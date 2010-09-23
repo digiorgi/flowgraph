@@ -1,0 +1,19 @@
+﻿Step#1
+
+	Comment stuff
+
+	cleanup frmMain(the code...)
+	Checkup on BaseObject  it may have goten messy.
+
+	Testing..
+
+
+
+Step#3
+
+	Load and Save
+	Plugin system
+	Compile saved config file with plugins.
+
+
+

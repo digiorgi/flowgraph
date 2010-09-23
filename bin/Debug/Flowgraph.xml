@@ -1,0 +1,50 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Flowgraph
+</name>
+</assembly>
+<members>
+<member name="M:Flowgraph.modMain.Load_Main">
+	<summary>
+ Loads the stuff in modMain.
+ </summary>
+</member><member name="M:Flowgraph.modMain.DoDraw(System.Boolean)">
+	<summary>
+ Tells auto draw to draw when the time comes.
+ </summary>
+	<param name="HeighPriority">If it's a heigh priority then it will instantly draw</param>
+</member><member name="P:Flowgraph.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Flowgraph.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Flowgraph.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="F:Flowgraph.BaseObject.OutputsInput">
+	<summary>
+ The input the output is sending to.
+ </summary>
+</member><member name="M:Flowgraph.BaseObject.Setup(System.Drawing.Point,System.Int32,System.Int32)">
+	<summary>
+ Create rectangles. using the position and size.
+ </summary>
+</member><member name="M:Flowgraph.BaseObject.DrawConnectors(System.Drawing.Graphics)">
+	<summary>
+ Draw lines connecting outputs to inputs.
+ </summary>
+</member><member name="M:Flowgraph.BaseObject.Moved">
+	<summary>
+ Is called when the object is moving.
+ Used to set the position of somethings.
+ </summary>
+</member>
+</members>
+</doc>
