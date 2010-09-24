@@ -83,6 +83,8 @@ Module AddObject
         For n As Integer = 0 To ObjectTypes.Length - 1
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
                 AddObject(n)
+                ResetObjectIndexs()
+                Exit For
             End If
         Next
 

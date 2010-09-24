@@ -28,23 +28,37 @@
 #End Region
 
 Module modMain
+    'The snap grid size.
     Public GridSize As Integer = 10
 
+    'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont
 
+    'The pen used to connect objects.
     Public ConnectorPen As New Pen(Color.FromArgb(80, 80, 80), 3)
 
+    'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
 
+    'The list of objects.
     Public Objects As New List(Of Object)
+
+    Public Sub ResetObjectIndexs()
+        For n As Integer = 0 To Objects.Count - 1
+            Objects(n).Index = n
+        Next
+    End Sub
+
 
     ''' <summary>
     ''' Loads the stuff in modMain.
     ''' </summary>
     Public Sub Load_Main()
-        SetupAutoDraw()
+        'Setup the auto draw timmer.
+        tmrDraw.Interval = 200
+        tmrDraw.Enabled = True
 
-        Mouse = New Rectangle(0, 0, 1, 1)
+        'Mouse = New Rectangle(0, 0, 1, 1)
 
         AddObject_Setup()
 
@@ -58,13 +72,10 @@ Module modMain
     ''' </summary>
     ''' <param name="HeighPriority">If it's a heigh priority then it will instantly draw</param>
     Public Sub DoDraw(Optional ByVal HeighPriority As Boolean = False)
-        DoNotDraw = False
-        If HeighPriority Then tmrDraw_Tick(Nothing, Nothing)
-    End Sub
+        DoNotDraw = False 'Tell the timmer it can draw.
 
-    Public Sub SetupAutoDraw()
-        tmrDraw.Interval = 200
-        tmrDraw.Enabled = True
+        'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
+        If HeighPriority Then tmrDraw_Tick(Nothing, Nothing)
     End Sub
 
     Private WithEvents tmrDraw As New Timer

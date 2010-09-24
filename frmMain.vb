@@ -37,7 +37,7 @@ Public Class frmMain
     End Enum
     Private Tool As ToolType
     Private ToolOffset As Point
-    Private ToolObject As Object
+    Private ToolObject As Integer
     Private ToolInt As Integer
 
 
@@ -47,8 +47,8 @@ Public Class frmMain
 
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
-        'Objects.Add(New fgCounter(New Point(50, 70)))
-        'Objects.Add(New fgDisplayAsString(New Point(250, 90)))
+        Objects.Add(New fgCounter(New Point(50, 70)))
+        Objects.Add(New fgDisplayAsString(New Point(250, 90)))
         'Objects.Add(New fgDisplayAsString(New Point(250, 200)))
         'Objects.Add(New fgSplit(New Point(50, 200)))
         'Objects.Add(New fgAdd(New Point(50, 300)))
@@ -62,7 +62,9 @@ Public Class frmMain
             For Each obj As Object In Objects
                 If obj.IntersectsWithOutput(Mouse) Then
                     'obj.Output(obj.Intersection).Output(obj.OutputsInput(obj.Intersection)) = Nothing
+                    Objects(obj.Output(obj.Intersection).obj1).Input(Objects(obj.Output(obj.Intersection)).Index1) = Nothing
                     obj.Output(obj.Intersection) = Nothing
+
 
                     Return
                 ElseIf obj.IntersectsWithInput(Mouse) Then
@@ -72,6 +74,24 @@ Public Class frmMain
                 'If the mouse intersects with the title bar then move the object.
                 If Mouse.IntersectsWith(obj.Rect) Then
                     obj.DoubleClicked()
+
+                    Return
+                End If
+
+
+
+            Next
+
+        ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+            For n As Integer = 0 To Objects.Count - 1
+
+                'If the mouse intersects with the title bar then move the object.
+                If Mouse.IntersectsWith(Objects(n).TitleBar) Then
+                    Objects(n).Distroy()
+                    Objects(n) = Nothing
+                    Objects.RemoveAt(n)
+
+                    ResetObjectIndexs()
 
                     Return
                 End If
@@ -93,7 +113,7 @@ Public Class frmMain
                         'If the mouse intersects with the title bar then move the object.
                         If Mouse.IntersectsWith(obj.TitleBar) Then
                             Tool = ToolType.Move
-                            ToolObject = obj
+                            ToolObject = obj.Index
                             ToolOffset = Mouse.Location - DirectCast(obj.Rect, Rectangle).Location
 
                             Return
@@ -102,7 +122,7 @@ Public Class frmMain
 
                         If obj.IntersectsWithOutput(Mouse) Then
                             Tool = ToolType.Connect
-                            ToolObject = obj
+                            ToolObject = obj.Index
                             ToolInt = obj.Intersection
                             ToolOffset = e.Location
 
@@ -145,11 +165,21 @@ Public Class frmMain
                 Dim m As New Rectangle(e.Location, New Size(1, 1))
 
                 For Each obj As Object In Objects
-                    If obj IsNot ToolObject Then
-                        If obj.IntersectsWithinput(m) Then
-                            'obj.Input(obj.Intersection) = ToolObject
-                            ToolObject.Output(ToolInt) = obj
-                            ToolObject.OutputsInput(ToolInt) = obj.Intersection
+                    If obj.Index <> ToolObject Then
+                        If obj.IntersectsWithInput(m) Then
+
+                            'Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
+                            Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
+                            Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
+
+                            'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
+                            obj.Input(obj.Intersection).obj1 = ToolObject
+                            obj.Input(obj.Intersection).Index1 = ToolInt
+
+
+                            'MsgBox(Objects(0).Output(0))
+
+                            'ToolObject.OutputsInput(ToolInt) = obj.Intersection
 
                             DoDraw(True)
 
@@ -178,12 +208,12 @@ Public Class frmMain
         'Check it see if the mouse is hovering over a input or a output.
         For Each obj As Object In Objects 'Loop thru each object until we found a input/output or we made it thru them all.
             If obj.IntersectsWithInput(Mouse) Then 'Check input.
-                ToolTipText = obj.InputNames(obj.Intersection)
+                ToolTipText = obj.Input(obj.Intersection).Name0
 
                 DoDraw()
                 Exit For
             ElseIf obj.IntersectsWithOutput(Mouse) Then 'Check output.
-                ToolTipText = obj.OutputNames(obj.Intersection)
+                ToolTipText = obj.Output(obj.Intersection).Name0
 
                 DoDraw()
                 Exit For
@@ -199,7 +229,7 @@ Public Class frmMain
 
             Case ToolType.Move
 
-                ToolObject.SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
+                Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
                 DoDraw(True)
 
             Case ToolType.Connect

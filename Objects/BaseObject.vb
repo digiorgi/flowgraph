@@ -28,15 +28,21 @@
 #End Region
 
 Public MustInherit Class BaseObject
+    Public Index As Integer
 
-    Public Output() As Object
+
+    'Output
+    Public Output() As Transmitter
     ''' <summary>
     ''' The input the output is sending to.
     ''' </summary>
     Public OutputsInput() As Integer
-    Public OutputNames() As String
-    Public InputNames() As String
-    'Public Input() As Object
+    ' Public OutputNames() As String
+
+    'Input
+    Public Input() As Transmitter
+    'Public InputNames() As String
+
 
     Public Rect As Rectangle
 
@@ -58,6 +64,8 @@ Public MustInherit Class BaseObject
         TitleBar = New Rectangle(Rect.Location, New Size(Rect.Width, 15))
 
         BackGround = New Rectangle(Rect.X, Rect.Y + 15, Rect.Width, Rect.Height - 15)
+
+        Index = Objects.Count
     End Sub
 
 #End Region
@@ -71,8 +79,8 @@ Public MustInherit Class BaseObject
         g.DrawRectangle(Pens.Black, Rect)
 
         'Draw the inputs. (if any.)
-        If InputNames IsNot Nothing Then
-            For n As Integer = 1 To InputNames.Length
+        If Input IsNot Nothing Then
+            For n As Integer = 1 To Input.Length
                 g.FillRectangle(Brushes.Red, Rect.X + 1, Rect.Y + 16 * n, 15, 15)
             Next
         End If
@@ -105,9 +113,9 @@ Public MustInherit Class BaseObject
 
 
         For n As Integer = 0 To Output.Length - 1
-            If Output(n) IsNot Nothing Then
+            If Output(n).IsNotEmpty Then
 
-                g.DrawLine(ConnectorPen, GetOutputPosition(n), Output(n).GetInputPosition(OutputsInput(n)))
+                g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(Output(n).obj1).GetInputPosition(Output(n).Index1))
 
             End If
         Next
@@ -142,37 +150,43 @@ Public MustInherit Class BaseObject
     Public Sub Send(ByVal Data As Object, ByVal ID As Integer)
         If Output Is Nothing Then Return
 
-        If Output(ID) IsNot Nothing Then Output(ID).Receive(Data, Me)
+        If Output(ID).IsNotEmpty Then Objects(Output(ID).obj1).Receive(Data, Output(ID))
     End Sub
     Public Sub Send(ByVal Data As Object)
         If Output Is Nothing Then Return
 
-        For Each obj As Object In Output
-            If obj IsNot Nothing Then obj.Receive(Data, Me)
+        For Each obj As Transmitter In Output
+            If obj.IsNotEmpty Then Objects(obj.obj1).Receive(Data, obj)
         Next
     End Sub
 
-    Public Overridable Sub Receive(ByVal Data As Object, ByVal sender As Object)
+    Public Overridable Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
     End Sub
 #End Region
 
 #Region "Inputs & Outputs"
 
     Protected Sub Inputs(ByVal Names As String())
-        InputNames = Names
-        'ReDim Input(Names.Length - 1)
+        'InputNames = Names
+        ReDim Input(Names.Length - 1)
+        For n As Integer = 0 To Names.Length - 1
+            Input(n) = New Transmitter(Index, n, Names(n))
+
+        Next
     End Sub
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
         ReDim OutputsInput(Names.Length - 1)
-        OutputNames = Names
+        For n As Integer = 0 To Names.Length - 1
+            Output(n) = New Transmitter(Index, n, Names(n))
+        Next
     End Sub
 
     Public Intersection As Integer
     Public Function IntersectsWithInput(ByVal rect As Rectangle) As Boolean
-        If InputNames Is Nothing Then Return False
+        If Input Is Nothing Then Return False
 
-        For n As Integer = 1 To InputNames.Length
+        For n As Integer = 1 To Input.Length
             Dim r As New Rectangle(Me.Rect.X, Me.Rect.Y + 16 * n, 16, 15)
             If rect.IntersectsWith(r) Then
                 Intersection = n - 1
@@ -205,5 +219,63 @@ Public MustInherit Class BaseObject
 
 #End Region
 
+
+    Public Overridable Sub Distroy()
+        If Output IsNot Nothing Then
+            For n As Integer = 0 To Output.Length - 1
+
+                Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
+                Output(n).obj1 = -1
+
+            Next
+        End If
+
+        If Input IsNot Nothing Then
+            For n As Integer = 0 To Input.Length - 1
+
+                Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
+                Input(n).obj1 = -1
+
+            Next
+        End If
+    End Sub
+    Public Overrides Function ToString() As String
+        Return Title
+    End Function
+
+End Class
+
+
+Public Class Transmitter
+    '0 defines it is from the base object.
+
+    Public obj0, obj1 As Integer
+    Public Index0, Index1 As Integer
+    Public Name0, Name1 As String
+
+    Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String)
+        obj0 = obj
+        obj1 = -1
+        Index0 = Index
+        Index1 = -1
+        Name0 = Name
+    End Sub
+
+    Public Sub SetValues(ByRef obj1 As Integer, ByVal Index1 As Integer)
+        Me.obj1 = obj1
+        Me.Index1 = Index1
+    End Sub
+
+
+    Public Function IsNotEmpty() As Boolean
+        Return (obj1 > -1 AndAlso Index1 > -1)
+    End Function
+
+    Public Shared Operator =(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
+        Return (left.obj0 = right.obj0) And (left.obj1 = right.obj1) And (left.Index0 = right.Index0) And (left.Index1 = right.Index1)
+    End Operator
+    Public Shared Operator <>(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
+        Return Not left = right
+    End Operator
 
 End Class

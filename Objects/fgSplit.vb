@@ -14,7 +14,7 @@
 
     End Sub
 
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Object)
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
         Send(Data)
     End Sub
 

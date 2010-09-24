@@ -15,11 +15,11 @@
     End Sub
 
     Private Value1, Value2 As Integer
-    Private Value1Sender As Object
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Object)
-        If Value1Sender Is Nothing Then Value1Sender = sender
+    Private Value1Sender As Transmitter
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
+        If Value1Sender.IsNotEmpty Then Value1Sender = sender
 
-        If sender Is Value1Sender Then
+        If sender = Value1Sender Then
             Value1 = Data
         Else
             Value2 = Data
