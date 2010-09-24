@@ -28,10 +28,6 @@ Flowgraph
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="F:Flowgraph.BaseObject.OutputsInput">
-	<summary>
- The input the output is sending to.
- </summary>
 </member><member name="M:Flowgraph.BaseObject.Setup(System.Drawing.Point,System.Int32,System.Int32)">
 	<summary>
  Create rectangles. using the position and size.

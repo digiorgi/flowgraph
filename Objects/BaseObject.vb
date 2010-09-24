@@ -33,15 +33,9 @@ Public MustInherit Class BaseObject
 
     'Output
     Public Output() As Transmitter
-    ''' <summary>
-    ''' The input the output is sending to.
-    ''' </summary>
-    Public OutputsInput() As Integer
-    ' Public OutputNames() As String
 
     'Input
     Public Input() As Transmitter
-    'Public InputNames() As String
 
 
     Public Rect As Rectangle
@@ -176,7 +170,6 @@ Public MustInherit Class BaseObject
     End Sub
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
-        ReDim OutputsInput(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
             Output(n) = New Transmitter(Index, n, Names(n))
         Next
@@ -224,18 +217,20 @@ Public MustInherit Class BaseObject
         If Output IsNot Nothing Then
             For n As Integer = 0 To Output.Length - 1
 
-                Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
-                Output(n).obj1 = -1
+                If Output(n).obj1 > -1 Then
+                    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
+                    Output(n).obj1 = -1
+                End If
 
             Next
         End If
 
         If Input IsNot Nothing Then
             For n As Integer = 0 To Input.Length - 1
-
-                Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
-                Input(n).obj1 = -1
-
+                If Input(n).obj1 > -1 Then
+                    Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
+                    Input(n).obj1 = -1
+                End If
             Next
         End If
     End Sub
