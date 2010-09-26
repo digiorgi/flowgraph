@@ -37,6 +37,25 @@ Module AddObject
 
     Private StartPos As Point
 
+    Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
+        Select Case LCase(Name)
+            Case "fgadd"
+                Objects.Add(New fgAdd(Position))
+
+            Case "fgsplit"
+                Objects.Add(New fgSplit(Position))
+
+            Case "fgcounter"
+                Objects.Add(New fgCounter(Position))
+
+            Case "fgdisplayasstring"
+                Objects.Add(New fgDisplayAsString(Position))
+
+        End Select
+
+        Return Objects.Count - 1
+    End Function
+
     Public Sub AddObject_Setup()
         ReDim ObjectTypes(3)
         ObjectTypes(0) = "Add"

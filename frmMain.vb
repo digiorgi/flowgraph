@@ -40,6 +40,18 @@ Public Class frmMain
     Private ToolObject As Integer
     Private ToolInt As Integer
 
+    Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Dim sd As New SimpleD.SimpleD
+        Dim g As SimpleD.Group = sd.Create_Group("Main")
+        g.Add("Objects", Objects.Count - 1)
+
+        For Each obj As Object In Objects
+            sd.Add_Group(obj.Save)
+        Next
+
+        sd.ToFile("Test.txt")
+    End Sub
+
 
 
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
@@ -47,11 +59,25 @@ Public Class frmMain
 
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
-        Objects.Add(New fgCounter(New Point(50, 70)))
-        Objects.Add(New fgDisplayAsString(New Point(250, 90)))
+        'Objects.Add(New fgCounter(New Point(50, 70)))
+        'Objects.Add(New fgDisplayAsString(New Point(250, 90)))
         'Objects.Add(New fgDisplayAsString(New Point(250, 200)))
         'Objects.Add(New fgSplit(New Point(50, 200)))
         'Objects.Add(New fgAdd(New Point(50, 300)))
+
+        Dim sd As New SimpleD.SimpleD
+        sd.FromFile("Test.txt")
+
+        Dim g As SimpleD.Group = sd.Get_Group("Main")
+        Dim numObj As Integer = g.Get_Value("Objects")
+        For n As Integer = 0 To numObj
+            g = sd.Get_Group("Object" & n)
+            Dim pos As String() = Split(g.Get_Value("position"), ",")
+            Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
+            Objects(obj).Load(g)
+
+        Next
+
     End Sub
 
 

@@ -2,7 +2,7 @@
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup(Position, 60, 100) 'Setup the base rectangles.
+        Setup("fgSplit", Position, 60, 100) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value"})

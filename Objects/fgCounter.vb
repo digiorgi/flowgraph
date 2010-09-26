@@ -7,7 +7,7 @@
 
 
     Public Sub New(ByVal Position As Point)
-        Setup(Position, 120, 60) 'Setup the base rectangles.
+        Setup("fgCounter", Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Value"})

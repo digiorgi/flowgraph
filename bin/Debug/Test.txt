@@ -1,0 +1,15 @@
+//v0.982\\
+Main{
+	Objects=1;
+}
+Object0{
+	Name=fgCounter;
+	Position=71,78;
+	Output=1,0;
+}
+Object1{
+	Name=fgDisplayAsString;
+	Position=260,110;
+	Input=0,0;
+	Data=8;
+}
