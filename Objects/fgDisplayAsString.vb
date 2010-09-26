@@ -2,7 +2,7 @@
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup(Position, 120, 60) 'Setup the base rectangles.
+        Setup("fgDisplayAsString", Position, 120, 60) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -12,6 +12,19 @@
 
     End Sub
 
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Add("Data", Data)
+
+        Return g
+    End Function
+    Public Overrides Function Load(ByVal g As SimpleD.Group) As SimpleD.Group
+
+        g.Get_Value("Data", Data)
+
+        Return MyBase.Load(g)
+    End Function
     Private Data As String
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
         Me.Data = Data.ToString

@@ -30,6 +30,7 @@
 Public MustInherit Class BaseObject
     Public Index As Integer
 
+    Private Name As String = "NoName"
 
     'Output
     Public Output() As Transmitter
@@ -46,11 +47,13 @@ Public MustInherit Class BaseObject
 
     Private BackGround As Rectangle
 
-#Region "Setup/Load"
+
+#Region "Setup & Distroy"
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
-    Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, ByVal Height As Integer)
+    Protected Sub Setup(ByVal ClassName As String, ByVal Position As Point, ByVal Width As Integer, ByVal Height As Integer)
+        Name = ClassName
         'Create the main rectangle.
         Rect = New Rectangle(Position, New Size(Width, Height))
 
@@ -61,6 +64,80 @@ Public MustInherit Class BaseObject
 
         Index = Objects.Count
     End Sub
+
+    Public Overridable Sub Distroy()
+        If Output IsNot Nothing Then
+            For n As Integer = 0 To Output.Length - 1
+
+                If Output(n).obj1 > -1 Then
+                    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
+                    Output(n).obj1 = -1
+                End If
+
+            Next
+        End If
+
+        If Input IsNot Nothing Then
+            For n As Integer = 0 To Input.Length - 1
+                If Input(n).obj1 > -1 Then
+                    Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
+                    Input(n).obj1 = -1
+                End If
+            Next
+        End If
+    End Sub
+#End Region
+
+#Region "Load & Save"
+    Public Overridable Function Load(ByVal g As SimpleD.Group) As SimpleD.Group
+
+        Dim tmp As String = ""
+
+
+        If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
+            g.Get_Value("Output", tmp)
+            Dim tmpS As String() = Split(tmp, ",")
+            For n As Integer = 0 To Output.Length - 1
+                Output(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
+            Next
+        End If
+
+        If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
+            g.Get_Value("Input", tmp)
+            Dim tmpS As String() = Split(tmp, ",")
+            For n As Integer = 0 To Input.Length - 1
+                Input(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
+            Next
+        End If
+
+        Return g
+    End Function
+
+    Public Overridable Function Save() As SimpleD.Group
+        Dim g As New SimpleD.Group("Object" & Index)
+        Dim tmp As String = ""
+
+        g.Add("Name", Name)
+        g.Add("Position", Rect.X & "," & Rect.Y)
+
+        If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
+            tmp = Output(0).obj1 & "," & Output(0).Index1
+            For n As Integer = 1 To Output.Length - 1
+                tmp &= "," & Output(n).obj1 & "," & Output(n).Index1
+            Next
+            g.Add("Output", tmp)
+        End If
+
+        If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
+            tmp = Input(0).obj1 & "," & Input(0).Index1
+            For n As Integer = 1 To Input.Length - 1
+                tmp &= "," & Input(n).obj1 & "," & Input(n).Index1
+            Next
+            g.Add("Input", tmp)
+        End If
+
+        Return g
+    End Function
 
 #End Region
 
@@ -213,27 +290,7 @@ Public MustInherit Class BaseObject
 #End Region
 
 
-    Public Overridable Sub Distroy()
-        If Output IsNot Nothing Then
-            For n As Integer = 0 To Output.Length - 1
 
-                If Output(n).obj1 > -1 Then
-                    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
-                    Output(n).obj1 = -1
-                End If
-
-            Next
-        End If
-
-        If Input IsNot Nothing Then
-            For n As Integer = 0 To Input.Length - 1
-                If Input(n).obj1 > -1 Then
-                    Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
-                    Input(n).obj1 = -1
-                End If
-            Next
-        End If
-    End Sub
     Public Overrides Function ToString() As String
         Return Title
     End Function
@@ -265,6 +322,10 @@ Public Class Transmitter
     Public Function IsNotEmpty() As Boolean
         Return (obj1 > -1 AndAlso Index1 > -1)
     End Function
+
+    'Public Overrides Function ToString() As String
+    '    Return obj1 & "," & Index1
+    'End Function
 
     Public Shared Operator =(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
         Return (left.obj0 = right.obj0) And (left.obj1 = right.obj1) And (left.Index0 = right.Index0) And (left.Index1 = right.Index1)
