@@ -16,6 +16,7 @@
 Step#2
 
 	Plugin system
+	Add support for C# plugins
 	Compile saved config file with plugins. as a single .exe
 
 

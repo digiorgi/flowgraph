@@ -170,18 +170,42 @@ Public Class frmMain
 
         Select Case Tool
             Case ToolType.None
+                'Check to see if the mouse is in a object.
+                For Each obj As Object In Objects
+                    If Mouse.IntersectsWith(obj.Rect) Then
+                        obj.MouseUp(e)
+                        Return
+                    End If
+                Next
                 If e.Button = Windows.Forms.MouseButtons.Right Then
                     Tool = ToolType.Add
 
                     AddObject_Open()
                 End If
 
+
             Case ToolType.Add
-                If AddObject_Select(e.Button) Then Tool = ToolType.None
+                If e.Button = Windows.Forms.MouseButtons.Left Then
+                    If AddObject_Select() Then Tool = ToolType.None
+                ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+                    For Each obj As Object In Objects
+                        If Mouse.IntersectsWith(obj.Rect) Then
+                            obj.MouseUp(e)
+                            Tool = ToolType.None
+                            DoDraw(True)
+                            Return
+                        End If
+                    Next
+                    AddObject_Open()
+                End If
+                DoDraw(True)
+
 
 
             Case ToolType.Move
                 Tool = ToolType.None
+
+
 
             Case ToolType.Connect
                 Tool = ToolType.None
@@ -282,6 +306,9 @@ Public Class frmMain
             Case ToolType.Connect 'If we are using teh connect tool then draw the line.
                 e.Graphics.DrawLine(ConnectorPen, ToolOffset, Mouse.Location)
 
+            Case ToolType.Add
+                AddObject_Draw(e.Graphics)
+
         End Select
 
         'If there is tooltip text to draw then draw it.
@@ -291,7 +318,7 @@ Public Class frmMain
             e.Graphics.DrawString(ToolTipText, DefaultFont, Brushes.Black, Mouse.X + 11, Mouse.Y + 18)
         End If
 
-        AddObject_Draw(e.Graphics)
+
     End Sub
 
 End Class
