@@ -2,18 +2,21 @@
 
 	Comment stuff
 
-	cleanup frmMain(the code...)
+	Add menu system for right click.
+	Add more stuff to this ToDo list.
+
+	Cleanup frmMain(the code...)
+	Clean AddObject
 	Checkup on BaseObject  it may have goten messy.
 
 	Testing..
 
 
 
-Step#3
+Step#2
 
-	Load and Save
 	Plugin system
-	Compile saved config file with plugins.
+	Compile saved config file with plugins. as a single .exe
 
 
 

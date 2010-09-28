@@ -33,16 +33,20 @@ Module AddObject
 
     Private Rect As Rectangle
 
-    Private ObjectTypes() As String
-
-    Private Items() As Node
+    Private Items(0) As Node
     Private Structure Node
         Public Children() As Node
         Public Name As String
         Public ClassName As String
-        Public Sub Setup(ByVal Name As String, ByVal ClassName As String)
+        Public Width As Integer
+        Public Sub Setup(ByVal Name As String, ByVal ClassName As String, Optional ByVal Width As Integer = 50)
             Me.Name = Name
             Me.ClassName = ClassName
+            Me.Width = Width
+        End Sub
+        Public Sub Setup(ByVal Name As String, Optional ByVal Width As Integer = 50)
+            Me.Name = Name
+            Me.Width = Width
         End Sub
         Public ReadOnly Property IsGroup() As Boolean
             Get
@@ -50,12 +54,17 @@ Module AddObject
             End Get
         End Property
         Public Overrides Function ToString() As String
-            Return Name
+            If Name = "" Then
+                Return "NoName"
+            Else
+                Return Name
+            End If
         End Function
     End Structure
 
-    Private StartPos As Point
+    'Private StartPos As Point
 
+    'NOTE: This whole sub will be created with the plugin compiler.
     Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
         Select Case LCase(Name)
             Case "fgadd"
@@ -70,91 +79,83 @@ Module AddObject
             Case "fgdisplayasstring"
                 Objects.Add(New fgDisplayAsString(Position))
 
+            Case Else
+                Return -1
         End Select
 
         Return Objects.Count - 1
     End Function
 
+    'NOTE: This whole sub will be created with the plugin compiler.
     Public Sub AddObject_Setup()
-        ReDim ObjectTypes(3)
-        ObjectTypes(0) = "Add"
-        ObjectTypes(1) = "Split"
-        ObjectTypes(2) = "Counter"
-        ObjectTypes(3) = "Display"
+
 
         'Create two groups.
         ReDim Items(1)
 
+
         'Group 1 is math
-        Items(0).Name = "< Math >"
+        Items(0).Setup("Math >", 50) 'The first node of each list holds the width of the list.
         ReDim Items(0).Children(1) 'Add two nodes to math
-        Items(0).Children(0).Setup("Add", "fgadd")
+        Items(0).Children(0).Setup("Add", "fgadd", 60)
         Items(0).Children(1).Setup("Counter", "fgcounter")
 
-        Items(1).Name = "< Misc >"
-        ReDim Items(1).Children(1)
-        Items(1).Children(0).Setup("Split", "fgsplit")
-        Items(1).Children(1).Setup("Display", "fgdisplayasstring")
+        Items(1).Name = "Misc >"
+        ReDim Items(1).Children(4)
+        Items(1).Children(0).Setup("Split", "fgsplit", 120)
+        Items(1).Children(1).Setup("Display As String", "fgdisplayasstring")
 
         SelectedGroup = Items
 
-        ' Rect.Size = New Size(50, ObjectTypes.Length * 12)
-        Rect.Size = New Size(50, Items.Length * 12)
-    End Sub
-
-    Private Sub AddObject(ByVal Index As Integer)
-
-        AddObject(LCase(ObjectTypes(Index)))
-
+        SetSize()
     End Sub
 
     Public Sub AddObject_Open()
         AddingObject = True
 
-        StartPos = Mouse.Location
+        'StartPos = Mouse.Location
         Rect.Location = Mouse.Location
 
+        'Set the selected group to the base items.
         SelectedGroup = Items
+        SetSize()
 
         DoDraw(True)
     End Sub
 
+    Private Sub SetSize()
+        Rect.Size = New Size(SelectedGroup(0).Width, (SelectedGroup.Length * 12) + 1)
+    End Sub
+
     Private SelectedGroup As Node()
-    Public Function AddObject_Select() As Boolean
+    Public Function AddObject_Select(ByVal b As MouseButtons) As Boolean
+        If b <> MouseButtons.Left Then
+            AddingObject = False
+            DoDraw(True)
+            Return True
+        End If
 
 
-
-
-        Dim Found As Boolean = False
         For n As Integer = 0 To SelectedGroup.Length - 1
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
 
                 If SelectedGroup(n).IsGroup Then
                     SelectedGroup = SelectedGroup(n).Children
-                    Rect.Size = New Size(50, Items.Length * 12)
+                    SetSize()
 
                     Return False
                 Else
-                    AddObject(SelectedGroup(n).ClassName, StartPos)
+                    AddObject(SelectedGroup(n).ClassName, Rect.Location)
 
                     Exit For
                 End If
 
-                'Found = True
             End If
         Next
 
         AddingObject = False
         DoDraw(True)
         Return True
-
-        'For n As Integer = 0 To ObjectTypes.Length - 1
-        '    If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-        '        AddObject(n)
-        '        'ResetObjectIndexs()
-        '        Exit For
-        '    End If
-        'Next
 
 
     End Function
@@ -164,6 +165,7 @@ Module AddObject
 
         g.FillRectangle(Brushes.LightGray, Rect)
 
+
         For n As Integer = 0 To SelectedGroup.Length - 1
 
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
@@ -171,17 +173,10 @@ Module AddObject
 
             End If
 
-            g.DrawString(SelectedGroup(n).Name, DefaultFont, Brushes.Black, Rect.X + 1, Rect.Y + (12 * n))
+            g.DrawString(SelectedGroup(n).ToString, DefaultFont, Brushes.Black, Rect.X + 1, Rect.Y + (12 * n))
         Next
 
-
-        'For n As Integer = 0 To ObjectTypes.Length - 1
-        '    If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-        '        g.FillRectangle(Brushes.White, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
-        '    End If
-
-        '    g.DrawString(ObjectTypes(n), DefaultFont, Brushes.Black, Rect.X + 1, Rect.Y + (12 * n))
-        'Next
+        g.DrawRectangle(Pens.Black, Rect)
     End Sub
 
 
