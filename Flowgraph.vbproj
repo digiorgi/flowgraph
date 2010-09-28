@@ -104,6 +104,7 @@
     <Compile Include="Objects\fgCounter.vb" />
     <Compile Include="Objects\fgDisplayAsString.vb" />
     <Compile Include="Objects\fgSplit.vb" />
+    <Compile Include="Objects\Menu.vb" />
     <Compile Include="Objects\SimpleD.vb" />
   </ItemGroup>
   <ItemGroup>
