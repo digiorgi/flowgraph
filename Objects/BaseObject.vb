@@ -290,6 +290,14 @@ Public MustInherit Class BaseObject
 #End Region
 
 
+#Region "Mouse"
+
+    Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
+
+    End Sub
+
+#End Region
+
 
     Public Overrides Function ToString() As String
         Return Title

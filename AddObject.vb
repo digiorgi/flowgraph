@@ -29,8 +29,6 @@
 
 Module AddObject
 
-    Public AddingObject As Boolean = False
-
     Private Rect As Rectangle
 
     Private Items(0) As Node
@@ -62,7 +60,6 @@ Module AddObject
         End Function
     End Structure
 
-    'Private StartPos As Point
 
     'NOTE: This whole sub will be created with the plugin compiler.
     Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
@@ -111,9 +108,7 @@ Module AddObject
     End Sub
 
     Public Sub AddObject_Open()
-        AddingObject = True
 
-        'StartPos = Mouse.Location
         Rect.Location = Mouse.Location
 
         'Set the selected group to the base items.
@@ -123,18 +118,18 @@ Module AddObject
         DoDraw(True)
     End Sub
 
+
     Private Sub SetSize()
         Rect.Size = New Size(SelectedGroup(0).Width, (SelectedGroup.Length * 12) + 1)
     End Sub
 
     Private SelectedGroup As Node()
-    Public Function AddObject_Select(ByVal b As MouseButtons) As Boolean
-        If b <> MouseButtons.Left Then
-            AddingObject = False
-            DoDraw(True)
+    Public Function AddObject_Select() As Boolean
+
+        'If the mouse is not in the main rect then return false
+        If Not Rect.IntersectsWith(Mouse) Then
             Return True
         End If
-
 
         For n As Integer = 0 To SelectedGroup.Length - 1
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
@@ -153,15 +148,11 @@ Module AddObject
             End If
         Next
 
-        AddingObject = False
-        DoDraw(True)
+
         Return True
-
-
     End Function
 
     Public Sub AddObject_Draw(ByVal g As Graphics)
-        If Not AddingObject Then Return
 
         g.FillRectangle(Brushes.LightGray, Rect)
 
