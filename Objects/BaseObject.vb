@@ -375,6 +375,7 @@ Public Class Transmitter
     'End Function
 
     Public Shared Operator =(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
+        If left Is Nothing Or right Is Nothing Then Return False
         Return (left.obj0 = right.obj0) And (left.obj1 = right.obj1) And (left.Index0 = right.Index0) And (left.Index1 = right.Index1)
     End Operator
     Public Shared Operator <>(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
