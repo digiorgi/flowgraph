@@ -11,5 +11,5 @@ Object1{
 	Name=fgDisplayAsString;
 	Position=260,110;
 	Input=0,0;
-	Data=8;
+	Data=20;
 }
