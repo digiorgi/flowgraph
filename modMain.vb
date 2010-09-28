@@ -29,7 +29,7 @@
 
 Module modMain
     'The snap grid size.
-    Public GridSize As Integer = 10
+    Public GridSize As Integer = 5
 
     'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont

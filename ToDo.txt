@@ -1,4 +1,8 @@
-﻿Step#1
+﻿####BUGS####
+	Can add more then one input to a input.
+
+
+Step#1
 
 	Comment stuff
 
