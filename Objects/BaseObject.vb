@@ -63,6 +63,9 @@ Public MustInherit Class BaseObject
         BackGround = New Rectangle(Rect.X, Rect.Y + 15, Rect.Width, Rect.Height - 15)
 
         Index = Objects.Count
+
+
+        Menu(0).Setup("Remove", 50)
     End Sub
 
     Public Overridable Sub Distroy()
@@ -163,6 +166,9 @@ Public MustInherit Class BaseObject
         End If
 
 
+        If IsMenuOpen Then
+            Menu_Draw(g, MenuCurrent, MenuStart)
+        End If
 
 
         'If title rect is empty then we will set the position and size of the title string.
@@ -290,10 +296,43 @@ Public MustInherit Class BaseObject
 #End Region
 
 
-#Region "Mouse"
+#Region "Mouse & Menu"
+    Private Menu(0) As MenuNode
+    Private MenuCurrent() As MenuNode
+    Private MenuStart As Point
+    Private IsMenuOpen As Boolean = False
 
+    Public Overridable Sub MouseMove(ByVal e As MouseEventArgs)
+        If IsMenuOpen Then DoDraw(True)
+    End Sub
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
+        If e.Button = MouseButtons.Right Then
 
+            IsMenuOpen = True
+            MenuCurrent = Menu
+            MenuStart = Mouse.Location
+
+            DoDraw(True)
+        ElseIf e.Button = MouseButtons.Left Then
+            If IsMenuOpen Then
+                Dim r As Integer = Menu_MouseUp(MenuCurrent, MenuStart)
+                Select Case r
+                    Case MenuResult.Closed
+                        IsMenuOpen = False
+                    Case MenuResult.SelectedGroup
+
+                    Case Else
+                        IsMenuOpen = False
+                        If r = 0 Then
+                            'MsgBox("REMOVE ME")
+                            RemoveAt(Index)
+
+                        End If
+                End Select
+
+                DoDraw(True)
+            End If
+        End If
     End Sub
 
 #End Region
@@ -332,7 +371,7 @@ Public Class Transmitter
     End Function
 
     'Public Overrides Function ToString() As String
-    '    Return obj1 & "," & Index1
+    '    Return Name0
     'End Function
 
     Public Shared Operator =(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean

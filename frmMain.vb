@@ -40,6 +40,8 @@ Public Class frmMain
     Private ToolObject As Integer
     Private ToolInt As Integer
 
+#Region "Load & Close"
+
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.Create_Group("Main")
@@ -51,8 +53,6 @@ Public Class frmMain
 
         sd.ToFile("Test.txt")
     End Sub
-
-
 
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
         Me.Text = "Flowgraph v" & Application.ProductVersion.ToString
@@ -80,6 +80,9 @@ Public Class frmMain
 
     End Sub
 
+#End Region
+
+#Region "Mouse"
 
     Private Sub frmMain_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDoubleClick
         Mouse.Location = e.Location
@@ -87,7 +90,6 @@ Public Class frmMain
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For Each obj As Object In Objects
                 If obj.IntersectsWithOutput(Mouse) Then
-                    'obj.Output(obj.Intersection).Output(obj.OutputsInput(obj.Intersection)) = Nothing
                     Objects(obj.Output(obj.Intersection).obj1).Input(Objects(obj.Output(obj.Intersection)).Index1) = Nothing
                     obj.Output(obj.Intersection) = Nothing
 
@@ -113,11 +115,7 @@ Public Class frmMain
 
                 'If the mouse intersects with the title bar then move the object.
                 If Mouse.IntersectsWith(Objects(n).TitleBar) Then
-                    Objects(n).Distroy()
-                    Objects(n) = Nothing
-                    Objects.RemoveAt(n)
-
-                    ResetObjectIndexs()
+                    RemoveAt(n)
 
                     Return
                 End If
@@ -215,18 +213,14 @@ Public Class frmMain
                     If obj.Index <> ToolObject Then
                         If obj.IntersectsWithInput(m) Then
 
-                            'Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
-                            Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
-                            Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
+                            Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
+                            'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
+                            'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
 
-                            'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
-                            obj.Input(obj.Intersection).obj1 = ToolObject
-                            obj.Input(obj.Intersection).Index1 = ToolInt
+                            obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
+                            'obj.Input(obj.Intersection).obj1 = ToolObject
+                            'obj.Input(obj.Intersection).Index1 = ToolInt
 
-
-                            'MsgBox(Objects(0).Output(0))
-
-                            'ToolObject.OutputsInput(ToolInt) = obj.Intersection
 
                             DoDraw(True)
 
@@ -271,6 +265,15 @@ Public Class frmMain
 
 
         Select Case Tool
+            Case ToolType.None
+                'Check to see if the mouse is in a object.
+                For Each obj As Object In Objects
+                    If Mouse.IntersectsWith(obj.Rect) Then
+                        obj.MouseMove(e)
+                        Return
+                    End If
+                Next
+
             Case ToolType.Add
                 DoDraw(True)
 
@@ -286,6 +289,7 @@ Public Class frmMain
         End Select
 
     End Sub
+#End Region
 
     Private ToolTipText As String = ""
 

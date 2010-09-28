@@ -43,10 +43,38 @@ Module modMain
     'The list of objects.
     Public Objects As New List(Of Object)
 
-    Public Sub ResetObjectIndexs()
+    Public Sub ResetObjectIndexs(ByVal RemovedIndex As Integer)
         For n As Integer = 0 To Objects.Count - 1
             Objects(n).Index = n
+
+            If Objects(n).Input IsNot Nothing Then
+                For Each Inp As Transmitter In Objects(n).Input
+                    If Inp.obj1 = RemovedIndex Then
+                        Inp.obj1 = -1
+                    ElseIf Inp.obj1 > RemovedIndex Then
+                        Inp.obj1 -= 1
+                    End If
+                Next
+            End If
+
+            If Objects(n).output IsNot Nothing Then
+                For Each outp As Transmitter In Objects(n).output
+                    If outp.obj1 = RemovedIndex Then
+                        outp.obj1 = -1
+                    ElseIf outp.obj1 > RemovedIndex Then
+                        outp.obj1 -= 1
+                    End If
+                Next
+            End If
         Next
+    End Sub
+
+    Public Sub RemoveAt(ByVal Index As Integer)
+        Objects(Index).Distroy()
+        Objects(Index) = Nothing
+        Objects.RemoveAt(Index)
+
+        ResetObjectIndexs(Index)
     End Sub
 
 
