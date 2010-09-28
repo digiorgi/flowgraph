@@ -17,7 +17,7 @@
     Private Value1, Value2 As Integer
     Private Value1Sender As Transmitter
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
-        If Value1Sender.IsNotEmpty Then Value1Sender = sender
+        If Value1Sender Is Nothing Then Value1Sender = sender
 
         If sender = Value1Sender Then
             Value1 = Data
