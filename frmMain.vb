@@ -177,11 +177,8 @@ Public Class frmMain
                 End If
 
             Case ToolType.Add
-                If e.Button = Windows.Forms.MouseButtons.Left Then
-                    If AddObject_Select() Then Tool = ToolType.None
+                If AddObject_Select(e.Button) Then Tool = ToolType.None
 
-
-                End If
 
             Case ToolType.Move
                 Tool = ToolType.None
