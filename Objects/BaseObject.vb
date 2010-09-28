@@ -155,13 +155,15 @@ Public MustInherit Class BaseObject
         'Draw the inputs. (if any.)
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
-                g.FillRectangle(Brushes.Red, Rect.X + 1, Rect.Y + 16 * n, 15, 15)
+                'g.FillRectangle(Brushes.Red, Rect.X + 1, Rect.Y + 16 * n, 15, 15)
+                g.FillEllipse(Brushes.Red, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
-                g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
+                'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
+                g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 15, 15)
             Next
         End If
 
@@ -287,10 +289,10 @@ Public MustInherit Class BaseObject
     End Function
 
     Public Function GetInputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.X + 7.5, Rect.Y + (16 * (ID + 1)) + 8)
+        Return New PointF(Rect.X + 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
     Public Function GetOutputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.Right - 7.5, Rect.Y + (16 * (ID + 1)) + 8)
+        Return New PointF(Rect.Right - 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
 
 #End Region

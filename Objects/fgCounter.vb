@@ -39,6 +39,8 @@
 
         Value += 1
 
+        If Value > 100 Then Value = 0
+
         Send(Value)
 
         DoDraw()

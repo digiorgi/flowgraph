@@ -295,6 +295,8 @@ Public Class frmMain
 
     'Draw everything.
     Private Sub frmMain_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
+        e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality
+
         'Draw the objects.
         For Each obj As Object In Objects
             obj.Draw(e.Graphics)
