@@ -77,6 +77,33 @@ Module modMain
         ResetObjectIndexs(Index)
     End Sub
 
+    Public Sub DisconnectOutput(ByRef Output As Transmitter)
+        If Output.IsEmpty Then Return
+
+        Objects(Output.obj1).Input(Output.Index1).Connected -= 1
+
+        Output.SetValues(-1, -1)
+    End Sub
+
+    Public Sub DisconnectInput(ByRef Input As Transmitter)
+        If Input.Connected = 0 Then Return
+
+        For Each obj As Object In Objects
+            If obj.Output IsNot Nothing Then
+                For Each inp As Transmitter In obj.Output
+
+                    If inp.obj1 = Input.obj0 And inp.Index1 = Input.Index0 Then
+                        inp.obj1 = -1
+                        inp.Index1 = -1
+                    End If
+
+                Next
+            End If
+        Next
+
+        Input.Connected = 0
+    End Sub
+
 
     ''' <summary>
     ''' Loads the stuff in modMain.
