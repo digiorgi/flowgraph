@@ -17,7 +17,7 @@ Object2{
 	Name=fgDisplayAsString;
 	Position=300,215;
 	Input=1;
-	Data=12;
+	Data=4;
 }
 Object3{
 	Name=fgSplit;
@@ -29,13 +29,13 @@ Object4{
 	Name=fgDisplayAsString;
 	Position=300,280;
 	Input=1;
-	Data=12;
+	Data=4;
 }
 Object5{
 	Name=fgDisplayAsString;
 	Position=300,345;
 	Input=1;
-	Data=12;
+	Data=4;
 }
 Object6{
 	Name=fgCounter;

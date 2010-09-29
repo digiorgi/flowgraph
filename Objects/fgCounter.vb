@@ -5,6 +5,7 @@
 
     Private Value As Integer
 
+    Private Reset As Rectangle
 
     Public Sub New(ByVal Position As Point)
         Setup("fgCounter", Position, 120, 60) 'Setup the base rectangles.
@@ -18,6 +19,20 @@
         tmr.Interval = 1000
         tmr.Enabled = True
 
+
+        Reset = New Rectangle(Rect.X + 15, Rect.Y + 35, 40, 15)
+    End Sub
+
+    Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseUp(e)
+
+        If e.Button = MouseButtons.Left Then
+            If Mouse.IntersectsWith(Reset) Then
+                Value = 0
+                Send(Value)
+                DoDraw()
+            End If
+        End If
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
@@ -25,7 +40,10 @@
         MyBase.Draw(g)
 
         'Draw the value.
-        g.DrawString("Value= " & Value, DefaultFont, Brushes.Black, Rect.X + 16, Rect.Y + 16)
+        g.DrawString("Value= " & Value, DefaultFont, Brushes.Black, Rect.X + 15, Rect.Y + 15)
+
+        g.DrawString("Reset ", DefaultFont, Brushes.Black, Reset.X + 1, Reset.Y)
+        g.DrawRectangle(Pens.Black, Reset)
     End Sub
 
     Public Overrides Sub DoubleClicked()
