@@ -6,6 +6,7 @@
 
         'Create one input.
         Inputs(New String() {"Value to display."})
+        Input(0).MaxConnected = 1
 
         'Set the title.
         Title = "Display as string"

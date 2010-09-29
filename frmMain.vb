@@ -90,12 +90,15 @@ Public Class frmMain
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For Each obj As Object In Objects
                 If obj.IntersectsWithOutput(Mouse) Then
-                    Objects(obj.Output(obj.Intersection).obj1).Input(Objects(obj.Output(obj.Intersection)).Index1) = Nothing
-                    obj.Output(obj.Intersection) = Nothing
+                    'Objects(obj.Output(obj.Intersection).obj1).Input(Objects(obj.Output(obj.Intersection)).Index1) = Nothing
+                    'obj.Output(obj.Intersection) = Nothing
 
+                    DisconnectOutput(obj.Output(obj.Intersection))
 
                     Return
                 ElseIf obj.IntersectsWithInput(Mouse) Then
+                    DisconnectInput(obj.Input(obj.Intersection))
+
                     Return
                 End If
 
@@ -110,19 +113,6 @@ Public Class frmMain
 
             Next
 
-        ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-            For n As Integer = 0 To Objects.Count - 1
-
-                'If the mouse intersects with the title bar then move the object.
-                If Mouse.IntersectsWith(Objects(n).TitleBar) Then
-                    RemoveAt(n)
-
-                    Return
-                End If
-
-
-
-            Next
         End If
     End Sub
 
@@ -213,20 +203,26 @@ Public Class frmMain
                     If obj.Index <> ToolObject Then
                         If obj.IntersectsWithInput(m) Then
 
-                            Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
-                            'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
-                            'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
+                            If obj.Input(obj.Intersection).MaxConnected = -1 Or _
+                                obj.Input(obj.Intersection).MaxConnected > obj.Input(obj.Intersection).Connected Then
 
-                            obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
-                            'obj.Input(obj.Intersection).obj1 = ToolObject
-                            'obj.Input(obj.Intersection).Index1 = ToolInt
+                                Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
+                                'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
+                                'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
+
+                                'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
+                                obj.Input(obj.Intersection).Connected += 1
+                                'obj.Input(obj.Intersection).obj1 = ToolObject
+                                'obj.Input(obj.Intersection).Index1 = ToolInt
+
+                            End If
 
 
                             DoDraw(True)
 
                             Return
                         End If
-                    End If
+                        End If
                 Next
 
 

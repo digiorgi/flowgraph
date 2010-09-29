@@ -74,7 +74,10 @@ Public MustInherit Class BaseObject
 
                 If Output(n).obj1 > -1 Then
                     Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
+                    Objects(Output(n).obj1).Input(Output(n).Index1).index1 = -1
+                    Objects(Output(n).obj1).Input(Output(n).Index1).Connected -= 1
                     Output(n).obj1 = -1
+                    Output(n).Index1 = -1
                 End If
 
             Next
@@ -82,9 +85,10 @@ Public MustInherit Class BaseObject
 
         If Input IsNot Nothing Then
             For n As Integer = 0 To Input.Length - 1
-                If Input(n).obj1 > -1 Then
-                    Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
-                    Input(n).obj1 = -1
+                If Input(n).Connected > 0 Then
+                    'Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
+                    'Input(n).obj1 = -1
+                    DisconnectInput(Input(n))
                 End If
             Next
         End If
@@ -109,7 +113,7 @@ Public MustInherit Class BaseObject
             g.Get_Value("Input", tmp)
             Dim tmpS As String() = Split(tmp, ",")
             For n As Integer = 0 To Input.Length - 1
-                Input(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
+                Input(n).Connected = tmpS(n)
             Next
         End If
 
@@ -132,9 +136,9 @@ Public MustInherit Class BaseObject
         End If
 
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
-            tmp = Input(0).obj1 & "," & Input(0).Index1
+            tmp = Input(0).Connected
             For n As Integer = 1 To Input.Length - 1
-                tmp &= "," & Input(n).obj1 & "," & Input(n).Index1
+                tmp &= "," & Input(n).Connected
             Next
             g.Add("Input", tmp)
         End If
@@ -168,10 +172,6 @@ Public MustInherit Class BaseObject
         End If
 
 
-        If IsMenuOpen Then
-            Menu_Draw(g, MenuCurrent, MenuStart)
-        End If
-
 
         'If title rect is empty then we will set the position and size of the title string.
         If TitleRect.IsEmpty Then
@@ -180,6 +180,10 @@ Public MustInherit Class BaseObject
         End If
         g.DrawString(Title, SystemFonts.DefaultFont, Brushes.Black, TitleRect) 'Draw the title string.
 
+
+        If IsMenuOpen Then
+            Menu_Draw(g, MenuCurrent, MenuStart)
+        End If
 
 
     End Sub
@@ -354,6 +358,10 @@ Public Class Transmitter
     Public Index0, Index1 As Integer
     Public Name0, Name1 As String
 
+    'For input
+    Public MaxConnected As Integer = -1
+    Public Connected As Integer = 0
+
     Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String)
         obj0 = obj
         obj1 = -1
@@ -361,15 +369,24 @@ Public Class Transmitter
         Index1 = -1
         Name0 = Name
     End Sub
+    Public Sub New(ByVal obj1 As Integer, ByVal Index1 As Integer)
+        obj0 = -1
+        Me.obj1 = obj1
+        Index0 = -1
+        Me.Index1 = Index1
+        Name0 = "Not a real transmitter!"
+    End Sub
 
     Public Sub SetValues(ByRef obj1 As Integer, ByVal Index1 As Integer)
         Me.obj1 = obj1
         Me.Index1 = Index1
     End Sub
 
-
+    Public Function IsEmpty() As Boolean
+        Return (obj1 = -1 AndAlso Index1 >= -1)
+    End Function
     Public Function IsNotEmpty() As Boolean
-        Return (obj1 > -1 AndAlso Index1 > -1)
+        Return Not IsEmpty()
     End Function
 
     'Public Overrides Function ToString() As String

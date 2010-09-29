@@ -1,27 +1,44 @@
 //v0.982\\
 Main{
-	Objects=3;
+	Objects=6;
 }
 Object0{
 	Name=fgCounter;
-	Position=40,140;
+	Position=33,86;
 	Output=1,0;
 }
 Object1{
 	Name=fgDisplayAsString;
-	Position=220,140;
-	Input=0,0;
-	Data=2;
+	Position=192,101;
+	Input=1;
+	Data=12;
 }
 Object2{
-	Name=fgAdd;
-	Position=210,265;
-	Output=-1,-1;
-	Input=3,3,3,1;
+	Name=fgDisplayAsString;
+	Position=300,215;
+	Input=1;
+	Data=12;
 }
 Object3{
 	Name=fgSplit;
-	Position=85,270;
-	Output=2,1,2,1,2,1,2,0;
-	Input=-1,-1;
+	Position=175,270;
+	Output=2,0,4,0,5,0,-1,-1;
+	Input=1;
+}
+Object4{
+	Name=fgDisplayAsString;
+	Position=300,280;
+	Input=1;
+	Data=12;
+}
+Object5{
+	Name=fgDisplayAsString;
+	Position=300,345;
+	Input=1;
+	Data=12;
+}
+Object6{
+	Name=fgCounter;
+	Position=20,270;
+	Output=3,0;
 }
