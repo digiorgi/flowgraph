@@ -6,7 +6,8 @@ Step#1
 
 	Comment stuff
 
-	Add menu system for right click.
+	Create a list of objects to add.
+
 	Add more stuff to this ToDo list.
 
 	Cleanup frmMain(the code...)
@@ -24,4 +25,6 @@ Step#2
 	Compile saved config file with plugins. as a single .exe
 
 
-
+Objects to add:
+	
+	
