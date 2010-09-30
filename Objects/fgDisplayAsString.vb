@@ -27,7 +27,7 @@
         Return MyBase.Load(g)
     End Function
     Private Data As String
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
         Me.Data = Data.ToString()
         DoDraw()
     End Sub

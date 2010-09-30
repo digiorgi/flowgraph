@@ -14,7 +14,7 @@
 
     End Sub
 
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
         Send(Data)
     End Sub
 

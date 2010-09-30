@@ -31,7 +31,7 @@ Public Module AddObject
 
     ' Private Rect As Rectangle
 
-    Private Items(0) As MenuNode
+    Public AddItems(0) As MenuNode
 
 
     'NOTE: This whole sub will be created with the plugin compiler.
@@ -61,27 +61,23 @@ Public Module AddObject
 
 
         'Create two groups.
-        ReDim Items(1)
+        ReDim AddItems(1)
 
 
         'Group 1 is math
-        Items(0).Setup("Math >", 50) 'The first node of each list holds the width of the list.
-        ReDim Items(0).Children(1) 'Add two nodes to math
-        Items(0).Children(0).Setup("Add", "fgadd", 60)
-        Items(0).Children(1).Setup("Counter", "fgcounter")
+        AddItems(0).Setup("Math >", 50) 'The first node of each list holds the width of the list.
+        ReDim AddItems(0).Children(1) 'Add two nodes to math
+        AddItems(0).Children(0).Setup("Add", "fgadd", 60)
+        AddItems(0).Children(1).Setup("Counter", "fgcounter")
 
-        Items(1).Name = "Misc >"
-        ReDim Items(1).Children(4)
-        Items(1).Children(0).Setup("Split", "fgsplit", 120)
-        Items(1).Children(1).Setup("Display As String", "fgdisplayasstring")
+        AddItems(1).Name = "Misc >"
+        ReDim AddItems(1).Children(4)
+        AddItems(1).Children(0).Setup("Split", "fgsplit", 120)
+        AddItems(1).Children(1).Setup("Display As String", "fgdisplayasstring")
 
         'SelectedGroup = Items
 
         'SetSize()
-    End Sub
-
-    Public Sub AddObject_Open()
-        Menu_Open(-1, Items)
     End Sub
 
 End Module

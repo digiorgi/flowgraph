@@ -15,9 +15,9 @@
     End Sub
 
     Private Value1, Value2 As Integer
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
 
-        If sender.Index1 = 0 Then
+        If sender.Index = 0 Then
             Value1 = Data
         Else
             Value2 = Data
