@@ -30,7 +30,9 @@
 
 Namespace SimpleD
     Module Info
-        Public Const Version = 0.982
+        Public Const Version = 0.983
+        '0.983
+        'Fixed: Spelling.
         '0.982
         'Added: Add_Group
         '0.981
@@ -334,7 +336,7 @@ Endy:
         ''' <param name="Name">The name of the property.</param>
         ''' <returns>The property.</returns>
         Public Function Find(ByVal Name As String) As Prop
-            'Very simple,  loop thru each property until the names match. then return the matching property.
+            'Very simple,  loop through each property until the names match. then return the matching property.
             For Each Prop As Prop In Propertys
                 If LCase(Prop.Name) = LCase(Name) Then
                     Return Prop

@@ -11,19 +11,19 @@ Object1{
 	Name=fgDisplayAsString;
 	Position=220,70;
 	Input=1;
-	Data=196;
+	Data=5;
 }
 Object2{
 	Name=fgDisplayAsString;
 	Position=200,255;
 	Input=1;
-	Data=196;
+	Data=5;
 }
 Object3{
 	Name=fgDisplayAsString;
 	Position=200,330;
 	Input=1;
-	Data=196;
+	Data=5;
 }
 Object4{
 	Name=fgCounter;

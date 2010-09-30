@@ -350,10 +350,11 @@ Public Class DataFlowBase
     Public Name As String = "DataFlowBase"
 
     'We do not create new because Inputs do not use it.
-    Friend Flow As List(Of DataFlow)
+    Friend Flow As List(Of DataFlow) 'We define if it is a input/output by wether flow is nothing or not.
 
+    'How meny can connect?
     Public MaxConnected As Integer = -1
-    Public Connected As Integer = 0
+    Public Connected As Integer = 0 'Holds the number of connections.
 
     Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String, Optional ByVal IsOutput As Boolean = False)
         Me.obj = obj
@@ -363,37 +364,65 @@ Public Class DataFlowBase
     End Sub
 
 #Region "Add & Disconnect"
+    ''' <summary>
+    ''' Add a input.
+    ''' </summary>
+    ''' <param name="obj1"></param>
+    ''' <param name="Index1"></param>
+    ''' <returns>True if successfully added.</returns>
     Public Function Add(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
-        If Flow Is Nothing Then Return False
+        If Flow Is Nothing Then Return False 'Return false if its a input.
 
+        'Return false if we are already at the max connections.
         If Connected = MaxConnected Then Return False
 
+        'Are we trying to connect to the same object.
+        If obj1 = obj Then Return False
+
+        'Look through flow, and check to see if there is already one going to the same place. this one wants to go.
+        'Note: they can connect to the same object just not the same place on the object.
         For Each df As DataFlow In Flow
             If df.obj = obj1 And df.Index = Index1 Then
-                Return False
+                Return False 'If there is we return false.
             End If
         Next
 
+
+        'Add the new data flow.
         Flow.Add(New DataFlow(obj1, Index1, Me))
 
+        'Add one to connected.
         Connected += 1
 
-        Return True
+        Return True 'We successfully added the input to the output.
     End Function
 
+    ''' <summary>
+    ''' Disconnect all connections.
+    ''' </summary>
     Public Sub Disconnect()
         If Flow Is Nothing Then
             'Disconnect input.
 
-            For Each obj As Object In Objects
-                If obj.Output IsNot Nothing Then
-                    For Each out As DataFlowBase In obj.Output
-                        'If Flow Is Nothing Then Continue For
+            'Disconnecting a input is harder. Because we do not hold all of the connections.
+            'So we have to go through all of the objects. and find the ones connecting to it and disconnect them.
 
-                        Dim n As Integer = 0
+            For Each obj As Object In Objects 'Loop through each object.
+                If obj.Output IsNot Nothing Then 'Make sure there is some outputs.
+                    For Each out As DataFlowBase In obj.Output 'Go through all of the outputs in the object.
+
+                        'This next part could look messy. 
+                        'But as far as I know there is no better way do to this.
+                        'It is really pretty simple. All it is doing, Is going through each object. One by one.
+                        'When it finds one to remove, it removes it.  
+                        'But scense it removed a object all the objects past that have fallen down.  (was [a,b,c,d} now {a,b,d})
+                        'So we just stay at the same index we removed the object at and go from there.
+
+                        Dim n As Integer = 0 'Even though n is declared here I still set it to 0. Because sometime it seems not to reset it.
                         Do
-                            If n > out.Flow.Count - 1 Then Exit Do
+                            'If n > out.Flow.Count - 1 Then Exit Do
                             If out.Flow(n).obj = Me.obj And out.Flow(n).Index = Index Then
+                                'Remove the object.
                                 out.Flow(n) = Nothing
                                 out.Flow.RemoveAt(n)
                                 out.Connected -= 1
@@ -411,17 +440,21 @@ Public Class DataFlowBase
 
         Else 'Disconnect output.
 
-            For Each fd As DataFlow In Flow
+            'Really simple.
+            'First we go through each output and subtract one from the input the output is outputing to.
+            'Then we just clear the list and set connected to zero.
 
+            For Each fd As DataFlow In Flow
+                'Subtract one from the inputs connitions.
                 Objects(fd.obj).Input(fd.Index).Connected -= 1
 
             Next
 
+            'Clear the data flow list.
             Flow.Clear()
-
+            Connected = 0 'Set connected to 0.
         End If
 
-        'Connected = 0
 
     End Sub
 #End Region
@@ -455,7 +488,7 @@ Public Class DataFlowBase
             Add(data(i), data(i + 1))
         Next
         If Connected <> data(0) Then
-            Throw New Exception("Error loading")
+            Throw New Exception("Connections do not match!")
         End If
     End Sub
     Public Function Save() As String
