@@ -16,7 +16,7 @@ Step#1
 	Clean AddObject
 	Checkup on BaseObject  it may have goten messy.
 
-	Testing..
+	Do more testing.
 
 
 
@@ -28,5 +28,8 @@ Step#2
 
 
 Objects to add:
-	
+	Math:
+		Minus
+		Round
+		Sin
 	
