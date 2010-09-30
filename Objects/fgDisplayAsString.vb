@@ -28,7 +28,7 @@
     End Function
     Private Data As String
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
-        Me.Data = Data.ToString
+        Me.Data = Data.ToString()
         DoDraw()
     End Sub
 

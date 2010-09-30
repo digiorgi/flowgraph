@@ -43,6 +43,19 @@ Module modMain
     'The list of objects.
     Public Objects As New List(Of Object)
 
+    Public Enum ToolType
+        None
+        Move
+        Connect
+        Menu
+        Add
+        Remove
+    End Enum
+    Public Tool As ToolType
+    Public ToolOffset As Point
+    Public ToolObject As Integer
+    Public ToolInt As Integer
+
     Public Sub ResetObjectIndexs(ByVal RemovedIndex As Integer)
         For n As Integer = 0 To Objects.Count - 1
             Objects(n).Index = n
