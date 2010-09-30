@@ -26,6 +26,11 @@
 
     End Sub
 
+    Public Overrides Sub Distroy()
+        btnReset.Dispose()
+        MyBase.Distroy()
+    End Sub
+
     Public Overrides Sub Moved()
         MyBase.Moved()
 

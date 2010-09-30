@@ -28,7 +28,7 @@
 #End Region
 
 Public MustInherit Class BaseObject
-    Public Index As Integer
+    Public Index As Integer = -1
 
     Private Name As String = "NoName"
 
@@ -41,7 +41,7 @@ Public MustInherit Class BaseObject
 
     Public Rect As Rectangle
 
-    Public Title As String = "Name not set"
+    Public Title As String = "Title not set"
     Private TitleRect As RectangleF
     Public TitleBar As Rectangle
 
@@ -86,8 +86,6 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 0 To Input.Length - 1
                 If Input(n).Connected > 0 Then
-                    'Objects(Input(n).obj1).Output(Input(n).Index1).obj1 = -1
-                    'Input(n).obj1 = -1
                     DisconnectInput(Input(n))
                 End If
             Next

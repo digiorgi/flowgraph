@@ -125,7 +125,6 @@ Module modMain
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        'Mouse = New Rectangle(0, 0, 1, 1)
 
         AddObject_Setup()
 
@@ -158,6 +157,9 @@ Module modMain
 
     Public Sub AddControl(ByVal Control As Control)
         frmMain.Controls.Add(Control)
+    End Sub
+    Public Sub RemoveControl(ByVal Control As Control)
+        frmMain.Controls.Remove(Control)
     End Sub
 
 End Module
