@@ -38,7 +38,7 @@
         MyBase.Draw(g)
 
         'Draw the value.
-        g.DrawString("Value= " & Value, DefaultFont, Brushes.Black, Rect.X + 15, Rect.Y + 15)
+        g.DrawString("Value= " & Value, DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 15)
 
     End Sub
 
@@ -52,8 +52,6 @@
     Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
 
         Value += 1
-
-        If Value > 100 Then Value = 0
 
         Send(Value)
 

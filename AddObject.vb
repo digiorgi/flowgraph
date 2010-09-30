@@ -27,38 +27,11 @@
 '   Email: RaymondEllis@live.com
 #End Region
 
-Module AddObject
+Public Module AddObject
 
-    Private Rect As Rectangle
+    ' Private Rect As Rectangle
 
-    Private Items(0) As Node
-    Private Structure Node
-        Public Children() As Node
-        Public Name As String
-        Public ClassName As String
-        Public Width As Integer
-        Public Sub Setup(ByVal Name As String, ByVal ClassName As String, Optional ByVal Width As Integer = 50)
-            Me.Name = Name
-            Me.ClassName = ClassName
-            Me.Width = Width
-        End Sub
-        Public Sub Setup(ByVal Name As String, Optional ByVal Width As Integer = 50)
-            Me.Name = Name
-            Me.Width = Width
-        End Sub
-        Public ReadOnly Property IsGroup() As Boolean
-            Get
-                Return Children IsNot Nothing
-            End Get
-        End Property
-        Public Overrides Function ToString() As String
-            If Name = "" Then
-                Return "NoName"
-            Else
-                Return Name
-            End If
-        End Function
-    End Structure
+    Private Items(0) As MenuNode
 
 
     'NOTE: This whole sub will be created with the plugin compiler.
@@ -102,75 +75,13 @@ Module AddObject
         Items(1).Children(0).Setup("Split", "fgsplit", 120)
         Items(1).Children(1).Setup("Display As String", "fgdisplayasstring")
 
-        SelectedGroup = Items
+        'SelectedGroup = Items
 
-        SetSize()
+        'SetSize()
     End Sub
 
     Public Sub AddObject_Open()
-
-        Rect.Location = Mouse.Location
-
-        'Set the selected group to the base items.
-        SelectedGroup = Items
-        SetSize()
-
-        DoDraw(True)
+        Menu_Open(-1, Items)
     End Sub
-
-
-    Private Sub SetSize()
-        Rect.Size = New Size(SelectedGroup(0).Width, (SelectedGroup.Length * 12) + 1)
-    End Sub
-
-    Private SelectedGroup As Node()
-    Public Function AddObject_Select() As Boolean
-
-        'If the mouse is not in the main rect then return false
-        If Not Rect.IntersectsWith(Mouse) Then
-            Return True
-        End If
-
-        For n As Integer = 0 To SelectedGroup.Length - 1
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-
-                If SelectedGroup(n).IsGroup Then
-                    SelectedGroup = SelectedGroup(n).Children
-                    SetSize()
-
-                    Return False
-                Else
-                    AddObject(SelectedGroup(n).ClassName, Rect.Location)
-
-                    Exit For
-                End If
-
-            End If
-        Next
-
-
-        Return True
-    End Function
-
-    Public Sub AddObject_Draw(ByVal g As Graphics)
-
-        g.FillRectangle(Brushes.LightGray, Rect)
-
-
-        For n As Integer = 0 To SelectedGroup.Length - 1
-
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-                g.FillRectangle(Brushes.White, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
-
-            End If
-
-            g.DrawString(SelectedGroup(n).ToString, DefaultFont, Brushes.Black, Rect.X + 1, Rect.Y + (12 * n))
-        Next
-
-        g.DrawRectangle(Pens.Black, Rect)
-    End Sub
-
-
-
 
 End Module

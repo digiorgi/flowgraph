@@ -163,70 +163,63 @@ Public Class frmMain
                     End If
                 Next
                 If e.Button = Windows.Forms.MouseButtons.Right Then
-                    Tool = ToolType.Add
-
                     AddObject_Open()
                 End If
 
             Case ToolType.Menu
-                Menu_MouseUp()
-                DoDraw(True)
-
-            Case ToolType.Add
                 If e.Button = Windows.Forms.MouseButtons.Left Then
-                    If AddObject_Select() Then Tool = ToolType.None
+                    Menu_MouseUp()
+                    DoDraw(True)
                 ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
                     For Each obj As Object In Objects
                         If Mouse.IntersectsWith(obj.Rect) Then
-                            obj.MouseUp(e)
                             Tool = ToolType.None
+                            obj.MouseUp(e)
                             DoDraw(True)
                             Return
                         End If
                     Next
                     AddObject_Open()
                 End If
-                DoDraw(True)
-
 
 
             Case ToolType.Move
-                Tool = ToolType.None
+                    Tool = ToolType.None
 
 
 
             Case ToolType.Connect
-                Tool = ToolType.None
-                Dim m As New Rectangle(e.Location, New Size(1, 1))
+                    Tool = ToolType.None
+                    Dim m As New Rectangle(e.Location, New Size(1, 1))
 
-                For Each obj As Object In Objects
-                    If obj.Index <> ToolObject Then
-                        If obj.IntersectsWithInput(m) Then
+                    For Each obj As Object In Objects
+                        If obj.Index <> ToolObject Then
+                            If obj.IntersectsWithInput(m) Then
 
-                            If obj.Input(obj.Intersection).MaxConnected = -1 Or _
-                                obj.Input(obj.Intersection).MaxConnected > obj.Input(obj.Intersection).Connected Then
+                                If obj.Input(obj.Intersection).MaxConnected = -1 Or _
+                                    obj.Input(obj.Intersection).MaxConnected > obj.Input(obj.Intersection).Connected Then
 
-                                Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
-                                'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
-                                'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
+                                    Objects(ToolObject).Output(ToolInt).SetValues(obj.Index, obj.Intersection)
+                                    'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
+                                    'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
 
-                                'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
-                                obj.Input(obj.Intersection).Connected += 1
-                                'obj.Input(obj.Intersection).obj1 = ToolObject
-                                'obj.Input(obj.Intersection).Index1 = ToolInt
+                                    'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
+                                    obj.Input(obj.Intersection).Connected += 1
+                                    'obj.Input(obj.Intersection).obj1 = ToolObject
+                                    'obj.Input(obj.Intersection).Index1 = ToolInt
 
+                                End If
+
+
+                                DoDraw(True)
+
+                                Return
                             End If
-
-
-                            DoDraw(True)
-
-                            Return
                         End If
-                        End If
-                Next
+                    Next
 
 
-                DoDraw(True)
+                    DoDraw(True)
 
         End Select
 
@@ -270,8 +263,6 @@ Public Class frmMain
                     End If
                 Next
 
-            Case ToolType.Add
-                DoDraw(True)
             Case ToolType.Menu
                 DoDraw(True)
 
@@ -310,9 +301,6 @@ Public Class frmMain
             Case ToolType.Connect 'If we are using teh connect tool then draw the line.
                 e.Graphics.DrawLine(ConnectorPen, ToolOffset, Mouse.Location)
 
-            Case ToolType.Add
-                AddObject_Draw(e.Graphics)
-
             Case ToolType.Menu
                 Menu_Draw(e.Graphics)
 
@@ -321,8 +309,8 @@ Public Class frmMain
         'If there is tooltip text to draw then draw it.
         If Not ToolTipText = "" Then
             Dim s As SizeF = e.Graphics.MeasureString(ToolTipText, DefaultFont)
-            e.Graphics.FillRectangle(Brushes.White, Mouse.X + 10, Mouse.Y + 17, s.Width + 2, s.Height + 2)
-            e.Graphics.DrawString(ToolTipText, DefaultFont, Brushes.Black, Mouse.X + 11, Mouse.Y + 18)
+            e.Graphics.FillRectangle(SystemBrushes.Info, Mouse.X + 10, Mouse.Y + 17, s.Width + 2, s.Height + 2)
+            e.Graphics.DrawString(ToolTipText, DefaultFont, SystemBrushes.InfoText, Mouse.X + 11, Mouse.Y + 18)
         End If
 
 

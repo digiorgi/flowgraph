@@ -33,6 +33,7 @@ Module modMain
 
     'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont
+    Public DefaultFontBrush As Brush = SystemBrushes.ControlText
 
     'The pen used to connect objects.
     Public ConnectorPen As New Pen(Color.FromArgb(80, 80, 80), 3)
@@ -48,8 +49,6 @@ Module modMain
         Move
         Connect
         Menu
-        Add
-        Remove
     End Enum
     Public Tool As ToolType
     Public ToolOffset As Point
@@ -129,6 +128,7 @@ Module modMain
         'Mouse = New Rectangle(0, 0, 1, 1)
 
         AddObject_Setup()
+
 
     End Sub
 
