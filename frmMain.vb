@@ -28,17 +28,7 @@
 #End Region
 
 Public Class frmMain
-    Enum ToolType
-        None
-        Move
-        Connect
-        Add
-        Remove
-    End Enum
-    Private Tool As ToolType
-    Private ToolOffset As Point
-    Private ToolObject As Integer
-    Private ToolInt As Integer
+   
 
 #Region "Load & Close"
 
@@ -146,6 +136,13 @@ Public Class frmMain
 
                 End If
 
+                For Each obj As Object In Objects
+                    If Mouse.IntersectsWith(obj.Rect) Then
+                        obj.MouseDown(e)
+                        Return
+                    End If
+                Next
+
 
 
         End Select
@@ -171,6 +168,9 @@ Public Class frmMain
                     AddObject_Open()
                 End If
 
+            Case ToolType.Menu
+                Menu_MouseUp()
+                DoDraw(True)
 
             Case ToolType.Add
                 If e.Button = Windows.Forms.MouseButtons.Left Then
@@ -272,6 +272,8 @@ Public Class frmMain
 
             Case ToolType.Add
                 DoDraw(True)
+            Case ToolType.Menu
+                DoDraw(True)
 
             Case ToolType.Move
 
@@ -310,6 +312,9 @@ Public Class frmMain
 
             Case ToolType.Add
                 AddObject_Draw(e.Graphics)
+
+            Case ToolType.Menu
+                Menu_Draw(e.Graphics)
 
         End Select
 

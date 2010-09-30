@@ -181,9 +181,6 @@ Public MustInherit Class BaseObject
         g.DrawString(Title, SystemFonts.DefaultFont, Brushes.Black, TitleRect) 'Draw the title string.
 
 
-        If IsMenuOpen Then
-            Menu_Draw(g, MenuCurrent, MenuStart)
-        End If
 
 
     End Sub
@@ -304,40 +301,28 @@ Public MustInherit Class BaseObject
 
 #Region "Mouse & Menu"
     Private Menu(0) As MenuNode
-    Private MenuCurrent() As MenuNode
-    Private MenuStart As Point
-    Private IsMenuOpen As Boolean = False
+
+    Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
+
+
+        Select Case LCase(Result.Name)
+            Case "remove"
+                RemoveAt(Index)
+
+        End Select
+    End Sub
 
     Public Overridable Sub MouseMove(ByVal e As MouseEventArgs)
-        If IsMenuOpen Then DoDraw(True)
+
+    End Sub
+    Public Overridable Sub MouseDown(ByVal e As MouseEventArgs)
+
     End Sub
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
 
-            IsMenuOpen = True
-            MenuCurrent = Menu
-            MenuStart = Mouse.Location
+            OpenMenu(Index, Menu)
 
-            DoDraw(True)
-        ElseIf e.Button = MouseButtons.Left Then
-            If IsMenuOpen Then
-                Dim r As Integer = Menu_MouseUp(MenuCurrent, MenuStart)
-                Select Case r
-                    Case MenuResult.Closed
-                        IsMenuOpen = False
-                    Case MenuResult.SelectedGroup
-
-                    Case Else
-                        IsMenuOpen = False
-                        If r = 0 Then
-                            'MsgBox("REMOVE ME")
-                            RemoveAt(Index)
-
-                        End If
-                End Select
-
-                DoDraw(True)
-            End If
         End If
     End Sub
 

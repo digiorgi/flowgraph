@@ -31,41 +31,67 @@
         Closed = -1
     End Enum
 
+    Private StartPosition As Point
+    Private Items() As MenuNode
+    Private ObjectIndex As Integer = -1
+    Private Rect As Rectangle
 
-    Public Function Menu_MouseUp(ByVal Items() As MenuNode, ByVal Position As Point) As Integer
-        Return Menu_MouseUp(Items, New Rectangle(Position, New Size(Items(0).Width, (Items.Length * 12) + 1)))
-    End Function
-    Public Function Menu_MouseUp(ByRef Items() As MenuNode, ByVal Rect As Rectangle) As Integer
+    'Public MenuIsOpen As Boolean = False
 
-        'If the mouse is not in the main rect then return false
-        If Not Rect.IntersectsWith(Mouse) Then
-            Return MenuResult.Closed
+    Public Sub OpenMenu(ByVal ObjectIndex As Integer, ByVal Items() As MenuNode, Optional ByVal Rect As Rectangle = Nothing)
+
+
+        Menu.Items = Items
+        Menu.ObjectIndex = ObjectIndex
+
+        StartPosition = Mouse.Location
+        'MenuIsOpen = True
+
+        Tool = ToolType.Menu
+
+        If Rect.IsEmpty Then
+            Rect = New Rectangle(StartPosition, New Size(Items(0).Width, (Items.Length * 12) + 1))
         End If
 
-        For n As Integer = 0 To Items.Length - 1
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
+        Menu.Rect = Rect
 
-                If Items(n).IsGroup Then
-                    Items = Items(n).Children
+        DoDraw(True)
+    End Sub
 
-                    Return MenuResult.SelectedGroup
-                Else
+    Public Function Menu_MouseUp() As Integer
+
+        'If the mouse is not in the main rect then return false
+        If Rect.IntersectsWith(Mouse) Then
 
 
-                    Return n
+            For n As Integer = 0 To Items.Length - 1
+                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
+
+                    If Items(n).IsGroup Then
+                        Items = Items(n).Children
+
+                        Return MenuResult.SelectedGroup
+                    Else
+
+                        If ObjectIndex > -1 Then
+                            Objects(ObjectIndex).MenuSelected(Items(n))
+                        End If
+
+                        Tool = ToolType.None
+                        Return n
+                    End If
+
                 End If
+            Next
 
-            End If
-        Next
+        End If
 
+        Tool = ToolType.None
 
         Return MenuResult.Closed
     End Function
 
-    Public Sub Menu_Draw(ByVal g As Graphics, ByVal Items() As MenuNode, ByVal Position As Point)
-        Menu_Draw(g, Items, New Rectangle(Position, New Size(Items(0).Width, (Items.Length * 12) + 1)))
-    End Sub
-    Public Sub Menu_Draw(ByVal g As Graphics, ByVal Items() As MenuNode, ByVal Rect As Rectangle)
+    Public Sub Menu_Draw(ByVal g As Graphics)
 
         g.FillRectangle(Brushes.LightGray, Rect)
 
