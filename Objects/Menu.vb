@@ -4,6 +4,10 @@
         Public Name As String
         Public ClassName As String
         Public Width As Integer
+        Public Result As MenuResult
+        Sub New(ByVal Result As MenuResult)
+            Me.Result = Result
+        End Sub
         Public Sub Setup(ByVal Name As String, ByVal ClassName As String, Optional ByVal Width As Integer = 50)
             Me.Name = Name
             Me.ClassName = ClassName
@@ -27,38 +31,35 @@
         End Function
     End Structure
     Public Enum MenuResult
-        SelectedGroup = -2
-        Closed = -1
+        SelectedItem
+        SelectedGroup '= -2
+        Closed '= -1
     End Enum
 
-    Private StartPosition As Point
+    Public MenuStartPosition As Point
     Private Items() As MenuNode
     Private ObjectIndex As Integer = -1
     Private Rect As Rectangle
 
-    'Public MenuIsOpen As Boolean = False
 
-    Public Sub OpenMenu(ByVal ObjectIndex As Integer, ByVal Items() As MenuNode, Optional ByVal Rect As Rectangle = Nothing)
+    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Items() As MenuNode)
 
 
         Menu.Items = Items
         Menu.ObjectIndex = ObjectIndex
 
-        StartPosition = Mouse.Location
-        'MenuIsOpen = True
+        MenuStartPosition = Mouse.Location
 
         Tool = ToolType.Menu
 
-        If Rect.IsEmpty Then
-            Rect = New Rectangle(StartPosition, New Size(Items(0).Width, (Items.Length * 12) + 1))
-        End If
+        Rect.Location = MenuStartPosition
+        UpdateRectSize()
 
-        Menu.Rect = Rect
 
         DoDraw(True)
     End Sub
 
-    Public Function Menu_MouseUp() As Integer
+    Public Function Menu_MouseUp() As MenuNode
 
         'If the mouse is not in the main rect then return false
         If Rect.IntersectsWith(Mouse) Then
@@ -70,15 +71,21 @@
                     If Items(n).IsGroup Then
                         Items = Items(n).Children
 
-                        Return MenuResult.SelectedGroup
+                        UpdateRectSize()
+
+                        Items(n).Result = MenuResult.SelectedGroup
+                        Return Items(n)
                     Else
 
                         If ObjectIndex > -1 Then
                             Objects(ObjectIndex).MenuSelected(Items(n))
+                        Else
+                            AddObject.AddObject(Items(n).ClassName, MenuStartPosition)
                         End If
 
+                        Items(n).Result = MenuResult.SelectedItem
                         Tool = ToolType.None
-                        Return n
+                        Return Items(n)
                     End If
 
                 End If
@@ -87,25 +94,30 @@
         End If
 
         Tool = ToolType.None
-
-        Return MenuResult.Closed
+        Return New MenuNode(MenuResult.Closed)
     End Function
 
     Public Sub Menu_Draw(ByVal g As Graphics)
 
-        g.FillRectangle(Brushes.LightGray, Rect)
+        g.FillRectangle(SystemBrushes.Menu, Rect)
 
 
         For n As Integer = 0 To Items.Length - 1
 
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-                g.FillRectangle(Brushes.White, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
-
+                g.FillRectangle(SystemBrushes.Highlight, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
+                g.DrawString(Items(n).ToString, DefaultFont, SystemBrushes.HighlightText, Rect.X + 1, Rect.Y + (12 * n))
+            Else
+                g.DrawString(Items(n).ToString, DefaultFont, SystemBrushes.MenuText, Rect.X + 1, Rect.Y + (12 * n))
             End If
 
-            g.DrawString(Items(n).ToString, DefaultFont, Brushes.Black, Rect.X + 1, Rect.Y + (12 * n))
+
         Next
 
         g.DrawRectangle(Pens.Black, Rect)
+    End Sub
+
+    Private Sub UpdateRectSize()
+        Rect.Size = New Size(Items(0).Width, (Items.Length * 12) + 1)
     End Sub
 End Module

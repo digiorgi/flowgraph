@@ -152,9 +152,10 @@ Public MustInherit Class BaseObject
 
     Public Overridable Sub Draw(ByVal g As Graphics)
         'Draw the title and the background. Then we draw teh border so it is on top.
-        g.FillRectangle(Brushes.LightBlue, TitleBar)
-        g.FillRectangle(Brushes.LightGray, BackGround)
-        g.DrawRectangle(Pens.Black, Rect)
+        g.FillRectangle(SystemBrushes.GradientActiveCaption, TitleBar)
+
+        g.FillRectangle(SystemBrushes.Control, BackGround)
+        g.DrawRectangle(SystemPens.WindowFrame, Rect)
 
         'Draw the inputs. (if any.)
         If Input IsNot Nothing Then
@@ -178,7 +179,7 @@ Public MustInherit Class BaseObject
             TitleRect.Size = g.MeasureString(Title, SystemFonts.DefaultFont)
             TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
         End If
-        g.DrawString(Title, SystemFonts.DefaultFont, Brushes.Black, TitleRect) 'Draw the title string.
+        g.DrawString(Title, SystemFonts.DefaultFont, SystemBrushes.ActiveCaptionText, TitleRect) 'Draw the title string.
 
 
 
@@ -321,7 +322,7 @@ Public MustInherit Class BaseObject
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
 
-            OpenMenu(Index, Menu)
+            Menu_Open(Index, Menu)
 
         End If
     End Sub

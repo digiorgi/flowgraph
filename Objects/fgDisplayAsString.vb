@@ -2,7 +2,7 @@
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup("fgDisplayAsString", Position, 120, 60) 'Setup the base rectangles.
+        Setup("fgDisplayAsString", Position, 120, 40) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -37,7 +37,7 @@
         MyBase.Draw(g)
 
         'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, Brushes.Black, Rect.X + 16, Rect.Y + 16)
+        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 16, Rect.Y + 16)
     End Sub
 
 End Class
