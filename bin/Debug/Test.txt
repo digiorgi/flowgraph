@@ -4,14 +4,14 @@ Main{
 }
 Object0{
 	Name=fgCounter;
-	Position=33,86;
+	Position=25,75;
 	Output=1,0;
 }
 Object1{
 	Name=fgDisplayAsString;
-	Position=192,101;
+	Position=230,70;
 	Input=1;
-	Data=3;
+	Data=8;
 }
 Object2{
 	Name=fgSplit;
@@ -21,18 +21,18 @@ Object2{
 }
 Object3{
 	Name=fgDisplayAsString;
-	Position=300,280;
+	Position=300,275;
 	Input=1;
-	Data=82;
+	Data=7;
 }
 Object4{
 	Name=fgDisplayAsString;
 	Position=300,345;
 	Input=1;
-	Data=82;
+	Data=7;
 }
 Object5{
 	Name=fgCounter;
-	Position=20,270;
+	Position=25,270;
 	Output=2,0;
 }
