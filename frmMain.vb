@@ -49,11 +49,6 @@ Public Class frmMain
 
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
-        'Objects.Add(New fgCounter(New Point(50, 70)))
-        'Objects.Add(New fgDisplayAsString(New Point(250, 90)))
-        'Objects.Add(New fgDisplayAsString(New Point(250, 200)))
-        'Objects.Add(New fgSplit(New Point(50, 200)))
-        'Objects.Add(New fgAdd(New Point(50, 300)))
 
         Dim sd As New SimpleD.SimpleD
         sd.FromFile("Test.txt")
@@ -80,21 +75,19 @@ Public Class frmMain
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For Each obj As Object In Objects
                 If obj.IntersectsWithOutput(Mouse) Then
-                    'Objects(obj.Output(obj.Intersection).obj1).Input(Objects(obj.Output(obj.Intersection)).Index1) = Nothing
-                    'obj.Output(obj.Intersection) = Nothing
 
-                    DisconnectOutput(obj.Output(obj.Intersection))
+                    obj.Output(obj.Intersection).Disconnect()
 
                     Return
                 ElseIf obj.IntersectsWithInput(Mouse) Then
-                    DisconnectInput(obj.Input(obj.Intersection))
+                    obj.Input(obj.Intersection).Disconnect()
 
                     Return
                 End If
 
                 'If the mouse intersects with the title bar then move the object.
                 If Mouse.IntersectsWith(obj.Rect) Then
-                    obj.DoubleClicked()
+                    obj.MouseDoubleClick(e)
 
                     Return
                 End If
@@ -190,31 +183,19 @@ Public Class frmMain
 
             Case ToolType.Connect
                 Tool = ToolType.None
-                Dim m As New Rectangle(e.Location, New Size(1, 1))
 
                 For Each obj As Object In Objects
                     If obj.Index <> ToolObject Then
-                        If obj.IntersectsWithInput(m) Then
+                        If obj.IntersectsWithInput(Mouse) Then
 
-                            If obj.Input(obj.Intersection).MaxConnected = -1 Or _
-                                obj.Input(obj.Intersection).MaxConnected > obj.Input(obj.Intersection).Connected Then
-
-                                If Objects(ToolObject).Output(ToolInt).Add(obj.Index, obj.Intersection) Then
-                                    'Objects(ToolObject).Output(ToolInt).obj1 = obj.Index
-                                    'Objects(ToolObject).Output(ToolInt).Index1 = obj.Intersection
-
-                                    'obj.Input(obj.Intersection).SetValues(ToolObject, ToolInt)
-                                    obj.Input(obj.Intersection).Connected += 1
-                                    'obj.Input(obj.Intersection).obj1 = ToolObject
-                                    'obj.Input(obj.Intersection).Index1 = ToolInt
-                                End If
-
+                            'Try and connect.
+                            If Objects(ToolObject).Output(ToolInt).Add(obj.Index, obj.Intersection) Then
+                                'Add one to connected if it successfully connected.
+                                obj.Input(obj.Intersection).Connected += 1
                             End If
 
 
-                            DoDraw(True)
-
-                            Return
+                            Exit For
                         End If
                     End If
                 Next
@@ -237,7 +218,7 @@ Public Class frmMain
         End If
 
         'Check it see if the mouse is hovering over a input or a output.
-        For Each obj As Object In Objects 'Loop thru each object until we found a input/output or we made it thru them all.
+        For Each obj As Object In Objects 'Loop through each object until we found a input/output or we made it through them all.
             If obj.IntersectsWithInput(Mouse) Then 'Check input.
                 ToolTipText = obj.Input(obj.Intersection).Name
 

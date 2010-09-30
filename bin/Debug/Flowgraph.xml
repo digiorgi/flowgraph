@@ -101,6 +101,17 @@ Flowgraph
 	<summary>
  Is called when the object is moving.
  </summary>
+</member><member name="M:Flowgraph.DataFlowBase.Add(System.Int32,System.Int32)">
+	<summary>
+ Add a input.
+ </summary>
+	<param name="obj1"></param>
+	<param name="Index1"></param>
+	<returns>True if successfully added.</returns>
+</member><member name="M:Flowgraph.DataFlowBase.Disconnect">
+	<summary>
+ Disconnect all connections.
+ </summary>
 </member>
 </members>
 </doc>

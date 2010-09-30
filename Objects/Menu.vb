@@ -1,6 +1,6 @@
 ﻿Public Module Menu
     Public Structure MenuNode
-        Public Children() As MenuNode
+        Public Children As List(Of MenuNode)
         Public Name As String
         Public ClassName As String
         Public Width As Integer
@@ -8,14 +8,28 @@
         Sub New(ByVal Result As MenuResult)
             Me.Result = Result
         End Sub
+        Public Sub New(ByVal Name As String, ByVal ClassName As String, Optional ByVal Width As Integer = 50)
+            Me.Name = Name
+            Me.ClassName = ClassName
+            Me.Width = Width
+        End Sub
+        Public Sub New(ByVal Name As String, Optional ByVal IsGroup As Boolean = False, Optional ByVal Width As Integer = 50)
+            Me.Name = Name
+            Me.Width = Width
+            If IsGroup Then Children = New List(Of MenuNode)
+        End Sub
         Public Sub Setup(ByVal Name As String, ByVal ClassName As String, Optional ByVal Width As Integer = 50)
             Me.Name = Name
             Me.ClassName = ClassName
             Me.Width = Width
         End Sub
-        Public Sub Setup(ByVal Name As String, Optional ByVal Width As Integer = 50)
+        Public Sub Setup(ByVal Name As String, Optional ByVal IsGroup As Boolean = False, Optional ByVal Width As Integer = 50)
             Me.Name = Name
             Me.Width = Width
+            If IsGroup Then Children = New List(Of MenuNode)
+        End Sub
+        Public Sub SetResult(ByVal Result As MenuResult)
+            Me.Result = Result
         End Sub
         Public ReadOnly Property IsGroup() As Boolean
             Get
@@ -37,12 +51,12 @@
     End Enum
 
     Public MenuStartPosition As Point
-    Private Items() As MenuNode
+    Private Items As List(Of MenuNode)
     Private ObjectIndex As Integer = -1
     Private Rect As Rectangle
 
 
-    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Items() As MenuNode)
+    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Items As List(Of MenuNode))
 
 
         Menu.Items = Items
@@ -65,7 +79,7 @@
         If Rect.IntersectsWith(Mouse) Then
 
 
-            For n As Integer = 0 To Items.Length - 1
+            For n As Integer = 0 To Items.Count - 1
                 If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
 
                     If Items(n).IsGroup Then
@@ -73,7 +87,7 @@
 
                         UpdateRectSize()
 
-                        Items(n).Result = MenuResult.SelectedGroup
+                        Items(n).SetResult(MenuResult.SelectedGroup)
                         Return Items(n)
                     Else
 
@@ -83,7 +97,7 @@
                             AddObject.AddObject(Items(n).ClassName, MenuStartPosition)
                         End If
 
-                        Items(n).Result = MenuResult.SelectedItem
+                        Items(n).SetResult(MenuResult.SelectedItem)
                         Tool = ToolType.None
                         Return Items(n)
                     End If
@@ -102,7 +116,7 @@
         g.FillRectangle(SystemBrushes.Menu, Rect)
 
 
-        For n As Integer = 0 To Items.Length - 1
+        For n As Integer = 0 To Items.Count - 1
 
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
                 g.FillRectangle(SystemBrushes.Highlight, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
@@ -118,6 +132,6 @@
     End Sub
 
     Private Sub UpdateRectSize()
-        Rect.Size = New Size(Items(0).Width, (Items.Length * 12) + 1)
+        Rect.Size = New Size(Items(0).Width, (Items.Count * 12) + 1)
     End Sub
 End Module

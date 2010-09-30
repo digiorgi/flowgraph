@@ -47,7 +47,7 @@
 
     End Sub
 
-    Public Overrides Sub DoubleClicked()
+    Public Overrides Sub MouseDoubleClick(ByVal e As System.Windows.Forms.MouseEventArgs)
         On Error Resume Next
         Value = InputBox("Enter value", "Counter", 0)
 
