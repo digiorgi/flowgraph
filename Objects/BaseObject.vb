@@ -33,10 +33,10 @@ Public MustInherit Class BaseObject
     Private Name As String = "NoName"
 
     'Output
-    Public Output() As Transmitter
+    Public Output() As DataFlowBase
 
     'Input
-    Public Input() As Transmitter
+    Public Input() As DataFlowBase
 
 
     Public Rect As Rectangle
@@ -72,22 +72,25 @@ Public MustInherit Class BaseObject
         If Output IsNot Nothing Then
             For n As Integer = 0 To Output.Length - 1
 
-                If Output(n).obj1 > -1 Then
-                    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
-                    Objects(Output(n).obj1).Input(Output(n).Index1).index1 = -1
-                    Objects(Output(n).obj1).Input(Output(n).Index1).Connected -= 1
-                    Output(n).obj1 = -1
-                    Output(n).Index1 = -1
-                End If
+                Output(n).Disconnect()
+
+                'If Output(n).obj1 > -1 Then
+                '    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
+                '    Objects(Output(n).obj1).Input(Output(n).Index1).index1 = -1
+                '    Objects(Output(n).obj1).Input(Output(n).Index1).Connected -= 1
+                '    Output(n).obj1 = -1
+                '    Output(n).Index1 = -1
+                'End If
 
             Next
         End If
 
         If Input IsNot Nothing Then
             For n As Integer = 0 To Input.Length - 1
-                If Input(n).Connected > 0 Then
-                    DisconnectInput(Input(n))
-                End If
+                Input(n).Disconnect()
+                'If Input(n).Connected > 0 Then
+                '    DisconnectInput(Input(n))
+                'End If
             Next
         End If
     End Sub
@@ -101,9 +104,10 @@ Public MustInherit Class BaseObject
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
             g.Get_Value("Output", tmp)
-            Dim tmpS As String() = Split(tmp, ",")
+            Dim tmpS As String() = Split(tmp, "`")
             For n As Integer = 0 To Output.Length - 1
-                Output(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
+                'Output(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
+                Output(n).Load(Split(tmpS(n), ","))
             Next
         End If
 
@@ -126,9 +130,9 @@ Public MustInherit Class BaseObject
         g.Add("Position", Rect.X & "," & Rect.Y)
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
-            tmp = Output(0).obj1 & "," & Output(0).Index1
+            tmp = Output(0).Save
             For n As Integer = 1 To Output.Length - 1
-                tmp &= "," & Output(n).obj1 & "," & Output(n).Index1
+                tmp &= "`" & Output(n).Save
             Next
             g.Add("Output", tmp)
         End If
@@ -193,8 +197,10 @@ Public MustInherit Class BaseObject
 
         For n As Integer = 0 To Output.Length - 1
             If Output(n).IsNotEmpty Then
-
-                g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(Output(n).obj1).GetInputPosition(Output(n).Index1))
+                For Each fd As DataFlow In Output(n).Flow
+                    g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(fd.obj).GetInputPosition(fd.Index))
+                Next
+                'g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(Output(n).obj1).GetInputPosition(Output(n).Index1))
 
             End If
         Next
@@ -229,17 +235,19 @@ Public MustInherit Class BaseObject
     Public Sub Send(ByVal Data As Object, ByVal ID As Integer)
         If Output Is Nothing Then Return
 
-        If Output(ID).IsNotEmpty Then Objects(Output(ID).obj1).Receive(Data, Output(ID))
+        'If Output(ID).IsNotEmpty Then Objects(Output(ID).obj1).Receive(Data, Output(ID))
+        Output(ID).Send(Data)
     End Sub
     Public Sub Send(ByVal Data As Object)
         If Output Is Nothing Then Return
 
-        For Each obj As Transmitter In Output
-            If obj.IsNotEmpty Then Objects(obj.obj1).Receive(Data, obj)
+        For Each obj As DataFlowBase In Output
+            'If obj.IsNotEmpty Then Objects(obj.obj1).Receive(Data, obj)
+            obj.Send(Data)
         Next
     End Sub
 
-    Public Overridable Sub Receive(ByVal Data As Object, ByVal sender As Transmitter)
+    Public Overridable Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
     End Sub
 #End Region
 
@@ -249,14 +257,14 @@ Public MustInherit Class BaseObject
         'InputNames = Names
         ReDim Input(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
-            Input(n) = New Transmitter(Index, n, Names(n))
+            Input(n) = New DataFlowBase(Index, n, Names(n))
 
         Next
     End Sub
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
-            Output(n) = New Transmitter(Index, n, Names(n))
+            Output(n) = New DataFlowBase(Index, n, Names(n), True)
         Next
     End Sub
 
@@ -334,55 +342,177 @@ Public MustInherit Class BaseObject
 
 End Class
 
+Public Class DataFlowBase
 
-Public Class Transmitter
-    '0 defines it is from the base object.
+    'Base object and the output/input index.
+    Public obj As Integer = -1
+    Public Index As Integer = -1
+    Public Name As String = "DataFlowBase"
 
-    Public obj0, obj1 As Integer
-    Public Index0, Index1 As Integer
-    Public Name0, Name1 As String
+    'We do not create new because Inputs do not use it.
+    Friend Flow As List(Of DataFlow)
 
-    'For input
     Public MaxConnected As Integer = -1
     Public Connected As Integer = 0
 
-    Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String)
-        obj0 = obj
-        obj1 = -1
-        Index0 = Index
-        Index1 = -1
-        Name0 = Name
-    End Sub
-    Public Sub New(ByVal obj1 As Integer, ByVal Index1 As Integer)
-        obj0 = -1
-        Me.obj1 = obj1
-        Index0 = -1
-        Me.Index1 = Index1
-        Name0 = "Not a real transmitter!"
+    Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String, Optional ByVal IsOutput As Boolean = False)
+        Me.obj = obj
+        Me.Index = Index
+        Me.Name = Name
+        If IsOutput Then Flow = New List(Of DataFlow)
     End Sub
 
-    Public Sub SetValues(ByRef obj1 As Integer, ByVal Index1 As Integer)
-        Me.obj1 = obj1
-        Me.Index1 = Index1
+#Region "Add & Disconnect"
+    Public Function Add(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
+        If Flow Is Nothing Then Return False
+
+        If Connected = MaxConnected Then Return False
+
+        For Each df As DataFlow In Flow
+            If df.obj = obj1 And df.Index = Index1 Then
+                Return False
+            End If
+        Next
+
+        Flow.Add(New DataFlow(obj1, Index1, Me))
+
+        Connected += 1
+
+        Return True
+    End Function
+
+    Public Sub Disconnect()
+        If Flow Is Nothing Then
+            'Disconnect input.
+
+            For Each obj As Object In Objects
+                If obj.Output IsNot Nothing Then
+                    For Each out As DataFlowBase In obj.Output
+                        'If Flow Is Nothing Then Continue For
+
+                        Dim n As Integer = 0
+                        Do
+                            If n > out.Flow.Count - 1 Then Exit Do
+                            If out.Flow(n).obj = Me.obj And out.Flow(n).Index = Index Then
+                                out.Flow(n) = Nothing
+                                out.Flow.RemoveAt(n)
+                                out.Connected -= 1
+                                Connected -= 1
+                            Else
+                                n += 1
+                            End If
+                        Loop Until n = out.Flow.Count
+
+
+                    Next
+                End If
+            Next
+
+
+        Else 'Disconnect output.
+
+            For Each fd As DataFlow In Flow
+
+                Objects(fd.obj).Input(fd.Index).Connected -= 1
+
+            Next
+
+            Flow.Clear()
+
+        End If
+
+        'Connected = 0
+
     End Sub
+#End Region
+
+#Region "Send"
+    Public Function Send(ByVal Data As Object, ByVal subIndex As Integer) As Boolean
+        If Flow Is Nothing Then Return False
+
+        If Flow.Count > subIndex Then Return False
+
+        Objects(Flow(subIndex).obj).Receive(Data, Flow(subIndex))
+
+        Return True
+    End Function
+    Public Function Send(ByVal Data As Object) As Boolean
+        If Flow Is Nothing Then Return False
+
+        For Each fd As DataFlow In Flow
+            Objects(fd.obj).Receive(Data, fd)
+        Next
+
+        Return True
+    End Function
+#End Region
+
+    Public Sub Load(ByVal data() As String)
+        'Connected = data(0)
+
+        If Flow Is Nothing Then Return
+        For i As Integer = 1 To data.Length - 1 Step 2
+            Add(data(i), data(i + 1))
+        Next
+        If Connected <> data(0) Then
+            Throw New Exception("Error loading")
+        End If
+    End Sub
+    Public Function Save() As String
+        Dim data As String = Connected
+
+        If Flow Is Nothing Then Return data
+        For i As Integer = 0 To Flow.Count - 1
+            data &= "," & Flow(i).obj & "," & Flow(i).Index
+        Next
+        Return data
+    End Function
 
     Public Function IsEmpty() As Boolean
-        Return (obj1 = -1 AndAlso Index1 >= -1)
+        If Flow Is Nothing Then Return True
+
+        If Flow.Count = 0 Then Return True
+
+        Return False
     End Function
     Public Function IsNotEmpty() As Boolean
         Return Not IsEmpty()
     End Function
 
-    'Public Overrides Function ToString() As String
-    '    Return Name0
-    'End Function
-
-    Public Shared Operator =(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
+    Shared Operator =(ByVal left As DataFlowBase, ByVal right As DataFlowBase) As Boolean
         If left Is Nothing Or right Is Nothing Then Return False
-        Return (left.obj0 = right.obj0) And (left.obj1 = right.obj1) And (left.Index0 = right.Index0) And (left.Index1 = right.Index1)
+
+        If right.obj <> left.obj Or right.Index <> left.Index Or right.Connected <> left.Connected Then Return False
+
+        Return True
     End Operator
-    Public Shared Operator <>(ByVal left As Transmitter, ByVal right As Transmitter) As Boolean
+    Shared Operator <>(ByVal left As DataFlowBase, ByVal right As DataFlowBase) As Boolean
         Return Not left = right
     End Operator
-
 End Class
+
+Public Structure DataFlow
+
+    Public obj, Index As Integer
+
+    Public Base As DataFlowBase
+
+    Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Base As DataFlowBase)
+        Me.obj = obj
+        Me.Index = Index
+        Me.Base = Base
+    End Sub
+
+    Public Sub AddToObj(ByVal value As Integer)
+        obj += value
+    End Sub
+
+    Shared Operator =(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean
+        If right.obj <> left.obj Or right.Index <> left.Index Then Return False
+
+        Return True
+    End Operator
+    Shared Operator <>(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean
+        Return Not left = right
+    End Operator
+End Structure

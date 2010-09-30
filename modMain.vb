@@ -59,23 +59,27 @@ Module modMain
         For n As Integer = 0 To Objects.Count - 1
             Objects(n).Index = n
 
-            If Objects(n).Input IsNot Nothing Then
-                For Each Inp As Transmitter In Objects(n).Input
-                    If Inp.obj1 = RemovedIndex Then
-                        Inp.obj1 = -1
-                    ElseIf Inp.obj1 > RemovedIndex Then
-                        Inp.obj1 -= 1
-                    End If
-                Next
-            End If
+          
 
             If Objects(n).output IsNot Nothing Then
-                For Each outp As Transmitter In Objects(n).output
-                    If outp.obj1 = RemovedIndex Then
-                        outp.obj1 = -1
-                    ElseIf outp.obj1 > RemovedIndex Then
-                        outp.obj1 -= 1
-                    End If
+                For Each out As DataFlowBase In Objects(n).output
+                    Dim i As Integer
+                    Do
+                        If out.Flow(i).obj = RemovedIndex Then
+                            out.Flow(i) = Nothing
+                            out.Flow.RemoveAt(i)
+                        ElseIf out.Flow(i).obj > RemovedIndex Then
+                            out.Flow(i).AddToObj(-1)
+                            i += 1
+                        Else
+                            i += 1
+                        End If
+                    Loop Until i = out.Flow.Count
+                    'If outp.obj1 = RemovedIndex Then
+                    '    outp.obj1 = -1
+                    'ElseIf outp.obj1 > RemovedIndex Then
+                    '    outp.obj1 -= 1
+                    'End If
                 Next
             End If
         Next
@@ -89,31 +93,18 @@ Module modMain
         ResetObjectIndexs(Index)
     End Sub
 
-    Public Sub DisconnectOutput(ByRef Output As Transmitter)
+    Public Sub DisconnectOutput(ByRef Output As DataFlowBase)
         If Output.IsEmpty Then Return
 
-        Objects(Output.obj1).Input(Output.Index1).Connected -= 1
-
-        Output.SetValues(-1, -1)
+        Output.Disconnect()
     End Sub
 
-    Public Sub DisconnectInput(ByRef Input As Transmitter)
+    Public Sub DisconnectInput(ByRef Input As DataFlowBase)
         If Input.Connected = 0 Then Return
 
-        For Each obj As Object In Objects
-            If obj.Output IsNot Nothing Then
-                For Each inp As Transmitter In obj.Output
+        Input.Disconnect()
 
-                    If inp.obj1 = Input.obj0 And inp.Index1 = Input.Index0 Then
-                        inp.obj1 = -1
-                        inp.Index1 = -1
-                    End If
-
-                Next
-            End If
-        Next
-
-        Input.Connected = 0
+        'Input.Connected = 0
     End Sub
 
 

@@ -3,6 +3,9 @@
 
 
 Step#1
+	
+	Allow outputs to output to multiple inputs.
+
 
 	Comment stuff
 
