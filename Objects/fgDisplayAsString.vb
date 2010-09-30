@@ -11,6 +11,7 @@
         'Set the title.
         Title = "Display as string"
 
+        Menu.Add(New MenuNode("Set String"))
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
@@ -26,6 +27,17 @@
 
         Return MyBase.Load(g)
     End Function
+
+    Public Overrides Sub MenuSelected(ByVal Result As Menu.MenuNode)
+        MyBase.MenuSelected(Result)
+
+        If Result.Result = MenuResult.SelectedItem Then
+            If Result.Name = "Set String" Then
+                Me.Data = InputBox("Set string", "THIS IS THE TITLE")
+            End If
+        End If
+    End Sub
+
     Private Data As String
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
         Me.Data = Data.ToString()

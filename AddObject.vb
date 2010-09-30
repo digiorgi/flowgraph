@@ -31,7 +31,7 @@ Public Module AddObject
 
     ' Private Rect As Rectangle
 
-    Public AddItems(0) As MenuNode
+    Public AddItems As New List(Of MenuNode)
 
 
     'NOTE: This whole sub will be created with the plugin compiler.
@@ -60,20 +60,16 @@ Public Module AddObject
     Public Sub AddObject_Setup()
 
 
-        'Create two groups.
-        ReDim AddItems(1)
-
 
         'Group 1 is math
-        AddItems(0).Setup("Math >", 50) 'The first node of each list holds the width of the list.
-        ReDim AddItems(0).Children(1) 'Add two nodes to math
-        AddItems(0).Children(0).Setup("Add", "fgadd", 60)
-        AddItems(0).Children(1).Setup("Counter", "fgcounter")
+        AddItems.Add(New MenuNode("Math >", True, 50)) 'The first node of each list holds the width of the list.
+        'Add two nodes to math
+        AddItems(0).Children.Add(New MenuNode("Add", "fgadd", 60))
+        AddItems(0).Children.Add(New MenuNode("Counter", "fgcounter"))
 
-        AddItems(1).Name = "Misc >"
-        ReDim AddItems(1).Children(4)
-        AddItems(1).Children(0).Setup("Split", "fgsplit", 120)
-        AddItems(1).Children(1).Setup("Display As String", "fgdisplayasstring")
+        AddItems.Add(New MenuNode("Misc >", True))
+        AddItems(1).Children.Add(New MenuNode("Split", "fgsplit", 120))
+        AddItems(1).Children.Add(New MenuNode("Display As String", "fgdisplayasstring"))
 
         'SelectedGroup = Items
 

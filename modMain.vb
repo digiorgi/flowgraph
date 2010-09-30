@@ -59,7 +59,6 @@ Module modMain
         For n As Integer = 0 To Objects.Count - 1
             Objects(n).Index = n
 
-          
 
             If Objects(n).output IsNot Nothing Then
                 For Each out As DataFlowBase In Objects(n).output
@@ -75,11 +74,6 @@ Module modMain
                             i += 1
                         End If
                     Loop Until i = out.Flow.Count
-                    'If outp.obj1 = RemovedIndex Then
-                    '    outp.obj1 = -1
-                    'ElseIf outp.obj1 > RemovedIndex Then
-                    '    outp.obj1 -= 1
-                    'End If
                 Next
             End If
         Next
@@ -91,20 +85,6 @@ Module modMain
         Objects.RemoveAt(Index)
 
         ResetObjectIndexs(Index)
-    End Sub
-
-    Public Sub DisconnectOutput(ByRef Output As DataFlowBase)
-        If Output.IsEmpty Then Return
-
-        Output.Disconnect()
-    End Sub
-
-    Public Sub DisconnectInput(ByRef Input As DataFlowBase)
-        If Input.Connected = 0 Then Return
-
-        Input.Disconnect()
-
-        'Input.Connected = 0
     End Sub
 
 

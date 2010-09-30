@@ -65,7 +65,7 @@ Public MustInherit Class BaseObject
         Index = Objects.Count
 
 
-        Menu(0).Setup("Remove", 50)
+        Menu.Add(New MenuNode("Remove", False, 50))
     End Sub
 
     Public Overridable Sub Distroy()
@@ -217,8 +217,7 @@ Public MustInherit Class BaseObject
 
     End Sub
 
-    Public Overridable Sub DoubleClicked()
-    End Sub
+
 
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
@@ -235,14 +234,12 @@ Public MustInherit Class BaseObject
     Public Sub Send(ByVal Data As Object, ByVal ID As Integer)
         If Output Is Nothing Then Return
 
-        'If Output(ID).IsNotEmpty Then Objects(Output(ID).obj1).Receive(Data, Output(ID))
         Output(ID).Send(Data)
     End Sub
     Public Sub Send(ByVal Data As Object)
         If Output Is Nothing Then Return
 
         For Each obj As DataFlowBase In Output
-            'If obj.IsNotEmpty Then Objects(obj.obj1).Receive(Data, obj)
             obj.Send(Data)
         Next
     End Sub
@@ -307,7 +304,7 @@ Public MustInherit Class BaseObject
 
 
 #Region "Mouse & Menu"
-    Private Menu(0) As MenuNode
+    Friend Menu As New List(Of MenuNode)
 
     Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
 
@@ -319,6 +316,8 @@ Public MustInherit Class BaseObject
         End Select
     End Sub
 
+    Public Overridable Sub MouseDoubleClick(ByVal e As MouseEventArgs)
+    End Sub
     Public Overridable Sub MouseMove(ByVal e As MouseEventArgs)
 
     End Sub
@@ -354,7 +353,24 @@ Public Class DataFlowBase
 
     'How meny can connect?
     Public MaxConnected As Integer = -1
-    Public Connected As Integer = 0 'Holds the number of connections.
+    Private bConnected As Integer = 0 'Holds the number of connections. Only used for inputs.
+    Public Property Connected() As Integer
+        Get
+            If Flow Is Nothing Then
+                Return bConnected
+            Else
+                Return Flow.Count
+            End If
+        End Get
+        Set(ByVal value As Integer)
+            If Flow Is Nothing Then
+                bConnected = value
+            Else
+                Throw New Exception("Can not set output.Connected!")
+            End If
+        End Set
+    End Property
+
 
     Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String, Optional ByVal IsOutput As Boolean = False)
         Me.obj = obj
@@ -391,9 +407,6 @@ Public Class DataFlowBase
         'Add the new data flow.
         Flow.Add(New DataFlow(obj1, Index1, Me))
 
-        'Add one to connected.
-        Connected += 1
-
         Return True 'We successfully added the input to the output.
     End Function
 
@@ -401,6 +414,8 @@ Public Class DataFlowBase
     ''' Disconnect all connections.
     ''' </summary>
     Public Sub Disconnect()
+        If Connected = 0 Then Return
+
         If Flow Is Nothing Then
             'Disconnect input.
 
@@ -420,12 +435,11 @@ Public Class DataFlowBase
 
                         Dim n As Integer = 0 'Even though n is declared here I still set it to 0. Because sometime it seems not to reset it.
                         Do
-                            'If n > out.Flow.Count - 1 Then Exit Do
+                            If n > out.Flow.Count - 1 Then Exit Do
                             If out.Flow(n).obj = Me.obj And out.Flow(n).Index = Index Then
                                 'Remove the object.
                                 out.Flow(n) = Nothing
                                 out.Flow.RemoveAt(n)
-                                out.Connected -= 1
                                 Connected -= 1
                             Else
                                 n += 1
@@ -442,7 +456,7 @@ Public Class DataFlowBase
 
             'Really simple.
             'First we go through each output and subtract one from the input the output is outputing to.
-            'Then we just clear the list and set connected to zero.
+            'Then we just clear the list.
 
             For Each fd As DataFlow In Flow
                 'Subtract one from the inputs connitions.
@@ -452,7 +466,6 @@ Public Class DataFlowBase
 
             'Clear the data flow list.
             Flow.Clear()
-            Connected = 0 'Set connected to 0.
         End If
 
 
@@ -480,31 +493,38 @@ Public Class DataFlowBase
     End Function
 #End Region
 
+#Region "Load & Save"
     Public Sub Load(ByVal data() As String)
-        'Connected = data(0)
 
-        If Flow Is Nothing Then Return
-        For i As Integer = 1 To data.Length - 1 Step 2
-            Add(data(i), data(i + 1))
-        Next
-        If Connected <> data(0) Then
-            Throw New Exception("Connections do not match!")
+        If Flow Is Nothing Then
+            Connected = data(0)
+        Else
+
+            For i As Integer = 1 To data.Length - 1 Step 2
+                Add(data(i), data(i + 1))
+            Next
+            'Make sure everything connected.
+            If Connected <> data(0) Then
+                Throw New Exception("Connections do not match!")
+            End If
+
         End If
     End Sub
     Public Function Save() As String
         Dim data As String = Connected
-
+        'Input doesn't have anything more then connected. so just return that.
         If Flow Is Nothing Then Return data
+
         For i As Integer = 0 To Flow.Count - 1
             data &= "," & Flow(i).obj & "," & Flow(i).Index
         Next
         Return data
     End Function
+#End Region
 
+#Region "IsEmpty & ="
     Public Function IsEmpty() As Boolean
-        If Flow Is Nothing Then Return True
-
-        If Flow.Count = 0 Then Return True
+        If Connected = 0 Then Return True
 
         Return False
     End Function
@@ -522,6 +542,7 @@ Public Class DataFlowBase
     Shared Operator <>(ByVal left As DataFlowBase, ByVal right As DataFlowBase) As Boolean
         Return Not left = right
     End Operator
+#End Region
 End Class
 
 Public Structure DataFlow

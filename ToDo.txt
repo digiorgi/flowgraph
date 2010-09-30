@@ -8,6 +8,8 @@ Step#1
 	##########Comment stuff##########
 	#################################
 	
+	Change menu system to use lists.
+
 	Add DataType system to DataFlowBase. That way it will only allow connections of the right data type.
 
 	Create a list of objects to add.
@@ -20,7 +22,8 @@ Step#1
 
 	Do more testing.
 
-
+	Add save and load buttons.
+	Allow loading from commmand line args.
 
 Step#2
 
