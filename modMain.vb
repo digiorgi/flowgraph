@@ -156,5 +156,8 @@ Module modMain
     End Sub
 #End Region
 
+    Public Sub AddControl(ByVal Control As Control)
+        frmMain.Controls.Add(Control)
+    End Sub
 
 End Module

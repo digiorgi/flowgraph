@@ -206,14 +206,8 @@ Public MustInherit Class BaseObject
 
     ''' <summary>
     ''' Is called when the object is moving.
-    ''' Used to set the position of somethings.
     ''' </summary>
     Public Overridable Sub Moved()
-
-        'Update the title position.
-        TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
-        TitleBar.Location = Rect.Location
-        BackGround.Location = New Point(Rect.X, Rect.Y + 15)
 
 
     End Sub
@@ -223,6 +217,12 @@ Public MustInherit Class BaseObject
 
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
+
+        'Update the title position.
+        TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
+        TitleBar.Location = Rect.Location
+        BackGround.Location = New Point(Rect.X, Rect.Y + 15)
+
         Moved()
     End Sub
 

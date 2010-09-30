@@ -5,7 +5,7 @@
 
     Private Value As Integer
 
-    Private Reset As Rectangle
+    Private WithEvents btnReset As New Button
 
     Public Sub New(ByVal Position As Point)
         Setup("fgCounter", Position, 120, 60) 'Setup the base rectangles.
@@ -20,20 +20,18 @@
         tmr.Enabled = True
 
 
-        Reset = New Rectangle(Rect.X + 15, Rect.Y + 35, 40, 15)
+        btnReset.Text = "Reset"
+        btnReset.Location = Position + New Point(15, 30)
+        AddControl(btnReset)
+
     End Sub
 
-    Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
-        MyBase.MouseUp(e)
+    Public Overrides Sub Moved()
+        MyBase.Moved()
 
-        If e.Button = MouseButtons.Left Then
-            If Mouse.IntersectsWith(Reset) Then
-                Value = 0
-                Send(Value)
-                DoDraw()
-            End If
-        End If
+        btnReset.Location = Rect.Location + New Point(15, 30)
     End Sub
+
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         'Draw the base stuff like the title outputs etc..
@@ -42,8 +40,6 @@
         'Draw the value.
         g.DrawString("Value= " & Value, DefaultFont, Brushes.Black, Rect.X + 15, Rect.Y + 15)
 
-        g.DrawString("Reset ", DefaultFont, Brushes.Black, Reset.X + 1, Reset.Y)
-        g.DrawRectangle(Pens.Black, Reset)
     End Sub
 
     Public Overrides Sub DoubleClicked()
@@ -61,6 +57,12 @@
 
         Send(Value)
 
+        DoDraw()
+    End Sub
+
+    Private Sub btnReset_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnReset.Click
+        Value = 0
+        Send(Value)
         DoDraw()
     End Sub
 End Class

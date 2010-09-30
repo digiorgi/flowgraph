@@ -100,7 +100,6 @@ Flowgraph
 </member><member name="M:Flowgraph.BaseObject.Moved">
 	<summary>
  Is called when the object is moving.
- Used to set the position of somethings.
  </summary>
 </member>
 </members>
