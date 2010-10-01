@@ -50,24 +50,26 @@ Public Class frmMain
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
 
-        Dim sd As New SimpleD.SimpleD
-        sd.FromFile("Test.txt")
+        If IO.File.Exists("Test.txt") Then
+            Dim sd As New SimpleD.SimpleD
+            sd.FromFile("Test.txt")
 
-        Dim g As SimpleD.Group = sd.Get_Group("Main")
-        Dim numObj As Integer = g.Get_Value("Objects")
-        For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
-            Dim pos As String() = Split(g.Get_Value("position"), ",")
-            Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
-            'Objects(obj).Load(g)
+            Dim g As SimpleD.Group = sd.Get_Group("Main")
+            Dim numObj As Integer = g.Get_Value("Objects")
+            For n As Integer = 0 To numObj
+                g = sd.Get_Group("Object" & n)
+                Dim pos As String() = Split(g.Get_Value("position"), ",")
+                Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
+                'Objects(obj).Load(g)
 
-        Next
+            Next
 
-        For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
-            Objects(n).Load(g)
+            For n As Integer = 0 To numObj
+                g = sd.Get_Group("Object" & n)
+                Objects(n).Load(g)
 
-        Next
+            Next
+        End If
     End Sub
 
 #End Region
