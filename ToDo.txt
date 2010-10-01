@@ -8,8 +8,6 @@ Step#1
 	##########Comment stuff##########
 	#################################
 	
-	Add DataType system to DataFlowBase. That way it will only allow connections of the right data type.
-
 	Create a list of objects to add.
 
 	Add more stuff to this ToDo list.
