@@ -348,6 +348,8 @@ Public Class DataFlowBase
     Public Index As Integer = -1
     Public Name As String = "DataFlowBase"
 
+    Public DataType As New List(Of String)
+
     'We do not create new because Inputs do not use it.
     Friend Flow As List(Of DataFlow) 'We define if it is a input/output by wether flow is nothing or not.
 
@@ -375,9 +377,34 @@ Public Class DataFlowBase
     Public Sub New(ByVal obj As Integer, ByVal Index As Integer, ByVal Name As String, Optional ByVal IsOutput As Boolean = False)
         Me.obj = obj
         Me.Index = Index
-        Me.Name = Name
+
+        Dim Types As String() = Split(Name, "|")
+        If Types.Length = 0 Then
+            Me.Name = Name
+        Else
+            Me.Name = Types(0)
+            For n As Integer = 1 To Types.Length - 1
+                DataType.Add(Types(n))
+            Next
+        End If
+
         If IsOutput Then Flow = New List(Of DataFlow)
     End Sub
+
+    Public Overrides Function ToString() As String
+        Dim str As String = "Name: " & Name & vbNewLine & "Types"
+
+        If DataType.Count = 0 Then
+            str &= " undefined."
+        Else
+            For Each Type As String In DataType
+                str &= " : " & Type
+            Next
+        End If
+
+
+        Return str
+    End Function
 
 #Region "Add & Disconnect"
     ''' <summary>
@@ -394,6 +421,29 @@ Public Class DataFlowBase
 
         'Are we trying to connect to the same object.
         If obj1 = obj Then Return False
+
+        'Make sure the object we are connecting to is a input.
+        If Objects(obj1).Input Is Nothing Then Return False
+
+        'Make sure the object can connect to that type.
+        Dim FoundType As Boolean = False
+        If DataType.Count > 0 And Objects(obj1).Input(Index1).DataType.Count > 0 Then
+            For Each Type As String In DataType
+                For Each objType As String In Objects(obj1).Input(Index1).DataType
+                    If LCase(objType) = LCase(Type) Then
+                        FoundType = True
+                        Exit For
+                    End If
+                Next
+                If FoundType Then Exit For
+            Next
+        ElseIf Objects(obj1).Input(Index1).DataType.Count > 0 Then
+            Return False
+        Else
+            FoundType = True
+        End If
+        If Not FoundType Then Return False
+
 
         'Look through flow, and check to see if there is already one going to the same place. this one wants to go.
         'Note: they can connect to the same object just not the same place on the object.

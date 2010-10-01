@@ -59,10 +59,15 @@ Public Class frmMain
             g = sd.Get_Group("Object" & n)
             Dim pos As String() = Split(g.Get_Value("position"), ",")
             Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
-            Objects(obj).Load(g)
+            'Objects(obj).Load(g)
 
         Next
 
+        For n As Integer = 0 To numObj
+            g = sd.Get_Group("Object" & n)
+            Objects(n).Load(g)
+
+        Next
     End Sub
 
 #End Region
@@ -220,12 +225,12 @@ Public Class frmMain
         'Check it see if the mouse is hovering over a input or a output.
         For Each obj As Object In Objects 'Loop through each object until we found a input/output or we made it through them all.
             If obj.IntersectsWithInput(Mouse) Then 'Check input.
-                ToolTipText = obj.Input(obj.Intersection).Name
+                ToolTipText = obj.Input(obj.Intersection).ToString
 
                 DoDraw()
                 Exit For
             ElseIf obj.IntersectsWithOutput(Mouse) Then 'Check output.
-                ToolTipText = obj.Output(obj.Intersection).Name
+                ToolTipText = obj.Output(obj.Intersection).ToString
 
                 DoDraw()
                 Exit For

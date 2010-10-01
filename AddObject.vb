@@ -38,7 +38,6 @@ Public Module AddObject
             Case "fgadd"
                 Objects.Add(New fgAdd(Position))
 
-
             Case "fgcounter"
                 Objects.Add(New fgCounter(Position))
 
@@ -55,8 +54,6 @@ Public Module AddObject
     'NOTE: This whole sub will be created with the plugin compiler.
     Public Sub AddObject_Setup()
 
-
-
         'Group 1 is math
         AddItems.Add(New MenuNode("Math >", True, 50)) 'The first node of each list holds the width of the list.
         'Add two nodes to math
@@ -66,9 +63,6 @@ Public Module AddObject
         AddItems.Add(New MenuNode("Misc >", True))
         AddItems(1).Children.Add(New MenuNode("Display As String", "fgdisplayasstring", 100))
 
-        'SelectedGroup = Items
-
-        'SetSize()
     End Sub
 
 End Module

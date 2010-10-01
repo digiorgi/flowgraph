@@ -1,6 +1,6 @@
 //v0.983\\
 Main{
-	Objects=4;
+	Objects=7;
 }
 Object0{
 	Name=fgCounter;
@@ -11,22 +11,39 @@ Object1{
 	Name=fgDisplayAsString;
 	Position=220,70;
 	Input=1;
-	Data=1;
+	Data=53;
 }
 Object2{
 	Name=fgDisplayAsString;
-	Position=200,255;
+	Position=195,230;
 	Input=1;
-	Data=1;
+	Data=53;
 }
 Object3{
 	Name=fgDisplayAsString;
-	Position=200,330;
+	Position=195,280;
 	Input=1;
-	Data=1;
+	Data=53;
 }
 Object4{
 	Name=fgCounter;
-	Position=35,295;
-	Output=2,3,0,2,0;
+	Position=40,230;
+	Output=3,3,0,2,0,5,0;
+}
+Object5{
+	Name=fgAdd;
+	Position=200,335;
+	Output=1,7,0;
+	Input=1,1;
+}
+Object6{
+	Name=fgCounter;
+	Position=40,335;
+	Output=1,5,1;
+}
+Object7{
+	Name=fgDisplayAsString;
+	Position=320,335;
+	Input=1;
+	Data=106;
 }

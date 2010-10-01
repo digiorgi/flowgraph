@@ -11,7 +11,7 @@
         Setup("fgCounter", Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Value"})
+        Outputs(New String() {"Value|Number"})
 
         'Set the title.
         Title = "Counter"
