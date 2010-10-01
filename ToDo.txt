@@ -8,8 +8,6 @@ Step#1
 	##########Comment stuff##########
 	#################################
 	
-	Change menu system to use lists.
-
 	Add DataType system to DataFlowBase. That way it will only allow connections of the right data type.
 
 	Create a list of objects to add.

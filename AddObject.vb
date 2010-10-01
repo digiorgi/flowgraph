@@ -29,8 +29,6 @@
 
 Public Module AddObject
 
-    ' Private Rect As Rectangle
-
     Public AddItems As New List(Of MenuNode)
 
 
@@ -40,8 +38,6 @@ Public Module AddObject
             Case "fgadd"
                 Objects.Add(New fgAdd(Position))
 
-            Case "fgsplit"
-                Objects.Add(New fgSplit(Position))
 
             Case "fgcounter"
                 Objects.Add(New fgCounter(Position))
@@ -68,8 +64,7 @@ Public Module AddObject
         AddItems(0).Children.Add(New MenuNode("Counter", "fgcounter"))
 
         AddItems.Add(New MenuNode("Misc >", True))
-        AddItems(1).Children.Add(New MenuNode("Split", "fgsplit", 120))
-        AddItems(1).Children.Add(New MenuNode("Display As String", "fgdisplayasstring"))
+        AddItems(1).Children.Add(New MenuNode("Display As String", "fgdisplayasstring", 100))
 
         'SelectedGroup = Items
 
