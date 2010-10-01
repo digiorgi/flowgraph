@@ -108,12 +108,17 @@ Module modMain
     ''' <summary>
     ''' Tells auto draw to draw when the time comes.
     ''' </summary>
-    ''' <param name="HeighPriority">If it's a heigh priority then it will instantly draw</param>
+    ''' <param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
     Public Sub DoDraw(Optional ByVal HeighPriority As Boolean = False)
-        DoNotDraw = False 'Tell the timmer it can draw.
 
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
-        If HeighPriority Then tmrDraw_Tick(Nothing, Nothing)
+        If HeighPriority Then
+            frmMain.Invalidate()
+
+        Else 'Other wise we wait for the timer.
+            DoNotDraw = False 'Tell the timer it can draw.
+        End If
+
     End Sub
 
     Private WithEvents tmrDraw As New Timer
