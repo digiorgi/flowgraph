@@ -102,6 +102,57 @@ Module modMain
 
     End Sub
 
+#Region "Open & Save"
+    Public LoadedFile As String = ""
+
+    Public Sub Open(ByVal File As String)
+        If Not IO.File.Exists(File) Then
+            MsgBox("Could not find file:" & vbNewLine & File, , "Error loading")
+            Return
+        End If
+
+
+        Dim sd As New SimpleD.SimpleD
+        sd.FromFile(File)
+
+        Dim g As SimpleD.Group = sd.Get_Group("Main")
+        Dim numObj As Integer = g.Get_Value("Objects")
+        For n As Integer = 0 To numObj
+            g = sd.Get_Group("Object" & n)
+            Dim pos As String() = Split(g.Get_Value("position"), ",")
+            Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
+            'Objects(obj).Load(g)
+
+        Next
+
+        For n As Integer = 0 To numObj
+            g = sd.Get_Group("Object" & n)
+            Objects(n).Load(g)
+        Next
+
+        LoadedFile = File
+    End Sub
+
+    Public Sub Save(ByVal File As String)
+        If Not IO.File.Exists(File) Then
+            MsgBox("Could not find file:" & vbNewLine & File, , "Error saving")
+            Return
+        End If
+
+        Dim sd As New SimpleD.SimpleD
+        Dim g As SimpleD.Group = sd.Create_Group("Main")
+        g.Add("Objects", Objects.Count - 1)
+
+        For Each obj As Object In Objects
+            sd.Add_Group(obj.Save)
+        Next
+
+        sd.ToFile(File)
+
+        LoadedFile = File
+    End Sub
+#End Region
+
 #Region "Auto draw"
     Private DoNotDraw As Boolean = True
 
