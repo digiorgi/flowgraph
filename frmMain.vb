@@ -33,15 +33,10 @@ Public Class frmMain
 #Region "Load & Close"
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        Dim sd As New SimpleD.SimpleD
-        Dim g As SimpleD.Group = sd.Create_Group("Main")
-        g.Add("Objects", Objects.Count - 1)
+        If MsgBox("Do you want to save your work?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
+            btnSave_Click(sender, e)
+        End If
 
-        For Each obj As Object In Objects
-            sd.Add_Group(obj.Save)
-        Next
-
-        sd.ToFile("Test.txt")
     End Sub
 
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
@@ -49,27 +44,12 @@ Public Class frmMain
 
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
-
-        If IO.File.Exists("Test.txt") Then
-            Dim sd As New SimpleD.SimpleD
-            sd.FromFile("Test.txt")
-
-            Dim g As SimpleD.Group = sd.Get_Group("Main")
-            Dim numObj As Integer = g.Get_Value("Objects")
-            For n As Integer = 0 To numObj
-                g = sd.Get_Group("Object" & n)
-                Dim pos As String() = Split(g.Get_Value("position"), ",")
-                Dim obj As Integer = AddObject.AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
-                'Objects(obj).Load(g)
-
-            Next
-
-            For n As Integer = 0 To numObj
-                g = sd.Get_Group("Object" & n)
-                Objects(n).Load(g)
-
-            Next
+        Dim args As String() = Environment.GetCommandLineArgs
+        If args.Length = 2 Then
+            Open(args(1))
         End If
+        ' MsgBox(Environment.GetCommandLineArgs.Length)
+        ' Open("Autosave.txt")
     End Sub
 
 #End Region
@@ -305,4 +285,26 @@ Public Class frmMain
 
     End Sub
 
+    Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
+        Dim ofd As New OpenFileDialog
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Open(ofd.FileName)
+        End If
+    End Sub
+
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        If LoadedFile = "" Then
+            btnSaveAs_Click(sender, e)
+        Else
+            Save(LoadedFile)
+        End If
+    End Sub
+
+    Private Sub btnSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveAs.Click
+        Dim sfd As New SaveFileDialog
+        'sfd.Title'
+        If sfd.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Save(sfd.FileName)
+        End If
+    End Sub
 End Class

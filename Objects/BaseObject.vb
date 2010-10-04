@@ -341,6 +341,7 @@ Public MustInherit Class BaseObject
 
 End Class
 
+
 Public Class DataFlowBase
 
     'Base object and the output/input index.
@@ -392,6 +393,7 @@ Public Class DataFlowBase
     End Sub
 
     Public Overrides Function ToString() As String
+        'Let me know if anything here needs comments.
         Dim str As String = "Name: " & Name & vbNewLine & "Types"
 
         If DataType.Count = 0 Then
@@ -401,7 +403,6 @@ Public Class DataFlowBase
                 str &= " : " & Type
             Next
         End If
-
 
         Return str
     End Function
