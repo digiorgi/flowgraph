@@ -60,11 +60,10 @@ Module modMain
             Objects(n).Index = n
 
 
-            If Objects(n).output IsNot Nothing Then
+            If Objects(n).Output IsNot Nothing Then
                 For o As Integer = 0 To Objects(n).Output.Length - 1
                     Dim i As Integer = 0
                     Do
-                        ' If i = out.Flow.Count Then Exit Do
                         If Objects(n).Output(o).Flow(i).obj = RemovedIndex Then
                             Objects(n).Output(o).Flow(i) = Nothing
                             Objects(n).Output(o).Flow.RemoveAt(i)
