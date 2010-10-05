@@ -52,7 +52,7 @@ Public MustInherit Class BaseObject
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
-    Protected Sub Setup(ByVal ClassName As String, ByVal Position As Point, ByVal Width As Integer, ByVal Height As Integer, Optional ByVal MenuWidth As Integer = 50)
+    Protected Sub Setup(ByVal ClassName As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31, Optional ByVal MenuWidth As Integer = 50)
         Name = ClassName
         'Create the main rectangle.
         Rect = New Rectangle(Position, New Size(Width, Height))
@@ -200,8 +200,6 @@ Public MustInherit Class BaseObject
                 For Each fd As DataFlow In Output(n).Flow
                     g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(fd.obj).GetInputPosition(fd.Index))
                 Next
-                'g.DrawLine(ConnectorPen, GetOutputPosition(n), Objects(Output(n).obj1).GetInputPosition(Output(n).Index1))
-
             End If
         Next
     End Sub
@@ -218,7 +216,11 @@ Public MustInherit Class BaseObject
     End Sub
 
 
+    Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer)
+        Rect.Size = New Size(Width, Height)
 
+        BackGround.Size = New Size(Rect.Width, Rect.Height - 15)
+    End Sub
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
 
@@ -251,18 +253,26 @@ Public MustInherit Class BaseObject
 #Region "Inputs & Outputs"
 
     Protected Sub Inputs(ByVal Names As String())
-        'InputNames = Names
         ReDim Input(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
             Input(n) = New DataFlowBase(Index, n, Names(n))
-
         Next
+
+        'Set the height if the current height is smaller.
+        If Rect.Height < 16 + (15 * Input.Length) Then
+            SetSize(Rect.Width, 16 + (15 * Input.Length))
+        End If
     End Sub
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
             Output(n) = New DataFlowBase(Index, n, Names(n), True)
         Next
+
+        'Set the height if the current height is smaller.
+        If Rect.Height < 16 + (15 * Output.Length) Then
+            SetSize(Rect.Width, 16 + (15 * Output.Length))
+        End If
     End Sub
 
     Public Intersection As Integer
@@ -606,10 +616,6 @@ Public Class DataFlow
         Me.obj = obj
         Me.Index = Index
         Me.Base = Base
-    End Sub
-
-    Public Sub AddToObj(ByVal value As Integer)
-        obj += value
     End Sub
 
     Shared Operator =(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean

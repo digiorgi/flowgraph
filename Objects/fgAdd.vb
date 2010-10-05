@@ -2,12 +2,12 @@
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup("fgAdd", Position, 60, 50) 'Setup the base rectangles.
+        Setup("fgAdd", Position, 60) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value 1|Number", "Value 2|Number"})
         'Create 4 outputs.
-        Outputs(New String() {"Out value|Number"})
+        Outputs(New String() {"Value1+Value2|Number"})
 
         'Set the title.
         Title = "Add"
