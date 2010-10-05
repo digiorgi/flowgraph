@@ -352,7 +352,7 @@ Public Class DataFlowBase
     Public DataType As New List(Of String)
 
     'We do not create new because Inputs do not use it.
-    Friend Flow As List(Of DataFlow) 'We define if it is a input/output by wether flow is nothing or not.
+    Public Flow As List(Of DataFlow) 'We define if it is a input/output by wether flow is nothing or not.
 
     'How meny can connect?
     Public MaxConnected As Integer = -1
@@ -596,7 +596,7 @@ Public Class DataFlowBase
 #End Region
 End Class
 
-Public Structure DataFlow
+Public Class DataFlow
 
     Public obj, Index As Integer
 
@@ -620,4 +620,4 @@ Public Structure DataFlow
     Shared Operator <>(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean
         Return Not left = right
     End Operator
-End Structure
+End Class

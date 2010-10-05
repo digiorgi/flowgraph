@@ -61,19 +61,20 @@ Module modMain
 
 
             If Objects(n).output IsNot Nothing Then
-                For Each out As DataFlowBase In Objects(n).output
-                    Dim i As Integer
+                For o As Integer = 0 To Objects(n).Output.Length - 1
+                    Dim i As Integer = 0
                     Do
-                        If out.Flow(i).obj = RemovedIndex Then
-                            out.Flow(i) = Nothing
-                            out.Flow.RemoveAt(i)
-                        ElseIf out.Flow(i).obj > RemovedIndex Then
-                            out.Flow(i).AddToObj(-1)
+                        ' If i = out.Flow.Count Then Exit Do
+                        If Objects(n).Output(o).Flow(i).obj = RemovedIndex Then
+                            Objects(n).Output(o).Flow(i) = Nothing
+                            Objects(n).Output(o).Flow.RemoveAt(i)
+                        ElseIf Objects(n).Output(o).Flow(i).obj > RemovedIndex Then
+                            Objects(n).Output(o).Flow(i).obj -= 1
                             i += 1
                         Else
                             i += 1
                         End If
-                    Loop Until i = out.Flow.Count
+                    Loop Until i = Objects(n).Output(o).Flow.Count
                 Next
             End If
         Next
@@ -111,6 +112,7 @@ Module modMain
             Return
         End If
 
+        ClearObjects()
 
         Dim sd As New SimpleD.SimpleD
         sd.FromFile(File)
@@ -134,10 +136,6 @@ Module modMain
     End Sub
 
     Public Sub Save(ByVal File As String)
-        If Not IO.File.Exists(File) Then
-            MsgBox("Could not find file:" & vbNewLine & File, , "Error saving")
-            Return
-        End If
 
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.Create_Group("Main")
@@ -150,6 +148,13 @@ Module modMain
         sd.ToFile(File)
 
         LoadedFile = File
+    End Sub
+
+    Public Sub ClearObjects()
+        For Each obj As Object In Objects
+            obj.Distroy()
+        Next
+        Objects.Clear()
     End Sub
 #End Region
 

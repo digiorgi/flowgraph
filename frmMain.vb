@@ -48,8 +48,6 @@ Public Class frmMain
         If args.Length = 2 Then
             Open(args(1))
         End If
-        ' MsgBox(Environment.GetCommandLineArgs.Length)
-        ' Open("Autosave.txt")
     End Sub
 
 #End Region
