@@ -143,6 +143,12 @@
     End Sub
 
     Private Sub UpdateRectSize()
-        Rect.Size = New Size(Items(0).Width, (Items.Count * 12) + 1)
+        Dim Width As Integer ' = 40
+        For Each item As MenuNode In Items
+            If item.Width > Width Then
+                Width = item.Width
+            End If
+        Next
+        Rect.Size = New Size(Width, (Items.Count * 12) + 1)
     End Sub
 End Module

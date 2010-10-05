@@ -7,10 +7,6 @@ Step#1
 	#################################
 	##########Comment stuff##########
 	#################################
-	
-	Create a list of objects to add.
-
-	Add more stuff to this ToDo list.
 
 	Cleanup frmMain(the code...)
 	Clean AddObject
@@ -18,17 +14,15 @@ Step#1
 
 	Do more testing.
 
-	Add save and load buttons.
-	Allow loading from commmand line args.
-
 Step#2
 
 	Plugin system
 	Add support for C# plugins
-	Compile saved config file with plugins. as a single .exe
+	Disable plugins with the command line(Compiler)
+	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
 
-Objects to add:
+Step#3 Add objects:
 	Math:
 		Minus
 		Round
@@ -36,4 +30,16 @@ Objects to add:
 
 	Misc:
 		Get varable from object.
-	
+		Timer: In(Enabled, Interval) Out(Tick)
+
+	Input:
+		Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
+		Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
+		Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
+		InputHandler: In(Input)		Out(InputState ,Axis, IsPressed)
+
+	MIDI:
+		Input device	In(Enabled, DeviceID)			Out(MidiMessage)
+		Output device	In(Enabled, DeviceID, MidiMessage)
+		Controller		In(Controller, InputHandler)	Out(MidiMessage)
+		AlterNote		In(MidiMessage, SustainInput, SostenutoInput, SoftInput) Out(MidiMessage)
