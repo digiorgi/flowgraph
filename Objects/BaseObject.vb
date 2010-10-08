@@ -105,7 +105,7 @@ Public MustInherit Class BaseObject
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
             g.Get_Value("Output", tmp)
             Dim tmpS As String() = Split(tmp, "`")
-            For n As Integer = 0 To Output.Length - 1
+            For n As Integer = 0 To tmpS.Length - 1
                 'Output(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
                 Output(n).Load(Split(tmpS(n), ","))
             Next
@@ -114,7 +114,7 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
             g.Get_Value("Input", tmp)
             Dim tmpS As String() = Split(tmp, ",")
-            For n As Integer = 0 To Input.Length - 1
+            For n As Integer = 0 To tmpS.Length - 1
                 Input(n).Connected = tmpS(n)
             Next
         End If
@@ -219,7 +219,7 @@ Public MustInherit Class BaseObject
     Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer)
         Rect.Size = New Size(Width, Height)
 
-        BackGround.Size = New Size(Rect.Width, Rect.Height - 15)
+        BackGround.Size = New Size(Width, Height - 15)
     End Sub
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)

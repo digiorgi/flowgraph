@@ -188,6 +188,7 @@ Module modMain
 
     Public Sub AddControl(ByVal Control As Control)
         frmMain.Controls.Add(Control)
+        frmMain.lblToolTip.BringToFront()
     End Sub
     Public Sub RemoveControl(ByVal Control As Control)
         frmMain.Controls.Remove(Control)

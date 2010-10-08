@@ -13,6 +13,8 @@
         'Create one output.
         Outputs(New String() {"Value|Number"})
 
+        Inputs(New String() {"Enable|Boolean", "Reset"})
+
         'Set the title.
         Title = "Counter"
 
@@ -35,6 +37,18 @@
         MyBase.Moved()
 
         btnReset.Location = Rect.Location + New Point(15, 30)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                tmr.Enabled = Data
+
+            Case 1 'Reset
+                Value = 0
+                Send(Value)
+                DoDraw()
+        End Select
     End Sub
 
 
