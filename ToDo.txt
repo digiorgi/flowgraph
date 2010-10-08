@@ -8,6 +8,8 @@ Step#1
 	##########Comment stuff##########
 	#################################
 
+	Make sure there is nothing else that needs to be in the base. Before moving to step2.
+
 	Cleanup frmMain(the code...)
 	Clean AddObject
 	Checkup on BaseObject  it may have goten messy.
@@ -36,7 +38,7 @@ Step#3 Add objects:
 		Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
 		Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
 		Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
-		InputHandler: In(Input)		Out(InputState ,Axis, IsPressed)
+		InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
 
 	MIDI:
 		Input device	In(Enabled, DeviceID)			Out(MidiMessage)

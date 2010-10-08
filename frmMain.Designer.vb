@@ -26,6 +26,7 @@ Partial Class frmMain
         Me.btnOpen = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnSaveAs = New System.Windows.Forms.Button()
+        Me.lblToolTip = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnOpen
@@ -55,12 +56,28 @@ Partial Class frmMain
         Me.btnSaveAs.Text = "Save as"
         Me.btnSaveAs.UseVisualStyleBackColor = True
         '
+        'lblToolTip
+        '
+        Me.lblToolTip.AutoSize = True
+        Me.lblToolTip.BackColor = System.Drawing.SystemColors.Info
+        Me.lblToolTip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblToolTip.CausesValidation = False
+        Me.lblToolTip.ForeColor = System.Drawing.SystemColors.InfoText
+        Me.lblToolTip.Location = New System.Drawing.Point(305, 22)
+        Me.lblToolTip.Name = "lblToolTip"
+        Me.lblToolTip.Size = New System.Drawing.Size(45, 15)
+        Me.lblToolTip.TabIndex = 3
+        Me.lblToolTip.Text = "ToolTip"
+        Me.lblToolTip.UseMnemonic = False
+        Me.lblToolTip.Visible = False
+        '
         'frmMain
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(525, 463)
+        Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.btnSaveAs)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.btnOpen)
@@ -69,10 +86,12 @@ Partial Class frmMain
         Me.Name = "frmMain"
         Me.Text = "Flowgraph"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents btnOpen As System.Windows.Forms.Button
     Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents btnSaveAs As System.Windows.Forms.Button
+    Friend WithEvents lblToolTip As System.Windows.Forms.Label
 
 End Class

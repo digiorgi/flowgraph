@@ -33,7 +33,8 @@ Public Class frmMain
 #Region "Load & Close"
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If MsgBox("Do you want to save your work?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
+        'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
+        If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
             btnSave_Click(sender, e)
         End If
 
@@ -275,9 +276,17 @@ Public Class frmMain
 
         'If there is tooltip text to draw then draw it.
         If Not ToolTipText = "" Then
-            Dim s As SizeF = e.Graphics.MeasureString(ToolTipText, DefaultFont)
-            e.Graphics.FillRectangle(SystemBrushes.Info, Mouse.X + 10, Mouse.Y + 17, s.Width + 2, s.Height + 2)
-            e.Graphics.DrawString(ToolTipText, DefaultFont, SystemBrushes.InfoText, Mouse.X + 11, Mouse.Y + 18)
+            'Dim s As SizeF = e.Graphics.MeasureString(ToolTipText, DefaultFont)
+            'e.Graphics.FillRectangle(SystemBrushes.Info, Mouse.X + 10, Mouse.Y + 17, s.Width + 2, s.Height + 2)
+            'e.Graphics.DrawString(ToolTipText, DefaultFont, SystemBrushes.InfoText, Mouse.X + 11, Mouse.Y + 18)
+
+            If lblToolTip.Text <> ToolTipText Or lblToolTip.Visible = False Then
+                lblToolTip.Text = ToolTipText
+                lblToolTip.Location = Mouse.Location + New Point(10, 17)
+                lblToolTip.Visible = True
+            End If
+        Else
+            lblToolTip.Visible = False
         End If
 
 
@@ -285,6 +294,7 @@ Public Class frmMain
 
     Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
         Dim ofd As New OpenFileDialog
+        ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
         If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
             Open(ofd.FileName)
         End If
@@ -300,7 +310,7 @@ Public Class frmMain
 
     Private Sub btnSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveAs.Click
         Dim sfd As New SaveFileDialog
-        'sfd.Title'
+        sfd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
         If sfd.ShowDialog = Windows.Forms.DialogResult.OK Then
             Save(sfd.FileName)
         End If
