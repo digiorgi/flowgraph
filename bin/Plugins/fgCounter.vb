@@ -1,4 +1,5 @@
-﻿Public Class fgCounter
+﻿'AddMenuObject|Counter,Plugins.fgCounter,60|Math
+Public Class fgCounter
     Inherits BaseObject
 
     Private WithEvents tmr As New Timer
@@ -8,7 +9,7 @@
     Private WithEvents btnReset As New Button
 
     Public Sub New(ByVal Position As Point)
-        Setup("fgCounter", Position, 120, 60) 'Setup the base rectangles.
+        Setup(Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Value|Number"})

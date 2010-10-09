@@ -200,36 +200,108 @@ Public Module Plugins
 
     Public AddItems As New List(Of MenuNode)
 
-    'NOTE: This whole sub will be created with the plugin compiler.
     Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
-        Select Case LCase(Name)
-            Case "fgadd"
-                Objects.Add(New fgAdd(Position))
 
-            Case "fgcounter"
-                Objects.Add(New fgCounter(Position))
+        Try
+            Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position}))
+            Return Objects.Count - 1
+        Catch ex As Exception
+            MsgBox("Could not create object: " & Name)
+            Return -1
+        End Try
 
-            Case "fgdisplayasstring"
-                Objects.Add(New fgDisplayAsString(Position))
-
-            Case Else
-                Return -1
-        End Select
-
-        Return Objects.Count - 1
     End Function
 
-    'NOTE: This whole sub will be created with the plugin compiler.
     Public Sub AddObject_Setup()
+        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\Objects.list") Then
+            MsgBox("Looking for objects.")
 
-        'Group 1 is math
-        AddItems.Add(New MenuNode("Math >", True, 50)) 'The first node of each list holds the width of the list.
-        'Add two nodes to math
-        AddItems(0).Children.Add(New MenuNode("Add", "fgadd", 60))
-        AddItems(0).Children.Add(New MenuNode("Counter", "fgcounter"))
+            'The plugins have changed. So lets create a new list of objects.
+            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.vb", IO.SearchOption.AllDirectories)
+            Dim ObjectList As String = ""
+            For Each script As String In Scripts
+                SearchForItems(script, ObjectList)
+            Next
 
-        AddItems.Add(New MenuNode("Misc >", True))
-        AddItems(1).Children.Add(New MenuNode("Display As String", "fgdisplayasstring", 100))
+            Dim sw As New IO.StreamWriter("Plugins\Objects.list", False)
+            sw.Write(ObjectList)
+            sw.Close()
+
+        Else
+            SearchForItems("Plugins\Objects.list")
+        End If
+    End Sub
+
+    Private Sub SearchForItems(ByVal File As String, Optional ByRef ObjectList As String = "NoList")
+        Dim sr As New IO.StreamReader(File)
+        Dim StartIndex As Integer
+        Do
+            Dim line As String = sr.ReadLine
+            StartIndex = line.IndexOf("AddMenuObject", StringComparison.OrdinalIgnoreCase)
+            If StartIndex > -1 Then
+                Dim SplitLine As String() = Split(line, "|")
+                Select Case SplitLine.Length
+                    Case 2
+                        AddItem(Split(SplitLine(1), ","), New String() {})
+
+                    Case 3
+                        AddItem(Split(SplitLine(1), ","), Split(SplitLine(2), ","))
+
+                End Select
+
+                If ObjectList = "NoList" Then
+
+                ElseIf ObjectList = "" Then
+                    ObjectList = line
+                Else
+                    ObjectList &= vbNewLine & line
+                End If
+            End If
+
+        Loop Until sr.EndOfStream Or StartIndex = -1
+        sr.Close()
+    End Sub
+
+    Private Sub AddItem(ByVal Data As String(), ByVal Groups As String())
+        Dim Node As New MenuNode
+        Node.Name = Data(0)
+        Node.ClassName = Data(1)
+        If Data.Length = 3 Then
+            Node.Width = Data(2)
+        Else
+            Node.Width = 50
+        End If
+
+        If Groups.Length > 0 Then
+
+            Dim g As Integer = 0
+            Dim Nodes As List(Of MenuNode) = AddItems
+            Do
+                Dim Found As Boolean = False
+                For Each n As MenuNode In Nodes
+                    If LCase(n.Name) = LCase(Groups(g)) And n.IsGroup Then
+                        Nodes = n.Children
+                        Found = True
+                        Exit For
+                    End If
+                Next
+                If Found = False Then
+
+                    Nodes.Add(New MenuNode(Groups(g), True))
+                    Nodes = Nodes(Nodes.Count - 1).Children
+                End If
+
+
+                g += 1
+            Loop Until g = Groups.Length
+
+            Nodes.Add(Node)
+
+        Else
+            AddItems.Add(Node)
+        End If
+
+
 
     End Sub
 End Module

@@ -52,8 +52,8 @@ Public MustInherit Class BaseObject
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
-    Protected Sub Setup(ByVal ClassName As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31, Optional ByVal MenuWidth As Integer = 50)
-        Name = ClassName
+    Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31, Optional ByVal MenuWidth As Integer = 50)
+        Name = MyClass.GetType.FullName ' IO.Path.GetFileNameWithoutExtension(MyClass.GetType.Assembly.CodeBase) & "." &
         'Create the main rectangle.
         Rect = New Rectangle(Position, New Size(Width, Height))
 
@@ -73,24 +73,12 @@ Public MustInherit Class BaseObject
             For n As Integer = 0 To Output.Length - 1
 
                 Output(n).Disconnect()
-
-                'If Output(n).obj1 > -1 Then
-                '    Objects(Output(n).obj1).Input(Output(n).Index1).obj1 = -1
-                '    Objects(Output(n).obj1).Input(Output(n).Index1).index1 = -1
-                '    Objects(Output(n).obj1).Input(Output(n).Index1).Connected -= 1
-                '    Output(n).obj1 = -1
-                '    Output(n).Index1 = -1
-                'End If
-
             Next
         End If
 
         If Input IsNot Nothing Then
             For n As Integer = 0 To Input.Length - 1
                 Input(n).Disconnect()
-                'If Input(n).Connected > 0 Then
-                '    DisconnectInput(Input(n))
-                'End If
             Next
         End If
     End Sub

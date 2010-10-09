@@ -1,8 +1,10 @@
-﻿Public Class fgAdd
+﻿'AddMenuObject|Add,Plugins.fgAdd,50|Math
+'Needed|Name displayed,Class name,Width|Groups
+Public Class fgAdd
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup("fgAdd", Position, 60) 'Setup the base rectangles.
+        Setup(Position, 60) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value 1|Number", "Value 2|Number"})

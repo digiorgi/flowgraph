@@ -3,55 +3,55 @@ Main{
 	Objects=8;
 }
 Object0{
-	Name=fgCounter;
+	Name=Plugins.fgCounter;
 	Position=80,70;
 	Output=1,1,0;
 	Input=1,0;
 }
 Object1{
-	Name=fgDisplayAsString;
+	Name=Plugins.fgDisplayAsString;
 	Position=220,70;
 	Input=1;
 	Data=50;
 }
 Object2{
-	Name=fgDisplayAsString;
+	Name=Plugins.fgDisplayAsString;
 	Position=195,230;
 	Input=1;
 	Data=50;
 }
 Object3{
-	Name=fgDisplayAsString;
+	Name=Plugins.fgDisplayAsString;
 	Position=195,280;
 	Input=1;
 	Data=50;
 }
 Object4{
-	Name=fgCounter;
+	Name=Plugins.fgCounter;
 	Position=40,230;
 	Output=3,3,0,2,0,5,0;
 	Input=3,0;
 }
 Object5{
-	Name=fgAdd;
+	Name=Plugins.fgAdd;
 	Position=195,330;
 	Output=1,7,0;
 	Input=1,1;
 }
 Object6{
-	Name=fgCounter;
+	Name=Plugins.fgCounter;
 	Position=40,345;
 	Output=1,5,1;
 	Input=1,0;
 }
 Object7{
-	Name=fgDisplayAsString;
+	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
 	Data=100;
 }
 Object8{
-	Name=fgDisplayAsString;
+	Name=Plugins.fgDisplayAsString;
 	Position=276,157;
 	Input=0;
 	Data=Test;

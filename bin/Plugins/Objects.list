@@ -1,0 +1,3 @@
+'AddMenuObject|Add,Plugins.fgAdd,50|Math
+'AddMenuObject|Counter,Plugins.fgCounter,60|Math
+'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
