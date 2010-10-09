@@ -1,8 +1,9 @@
-﻿Public Class fgDisplayAsString
+﻿'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
+Public Class fgDisplayAsString
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup("fgDisplayAsString", Position, 120, , 70) 'Setup the base rectangles.
+        Setup(Position, 120, , 70) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})

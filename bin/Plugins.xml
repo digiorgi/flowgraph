@@ -108,7 +108,7 @@ Plugins
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="M:Plugins.BaseObject.Setup(System.String,System.Drawing.Point,System.Int32,System.Int32,System.Int32)">
+</member><member name="M:Plugins.BaseObject.Setup(System.Drawing.Point,System.Int32,System.Int32,System.Int32)">
 	<summary>
  Create rectangles. using the position and size.
  </summary>
