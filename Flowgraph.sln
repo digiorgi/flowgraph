@@ -3,16 +3,38 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Basic Express 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Flowgraph", "Flowgraph\Flowgraph.vbproj", "{FA2FB722-21C5-4994-8548-95D08C2DED99}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Plugins", "Plugins\Plugins.vbproj", "{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Debug|x86.ActiveCfg = Debug|x86
 		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Debug|x86.Build.0 = Debug|x86
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Release|Any CPU.ActiveCfg = Release|x86
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Release|x86.ActiveCfg = Release|x86
 		{FA2FB722-21C5-4994-8548-95D08C2DED99}.Release|x86.Build.0 = Release|x86
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
