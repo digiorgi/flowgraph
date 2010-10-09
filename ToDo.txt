@@ -8,13 +8,11 @@ Step#1
 	##########Comment stuff##########
 	#################################
 
-	Make sure there is nothing else that needs to be in the base. Before moving to step2.
 
 	Cleanup frmMain(the code...)
 	Clean AddObject
 	Checkup on BaseObject  it may have goten messy.
 
-	Do more testing.
 
 Step#2
 

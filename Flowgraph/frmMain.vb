@@ -293,6 +293,7 @@ Public Class frmMain
 
     End Sub
 
+#Region "Open Save SaveAs buttons"
     Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
         Dim ofd As New OpenFileDialog
         ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
@@ -316,4 +317,6 @@ Public Class frmMain
             Save(sfd.FileName)
         End If
     End Sub
+#End Region
+
 End Class
