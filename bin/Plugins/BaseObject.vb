@@ -106,7 +106,6 @@ Public MustInherit Class BaseObject
             g.Get_Value("Output", tmp)
             Dim tmpS As String() = Split(tmp, "`")
             For n As Integer = 0 To tmpS.Length - 1
-                'Output(n).SetValues(tmpS(n * 2), tmpS((n * 2) + 1))
                 Output(n).Load(Split(tmpS(n), ","))
             Next
         End If

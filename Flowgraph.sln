@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Basic Express 2010
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Flowgraph", "Flowgraph.vbproj", "{FA2FB722-21C5-4994-8548-95D08C2DED99}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Flowgraph", "Flowgraph\Flowgraph.vbproj", "{FA2FB722-21C5-4994-8548-95D08C2DED99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
