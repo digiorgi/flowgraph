@@ -6,16 +6,7 @@ Flowgraph
 </name>
 </assembly>
 <members>
-<member name="M:Flowgraph.modMain.Load_Main">
-	<summary>
- Loads the stuff in modMain.
- </summary>
-</member><member name="M:Flowgraph.modMain.DoDraw(System.Boolean)">
-	<summary>
- Tells auto draw to draw when the time comes.
- </summary>
-	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
-</member><member name="M:Flowgraph.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:Flowgraph.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
@@ -95,6 +86,15 @@ Flowgraph
  </summary>
 	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
 	<param name="Items">The items for the menu to use.</param>
+</member><member name="M:Flowgraph.modMain.Load_Main">
+	<summary>
+ Loads the stuff in modMain.
+ </summary>
+</member><member name="M:Flowgraph.modMain.DoDraw(System.Boolean)">
+	<summary>
+ Tells auto draw to draw when the time comes.
+ </summary>
+	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
 </member><member name="P:Flowgraph.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
