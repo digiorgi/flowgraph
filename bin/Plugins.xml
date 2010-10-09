@@ -1,0 +1,136 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Plugins
+</name>
+</assembly>
+<members>
+<member name="M:Plugins.Plugins.Load_Main">
+	<summary>
+ Loads the stuff in modMain.
+ </summary>
+</member><member name="M:Plugins.Plugins.DoDraw(System.Boolean)">
+	<summary>
+ Tells auto draw to draw when the time comes.
+ </summary>
+	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
+</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+	<summary>
+ Load from string.
+ </summary>
+	<param name="Data"></param>
+	<param name="FromFile">If set to true then it will load from the file specfied in data</param>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.SimpleD.Create_Group(System.String)">
+	<summary>
+ Create a group.
+ </summary>
+	<param name="Name">The name of the group.</param>
+</member><member name="M:Plugins.SimpleD.SimpleD.FromFile(System.String)">
+	<summary>
+ Load the SimpleData from a file.
+ </summary>
+	<param name="File"></param>
+	<returns>True if loaded false if not.</returns>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.Group.Set_Value(System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.Group.Set_Value(System.Object)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Name">The name of the property to get the value from.</param>
+</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String,System.Object@)">
+	<summary>
+ Will not set value if no value found.
+ </summary>
+	<param name="Name"></param>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.Object)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Obj">The object to get the property from.</param>
+</member><member name="M:Plugins.SimpleD.Group.GetValueFromObject(System.Object)">
+	<summary>
+ Retuns "Could_Not_Find_Value" if it can not find the value.
+ </summary>
+	<param name="Obj"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.Group.Find(System.String)">
+	<summary>
+ Find a property from the name.
+ </summary>
+	<param name="Name">The name of the property.</param>
+	<returns>The property.</returns>
+</member><member name="M:Plugins.Menu.MenuNode.#ctor(Plugins.Menu.MenuResult)">
+	<summary>Is used when the menu sends the object the node.</summary>
+	<param name="Result">What was the menus results?</param>
+</member><member name="M:Plugins.Menu.MenuNode.#ctor(System.String,System.String,System.Int32)">
+	<summary>Create a node</summary>
+	<param name="Name">The name that will display in the menu.</param>
+	<param name="ClassName">The name of the class to create for adding objects.</param>
+	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
+</member><member name="M:Plugins.Menu.MenuNode.#ctor(System.String,System.Boolean,System.Int32)">
+	<summary>Create a node</summary>
+	<param name="Name">The name that will display in the menu.</param>
+	<param name="IsGroup">Is this node going to have children?</param>
+	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
+</member><member name="M:Plugins.Menu.Menu_Open(System.Int32,System.Collections.Generic.List{Plugins.Menu.MenuNode})">
+	<summary>
+ Open a dropdown menu with the items.
+ </summary>
+	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
+	<param name="Items">The items for the menu to use.</param>
+</member><member name="P:Plugins.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Plugins.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Plugins.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Plugins.BaseObject.Setup(System.String,System.Drawing.Point,System.Int32,System.Int32,System.Int32)">
+	<summary>
+ Create rectangles. using the position and size.
+ </summary>
+</member><member name="M:Plugins.BaseObject.DrawConnectors(System.Drawing.Graphics)">
+	<summary>
+ Draw lines connecting outputs to inputs.
+ </summary>
+</member><member name="M:Plugins.BaseObject.Moved">
+	<summary>
+ Is called when the object is moving.
+ </summary>
+</member><member name="M:Plugins.DataFlowBase.Add(System.Int32,System.Int32)">
+	<summary>
+ Add a input.
+ </summary>
+	<param name="obj1"></param>
+	<param name="Index1"></param>
+	<returns>True if successfully added.</returns>
+</member><member name="M:Plugins.DataFlowBase.Disconnect">
+	<summary>
+ Disconnect all connections.
+ </summary>
+</member>
+</members>
+</doc>

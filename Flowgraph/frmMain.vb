@@ -43,6 +43,7 @@ Public Class frmMain
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
         Me.Text = "Flowgraph v" & Application.ProductVersion.ToString
 
+        Load_PluginSystem()
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
         Dim args As String() = Environment.GetCommandLineArgs

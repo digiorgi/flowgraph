@@ -105,7 +105,7 @@
                         If ObjectIndex > -1 Then
                             Objects(ObjectIndex).MenuSelected(Items(n))
                         Else
-                            AddObject.AddObject(Items(n).ClassName, MenuStartPosition)
+                            AddObject(Items(n).ClassName, MenuStartPosition)
                         End If
 
                         Items(n).SetResult(MenuResult.SelectedItem)
