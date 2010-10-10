@@ -52,8 +52,8 @@ Public MustInherit Class BaseObject
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
-    Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31, Optional ByVal MenuWidth As Integer = 50)
-        Name = MyClass.GetType.FullName ' IO.Path.GetFileNameWithoutExtension(MyClass.GetType.Assembly.CodeBase) & "." &
+    Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31)
+        Name = MyClass.GetType.FullName
         'Create the main rectangle.
         Rect = New Rectangle(Position, New Size(Width, Height))
 
@@ -65,7 +65,7 @@ Public MustInherit Class BaseObject
         Index = Objects.Count
 
 
-        Menu.Add(New MenuNode("Remove", False, MenuWidth))
+        Menu.Add(New MenuNode("Remove", False))
     End Sub
 
     Public Overridable Sub Distroy()

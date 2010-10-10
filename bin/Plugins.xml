@@ -86,6 +86,15 @@ Plugins
  </summary>
 	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
 	<param name="Items">The items for the menu to use.</param>
+</member><member name="M:Plugins.Menu.AddNode(System.Collections.Generic.List{Plugins.Menu.MenuNode},System.String[],System.String[])">
+	<summary>
+ Add a menu node to a node list.
+ Usefull to add groups.
+ </summary>
+	<param name="Items">The list of items to add the node to.</param>
+	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+	<param name="Groups"></param>
+	<remarks></remarks>
 </member><member name="M:Plugins.Plugins.Load_Main">
 	<summary>
  Loads the stuff in modMain.
@@ -105,9 +114,11 @@ Plugins
 	<remarks></remarks>
 </member><member name="M:Plugins.Plugins.SearchForItems(System.String,System.String@,System.Boolean)">
 	<summary>
-	</summary>
+ Search thru a file and fill the add object menu. With found objects.
+ </summary>
 	<param name="File">The file to search thru.</param>
-	<param name="ObjectList">Will fill string with each line that has "AddMenuObject".</param>
+	<param name="ObjectList">Will fill string with each line that has "AddMenuObject".
+ Unlis set to "DoNotFill"</param>
 	<remarks></remarks>
 </member><member name="P:Plugins.My.Resources.Resources.ResourceManager">
 	<summary>
@@ -122,7 +133,7 @@ Plugins
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="M:Plugins.BaseObject.Setup(System.Drawing.Point,System.Int32,System.Int32,System.Int32)">
+</member><member name="M:Plugins.BaseObject.Setup(System.Drawing.Point,System.Int32,System.Int32)">
 	<summary>
  Create rectangles. using the position and size.
  </summary>
