@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Add,Plugins.fgAdd,50|Math
+﻿'AddMenuObject|Add,Plugins.fgAdd|Math
 'Needed|Name displayed,Class name,Width|Groups
 Public Class fgAdd
     Inherits BaseObject

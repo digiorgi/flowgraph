@@ -16,9 +16,13 @@ Step#1
 
 Step#2
 
-	Plugin system
+	Plugin compiler
+		AddReference e.g. "'AddReferemce|System.Drawing.dll,SomethingElse.dll"
+
+Compiler command line:
+		Disable plugin e.g. "-fgAdd.vb"
+
 	Add support for C# plugins
-	Disable plugins with the command line(Compiler)
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
 

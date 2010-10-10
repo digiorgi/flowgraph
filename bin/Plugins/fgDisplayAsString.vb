@@ -3,16 +3,16 @@ Public Class fgDisplayAsString
     Inherits BaseObject
 
     Public Sub New(ByVal Position As Point)
-        Setup(Position, 120, , 70) 'Setup the base rectangles.
+        Setup(Position, 120) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})
-        Input(0).MaxConnected = 1
+        Input(0).MaxConnected = 1 'Only allow one connection.
 
         'Set the title.
         Title = "Display as string"
 
-        Menu.Add(New MenuNode("Set String"))
+        Menu.Add(New MenuNode("Set String", , 70))
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
