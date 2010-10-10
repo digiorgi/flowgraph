@@ -151,4 +151,70 @@
         Next
         Rect.Size = New Size(Width, (Items.Count * 12) + 1)
     End Sub
+
+
+    ''' <summary>
+    ''' Add a menu node to a node list.
+    ''' Usefull to add groups.
+    ''' </summary>
+    ''' <param name="Items">The list of items to add the node to.</param>
+    ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+    ''' <param name="Groups"></param>
+    ''' <remarks></remarks>
+    Public Sub AddNode(ByVal Items As List(Of MenuNode), ByVal Data As String(), ByVal Groups As String())
+        Dim Node As New MenuNode
+        Node.Width = 50
+        Select Case Data.Length
+            Case 0
+                Return
+
+            Case 2
+                'Is it width or a class?
+                Try
+                    Node.Width = Data(1)
+                Catch ex As Exception
+                    Node.ClassName = Data(1)
+                End Try
+
+            Case 3
+                Node.ClassName = Data(1)
+                Node.Width = Data(2)
+
+        End Select
+        Node.Name = Data(0)
+
+        'Is there any groups?
+        If Groups.Length > 0 Then
+
+            Dim CurrentGroup As Integer = 0
+            Dim Nodes As List(Of MenuNode) = Items
+            Do
+                Dim Found As Boolean = False
+                For Each n As MenuNode In Nodes
+                    If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                        Nodes = n.Children
+                        Found = True
+                        Exit For
+                    End If
+                Next
+                If Found = False Then
+
+                    Nodes.Add(New MenuNode(Groups(CurrentGroup), True))
+                    Nodes = Nodes(Nodes.Count - 1).Children
+                End If
+
+
+                CurrentGroup += 1
+            Loop Until CurrentGroup = Groups.Length
+
+            Nodes.Add(Node)
+
+        Else
+            'There was no groups so lets just add the item.
+            AddItems.Add(Node)
+        End If
+
+
+
+    End Sub
 End Module

@@ -6,16 +6,7 @@ Plugins
 </name>
 </assembly>
 <members>
-<member name="M:Plugins.Plugins.Load_Main">
-	<summary>
- Loads the stuff in modMain.
- </summary>
-</member><member name="M:Plugins.Plugins.DoDraw(System.Boolean)">
-	<summary>
- Tells auto draw to draw when the time comes.
- </summary>
-	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
-</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
@@ -95,6 +86,29 @@ Plugins
  </summary>
 	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
 	<param name="Items">The items for the menu to use.</param>
+</member><member name="M:Plugins.Plugins.Load_Main">
+	<summary>
+ Loads the stuff in modMain.
+ </summary>
+</member><member name="M:Plugins.Plugins.DoDraw(System.Boolean)">
+	<summary>
+ Tells auto draw to draw when the time comes.
+ </summary>
+	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
+</member><member name="M:Plugins.Plugins.AddObject(System.String,System.Drawing.Point)">
+	<summary>
+ Add a new object from the class name.
+ </summary>
+	<param name="Name">ex: 'Plugins.fgAdd'</param>
+	<param name="Position">You shouldn't need help here.</param>
+	<returns>-1 if not found. other wise returns object index.</returns>
+	<remarks></remarks>
+</member><member name="M:Plugins.Plugins.SearchForItems(System.String,System.String@,System.Boolean)">
+	<summary>
+	</summary>
+	<param name="File">The file to search thru.</param>
+	<param name="ObjectList">Will fill string with each line that has "AddMenuObject".</param>
+	<remarks></remarks>
 </member><member name="P:Plugins.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.

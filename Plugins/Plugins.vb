@@ -200,8 +200,16 @@ Public Module Plugins
 
     Public AddItems As New List(Of MenuNode)
 
+    ''' <summary>
+    ''' Add a new object from the class name.
+    ''' </summary>
+    ''' <param name="Name">ex: 'Plugins.fgAdd'</param>
+    ''' <param name="Position">You shouldn't need help here.</param>
+    ''' <returns>-1 if not found. other wise returns object index.</returns>
+    ''' <remarks></remarks>
     Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
-
+        'NOTE: I am pretty sure there is a faster way to do this.
+        'But I got this working first, so until it is a problem it will stay like this.
         Try
             Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position}))
             Return Objects.Count - 1
@@ -209,48 +217,62 @@ Public Module Plugins
             MsgBox("Could not create object: " & Name)
             Return -1
         End Try
-
     End Function
 
     Public Sub AddObject_Setup()
+        'Is the plugins library newer then the objects file?
         If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\Objects.list") Then
-            MsgBox("Looking for objects.")
+            
+            'The plugins have changed. So lets find all of the objects.
 
-            'The plugins have changed. So lets create a new list of objects.
-            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.vb", IO.SearchOption.AllDirectories)
+            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.??", IO.SearchOption.AllDirectories)
             Dim ObjectList As String = ""
-            For Each script As String In Scripts
-                SearchForItems(script, ObjectList)
+            For Each File As String In Scripts
+                SearchForItems(File, ObjectList)
             Next
 
+            'Write all of the objects found to the file.
             Dim sw As New IO.StreamWriter("Plugins\Objects.list", False)
             sw.Write(ObjectList)
             sw.Close()
 
         Else
+            'Objects.list is newer, so lets get the items from it.
             SearchForItems("Plugins\Objects.list")
         End If
     End Sub
 
-    Private Sub SearchForItems(ByVal File As String, Optional ByRef ObjectList As String = "NoList")
+    ''' <summary>
+    ''' Search thru a file and fill the add object menu. With found objects.
+    ''' </summary>
+    ''' <param name="File">The file to search thru.</param>
+    ''' <param name="ObjectList">Will fill string with each line that has "AddMenuObject".
+    ''' Unlis set to "DoNotFill"</param>
+    ''' <remarks></remarks>
+    Private Sub SearchForItems(ByVal File As String, Optional ByRef ObjectList As String = "DoNotFill", Optional ByVal SearchWholeFile As Boolean = False)
         Dim sr As New IO.StreamReader(File)
         Dim StartIndex As Integer
         Do
-            Dim line As String = sr.ReadLine
-            StartIndex = line.IndexOf("AddMenuObject", StringComparison.OrdinalIgnoreCase)
+            Dim line As String = sr.ReadLine 'Get the next line out of the file.
+            StartIndex = line.IndexOf("AddMenuObject", StringComparison.OrdinalIgnoreCase) 'Get the index of "AddMenuObject".
+
+            'If we found "AddMenuObject" then.
             If StartIndex > -1 Then
+                'Should split like:
+                'AddMenuObject|Name,ClassName,Optional Width|Group1,Group2,Group3,etc..
+                'Groups are optional.
                 Dim SplitLine As String() = Split(line, "|")
                 Select Case SplitLine.Length
-                    Case 2
-                        AddItem(Split(SplitLine(1), ","), New String() {})
+                    Case 2 'No groups. 
+                        AddNode(AddItems, Split(SplitLine(1), ","), New String() {})
 
-                    Case 3
-                        AddItem(Split(SplitLine(1), ","), Split(SplitLine(2), ","))
+                    Case 3 'Has Group(s) 
+                        AddNode(AddItems, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
 
                 End Select
 
-                If ObjectList = "NoList" Then
-
+                'Fill object list(if not "DoNotFill").
+                If ObjectList = "DoNotFill" Then
                 ElseIf ObjectList = "" Then
                     ObjectList = line
                 Else
@@ -258,50 +280,8 @@ Public Module Plugins
                 End If
             End If
 
-        Loop Until sr.EndOfStream Or StartIndex = -1
+        Loop Until sr.EndOfStream Or (StartIndex = -1 And Not SearchWholeFile)
         sr.Close()
     End Sub
 
-    Private Sub AddItem(ByVal Data As String(), ByVal Groups As String())
-        Dim Node As New MenuNode
-        Node.Name = Data(0)
-        Node.ClassName = Data(1)
-        If Data.Length = 3 Then
-            Node.Width = Data(2)
-        Else
-            Node.Width = 50
-        End If
-
-        If Groups.Length > 0 Then
-
-            Dim g As Integer = 0
-            Dim Nodes As List(Of MenuNode) = AddItems
-            Do
-                Dim Found As Boolean = False
-                For Each n As MenuNode In Nodes
-                    If LCase(n.Name) = LCase(Groups(g)) And n.IsGroup Then
-                        Nodes = n.Children
-                        Found = True
-                        Exit For
-                    End If
-                Next
-                If Found = False Then
-
-                    Nodes.Add(New MenuNode(Groups(g), True))
-                    Nodes = Nodes(Nodes.Count - 1).Children
-                End If
-
-
-                g += 1
-            Loop Until g = Groups.Length
-
-            Nodes.Add(Node)
-
-        Else
-            AddItems.Add(Node)
-        End If
-
-
-
-    End Sub
 End Module
