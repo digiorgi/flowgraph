@@ -40,18 +40,41 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
+    Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.Text = "Flowgraph v" & Application.ProductVersion.ToString
 
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
 
+        Dim args As String() = Environment.GetCommandLineArgs
+        For a As Integer = 1 To args.Length - 1
+            Select Case LCase(args(a))
+                Case "startatcursor"
+                    'This block of code will move the window to the mouse position.
+                    Dim x As Integer = MousePosition.X - (Me.Width * 0.5) 'Set the window x center to the mouse position x
+                    Dim y As Integer = MousePosition.Y - (Me.Height * 0.5) 'Set the window y center to the mouse position y
+                    Dim scr As Rectangle = Screen.GetWorkingArea(MousePosition) 'Get the current screen that the mouse is on.
+                    If x < scr.Left Then x = scr.Left 'If the window is too far left. Then set it to the left of the screen.
+                    If y < scr.Top Then y = scr.Top 'If the window is too far up. Then set it to the top of the screen.
+                    If x + Me.Width > scr.Right Then x = scr.Right - Me.Width 'If the window is too far right. Then set it to the right of the screen.
+                    If y + Me.Height > scr.Bottom Then y = scr.Bottom - Me.Height 'If the window is too far down. Then set it to the bottom of the screen.
+                    Me.Location = New Point(x, y) 'Set the window location.
+
+                Case Else
+                    If IO.File.Exists(args(a)) Then
+                        FileToOpen = args(a)
+                    End If
+            End Select
+        Next
+    End Sub
+
+    Private FileToOpen As String = ""
+    Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
+     
+
         Load_PluginSystem()
         Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
-        Dim args As String() = Environment.GetCommandLineArgs
-        If args.Length = 2 Then
-            Open(args(1))
-        End If
+        If FileToOpen <> "" Then Open(FileToOpen)
     End Sub
 
 #End Region
@@ -238,8 +261,8 @@ Public Class frmMain
                 DoDraw(True)
 
             Case ToolType.Move
-
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
+
                 DoDraw(True)
 
             Case ToolType.Connect
