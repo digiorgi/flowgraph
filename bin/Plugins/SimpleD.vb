@@ -1,4 +1,6 @@
-﻿#Region "License & Contact"
+﻿Imports System.ComponentModel
+
+#Region "License & Contact"
 'License:
 '   Copyright (c) 2010 Raymond Ellis
 '   
@@ -30,7 +32,14 @@
 
 Namespace SimpleD
     Module Info
-        Public Const Version = 0.983
+        Public Const IllegalCharacters As String = "{}=;"
+        Public Const Version = 0.985
+        '0.985
+        'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
+        'Changed: Prop from a class to a structure.
+        'Changed: Everything returns empty if not found.
+        'Changed: Does not add if a value or name is empty.
+        'Removed: Group.Add because set_value will create if not found.
         '0.983
         'Fixed: Spelling.
         '0.982
@@ -187,7 +196,7 @@ Namespace SimpleD
                             Dim PropValue As String = Trim(Data.Substring(n + 1, PropEnd - n - 1).Trim(vbTab))
                             n = PropEnd
 
-                            Group.Add(PropName, PropValue)
+                            Group.Set_Value(PropName, PropValue)
 
 
                         End If
@@ -223,34 +232,17 @@ Endy:
             Me.Name = Name
         End Sub
 
-#Region "Add"
-        Public Function Add(ByVal Name As String, ByVal Value As String) As Prop
-            Dim tmp As New Prop(Name, Value)
-            Propertys.Add(tmp)
-            Return tmp
-        End Function
-        Public Function Add(ByVal Obj As Object) As Prop
-            Dim tmp As New Prop(Obj.Name, GetValueFromObject(Obj))
-            Propertys.Add(tmp)
-            Return tmp
-        End Function
-        Public Function Add(ByVal Prop As Prop) As Prop
-            Propertys.Add(Prop)
-            Return Prop
-        End Function
-#End Region
 
 #Region "SetValue"
         ''' <summary>
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
         ''' </summary>
-        ''' <remarks></remarks>
         Public Sub Set_Value(ByVal Name As String, ByVal Value As String)
-            On Error Resume Next
+            If Name = "" Or Value = "" Then Return
             Dim tmp As Prop = Find(Name) 'Find the property.
-            If tmp Is Nothing Then 'If it could not find the property then.
-                Add(Name, Value) 'Add the property.
+            If tmp = Nothing Then 'If it could not find the property then.
+                Propertys.Add(New Prop(Name, Value)) 'Add the property.
             Else
                 tmp.Value = Value 'Set the value.
             End If
@@ -259,13 +251,11 @@ Endy:
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
         ''' </summary>
-        ''' <remarks></remarks>
-        Public Sub Set_Value(ByVal Obj As Object)
-            On Error Resume Next
-            Dim Value As String = GetValueFromObject(Obj) 'Find the property from a object and set the value.
-            Dim tmp As Prop = Find(Obj.Name) 'Find the property.
-            If tmp Is Nothing Then 'If it could not find the property then.
-                Add(Obj.Name, Value) 'Add the property.
+        Public Sub Set_Value(ByVal Control As Control)
+            Dim Value As String = GetValueFromObject(Control) 'Find the property from a object and set the value.
+            Dim tmp As Prop = Find(Control.Name) 'Find the property.
+            If tmp = Nothing Then 'If it could not find the property then.
+                Propertys.Add(New Prop(Control.Name, Value)) 'Add the property.
             Else
                 tmp.Value = Value 'Set the value.
             End If
@@ -285,19 +275,21 @@ Endy:
         ''' </summary>
         ''' <param name="Name"></param>
         ''' <param name="Value"></param>
-        ''' <remarks></remarks>
-        Public Sub Get_Value(ByVal Name As String, ByRef Value As Object)
-            Try
-                Value = Find(Name).Value 'Find the property and return the value.
-            Catch ex As Exception
-            End Try
+        ''' <param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
+        Public Sub Get_Value(ByVal Name As String, ByRef Value As Object, Optional ByVal EmptyIfNotFound As Boolean = True)
+            Dim prop As Prop = Find(Name)
+            If prop = Nothing Then
+                If EmptyIfNotFound Then Value = Nothing
+            Else
+                Value = prop.Value 'Find the property and return the value.
+            End If
         End Sub
         ''' <summary>
         ''' Get the value from a property.
         ''' </summary>
-        ''' <param name="Obj">The object to get the property from.</param>
-        Public Function Get_Value(ByVal Obj As Object) As String
-            Return Find(Obj.Name).Value 'Find the property from a object and return the value.
+        ''' <param name="Control">The control to get the property from.</param>
+        Public Function Get_Value(ByVal Control As Control) As String
+            Return Find(Control.Name).Value 'Find the property from a object and return the value.
         End Function
 #End Region
 
@@ -342,8 +334,7 @@ Endy:
                     Return Prop
                 End If
             Next
-            Throw New Exception("Could not find any propertys in group(" & Me.Name & ") named:" & Name)
-            'Return Nothing
+            Return Nothing
         End Function
 
 
@@ -361,14 +352,22 @@ Endy:
 
     End Class
 
-    Public Class Prop
+    Public Structure Prop
         Public Name As String
         Public Value As String
         Public Sub New(ByVal Name As String, ByVal Value As String)
             Me.Name = Name
             Me.Value = Value
         End Sub
-    End Class
+
+        Shared Operator =(ByVal left As Prop, ByVal right As Prop) As Boolean
+            Return left.Name = right.Name And left.Value = right.Value
+        End Operator
+        Shared Operator <>(ByVal left As Prop, ByVal right As Prop) As Boolean
+            Return Not left = right
+        End Operator
+
+    End Structure
 
 
 End Namespace

@@ -125,7 +125,7 @@ Public Module Plugins
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
             Dim pos As String() = Split(g.Get_Value("position"), ",")
-            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)))
+            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata"))
             'Objects(obj).Load(g)
 
         Next
@@ -142,7 +142,7 @@ Public Module Plugins
 
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.Create_Group("Main")
-        g.Add("Objects", Objects.Count - 1)
+        g.Set_Value("Objects", Objects.Count - 1)
 
         For Each obj As Object In Objects
             sd.Add_Group(obj.Save)
@@ -207,11 +207,15 @@ Public Module Plugins
     ''' <param name="Position">You shouldn't need help here.</param>
     ''' <returns>-1 if not found. other wise returns object index.</returns>
     ''' <remarks></remarks>
-    Public Function AddObject(ByVal Name As String, ByVal Position As Point) As Integer
+    Public Function AddObject(ByVal Name As String, ByVal Position As Point, Optional ByVal UserData As String = "") As Integer
         'NOTE: I am pretty sure there is a faster way to do this.
         'But I got this working first, so until it is a problem it will stay like this.
         Try
-            Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position}))
+            If UserData = "" Then
+                Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position}))
+            Else
+                Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position, UserData}))
+            End If
             Return Objects.Count - 1
         Catch ex As Exception
             MsgBox("Could not create object: " & Name)

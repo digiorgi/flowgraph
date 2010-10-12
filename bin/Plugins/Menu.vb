@@ -34,6 +34,7 @@ Public Module Menu
         Public ClassName As String
         Public Width As Integer
         Public Result As MenuResult
+        Public UserData As String
 
         ''' <summary>Is used when the menu sends the object the node.</summary>
         ''' <param name="Result">What was the menus results?</param>
@@ -134,7 +135,7 @@ Public Module Menu
                         If ObjectIndex > -1 Then
                             Objects(ObjectIndex).MenuSelected(Items(n))
                         Else
-                            AddObject(Items(n).ClassName, MenuStartPosition)
+                            AddObject(Items(n).ClassName, MenuStartPosition, Items(n).UserData)
                         End If
 
                         Items(n).SetResult(MenuResult.SelectedItem)
@@ -190,12 +191,12 @@ Public Module Menu
     ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
     ''' <param name="Groups"></param>
     ''' <remarks></remarks>
-    Public Sub AddNode(ByVal Items As List(Of MenuNode), ByVal Data As String(), ByVal Groups As String())
+    Public Function AddNode(ByVal Items As List(Of MenuNode), ByVal Data As String(), ByVal Groups As String()) As MenuNode
         Dim Node As New MenuNode
         Node.Width = 50
         Select Case Data.Length
             Case 0
-                Return
+                Return Nothing
 
             Case 2
                 'Is it width or a class?
@@ -209,6 +210,10 @@ Public Module Menu
                 Node.ClassName = Data(1)
                 Node.Width = Data(2)
 
+            Case 4
+                Node.ClassName = Data(1)
+                Node.Width = Data(2)
+                Node.UserData = Data(3)
         End Select
         Node.Name = Data(0)
 
@@ -244,6 +249,6 @@ Public Module Menu
         End If
 
 
-
-    End Sub
+        Return Node
+    End Function
 End Module

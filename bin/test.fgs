@@ -1,4 +1,4 @@
-//v0.983\\
+//v0.985\\
 Main{
 	Objects=6;
 }
@@ -6,13 +6,13 @@ Object0{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,230;
 	Input=1;
-	Data=55;
+	Data=3;
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,280;
 	Input=1;
-	Data=55;
+	Data=3;
 }
 Object2{
 	Name=Plugins.fgCounter;
@@ -23,6 +23,7 @@ Object2{
 Object3{
 	Name=Plugins.fgAdd;
 	Position=195,330;
+	UserData=2;
 	Output=1,5,0;
 	Input=1,1;
 }
@@ -36,7 +37,7 @@ Object5{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=110;
+	Data=6;
 }
 Object6{
 	Name=Plugins.fgDisplayAsString;
