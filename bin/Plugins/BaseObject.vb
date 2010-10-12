@@ -38,40 +38,46 @@ Public MustInherit Class BaseObject
     'Input
     Public Input() As DataFlowBase
 
-
+    'This rectangle is the size of the whole object. It's used for collision checking. And the position of the object..
     Public Rect As Rectangle
 
     Public Title As String = "Title not set"
-    Private TitleRect As RectangleF
-    Public TitleBar As Rectangle
+    Private TitleRect As RectangleF 'The title rectangle is the size of the title text.
+    Public TitleBar As Rectangle 'The title bar is the size of the visual bar.
 
+    'This rectangle is the size of the client drawing area. (minus one pixel on each side.)
     Private BackGround As Rectangle
 
+    Public UserData As String = ""
 
 #Region "Setup & Distroy"
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
     Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31)
-        Name = MyClass.GetType.FullName
+        Name = MyClass.GetType.FullName 'Needed for every object that is created with the add menu.
+        Index = Objects.Count 'Needed for every object!
+
         'Create the main rectangle.
         Rect = New Rectangle(Position, New Size(Width, Height))
 
         'Set the size of the title.  Used to drag the object around.
         TitleBar = New Rectangle(Rect.Location, New Size(Rect.Width, 15))
 
+        'The backgound size is rect minus the height of the title bar.
         BackGround = New Rectangle(Rect.X, Rect.Y + 15, Rect.Width, Rect.Height - 15)
 
-        Index = Objects.Count
-
-
+        'Add remove to the object menu.
         Menu.Add(New MenuNode("Remove", False))
     End Sub
 
+    ''' <summary>
+    ''' Distroys everything in the object.
+    ''' BaseObject just dissconnects everything.
+    ''' </summary>
     Public Overridable Sub Distroy()
         If Output IsNot Nothing Then
             For n As Integer = 0 To Output.Length - 1
-
                 Output(n).Disconnect()
             Next
         End If
@@ -94,6 +100,7 @@ Public MustInherit Class BaseObject
             g.Get_Value("Output", tmp)
             Dim tmpS As String() = Split(tmp, "`")
             For n As Integer = 0 To tmpS.Length - 1
+                If n >= Output.Length Then Exit For
                 Output(n).Load(Split(tmpS(n), ","))
             Next
         End If
@@ -102,6 +109,7 @@ Public MustInherit Class BaseObject
             g.Get_Value("Input", tmp)
             Dim tmpS As String() = Split(tmp, ",")
             For n As Integer = 0 To tmpS.Length - 1
+                If n >= Input.Length Then Exit For
                 Input(n).Connected = tmpS(n)
             Next
         End If
@@ -113,15 +121,16 @@ Public MustInherit Class BaseObject
         Dim g As New SimpleD.Group("Object" & Index)
         Dim tmp As String = ""
 
-        g.Add("Name", Name)
-        g.Add("Position", Rect.X & "," & Rect.Y)
+        g.Set_Value("Name", Name)
+        g.Set_Value("Position", Rect.X & "," & Rect.Y)
+        g.Set_Value("UserData", UserData)
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
             tmp = Output(0).Save
             For n As Integer = 1 To Output.Length - 1
                 tmp &= "`" & Output(n).Save
             Next
-            g.Add("Output", tmp)
+            g.Set_Value("Output", tmp)
         End If
 
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
@@ -129,7 +138,7 @@ Public MustInherit Class BaseObject
             For n As Integer = 1 To Input.Length - 1
                 tmp &= "," & Input(n).Connected
             Next
-            g.Add("Input", tmp)
+            g.Set_Value("Input", tmp)
         End If
 
         Return g
@@ -140,9 +149,8 @@ Public MustInherit Class BaseObject
 #Region "Draw"
 
     Public Overridable Sub Draw(ByVal g As Graphics)
-        'Draw the title and the background. Then we draw teh border so it is on top.
+        'Draw the title and the background. Then we draw the border so it is on top.
         g.FillRectangle(SystemBrushes.GradientActiveCaption, TitleBar)
-
         g.FillRectangle(SystemBrushes.Control, BackGround)
         g.DrawRectangle(SystemPens.WindowFrame, Rect)
 
@@ -198,8 +206,6 @@ Public MustInherit Class BaseObject
     ''' Is called when the object is moving.
     ''' </summary>
     Public Overridable Sub Moved()
-
-
     End Sub
 
 
@@ -209,24 +215,25 @@ Public MustInherit Class BaseObject
         BackGround.Size = New Size(Width, Height - 15)
     End Sub
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
+        'Update the positions of the rectangles.
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
-
-        'Update the title position.
         TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
         TitleBar.Location = Rect.Location
         BackGround.Location = New Point(Rect.X, Rect.Y + 15)
 
+        'Tell everyone that wants to know that, we are moving!
         Moved()
     End Sub
 
 #Region "Send & Receive"
     Public Sub Send(ByVal Data As Object, ByVal ID As Integer)
-        If Output Is Nothing Then Return
+        If Output Is Nothing Then Throw New Exception("There is no outputs!")
+        If ID >= Output.Length Or ID < 0 Then Throw New Exception("ID is not inside the output bounds!")
 
         Output(ID).Send(Data)
     End Sub
     Public Sub Send(ByVal Data As Object)
-        If Output Is Nothing Then Return
+        If Output Is Nothing Then Throw New Exception("There is no outputs!")
 
         For Each obj As DataFlowBase In Output
             obj.Send(Data)
@@ -239,6 +246,11 @@ Public MustInherit Class BaseObject
 
 #Region "Inputs & Outputs"
 
+    ''' <summary>
+    ''' Create inputs.
+    ''' </summary>
+    ''' <param name="Names">array of strings. e.g. {"NameOfInput|Type1|Type2", "Input2"}</param>
+    ''' <remarks></remarks>
     Protected Sub Inputs(ByVal Names As String())
         ReDim Input(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
@@ -250,6 +262,11 @@ Public MustInherit Class BaseObject
             SetSize(Rect.Width, 16 + (15 * Input.Length))
         End If
     End Sub
+
+    ''' <summary>
+    ''' Create outputs.
+    ''' </summary>
+    ''' <param name="Names">array of strings. e.g. {"NameOfOutput|Type1|Type2", "Output2"}</param>
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
@@ -316,16 +333,12 @@ Public MustInherit Class BaseObject
     Public Overridable Sub MouseDoubleClick(ByVal e As MouseEventArgs)
     End Sub
     Public Overridable Sub MouseMove(ByVal e As MouseEventArgs)
-
     End Sub
     Public Overridable Sub MouseDown(ByVal e As MouseEventArgs)
-
     End Sub
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-
             Menu_Open(Index, Menu)
-
         End If
     End Sub
 

@@ -1,4 +1,5 @@
-'AddMenuObject|Add,Plugins.fgAdd|Math
+'AddMenuObject|Add2,Plugins.fgAdd,50,2|Math,Add
+'AddMenuObject|Add3,Plugins.fgAdd,50,3|Math,Add
 'AddMenuObject|Counter,Plugins.fgCounter,60|Math
 'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
 //AddMenuObject|Counter2,Plugins.fgCounter,60|Math

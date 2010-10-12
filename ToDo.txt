@@ -7,13 +7,16 @@ Step#1
 	#################################
 	##########Comment stuff##########
 	#################################
-
+	
+	Flowgraph command line:
+		StartAtCursor Would make flowgraph start at the mouse position.
 
 	Cleanup frmMain(the code...)
-	Clean AddObject
+	Clean Plugins.vb and maybe rename it.
 	Checkup on BaseObject  it may have goten messy.
-
-
+	
+	
+	
 Step#2
 
 	Plugin compiler
@@ -30,7 +33,16 @@ Step#3 Add objects:
 	Math:
 		Minus
 		Round
-		Sin
+		Multiply
+		Devide
+
+	Logic:
+		Equals	In(Object1,Object2)		Out(Equals|Boolean)
+		Numbers:
+			Greater Then
+			Less Than
+			Greater Than or equal to
+			Less Than or equal to 
 
 	Misc:
 		Get varable from object.

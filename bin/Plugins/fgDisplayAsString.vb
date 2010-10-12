@@ -18,7 +18,7 @@ Public Class fgDisplayAsString
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Add("Data", Data)
+        g.Set_Value("Data", Data)
 
         Return g
     End Function

@@ -30,30 +30,28 @@ Plugins
  This sets the value of a property.
  If it can not find the property it creates it.
  </summary>
-	<remarks></remarks>
-</member><member name="M:Plugins.SimpleD.Group.Set_Value(System.Object)">
+</member><member name="M:Plugins.SimpleD.Group.Set_Value(System.Windows.Forms.Control)">
 	<summary>
  This sets the value of a property.
  If it can not find the property it creates it.
  </summary>
-	<remarks></remarks>
 </member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String)">
 	<summary>
  Get the value from a property.
  </summary>
 	<param name="Name">The name of the property to get the value from.</param>
-</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String,System.Object@)">
+</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String,System.Object@,System.Boolean)">
 	<summary>
  Will not set value if no value found.
  </summary>
 	<param name="Name"></param>
 	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.Object)">
+	<param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
+</member><member name="M:Plugins.SimpleD.Group.Get_Value(System.Windows.Forms.Control)">
 	<summary>
  Get the value from a property.
  </summary>
-	<param name="Obj">The object to get the property from.</param>
+	<param name="Control">The control to get the property from.</param>
 </member><member name="M:Plugins.SimpleD.Group.GetValueFromObject(System.Object)">
 	<summary>
  Retuns "Could_Not_Find_Value" if it can not find the value.
@@ -104,7 +102,7 @@ Plugins
  Tells auto draw to draw when the time comes.
  </summary>
 	<param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
-</member><member name="M:Plugins.Plugins.AddObject(System.String,System.Drawing.Point)">
+</member><member name="M:Plugins.Plugins.AddObject(System.String,System.Drawing.Point,System.String)">
 	<summary>
  Add a new object from the class name.
  </summary>
@@ -137,6 +135,11 @@ Plugins
 	<summary>
  Create rectangles. using the position and size.
  </summary>
+</member><member name="M:Plugins.BaseObject.Distroy">
+	<summary>
+ Distroys everything in the object.
+ BaseObject just dissconnects everything.
+ </summary>
 </member><member name="M:Plugins.BaseObject.DrawConnectors(System.Drawing.Graphics)">
 	<summary>
  Draw lines connecting outputs to inputs.
@@ -145,6 +148,17 @@ Plugins
 	<summary>
  Is called when the object is moving.
  </summary>
+</member><member name="M:Plugins.BaseObject.Inputs(System.String[])">
+	<summary>
+ Create inputs.
+ </summary>
+	<param name="Names">array of strings. e.g. {"NameOfInput|Type1|Type2", "Input2"}</param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.Outputs(System.String[])">
+	<summary>
+ Create outputs.
+ </summary>
+	<param name="Names">array of strings. e.g. {"NameOfOutput|Type1|Type2", "Output2"}</param>
 </member><member name="M:Plugins.DataFlowBase.Add(System.Int32,System.Int32)">
 	<summary>
  Add a input.
