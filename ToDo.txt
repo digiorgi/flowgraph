@@ -8,11 +8,17 @@ Step#1
 	##########Comment stuff##########
 	#################################
 	
-	Flowgraph command line:
-		StartAtCursor Would make flowgraph start at the mouse position.
+	Add error handling to Open.
+	Do UserData different. Maybe just have it like Position.
+
+	Menu:
+		Clip menu to client area.
+		Center menu at mouse position when opened. and group change.
+		Put group name on top of menus.
 
 	Cleanup frmMain(the code...)
 	Clean Plugins.vb and maybe rename it.
+	Clean BaseObject.DataFlowBase
 	Checkup on BaseObject  it may have goten messy.
 	
 	

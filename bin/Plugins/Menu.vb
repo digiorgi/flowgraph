@@ -173,7 +173,7 @@ Public Module Menu
     End Sub
 
     Private Sub UpdateRectSize()
-        Dim Width As Integer ' = 40
+        Dim Width As Integer
         For Each item As MenuNode In Items
             If item.Width > Width Then
                 Width = item.Width

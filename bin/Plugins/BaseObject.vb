@@ -45,7 +45,7 @@ Public MustInherit Class BaseObject
     Private TitleRect As RectangleF 'The title rectangle is the size of the title text.
     Public TitleBar As Rectangle 'The title bar is the size of the visual bar.
 
-    'This rectangle is the size of the client drawing area. (minus one pixel on each side.)
+    'This rectangle is the size of the client drawing area. (plus one pixel on each side.)
     Private BackGround As Rectangle
 
     Public UserData As String = ""

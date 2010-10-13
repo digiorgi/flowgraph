@@ -1,6 +1,7 @@
 ﻿'AddMenuObject|Add2,Plugins.fgAdd,50,2|Math,Add
 'AddMenuObject|Add3,Plugins.fgAdd,50,3|Math,Add
-'Needed|Name displayed,Class name,Width|Groups
+'AddMenuObject|Add4,Plugins.fgAdd,50,4|Math,Add
+'Needed|Name displayed,Class name,Width,UserData|Groups
 Public Class fgAdd
     Inherits BaseObject
 
@@ -13,36 +14,36 @@ Public Class fgAdd
         Dim InputCount As Integer = 2
         If UserData <> "" Then
             InputCount = UserData
-            Me.UserData = UserData
+            Me.UserData = UserData 'Need to set the userdata of the calss so it will save.
         End If
 
 
-
+        ReDim Values(InputCount - 1)
         Dim inp(InputCount - 1) As String
         For n As Integer = 0 To InputCount - 1
             inp(n) = "Value " & n & "|Number"
         Next
 
-        'Create one input.
+        'Create the inputs.
         Inputs(inp)
-        'Create 4 outputs.
-        Outputs(New String() {"Value1+Value2|Number"})
+        'Create the output.
+        Outputs(New String() {"Equals|Number"})
 
         'Set the title.
         Title = "Add"
 
     End Sub
 
-    Private Value1, Value2 As Integer
+    Private Values() As Integer
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
 
-        If sender.Index = 0 Then
-            Value1 = Data
-        Else
-            Value2 = Data
-        End If
+        Values(sender.Index) = Data
 
-        Send(Value1 + Value2)
+        Dim Equals As Integer = 0
+        For Each Value As Integer In Values
+            Equals += Value
+        Next
+        Send(Equals)
     End Sub
 
 End Class
