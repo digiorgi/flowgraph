@@ -39,6 +39,7 @@ Namespace SimpleD
         'Changed: Prop from a class to a structure.
         'Changed: Everything returns empty if not found.
         'Changed: Does not add if a value or name is empty.
+        'Changed: Get_Group returns Nothing if no group found.
         'Removed: Group.Add because set_value will create if not found.
         '0.983
         'Fixed: Spelling.
@@ -99,8 +100,7 @@ Namespace SimpleD
                     Return Group
                 End If
             Next
-            Throw New Exception("Could not find any groups named:" & Name)
-            'Return Nothing
+            Return Nothing
         End Function
 #End Region
 

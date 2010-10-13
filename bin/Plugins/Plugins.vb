@@ -28,9 +28,6 @@
 #End Region
 
 Public Module Plugins
-    Event DrawEvent()
-    Event AddControlEvent(ByVal Control As Control)
-    Event RemoveControlEvent(ByVal Control As Control)
 
     'The snap grid size.
     Public GridSize As Integer = 5
@@ -45,8 +42,7 @@ Public Module Plugins
     'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
 
-    'The list of objects.
-    Public Objects As New List(Of Object)
+#Region "Tool stuff"
 
     Public Enum ToolType
         None
@@ -58,6 +54,11 @@ Public Module Plugins
     Public ToolOffset As Point
     Public ToolObject As Integer
     Public ToolInt As Integer
+#End Region
+
+#Region "Object stuff"
+    'The list of objects.
+    Public Objects As New List(Of Object)
 
     Public Sub ResetObjectIndexs(ByVal RemovedIndex As Integer)
         For n As Integer = 0 To Objects.Count - 1
@@ -91,6 +92,15 @@ Public Module Plugins
         ResetObjectIndexs(Index)
     End Sub
 
+    Public Sub ClearObjects()
+        For Each obj As Object In Objects
+            obj.Distroy()
+        Next
+        Objects.Clear()
+    End Sub
+#End Region
+
+#Region "Open & Save"
 
     ''' <summary>
     ''' Loads the stuff in modMain.
@@ -102,11 +112,8 @@ Public Module Plugins
 
 
         AddObject_Setup()
-
-
     End Sub
 
-#Region "Open & Save"
     Public LoadedFile As String = ""
 
     Public Sub Open(ByVal File As String)
@@ -153,15 +160,11 @@ Public Module Plugins
         LoadedFile = File
     End Sub
 
-    Public Sub ClearObjects()
-        For Each obj As Object In Objects
-            obj.Distroy()
-        Next
-        Objects.Clear()
-    End Sub
+
 #End Region
 
 #Region "Auto draw"
+    Event DrawEvent()
     Private DoNotDraw As Boolean = True
 
     ''' <summary>
@@ -190,14 +193,20 @@ Public Module Plugins
     End Sub
 #End Region
 
+#Region "Add & Remove Control"
+    Event AddControlEvent(ByVal Control As Control)
+    Event RemoveControlEvent(ByVal Control As Control)
+
     Public Sub AddControl(ByVal Control As Control)
         RaiseEvent AddControlEvent(Control)
     End Sub
     Public Sub RemoveControl(ByVal Control As Control)
         RaiseEvent RemoveControlEvent(Control)
     End Sub
+#End Region
 
-
+#Region "Adding objects"
+    'The items in the add object menu.
     Public AddItems As New List(Of MenuNode)
 
     ''' <summary>
@@ -223,10 +232,10 @@ Public Module Plugins
         End Try
     End Function
 
-    Public Sub AddObject_Setup()
+    Private Sub AddObject_Setup()
         'Is the plugins library newer then the objects file?
         If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\Objects.list") Then
-            
+
             'The plugins have changed. So lets find all of the objects.
 
             Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.??", IO.SearchOption.AllDirectories)
@@ -287,5 +296,6 @@ Public Module Plugins
         Loop Until sr.EndOfStream Or (StartIndex = -1 And Not SearchWholeFile)
         sr.Close()
     End Sub
+#End Region
 
 End Module
