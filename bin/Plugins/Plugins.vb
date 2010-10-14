@@ -115,6 +115,7 @@ Public Module Plugins
     End Sub
 
     Public LoadedFile As String = ""
+    Public Const FileVersion = 0.5
 
     Public Sub Open(ByVal File As String)
         If Not IO.File.Exists(File) Then
@@ -128,6 +129,12 @@ Public Module Plugins
         sd.FromFile(File)
 
         Dim g As SimpleD.Group = sd.Get_Group("Main")
+        'Make sure the versions match.
+        If g.Get_Value("FileVersion") <> FileVersion Then
+            MsgBox("File version does NOT match.", MsgBoxStyle.Exclamation, "Error opening")
+            Return
+        End If
+
         Dim numObj As Integer = g.Get_Value("Objects")
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
@@ -150,6 +157,7 @@ Public Module Plugins
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.Create_Group("Main")
         g.Set_Value("Objects", Objects.Count - 1)
+        g.Set_Value("FileVersion", FileVersion)
 
         For Each obj As Object In Objects
             sd.Add_Group(obj.Save)

@@ -1,18 +1,19 @@
-//v0.985\\
+//Version=0.985 FileVersion=1\\
 Main{
 	Objects=6;
+	FileVersion=0.5;
 }
 Object0{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,230;
 	Input=1;
-	Data=4;
+	Data=3;
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,280;
 	Input=1;
-	Data=4;
+	Data=3;
 }
 Object2{
 	Name=Plugins.fgCounter;
@@ -37,7 +38,7 @@ Object5{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=8;
+	Data=6;
 }
 Object6{
 	Name=Plugins.fgDisplayAsString;
