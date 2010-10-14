@@ -54,7 +54,9 @@ Public MustInherit Class BaseObject
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
-    Protected Sub Setup(ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31)
+    ''' <param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
+    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31)
+        Me.UserData = UserData
         Name = MyClass.GetType.FullName 'Needed for every object that is created with the add menu.
         Index = Objects.Count 'Needed for every object!
 
@@ -366,7 +368,7 @@ Public Class DataFlowBase
 
     'How meny can connect?
     Public MaxConnected As Integer = -1
-    Private bConnected As Integer = 0 'Holds the number of connections. Only used for inputs.
+    Private bConnected As Integer = 0 'Holds the number of connections. (Only used for inputs. We use flow.count for outputs.)
     Public Property Connected() As Integer
         Get
             If Flow Is Nothing Then
@@ -389,16 +391,21 @@ Public Class DataFlowBase
         Me.obj = obj
         Me.Index = Index
 
+        'We need to get the types(if any) from the name.
+        'Frist we split name.
         Dim Types As String() = Split(Name, "|")
-        If Types.Length = 0 Then
-            Me.Name = Name
+        If Types.Length = 0 Then 'If we did not find anything after spliting.
+            Me.Name = Name 'Then we just set the name.
         Else
+            'Other wise we have to set the name to the first type.
             Me.Name = Types(0)
+            'Then we loop thrugh all of the types and add them to the list. (Starting at one because zero is the name.)
             For n As Integer = 1 To Types.Length - 1
                 DataType.Add(Types(n))
             Next
         End If
 
+        'If it's a output then we create flow.
         If IsOutput Then Flow = New List(Of DataFlow)
     End Sub
 
@@ -535,10 +542,13 @@ Public Class DataFlowBase
 
 #Region "Send"
     Public Function Send(ByVal Data As Object, ByVal subIndex As Integer) As Boolean
+        'If flow is nothing then it's a input so we can't send.
         If Flow Is Nothing Then Return False
 
-        If Flow.Count > subIndex Then Return False
+        'Make sure subIndex is with-in the bounds.
+        If subIndex >= Flow.Count Or subIndex < 0 Then Return False
 
+        'Because of the way sending is done. We call the Recive sub on the object we are sending to.
         Objects(Flow(subIndex).obj).Receive(Data, Flow(subIndex))
 
         Return True
@@ -546,6 +556,7 @@ Public Class DataFlowBase
     Public Function Send(ByVal Data As Object) As Boolean
         If Flow Is Nothing Then Return False
 
+        'Send to each object in flow.
         For Each fd As DataFlow In Flow
             Objects(fd.obj).Receive(Data, fd)
         Next
@@ -584,11 +595,17 @@ Public Class DataFlowBase
 #End Region
 
 #Region "IsEmpty & ="
+    ''' <summary>
+    ''' Returns true if nothing connected.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function IsEmpty() As Boolean
         If Connected = 0 Then Return True
-
         Return False
     End Function
+    ''' <summary>
+    ''' Not IsEmpty
+    ''' </summary>
     Public Function IsNotEmpty() As Boolean
         Return Not IsEmpty()
     End Function
@@ -596,6 +613,7 @@ Public Class DataFlowBase
     Shared Operator =(ByVal left As DataFlowBase, ByVal right As DataFlowBase) As Boolean
         If left Is Nothing Or right Is Nothing Then Return False
 
+        'Check obj index and connected.
         If right.obj <> left.obj Or right.Index <> left.Index Or right.Connected <> left.Connected Then Return False
 
         Return True

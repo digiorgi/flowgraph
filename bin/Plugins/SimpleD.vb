@@ -36,6 +36,7 @@ Namespace SimpleD
         Public Const Version = 0.985
         '0.985
         'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
+        'Fixed  : Only allows one group with the same names. will combine groups if names match.
         'Changed: Prop from a class to a structure.
         'Changed: Everything returns empty if not found.
         'Changed: Does not add if a value or name is empty.
@@ -84,24 +85,38 @@ Namespace SimpleD
 #Region "Group"
         ''' <summary>
         ''' Create a group.
+        ''' Will return other group if names match.
         ''' </summary>
         ''' <param name="Name">The name of the group.</param>
         Public Function Create_Group(ByVal Name As String) As Group
-            Dim tmp As New Group(Name)
-            Groups.Add(tmp)
-            Return tmp
+            Dim tmp As Group = Get_Group(Name) 'Search for a group with the name.
+            If tmp Is Nothing Then 'If group not found then.
+                tmp = New Group(Name) 'Create a new group.
+                Groups.Add(tmp) 'Add the new group to the list.
+            End If
+            Return tmp 'Return the group.
         End Function
         Public Sub Add_Group(ByVal Group As Group)
-            Groups.Add(Group)
+            'First lets see if we can find a group.
+            Dim tmp As Group = Get_Group(Group.Name)
+            If tmp IsNot Nothing Then
+                'We found a group so lets combine them.
+                tmp.Combine(Group)
+            Else
+                'We did not find any other groups so add it to the list.
+                Groups.Add(Group)
+            End If
         End Sub
         Public Function Get_Group(ByVal Name As String) As Group
+            Name = LCase(Name)
             For Each Group As Group In Groups
-                If LCase(Group.Name) = LCase(Name) Then
+                If Name = LCase(Group.Name) Then
                     Return Group
                 End If
             Next
             Return Nothing
         End Function
+
 #End Region
 
 #Region "To String/File"
@@ -232,6 +247,16 @@ Endy:
             Me.Name = Name
         End Sub
 
+        ''' <summary>
+        ''' Conbines the group with this group.
+        ''' </summary>
+        ''' <param name="Group">Overides all the propertys with the propertys in the group.</param>
+        Public Sub Combine(ByVal Group As Group)
+            For Each Prop As Prop In Group.Propertys
+                Set_Value(Prop.Name, Prop.Value)
+            Next
+        End Sub
+
 
 #Region "SetValue"
         ''' <summary>
@@ -337,7 +362,6 @@ Endy:
             Return Nothing
         End Function
 
-
         Public Overloads Function ToString(Optional ByVal Split As String = "") As String
             If Propertys.Count = 0 Then Return ""
 
@@ -350,6 +374,10 @@ Endy:
 
         End Function
 
+        Overloads Shared Operator +(ByVal left As Group, ByVal right As Group) As Group
+            left.Combine(right)
+            Return left
+        End Operator
     End Class
 
     Public Structure Prop

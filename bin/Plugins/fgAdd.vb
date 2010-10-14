@@ -5,16 +5,12 @@
 Public Class fgAdd
     Inherits BaseObject
 
-    Public Sub New(ByVal Position As Point)
-        Me.New(Position, "")
-    End Sub
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(Position, 60) 'Setup the base rectangles.
+        Setup(UserData, Position, 60) 'Setup the base rectangles.
 
         Dim InputCount As Integer = 2
         If UserData <> "" Then
             InputCount = UserData
-            Me.UserData = UserData 'Need to set the userdata of the calss so it will save.
         End If
 
 

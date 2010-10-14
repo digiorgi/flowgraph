@@ -8,8 +8,8 @@ Public Class fgCounter
 
     Private WithEvents btnReset As New Button
 
-    Public Sub New(ByVal Position As Point)
-        Setup(Position, 120, 60) 'Setup the base rectangles.
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Value|Number"})

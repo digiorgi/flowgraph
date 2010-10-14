@@ -220,11 +220,7 @@ Public Module Plugins
         'NOTE: I am pretty sure there is a faster way to do this.
         'But I got this working first, so until it is a problem it will stay like this.
         Try
-            If UserData = "" Then
-                Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position}))
-            Else
-                Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position, UserData}))
-            End If
+            Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position, UserData}))
             Return Objects.Count - 1
         Catch ex As Exception
             MsgBox("Could not create object: " & Name)
