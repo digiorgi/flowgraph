@@ -34,7 +34,9 @@ Namespace SimpleD
     Module Info
         Public Const IllegalCharacters As String = "{}=;"
         Public Const Version = 0.985
+        Public Const FileVersion = 1
         '0.985
+        'Added  : FileVersion So I can easley tell if the file has changed.
         'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
         'Fixed  : Only allows one group with the same names. will combine groups if names match.
         'Changed: Prop from a class to a structure.
@@ -123,7 +125,7 @@ Namespace SimpleD
         Public Overloads Function ToString(Optional ByVal Split As String = vbNewLine & vbTab) As String
             If Groups.Count = 0 Then Return ""
 
-            Dim tmp As String = "//v" & Version & "\\"
+            Dim tmp As String = "//Version=" & Version & " FileVersion=" & FileVersion & "\\"
             For n As Integer = 0 To Groups.Count - 1
                 tmp &= vbNewLine & Groups(n).ToString(Split)
             Next
