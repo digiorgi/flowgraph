@@ -9,7 +9,6 @@ Step#1
 	#################################
 	
 	Add error handling to Open.
-	Do UserData different. Maybe just have it like Position.
 
 	Menu:
 		Clip menu to client area.
@@ -18,7 +17,6 @@ Step#1
 
 	Cleanup frmMain(the code...)
 	Clean Plugins.vb and maybe rename it.
-	Clean BaseObject.DataFlowBase
 	Checkup on BaseObject  it may have goten messy.
 	
 	

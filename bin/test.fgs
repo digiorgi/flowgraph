@@ -6,13 +6,13 @@ Object0{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,230;
 	Input=1;
-	Data=20;
+	Data=4;
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,280;
 	Input=1;
-	Data=20;
+	Data=4;
 }
 Object2{
 	Name=Plugins.fgCounter;
@@ -37,7 +37,7 @@ Object5{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=40;
+	Data=8;
 }
 Object6{
 	Name=Plugins.fgDisplayAsString;

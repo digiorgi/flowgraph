@@ -2,8 +2,8 @@
 Public Class fgDisplayAsString
     Inherits BaseObject
 
-    Public Sub New(ByVal Position As Point)
-        Setup(Position, 120) 'Setup the base rectangles.
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 120) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})
