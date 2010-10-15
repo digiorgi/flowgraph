@@ -13,7 +13,6 @@ Step#1
 	Menu:
 		Clip menu to client area.
 		Center menu at mouse position when opened. and group change.
-		Put group name on top of menus.
 
 	Cleanup frmMain(the code...)
 	Clean Plugins.vb and maybe rename it.

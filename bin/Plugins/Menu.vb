@@ -28,13 +28,18 @@
 #End Region
 
 Public Module Menu
-    Public Structure MenuNode
+    Public Class MenuNode
+        Public Parent As MenuNode
         Public Children As List(Of MenuNode)
         Public Name As String
         Public ClassName As String
         Public Width As Integer
         Public Result As MenuResult
         Public UserData As String
+
+#Region "New"
+        Sub New()
+        End Sub
 
         ''' <summary>Is used when the menu sends the object the node.</summary>
         ''' <param name="Result">What was the menus results?</param>
@@ -60,6 +65,12 @@ Public Module Menu
             Me.Width = Width
             If IsGroup Then Children = New List(Of MenuNode)
         End Sub
+#End Region
+
+        Public Sub Add(ByVal Item As MenuNode)
+            Item.Parent = Me
+            Children.Add(Item)
+        End Sub
 
         Public Sub SetResult(ByVal Result As MenuResult)
             Me.Result = Result
@@ -76,7 +87,7 @@ Public Module Menu
                 Return Name
             End If
         End Function
-    End Structure
+    End Class
     Public Enum MenuResult
         SelectedItem
         SelectedGroup
@@ -84,19 +95,25 @@ Public Module Menu
     End Enum
 
     Public MenuStartPosition As Point
-    Private Items As List(Of MenuNode)
+
+    Private Item As MenuNode
     Private ObjectIndex As Integer = -1
+
     Private Rect As Rectangle
+
+    Private Title As String = "Main"
+    Private TitleRect As RectangleF
+
 
     ''' <summary>
     ''' Open a dropdown menu with the items.
     ''' </summary>
     ''' <param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
     ''' <param name="Items">The items for the menu to use.</param>
-    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Items As List(Of MenuNode))
+    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Item As MenuNode)
+        Title = Item.Name
 
-
-        Menu.Items = Items
+        Menu.Item = Item
         Menu.ObjectIndex = ObjectIndex
 
         'Set the menu start position to the current mouse position.
@@ -107,6 +124,7 @@ Public Module Menu
 
         'Update the rectangle position and size.
         Rect.Location = MenuStartPosition
+        TitleRect.Location = MenuStartPosition
         UpdateRectSize()
 
         'Draw the newly opened menu.
@@ -118,29 +136,40 @@ Public Module Menu
         'If the mouse is not in the main rect. then we close the menu.
         If Rect.IntersectsWith(Mouse) Then
 
+            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y, Rect.Width, 12)) Then
+                If Item.Parent IsNot Nothing Then
 
-            For n As Integer = 0 To Items.Count - 1
-                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
+                    Item = Item.Parent
+                    Title = Item.Name
+                    UpdateRectSize()
+                Else
+                End If
+                Return New MenuNode(MenuResult.SelectedGroup)
+            End If
 
-                    If Items(n).IsGroup Then
-                        Items(n).SetResult(MenuResult.SelectedGroup)
-                        Dim ReturnNode As MenuNode = Items(n)
+            For n As Integer = 0 To Item.Children.Count - 1
+                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * (n + 1)), Rect.Width, 12)) Then
 
-                        Items = Items(n).Children
+                    If Item.Children(n).IsGroup Then
+                        Item.Children(n).SetResult(MenuResult.SelectedGroup)
+                        Dim ReturnNode As MenuNode = Item.Children(n)
+
+                        Item = Item.Children(n)
+                        Title = Item.Name
                         UpdateRectSize()
 
                         Return ReturnNode
                     Else
 
                         If ObjectIndex > -1 Then
-                            Objects(ObjectIndex).MenuSelected(Items(n))
+                            Objects(ObjectIndex).MenuSelected(Item.Children(n))
                         Else
-                            AddObject(Items(n).ClassName, MenuStartPosition, Items(n).UserData)
+                            AddObject(Item.Children(n).ClassName, MenuStartPosition, Item.Children(n).UserData)
                         End If
 
-                        Items(n).SetResult(MenuResult.SelectedItem)
+                        Item.Children(n).SetResult(MenuResult.SelectedItem)
                         Tool = ToolType.None
-                        Return Items(n)
+                        Return Item.Children(n)
                     End If
 
                 End If
@@ -153,17 +182,30 @@ Public Module Menu
     End Function
 
     Public Sub Menu_Draw(ByVal g As Graphics)
+        'Resize the title rectangle if needed.
+        If TitleRect.Size = Nothing Then
+            TitleRect.Size = g.MeasureString(Title, DefaultFont)
+            If TitleRect.Size.Width > Rect.Width Then
+                Rect.Width = TitleRect.Width + 4
+            End If
+            TitleRect.Location = New PointF(Rect.X + (Rect.Width * 0.5) - (TitleRect.Width * 0.5), Rect.Y - 1)
+        End If
 
+        'Draw the back ground.
         g.FillRectangle(SystemBrushes.Menu, Rect)
 
+        'Draw deviding line betwen the title and the items.
+        g.DrawLine(Pens.Black, Rect.Location + New Point(0, 12), Rect.Location + New Point(Rect.Width, 12))
+        g.DrawString(Title, DefaultFont, SystemBrushes.MenuText, TitleRect) 'Draw the title.
 
-        For n As Integer = 0 To Items.Count - 1
+
+        For n As Integer = 1 To Item.Children.Count
 
             If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
                 g.FillRectangle(SystemBrushes.Highlight, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
-                g.DrawString(Items(n).ToString, DefaultFont, SystemBrushes.HighlightText, Rect.X + 1, Rect.Y + (12 * n))
+                g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.HighlightText, Rect.X + 1, Rect.Y + (12 * n))
             Else
-                g.DrawString(Items(n).ToString, DefaultFont, SystemBrushes.MenuText, Rect.X + 1, Rect.Y + (12 * n))
+                g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.MenuText, Rect.X + 1, Rect.Y + (12 * n))
             End If
 
 
@@ -173,13 +215,14 @@ Public Module Menu
     End Sub
 
     Private Sub UpdateRectSize()
-        Dim Width As Integer
-        For Each item As MenuNode In Items
-            If item.Width > Width Then
-                Width = item.Width
+        Dim Width As Integer = 60
+        For Each Node As MenuNode In Item.Children
+            If Node.Width > Width Then
+                Width = Node.Width
             End If
         Next
-        Rect.Size = New Size(Width, (Items.Count * 12) + 1)
+        Rect.Size = New Size(Width, (Item.Children.Count * 12) + 13)
+        TitleRect.Size = Nothing
     End Sub
 
 
@@ -187,13 +230,12 @@ Public Module Menu
     ''' Add a menu node to a node list.
     ''' Usefull to add groups.
     ''' </summary>
-    ''' <param name="Items">The list of items to add the node to.</param>
+    ''' <param name="Item">The item to add the node to.</param>
     ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
     ''' <param name="Groups"></param>
     ''' <remarks></remarks>
-    Public Function AddNode(ByVal Items As List(Of MenuNode), ByVal Data As String(), ByVal Groups As String()) As MenuNode
+    Public Function AddNode(ByVal Item As MenuNode, ByVal Data As String(), ByVal Groups As String()) As MenuNode
         Dim Node As New MenuNode
-        Node.Width = 50
         Select Case Data.Length
             Case 0
                 Return Nothing
@@ -201,18 +243,18 @@ Public Module Menu
             Case 2
                 'Is it width or a class?
                 Try
-                    Node.Width = Data(1)
+                    If Data(1) <> "" Then Node.Width = Data(1)
                 Catch ex As Exception
                     Node.ClassName = Data(1)
                 End Try
 
             Case 3
                 Node.ClassName = Data(1)
-                Node.Width = Data(2)
+                If Data(2) <> "" Then Node.Width = Data(2)
 
             Case 4
                 Node.ClassName = Data(1)
-                Node.Width = Data(2)
+                If Data(2) <> "" Then Node.Width = Data(2)
                 Node.UserData = Data(3)
         End Select
         Node.Name = Data(0)
@@ -221,31 +263,33 @@ Public Module Menu
         If Groups.Length > 0 Then
 
             Dim CurrentGroup As Integer = 0
-            Dim Nodes As List(Of MenuNode) = Items
+            Dim CurrentNode As MenuNode = Item
             Do
                 Dim Found As Boolean = False
-                For Each n As MenuNode In Nodes
-                    If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
-                        Nodes = n.Children
-                        Found = True
-                        Exit For
-                    End If
-                Next
+                If CurrentNode.Children IsNot Nothing Then
+                    For Each n As MenuNode In CurrentNode.Children
+                        If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                            CurrentNode = n
+                            Found = True
+                            Exit For
+                        End If
+                    Next
+                End If
                 If Found = False Then
 
-                    Nodes.Add(New MenuNode(Groups(CurrentGroup), True))
-                    Nodes = Nodes(Nodes.Count - 1).Children
+                    CurrentNode.Add(New MenuNode(Groups(CurrentGroup), True))
+                    CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
                 End If
 
 
                 CurrentGroup += 1
             Loop Until CurrentGroup = Groups.Length
 
-            Nodes.Add(Node)
+            CurrentNode.Add(Node)
 
         Else
             'There was no groups so lets just add the item.
-            AddItems.Add(Node)
+            AddItem.Add(Node)
         End If
 
 

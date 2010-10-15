@@ -41,7 +41,7 @@ Public MustInherit Class BaseObject
     'This rectangle is the size of the whole object. It's used for collision checking. And the position of the object..
     Public Rect As Rectangle
 
-    Public Title As String = "Title not set"
+    Private _Title As String = "Title not set"
     Private TitleRect As RectangleF 'The title rectangle is the size of the title text.
     Public TitleBar As Rectangle 'The title bar is the size of the visual bar.
 
@@ -90,6 +90,17 @@ Public MustInherit Class BaseObject
             Next
         End If
     End Sub
+
+    Public Property Title() As String
+        Get
+            Return _Title
+        End Get
+        Set(ByVal value As String)
+            _Title = value
+            Menu.Name = value
+        End Set
+    End Property
+
 #End Region
 
 #Region "Load & Save"
@@ -320,7 +331,7 @@ Public MustInherit Class BaseObject
 
 
 #Region "Mouse & Menu"
-    Friend Menu As New List(Of MenuNode)
+    Friend Menu As New MenuNode("", True)
 
     Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
 

@@ -68,7 +68,7 @@ Public Module Plugins
             If Objects(n).Output IsNot Nothing Then
                 For o As Integer = 0 To Objects(n).Output.Length - 1
                     Dim i As Integer = 0
-                    Do
+                    Do Until i >= Objects(n).Output(o).Flow.Count
                         If Objects(n).Output(o).Flow(i).obj = RemovedIndex Then
                             Objects(n).Output(o).Flow(i) = Nothing
                             Objects(n).Output(o).Flow.RemoveAt(i)
@@ -78,7 +78,7 @@ Public Module Plugins
                         Else
                             i += 1
                         End If
-                    Loop Until i = Objects(n).Output(o).Flow.Count
+                    Loop
                 Next
             End If
         Next
@@ -215,7 +215,7 @@ Public Module Plugins
 
 #Region "Adding objects"
     'The items in the add object menu.
-    Public AddItems As New List(Of MenuNode)
+    Public AddItem As New MenuNode("Add object", True)
 
     ''' <summary>
     ''' Add a new object from the class name.
@@ -281,10 +281,10 @@ Public Module Plugins
                 Dim SplitLine As String() = Split(line, "|")
                 Select Case SplitLine.Length
                     Case 2 'No groups. 
-                        AddNode(AddItems, Split(SplitLine(1), ","), New String() {})
+                        AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
 
                     Case 3 'Has Group(s) 
-                        AddNode(AddItems, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
+                        AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
 
                 End Select
 
