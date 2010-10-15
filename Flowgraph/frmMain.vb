@@ -168,7 +168,7 @@ Public Class frmMain
                     End If
                 Next
                 If e.Button = Windows.Forms.MouseButtons.Right Then
-                    Menu_Open(-1, AddItems)
+                    Menu_Open(-1, AddItem)
                 End If
 
             Case ToolType.Menu
@@ -184,7 +184,7 @@ Public Class frmMain
                             Return
                         End If
                     Next
-                    Menu_Open(-1, AddItems)
+                    Menu_Open(-1, AddItem)
                 End If
 
 

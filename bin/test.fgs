@@ -17,7 +17,7 @@ Object1{
 }
 Object2{
 	Name=Plugins.fgCounter;
-	Position=40,230;
+	Position=40,280;
 	Output=3,1,0,0,0,3,0;
 	Input=3,0;
 }
@@ -42,7 +42,7 @@ Object5{
 }
 Object6{
 	Name=Plugins.fgDisplayAsString;
-	Position=195,185;
+	Position=40,135;
 	Input=0;
-	Data=Test;
+	Data=This is a test to see how 'Display as string' works. With long strings.;
 }
