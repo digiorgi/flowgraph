@@ -50,7 +50,7 @@ Public Class fgDisplayAsString
         MyBase.Draw(g)
 
         'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 16, Rect.Y + 16)
+        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 16, Rect.Y + 15)
     End Sub
 
 End Class

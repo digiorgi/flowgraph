@@ -29,8 +29,6 @@
 
 Public Module Plugins
 
-    'The snap grid size.
-    Public GridSize As Integer = 5
 
     'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont
@@ -41,6 +39,34 @@ Public Module Plugins
 
     'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
+
+#Region "Grid"
+    'The snap grid size.
+    Public GridSize As Integer = 5
+
+    Public Function SnapToGrid(ByVal value As Decimal) As Decimal
+        Return Math.Round(value / GridSize) * GridSize
+    End Function
+    Public Function SnapToGrid(ByVal value As Double) As Double
+        Return Math.Round(value / GridSize) * GridSize
+    End Function
+
+    Public Function SnapToGrid(ByVal point As Point) As Point
+        Return New Point(Math.Round(point.X / GridSize) * GridSize, Math.Round(point.Y / GridSize) * GridSize)
+    End Function
+    Public Function SnapToGrid(ByVal point As PointF) As PointF
+        Return New PointF(Math.Round(point.X / GridSize) * GridSize, Math.Round(point.Y / GridSize) * GridSize)
+    End Function
+
+    Public Function SnapToGrid(ByVal rect As Rectangle) As Rectangle
+        Return New Rectangle(Math.Round(rect.X / GridSize) * GridSize, Math.Round(rect.Y / GridSize) * GridSize, _
+                             Math.Round(rect.Width / GridSize) * GridSize, Math.Round(rect.Height / GridSize) * GridSize)
+    End Function
+    Public Function SnapToGrid(ByVal rect As RectangleF) As RectangleF
+        Return New RectangleF(Math.Round(rect.X / GridSize) * GridSize, Math.Round(rect.Y / GridSize) * GridSize, _
+                              Math.Round(rect.Width / GridSize) * GridSize, Math.Round(rect.Height / GridSize) * GridSize)
+    End Function
+#End Region
 
 #Region "Tool stuff"
 
@@ -131,7 +157,9 @@ Public Module Plugins
         Dim g As SimpleD.Group = sd.Get_Group("Main")
         'Make sure the versions match.
         If g.Get_Value("FileVersion") <> FileVersion Then
-            MsgBox("File version does NOT match.", MsgBoxStyle.Exclamation, "Error opening")
+            MsgBox("Wrong file version." & Environment.NewLine _
+                   & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
+                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error opening")
             Return
         End If
 

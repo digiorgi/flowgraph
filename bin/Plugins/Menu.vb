@@ -109,7 +109,7 @@ Public Module Menu
     ''' Open a dropdown menu with the items.
     ''' </summary>
     ''' <param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
-    ''' <param name="Items">The items for the menu to use.</param>
+    ''' <param name="Item">The item for the menu to use.</param>
     Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Item As MenuNode)
         Title = Item.Name
 
