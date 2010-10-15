@@ -84,6 +84,12 @@ Plugins
 	<param name="Name">The name that will display in the menu.</param>
 	<param name="IsGroup">Is this node going to have children?</param>
 	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
+</member><member name="M:Plugins.Menu.Menu_Open(System.Int32,Plugins.Menu.MenuNode)">
+	<summary>
+ Open a dropdown menu with the items.
+ </summary>
+	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
+	<param name="Item">The item for the menu to use.</param>
 </member><member name="M:Plugins.Menu.AddNode(Plugins.Menu.MenuNode,System.String[],System.String[])">
 	<summary>
  Add a menu node to a node list.

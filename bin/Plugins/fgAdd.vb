@@ -1,6 +1,12 @@
 ﻿'AddMenuObject|Add2,Plugins.fgAdd,,2|Math,Add
 'AddMenuObject|Add3,Plugins.fgAdd,,3|Math,Add
 'AddMenuObject|Add4,Plugins.fgAdd,,4|Math,Add
+'AddMenuObject|Add5,Plugins.fgAdd,,5|Math,Add
+'AddMenuObject|Add6,Plugins.fgAdd,,6|Math,Add
+'AddMenuObject|Add7,Plugins.fgAdd,,7|Math,Add
+'AddMenuObject|Add8,Plugins.fgAdd,,8|Math,Add
+'AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
+'AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 'Needed|Name displayed,Class name,Width,UserData|Groups
 Public Class fgAdd
     Inherits BaseObject

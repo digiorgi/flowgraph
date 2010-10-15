@@ -7,8 +7,6 @@ Step#1
 	#################################
 	##########Comment stuff##########
 	#################################
-	
-	Add error handling to Open.
 
 	Menu:
 		Clip menu to client area.
@@ -25,7 +23,7 @@ Step#2
 	Plugin compiler
 		AddReference e.g. "'AddReferemce|System.Drawing.dll,SomethingElse.dll"
 
-Compiler command line:
+	Compiler command line:
 		Disable plugin e.g. "-fgAdd.vb"
 
 	Add support for C# plugins

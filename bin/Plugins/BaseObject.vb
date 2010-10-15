@@ -55,13 +55,13 @@ Public MustInherit Class BaseObject
     ''' Create rectangles. using the position and size.
     ''' </summary>
     ''' <param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
-    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 31)
+    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 30)
         Me.UserData = UserData
         Name = MyClass.GetType.FullName 'Needed for every object that is created with the add menu.
         Index = Objects.Count 'Needed for every object!
 
         'Create the main rectangle.
-        Rect = New Rectangle(Position, New Size(Width, Height))
+        Rect = SnapToGrid(New Rectangle(Position, New Size(Width, Height)))
 
         'Set the size of the title.  Used to drag the object around.
         TitleBar = New Rectangle(Rect.Location, New Size(Rect.Width, 15))
@@ -170,15 +170,15 @@ Public MustInherit Class BaseObject
         'Draw the inputs. (if any.)
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
-                'g.FillRectangle(Brushes.Red, Rect.X + 1, Rect.Y + 16 * n, 15, 15)
-                g.FillEllipse(Brushes.Red, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
+                'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
+                g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 15, 15)
+                g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
             Next
         End If
 
@@ -271,8 +271,8 @@ Public MustInherit Class BaseObject
         Next
 
         'Set the height if the current height is smaller.
-        If Rect.Height < 16 + (15 * Input.Length) Then
-            SetSize(Rect.Width, 16 + (15 * Input.Length))
+        If Rect.Height < 15 + (15 * Input.Length) Then
+            SetSize(Rect.Width, 15 + (15 * Input.Length))
         End If
     End Sub
 
@@ -297,7 +297,7 @@ Public MustInherit Class BaseObject
         If Input Is Nothing Then Return False
 
         For n As Integer = 1 To Input.Length
-            Dim r As New Rectangle(Me.Rect.X, Me.Rect.Y + 16 * n, 16, 15)
+            Dim r As New Rectangle(Me.Rect.X, Me.Rect.Y + 15 * n, 15, 15)
             If rect.IntersectsWith(r) Then
                 Intersection = n - 1
                 Return True
@@ -310,7 +310,7 @@ Public MustInherit Class BaseObject
         If Output Is Nothing Then Return False
 
         For n As Integer = 1 To Output.Length
-            Dim r As New Rectangle(Me.Rect.Right - 15, Me.Rect.Y + 16 * n, 16, 15)
+            Dim r As New Rectangle(Me.Rect.Right - 15, Me.Rect.Y + 15 * n, 15, 15)
             If rect.IntersectsWith(r) Then
                 Intersection = n - 1
                 Return True
