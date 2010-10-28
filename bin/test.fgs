@@ -1,19 +1,19 @@
 //Version=0.985 FileVersion=1\\
 Main{
-	Objects=6;
+	Objects=7;
 	FileVersion=0.5;
 }
 Object0{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,230;
 	Input=1;
-	Data=3;
+	Data=11;
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
 	Position=195,280;
 	Input=1;
-	Data=3;
+	Data=11;
 }
 Object2{
 	Name=Plugins.fgCounter;
@@ -38,11 +38,20 @@ Object5{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=6;
+	Data=22;
 }
 Object6{
 	Name=Plugins.fgDisplayAsString;
 	Position=40,135;
 	Input=0;
 	Data=This is a test to see how 'Display as string' works. With long strings.;
+}
+Object7{
+	Name=Plugins.fgDisplayAsString;
+	Position=40,65;
+	Input=0;
+	Data=Multi line test
+Line 1
+Line 2
+This is like the other test but we are testing multi-lines.;
 }
