@@ -223,9 +223,11 @@ Public MustInherit Class BaseObject
 
 
     Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer)
-        Rect.Size = New Size(Width, Height)
+        Rect.Size = SnapToGrid(New Size(Width, Height))
 
-        BackGround.Size = New Size(Width, Height - 15)
+        BackGround.Size = SnapToGrid(New Size(Width, Height - 15))
+
+        TitleBar.Width = Rect.Width
     End Sub
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         'Update the positions of the rectangles.

@@ -40,17 +40,36 @@ Public Class fgDisplayAsString
     End Sub
 
     Private Data As String
+    Private DataSize, OldSize As SizeF
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Me.Data = Data.ToString()
-        DoDraw()
+        Me.Data = Data.ToString() 'Set the data.
+        DataSize = Nothing 'Set the data size to nothing so we will check the size later.
+
+        'Tell auto draw we want to draw.
+        DoDraw(True)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        'Lets measure the size if data size is nothing.
+        If DataSize = Nothing Then
+            DataSize = g.MeasureString("String= " & Data, DefaultFont) 'Measure the string.
+            If DataSize.Width < 75 Then DataSize.Width = 75 'Set the min width.
+
+            'Did the size change?
+            If DataSize <> OldSize Then
+                'If so then we set the size of the base object
+                MyBase.SetSize(15 + DataSize.Width, 15 + DataSize.Height)
+                OldSize = DataSize 'Then set the old size.
+            End If
+
+        End If
+
         'Draw the base stuff like the title outputs etc..
         MyBase.Draw(g)
 
+
         'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 16, Rect.Y + 15)
+        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 15)
     End Sub
 
 End Class
