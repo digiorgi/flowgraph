@@ -12,8 +12,6 @@ Step#1
 		Clip menu to client area.
 		Center menu at mouse position when opened. and group change.
 
-	Rename BaseObject.Distroy to Dispose
-
 	Cleanup frmMain(the code...)
 	Clean Plugins.vb and maybe rename it.
 	Input.vb is messy and should be cleaned-up.
@@ -24,7 +22,7 @@ Step#1
 Step#2
 
 	Plugin compiler
-		AddReference e.g. "'AddReferemce|System.Drawing.dll,SomethingElse.dll"
+		AddReference e.g. "'AddReference|System.Drawing.dll,SomethingElse.dll"
 
 	Compiler command line:
 		Disable plugin e.g. "-fgAdd.vb"

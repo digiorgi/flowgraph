@@ -29,14 +29,12 @@ Public Class fgCounter
 
     End Sub
 
-    Public Overrides Sub Distroy()
+    Public Overrides Sub Dispose()
         btnReset.Dispose()
-        MyBase.Distroy()
+        MyBase.Dispose()
     End Sub
 
-    Public Overrides Sub Moved()
-        MyBase.Moved()
-
+    Public Overrides Sub Moving()
         btnReset.Location = Rect.Location + New Point(15, 30)
     End Sub
 

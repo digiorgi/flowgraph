@@ -111,7 +111,7 @@ Public Module Plugins
     End Sub
 
     Public Sub RemoveAt(ByVal Index As Integer)
-        Objects(Index).Distroy()
+        Objects(Index).Dispose()
         Objects(Index) = Nothing
         Objects.RemoveAt(Index)
 
@@ -120,7 +120,7 @@ Public Module Plugins
 
     Public Sub ClearObjects()
         For Each obj As Object In Objects
-            obj.Distroy()
+            obj.Dispose()
         Next
         Objects.Clear()
     End Sub

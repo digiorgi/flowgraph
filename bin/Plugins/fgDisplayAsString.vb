@@ -22,12 +22,12 @@ Public Class fgDisplayAsString
 
         Return g
     End Function
-    Public Overrides Function Load(ByVal g As SimpleD.Group) As SimpleD.Group
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.Get_Value("Data", Data)
 
-        Return MyBase.Load(g)
-    End Function
+        MyBase.Load(g)
+    End Sub
 
     Public Overrides Sub MenuSelected(ByVal Result As Menu.MenuNode)
         MyBase.MenuSelected(Result)

@@ -32,7 +32,7 @@ Object4{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=40;
+	Data=6;
 }
 Object5{
 	Name=Plugins.fgDisplayAsString;
