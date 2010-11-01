@@ -5,48 +5,42 @@ Main{
 }
 Object0{
 	Name=Plugins.fgDisplayAsString;
-	Position=195,230;
+	Position=385,230;
 	Input=1;
-	Data=11;
+	Data=0;
 }
 Object1{
-	Name=Plugins.fgDisplayAsString;
-	Position=195,280;
-	Input=1;
-	Data=11;
-}
-Object2{
 	Name=Plugins.fgCounter;
-	Position=40,280;
-	Output=3,1,0,0,0,3,0;
+	Position=30,245;
+	Output=1,7,1;
 	Input=3,0;
 }
-Object3{
+Object2{
 	Name=Plugins.fgAdd;
 	Position=195,330;
 	UserData=2;
-	Output=1,5,0;
-	Input=1,1;
+	Output=1,4,0;
+	Input=0,1;
 }
-Object4{
+Object3{
 	Name=Plugins.fgCounter;
 	Position=40,345;
-	Output=1,3,1;
+	Output=1,2,1;
 	Input=1,0;
 }
-Object5{
+Object4{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=22;
+	Data=40;
 }
-Object6{
+Object5{
 	Name=Plugins.fgDisplayAsString;
 	Position=40,135;
 	Input=0;
 	Data=This is a test to see how 'Display as string' works. With long strings.;
 }
-Object7{
+Object6{
 	Name=Plugins.fgDisplayAsString;
 	Position=40,65;
 	Input=0;
@@ -54,4 +48,11 @@ Object7{
 Line 1
 Line 2
 This is like the other test but we are testing multi-lines.;
+}
+Object7{
+	Name=Plugins.fgKeyPressed;
+	Position=195,230;
+	Output=1,0,0;
+	Input=0,1;
+	Key=A;
 }
