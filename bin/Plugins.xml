@@ -6,7 +6,15 @@ Plugins
 </name>
 </assembly>
 <members>
-<member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="F:Plugins.InputState.Axis">
+	<summary>
+ currently from 0 to 1000
+ </summary>
+</member><member name="T:Plugins.HID">
+	<summary>
+ Human interface device
+ </summary>
+</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
