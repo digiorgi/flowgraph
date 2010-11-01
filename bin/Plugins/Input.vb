@@ -35,14 +35,13 @@ Public Class fgKeyPressed
         HID.Create()
     End Sub
 
-    Public Overrides Sub Moved()
-        MyBase.Moved()
+    Public Overrides Sub Moving()
 
         comKey.Location = Rect.Location + New Point(15, 20)
     End Sub
 
-    Public Overrides Sub Distroy()
-        MyBase.Distroy()
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
         HID.Dispose()
         comKey.Dispose()
     End Sub
@@ -56,11 +55,12 @@ Public Class fgKeyPressed
                 Enabled = Data
 
             Case 1
+                If Not Enabled Then Return
                 HID.Keyboard.Poll()
                 If HID.Keyboard.GetCurrentState.IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) And Not LastState Then
                     LastState = True
 
-                    Send(New InputState(1000, Me))
+                    Send(New InputState(1, Me))
                 ElseIf LastState Then
                     Send(New InputState(0, Me))
                     LastState = False
@@ -69,11 +69,11 @@ Public Class fgKeyPressed
         End Select
     End Sub
 
-    Public Overrides Function Load(ByVal g As SimpleD.Group) As SimpleD.Group
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
         g.Get_Value("Key", comKey.SelectedItem, False)
 
-        Return MyBase.Load(g)
-    End Function
+        MyBase.Load(g)
+    End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
@@ -86,12 +86,12 @@ End Class
 
 Public Structure InputState
     ''' <summary>
-    ''' currently from 0 to 1000
+    ''' currently from 0 to 1
     ''' </summary>
-    Public Axis As Integer
+    Public Axis As Single
     Public Parent As Object
 
-    Sub New(ByVal Axis As Integer, ByVal Parent As Object)
+    Sub New(ByVal Axis As Single, ByVal Parent As Object)
         Me.Axis = Axis
         Me.Parent = Parent
     End Sub

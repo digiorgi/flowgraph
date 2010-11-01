@@ -6,15 +6,7 @@ Plugins
 </name>
 </assembly>
 <members>
-<member name="F:Plugins.InputState.Axis">
-	<summary>
- currently from 0 to 1000
- </summary>
-</member><member name="T:Plugins.HID">
-	<summary>
- Human interface device
- </summary>
-</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
@@ -150,19 +142,68 @@ Plugins
  Create rectangles. using the position and size.
  </summary>
 	<param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
-</member><member name="M:Plugins.BaseObject.Distroy">
+</member><member name="M:Plugins.BaseObject.Dispose">
 	<summary>
  Distroys everything in the object.
  BaseObject just dissconnects everything.
  </summary>
+</member><member name="P:Plugins.BaseObject.Title">
+	<summary>
+ Gets or sets the title shown on the object and the object menu.
+ </summary>
+</member><member name="M:Plugins.BaseObject.Load(Plugins.SimpleD.Group)">
+	<summary>
+ Because UserData is loaded in New. We just connect everything here.
+ </summary>
+	<param name="g"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.Save">
+	<summary>
+ Creates a new group and adds Name, Position, UserData, Outputs and inputs.
+ </summary>
+	<returns>The new group to be used.</returns>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.Draw(System.Drawing.Graphics)">
+	<summary>
+ Draws the base object stuff.
+ </summary>
+	<param name="g"></param>
+	<remarks></remarks>
 </member><member name="M:Plugins.BaseObject.DrawConnectors(System.Drawing.Graphics)">
 	<summary>
  Draw lines connecting outputs to inputs.
  </summary>
-</member><member name="M:Plugins.BaseObject.Moved">
+</member><member name="M:Plugins.BaseObject.SetSize(System.Int32,System.Int32)">
+	<summary>
+ Set the size of the object.
+ Will call Resizing.
+ </summary>
+	<param name="Width"></param>
+	<param name="Height"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.Resizing">
+	<summary>
+ Is called when the object is being resized.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.SetPosition(System.Int32,System.Int32)">
+	<summary>
+ Sets the position of the object.
+ Will call Moving.
+ </summary>
+</member><member name="M:Plugins.BaseObject.Moving">
 	<summary>
  Is called when the object is moving.
+ BaseObject does not use moving.
  </summary>
+</member><member name="M:Plugins.BaseObject.Receive(System.Object,Plugins.DataFlow)">
+	<summary>
+ Is called when a object sends to this object.
+ Is Not used by BaseObject.
+ </summary>
+	<param name="Data"></param>
+	<param name="sender"></param>
+	<remarks></remarks>
 </member><member name="M:Plugins.BaseObject.Inputs(System.String[])">
 	<summary>
  Create inputs.
@@ -174,6 +215,41 @@ Plugins
  Create outputs.
  </summary>
 	<param name="Names">array of strings. e.g. {"NameOfOutput|Type1|Type2", "Output2"}</param>
+</member><member name="M:Plugins.BaseObject.MenuSelected(Plugins.Menu.MenuNode)">
+	<summary>
+ Is called when somthing in the menu was selected.
+ BaseObject just checks if remove was selected.
+ </summary>
+	<param name="Result"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.MouseDoubleClick(System.Windows.Forms.MouseEventArgs)">
+	<summary>
+ Is called when the mouse has duble clicked on the object.
+ Is Not used by BaseObject.
+ </summary>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.MouseMove(System.Windows.Forms.MouseEventArgs)">
+	<summary>
+ Is called when mouse has moved over the object.
+ Is Not used by BaseObject.
+ </summary>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.MouseDown(System.Windows.Forms.MouseEventArgs)">
+	<summary>
+ Is called when a mouse button is down over the object.
+ Is Not used by BaseObject.
+ </summary>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.BaseObject.MouseUp(System.Windows.Forms.MouseEventArgs)">
+	<summary>
+ Is called when a mouse button is released over the object.
+ BaseObject uses for opening the menu.
+ </summary>
+	<param name="e"></param>
+	<remarks></remarks>
 </member><member name="M:Plugins.DataFlowBase.Add(System.Int32,System.Int32)">
 	<summary>
  Add a input.
@@ -193,6 +269,14 @@ Plugins
 </member><member name="M:Plugins.DataFlowBase.IsNotEmpty">
 	<summary>
  Not IsEmpty
+ </summary>
+</member><member name="F:Plugins.InputState.Axis">
+	<summary>
+ currently from 0 to 1
+ </summary>
+</member><member name="T:Plugins.HID">
+	<summary>
+ Human interface device
  </summary>
 </member>
 </members>

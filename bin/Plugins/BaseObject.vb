@@ -50,7 +50,7 @@ Public MustInherit Class BaseObject
 
     Public UserData As String = ""
 
-#Region "Setup & Distroy"
+#Region "Setup & Dispose"
     ''' <summary>
     ''' Create rectangles. using the position and size.
     ''' </summary>
@@ -77,7 +77,7 @@ Public MustInherit Class BaseObject
     ''' Distroys everything in the object.
     ''' BaseObject just dissconnects everything.
     ''' </summary>
-    Public Overridable Sub Distroy()
+    Public Overridable Sub Dispose()
         If Output IsNot Nothing Then
             For n As Integer = 0 To Output.Length - 1
                 Output(n).Disconnect()
@@ -91,6 +91,9 @@ Public MustInherit Class BaseObject
         End If
     End Sub
 
+    ''' <summary>
+    ''' Gets or sets the title shown on the object and the object menu.
+    ''' </summary>
     Public Property Title() As String
         Get
             Return _Title
@@ -104,7 +107,12 @@ Public MustInherit Class BaseObject
 #End Region
 
 #Region "Load & Save"
-    Public Overridable Function Load(ByVal g As SimpleD.Group) As SimpleD.Group
+    ''' <summary>
+    ''' Because UserData is loaded in New. We just connect everything here.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <remarks></remarks>
+    Public Overridable Sub Load(ByVal g As SimpleD.Group)
 
         Dim tmp As String = ""
 
@@ -118,7 +126,7 @@ Public MustInherit Class BaseObject
             Next
         End If
 
-        If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
+        If Input IsNot Nothing Then 'Same as output^^^ but for inputs.
             g.Get_Value("Input", tmp)
             Dim tmpS As String() = Split(tmp, ",")
             For n As Integer = 0 To tmpS.Length - 1
@@ -127,9 +135,14 @@ Public MustInherit Class BaseObject
             Next
         End If
 
-        Return g
-    End Function
 
+    End Sub
+
+    ''' <summary>
+    ''' Creates a new group and adds Name, Position, UserData, Outputs and inputs.
+    ''' </summary>
+    ''' <returns>The new group to be used.</returns>
+    ''' <remarks></remarks>
     Public Overridable Function Save() As SimpleD.Group
         Dim g As New SimpleD.Group("Object" & Index)
         Dim tmp As String = ""
@@ -161,6 +174,11 @@ Public MustInherit Class BaseObject
 
 #Region "Draw"
 
+    ''' <summary>
+    ''' Draws the base object stuff.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub Draw(ByVal g As Graphics)
         'Draw the title and the background. Then we draw the border so it is on top.
         g.FillRectangle(SystemBrushes.GradientActiveCaption, TitleBar)
@@ -192,8 +210,6 @@ Public MustInherit Class BaseObject
         g.DrawString(Title, SystemFonts.DefaultFont, SystemBrushes.ActiveCaptionText, TitleRect) 'Draw the title string.
 
 
-
-
     End Sub
 
     ''' <summary>
@@ -214,14 +230,15 @@ Public MustInherit Class BaseObject
 
 #End Region
 
+#Region "Set Position and Size"
 
     ''' <summary>
-    ''' Is called when the object is moving.
+    ''' Set the size of the object.
+    ''' Will call Resizing.
     ''' </summary>
-    Public Overridable Sub Moved()
-    End Sub
-
-
+    ''' <param name="Width"></param>
+    ''' <param name="Height"></param>
+    ''' <remarks></remarks>
     Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer)
         Rect.Size = SnapToGrid(New Size(Width, Height))
 
@@ -229,6 +246,18 @@ Public MustInherit Class BaseObject
 
         TitleBar.Width = Rect.Width
     End Sub
+
+    ''' <summary>
+    ''' Is called when the object is being resized.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Overridable Sub Resizing()
+    End Sub
+
+    ''' <summary>
+    ''' Sets the position of the object.
+    ''' Will call Moving.
+    ''' </summary>
     Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
         'Update the positions of the rectangles.
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
@@ -237,8 +266,16 @@ Public MustInherit Class BaseObject
         BackGround.Location = New Point(Rect.X, Rect.Y + 15)
 
         'Tell everyone that wants to know that, we are moving!
-        Moved()
+        Moving()
     End Sub
+
+    ''' <summary>
+    ''' Is called when the object is moving.
+    ''' BaseObject does not use moving.
+    ''' </summary>
+    Public Overridable Sub Moving()
+    End Sub
+#End Region
 
 #Region "Send & Receive"
     Public Sub Send(ByVal Data As Object, ByVal ID As Integer)
@@ -255,6 +292,13 @@ Public MustInherit Class BaseObject
         Next
     End Sub
 
+    ''' <summary>
+    ''' Is called when a object sends to this object.
+    ''' Is Not used by BaseObject.
+    ''' </summary>
+    ''' <param name="Data"></param>
+    ''' <param name="sender"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
     End Sub
 #End Region
@@ -335,9 +379,13 @@ Public MustInherit Class BaseObject
 #Region "Mouse & Menu"
     Friend Menu As New MenuNode("", True)
 
+    ''' <summary>
+    ''' Is called when somthing in the menu was selected.
+    ''' BaseObject just checks if remove was selected.
+    ''' </summary>
+    ''' <param name="Result"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
-
-
         Select Case LCase(Result.Name)
             Case "remove"
                 RemoveAt(Index)
@@ -345,12 +393,41 @@ Public MustInherit Class BaseObject
         End Select
     End Sub
 
+
+
+    ''' <summary>
+    ''' Is called when the mouse has duble clicked on the object.
+    ''' Is Not used by BaseObject.
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub MouseDoubleClick(ByVal e As MouseEventArgs)
     End Sub
+
+    ''' <summary>
+    ''' Is called when mouse has moved over the object.
+    ''' Is Not used by BaseObject.
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub MouseMove(ByVal e As MouseEventArgs)
     End Sub
+
+    ''' <summary>
+    ''' Is called when a mouse button is down over the object.
+    ''' Is Not used by BaseObject.
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub MouseDown(ByVal e As MouseEventArgs)
     End Sub
+
+    ''' <summary>
+    ''' Is called when a mouse button is released over the object.
+    ''' BaseObject uses for opening the menu.
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
             Menu_Open(Index, Menu)
@@ -651,7 +728,6 @@ Public Class DataFlow
 
     Shared Operator =(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean
         If right.obj <> left.obj Or right.Index <> left.Index Then Return False
-
         Return True
     End Operator
     Shared Operator <>(ByVal left As DataFlow, ByVal right As DataFlow) As Boolean
