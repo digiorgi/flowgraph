@@ -1,5 +1,7 @@
 //Version=0.985 FileVersion=1\\
 Main{
+	Width=721;
+	Height=430;
 	Objects=7;
 	FileVersion=0.5;
 }
@@ -45,12 +47,18 @@ Object5{
 Object6{
 	Name=Plugins.fgGetJoystickAxis;
 	Position=380,260;
-	Output=1,7,0`0`0;
+	Output=0`0`0`0`0`1,7,0;
 	Input=1;
+	Rev0=False;
+	Rev1=False;
+	Rev2=False;
+	Rev3=False;
+	Rev4=False;
+	Rev5=True;
 }
 Object7{
 	Name=Plugins.fgDisplayAsString;
-	Position=465,260;
+	Position=480,335;
 	Input=1;
 	Data=0;
 }

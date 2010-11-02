@@ -99,7 +99,7 @@ Plugins
 	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
 	<param name="Groups"></param>
 	<remarks></remarks>
-</member><member name="M:Plugins.Plugins.Load_Main(System.IntPtr)">
+</member><member name="M:Plugins.Plugins.Load_Main(System.Windows.Forms.Control)">
 	<summary>
  Loads the main plugin stuff.
  </summary>

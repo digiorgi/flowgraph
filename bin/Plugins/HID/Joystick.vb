@@ -73,6 +73,7 @@ Public Class fgJoystick
 
             Case 1
                 If Not Enabled Then Return
+
                 Joystick.Poll()
                 Dim state As JoystickState = Joystick.GetCurrentState
                 If Not state.Equals(LastState) Then
@@ -89,10 +90,11 @@ Public Class fgJoystick
         'Try to create the device.
         Try
             Joystick = New Joystick(HID.DirectInput, HID.Joysticks(comJoy.SelectedIndex).Device.InstanceGuid)
-            Joystick.SetCooperativeLevel(FormHandle, CooperativeLevel.Exclusive + CooperativeLevel.Background)
+            Joystick.SetCooperativeLevel(Form.Handle, CooperativeLevel.Exclusive + CooperativeLevel.Background)
 
         Catch ex As Exception
-            MsgBox("Error! Could not create joystick device.", vbOK + vbExclamation, "Error")
+            MsgBox("Error! Could not create joystick device.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error")
+            Enabled = False
         Finally
             Joystick.Acquire()
 
@@ -102,6 +104,7 @@ Public Class fgJoystick
                 End If
             Next
 
+            Enabled = True
         End Try
     End Sub
 End Class
@@ -109,6 +112,7 @@ End Class
 Public Class fgGetJoystickAxis
     Inherits BaseObject
 
+    Private chkReverse As New List(Of CheckBox)
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
         Setup(UserData, Position, 80) 'Setup the base rectangles.
 
@@ -116,10 +120,59 @@ Public Class fgGetJoystickAxis
         'Create the inputs.
         Inputs(New String() {"Joystick State|JoystickState"})
         'Create the output.
-        Outputs(New String() {"X|Number", "Y|Number", "Z|Number"})
+        Outputs(New String() {"X|Number", "Y|Number", "Z|Number", "RotationX|Number", "RotationY|Number", "RotationZ|Number"})
 
         'Set the title.
         Title = "Joystick Axis"
+
+        For i As Integer = 1 To 6
+            Dim chk As New CheckBox
+            chk.Text = "Rev"
+            chk.Width = 46
+            chk.Height = 15
+            chk.Tag = i - 1
+            chk.Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
+            AddHandler chk.CheckedChanged, AddressOf ReverseChange
+
+            chkReverse.Add(chk)
+            AddControl(chk)
+        Next
+    End Sub
+
+    Public Overrides Sub Moving()
+        For i As Integer = 1 To 3
+            chkReverse(i - 1).Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
+        Next
+    End Sub
+
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+
+        For i As Integer = 0 To 2
+            chkReverse(i).Dispose()
+        Next
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        For Each chk As CheckBox In chkReverse
+            g.Get_Value(chk.Text & chk.Tag, chk.Checked)
+        Next
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        For Each chk As CheckBox In chkReverse
+            g.Set_Value(chk.Text & chk.Tag, chk.Checked)
+        Next
+
+
+        Return g
+    End Function
+
+    Public Sub ReverseChange(ByVal sender As Object, ByVal e As EventArgs)
 
     End Sub
 
@@ -130,14 +183,29 @@ Public Class fgGetJoystickAxis
         If Not state.Equals(LastState) Then
 
 
-            'If state.X <> LastState.X Then Send(state.X * 0.0001, 0)
-            If state.Y <> LastState.Y Then Send(state.Y * 0.0001, 1)
-            If state.Z <> LastState.Z Then Send(state.Z * 0.0001, 2)
+            If state.X <> LastState.X Then SendAxis(state.X, 0)
+            If state.Y <> LastState.Y Then SendAxis(state.Y, 1)
+            If state.Z <> LastState.Z Then SendAxis(state.Z, 2)
 
-            If state.RotationZ <> LastState.RotationZ Then Send(-(state.RotationZ * 0.0001) + 1, 0)
+            If state.RotationX <> LastState.RotationX Then SendAxis(state.RotationX, 3)
+            If state.RotationY <> LastState.RotationY Then SendAxis(state.RotationY, 4)
+            If state.RotationZ <> LastState.RotationZ Then SendAxis(state.RotationZ, 5)
+
+            'If state.RotationZ <> LastState.RotationZ Then SendAxis(state.gets, 0)
+            'If state.RotationZ <> LastState.RotationZ Then SendAxis(state.RotationZ, 0)
 
             LastState = state
         End If
 
     End Sub
+
+    Public Sub SendAxis(ByVal Axis As Integer, ByVal ID As Integer)
+        If chkReverse(ID).Checked = False Then
+            Send(Axis * 0.0001, ID)
+        Else
+            Send((-Axis * 0.0001) + 1, ID)
+        End If
+
+    End Sub
+
 End Class

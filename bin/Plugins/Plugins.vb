@@ -40,7 +40,7 @@ Public Module Plugins
     'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
 
-    Public FormHandle As IntPtr
+    Public Form As Control
 
 #Region "Grid"
     'The snap grid size.
@@ -134,12 +134,12 @@ Public Module Plugins
     ''' <summary>
     ''' Loads the main plugin stuff.
     ''' </summary>
-    Public Sub Load_Main(ByVal Handle As IntPtr)
+    Public Sub Load_Main(ByVal form As Control)
         'Setup the auto draw timmer.
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        FormHandle = Handle
+        Plugins.Form = form
 
         AddObject_Setup()
     End Sub
@@ -159,6 +159,9 @@ Public Module Plugins
         sd.FromFile(File)
 
         Dim g As SimpleD.Group = sd.Get_Group("Main")
+        Form.ClientSize = New Size(g.Get_Value("Width"), g.Get_Value("Height"))
+
+
         'Make sure the versions match.
         If g.Get_Value("FileVersion") <> FileVersion Then
             MsgBox("Wrong file version." & Environment.NewLine _
@@ -188,6 +191,8 @@ Public Module Plugins
 
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.Create_Group("Main")
+        g.Set_Value("Width", Form.ClientSize.Width)
+        g.Set_Value("Height", Form.ClientSize.Height)
         g.Set_Value("Objects", Objects.Count - 1)
         g.Set_Value("FileVersion", FileVersion)
 
