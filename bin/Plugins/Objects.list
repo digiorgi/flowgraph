@@ -9,6 +9,8 @@
 'AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 'AddMenuObject|Counter,Plugins.fgCounter,60|Math
 'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
+'AddMenuObject|Timer,Plugins.fgTimer|Math
 //AddMenuObject|Counter2,Plugins.fgCounter,60|Math
 'AddMenuObject|KeyPressed,Plugins.fgKeyPressed,70|Input
 'AddMenuObject|Keyboard,Plugins.fgKeyboard,70|Input
+'AddMenuObject|Mouse,Plugins.fgMouse,70|Input

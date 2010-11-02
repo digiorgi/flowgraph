@@ -30,11 +30,11 @@ Public Class fgKeyPressed
 
         comKey.Location = Position + New Point(15, 20)
         comKey.Items.AddRange([Enum].GetNames(GetType(SlimDX.DirectInput.Key)))
-        comKey.SelectedItem = SlimDX.DirectInput.Key.DownArrow.ToString
+        comKey.SelectedItem = SlimDX.DirectInput.Key.Pause.ToString
         comKey.DropDownStyle = ComboBoxStyle.DropDownList
         AddControl(comKey)
 
-        HID.Create()
+        HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
@@ -43,7 +43,7 @@ Public Class fgKeyPressed
 
     Public Overrides Sub Dispose()
         MyBase.Dispose()
-        HID.Dispose()
+        HID.Dispose(True)
         comKey.Dispose()
     End Sub
 
@@ -58,24 +58,32 @@ Public Class fgKeyPressed
             Case 1
                 If Not Enabled Then Return
                 HID.Keyboard.Poll()
-                If HID.Keyboard.GetCurrentState.IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) And Not LastState Then
-                    LastState = True
+                If HID.Keyboard.GetCurrentState.IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
+                    If LastState = False Then
+                        Send(New InputState(1, Me))
+                        LastState = True
+                    End If
 
-                    Send(New InputState(1, Me))
-                ElseIf LastState Then
-                    Send(New InputState(0, Me))
-                    LastState = False
+                Else
+                    If LastState = True Then
+                        Send(New InputState(0, Me))
+                        LastState = False
+                    End If
                 End If
 
             Case 2
                 If Not Enabled Then Return
-                If DirectCast(Data, KeyboardState).IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) And Not LastState Then
-                    LastState = True
+                If DirectCast(Data, KeyboardState).IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
+                    If LastState = False Then
+                        Send(New InputState(1, Me))
+                        LastState = True
+                    End If
 
-                    Send(New InputState(1, Me))
-                ElseIf LastState Then
-                    Send(New InputState(0, Me))
-                    LastState = False
+                Else
+                    If LastState = True Then
+                        Send(New InputState(0, Me))
+                        LastState = False
+                    End If
                 End If
 
         End Select
@@ -112,12 +120,12 @@ Public Class fgKeyboard
         'Set the title.
         Title = "Keyboard"
 
-        HID.Create()
+        HID.Create(True)
     End Sub
 
     Public Overrides Sub Dispose()
         MyBase.Dispose()
-        HID.Dispose()
+        HID.Dispose(True)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
