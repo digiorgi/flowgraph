@@ -112,7 +112,7 @@ End Class
 Public Class fgGetJoystickAxis
     Inherits BaseObject
 
-    Private chkReverse As New List(Of CheckBox)
+    Private chkReverse(7) As CheckBox
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
         Setup(UserData, Position, 80) 'Setup the base rectangles.
 
@@ -120,12 +120,14 @@ Public Class fgGetJoystickAxis
         'Create the inputs.
         Inputs(New String() {"Joystick State|JoystickState"})
         'Create the output.
-        Outputs(New String() {"X|Number", "Y|Number", "Z|Number", "RotationX|Number", "RotationY|Number", "RotationZ|Number"})
+        Outputs(New String() {"X|Number", "Y|Number", "Z|Number", _
+                              "RotationX|Number", "RotationY|Number", "RotationZ|Number", _
+                              "Slider1|Number", "Slider2|Number"})
 
         'Set the title.
         Title = "Joystick Axis"
 
-        For i As Integer = 1 To 6
+        For i As Integer = 1 To 8
             Dim chk As New CheckBox
             chk.Text = "Rev"
             chk.Width = 46
@@ -134,13 +136,13 @@ Public Class fgGetJoystickAxis
             chk.Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
             AddHandler chk.CheckedChanged, AddressOf ReverseChange
 
-            chkReverse.Add(chk)
+            chkReverse(i - 1) = chk
             AddControl(chk)
         Next
     End Sub
 
     Public Overrides Sub Moving()
-        For i As Integer = 1 To 3
+        For i As Integer = 1 To 8
             chkReverse(i - 1).Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
         Next
     End Sub
@@ -148,8 +150,9 @@ Public Class fgGetJoystickAxis
     Public Overrides Sub Dispose()
         MyBase.Dispose()
 
-        For i As Integer = 0 To 2
-            chkReverse(i).Dispose()
+
+        For Each chk As CheckBox In chkReverse
+            chk.Dispose()
         Next
     End Sub
 
@@ -164,16 +167,35 @@ Public Class fgGetJoystickAxis
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        'Save all the reverse check boxs state.
         For Each chk As CheckBox In chkReverse
             g.Set_Value(chk.Text & chk.Tag, chk.Checked)
         Next
-
 
         Return g
     End Function
 
     Public Sub ReverseChange(ByVal sender As Object, ByVal e As EventArgs)
+        Select Case sender.tag
+            Case 0
+                SendAxis(LastState.X, 0)
+            Case 1
+                SendAxis(LastState.Y, 1)
+            Case 2
+                SendAxis(LastState.Z, 2)
 
+            Case 3
+                SendAxis(LastState.RotationX, 3)
+            Case 4
+                SendAxis(LastState.RotationY, 4)
+            Case 5
+                SendAxis(LastState.RotationZ, 5)
+
+            Case 6
+                SendAxis(LastState.GetSliders(0), 6)
+            Case 7
+                SendAxis(LastState.GetSliders(1), 7)
+        End Select
     End Sub
 
     Private LastState As New JoystickState
@@ -182,7 +204,7 @@ Public Class fgGetJoystickAxis
 
         If Not state.Equals(LastState) Then
 
-
+            'Get axis.
             If state.X <> LastState.X Then SendAxis(state.X, 0)
             If state.Y <> LastState.Y Then SendAxis(state.Y, 1)
             If state.Z <> LastState.Z Then SendAxis(state.Z, 2)
@@ -191,8 +213,9 @@ Public Class fgGetJoystickAxis
             If state.RotationY <> LastState.RotationY Then SendAxis(state.RotationY, 4)
             If state.RotationZ <> LastState.RotationZ Then SendAxis(state.RotationZ, 5)
 
-            'If state.RotationZ <> LastState.RotationZ Then SendAxis(state.gets, 0)
-            'If state.RotationZ <> LastState.RotationZ Then SendAxis(state.RotationZ, 0)
+            If state.GetSliders(0) <> LastState.GetSliders(0) Then SendAxis(state.GetSliders(0), 6)
+            If state.GetSliders(1) <> LastState.GetSliders(1) Then SendAxis(state.GetSliders(1), 7)
+
 
             LastState = state
         End If
