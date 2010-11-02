@@ -450,6 +450,7 @@ Public Class DataFlowBase
     Public obj As Integer = -1
     Public Index As Integer = -1
     Public Name As String = "DataFlowBase"
+    Public Note As String = ""
 
     Public DataType As New List(Of String)
 
@@ -511,7 +512,7 @@ Public Class DataFlowBase
             Next
         End If
 
-        Return str
+        Return str & vbNewLine & Note
     End Function
 
 #Region "Add & Disconnect"

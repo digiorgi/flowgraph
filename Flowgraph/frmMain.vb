@@ -234,12 +234,12 @@ Public Class frmMain
             If obj.IntersectsWithInput(Mouse) Then 'Check input.
                 ToolTipText = obj.Input(obj.Intersection).ToString
 
-                DoDraw()
+                'DoDraw()
                 Exit For
             ElseIf obj.IntersectsWithOutput(Mouse) Then 'Check output.
                 ToolTipText = obj.Output(obj.Intersection).ToString
 
-                DoDraw()
+                'DoDraw()
                 Exit For
             End If
         Next
