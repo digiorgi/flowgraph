@@ -72,7 +72,7 @@ Public Class frmMain
      
 
         Load_PluginSystem()
-        Load_Main() 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
+        Load_Main(Me.Handle) 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
         If FileToOpen <> "" Then Open(FileToOpen)
     End Sub

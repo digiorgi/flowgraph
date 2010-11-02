@@ -40,6 +40,8 @@ Public Module Plugins
     'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
 
+    Public FormHandle As IntPtr
+
 #Region "Grid"
     'The snap grid size.
     Public GridSize As Integer = 5
@@ -128,14 +130,16 @@ Public Module Plugins
 
 #Region "Open & Save"
 
+
     ''' <summary>
-    ''' Loads the stuff in modMain.
+    ''' Loads the main plugin stuff.
     ''' </summary>
-    Public Sub Load_Main()
+    Public Sub Load_Main(ByVal Handle As IntPtr)
         'Setup the auto draw timmer.
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
+        FormHandle = Handle
 
         AddObject_Setup()
     End Sub
