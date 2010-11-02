@@ -1,88 +1,10 @@
-﻿'AddMenuObject|KeyPressed,Plugins.fgKeyPressed|Input
-Imports SlimDX.DirectInput
+﻿Imports SlimDX.DirectInput
 
 'Input:
 '	Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
 '	Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
 '	Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
 '	InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
-
-Public Class fgKeyPressed
-    Inherits BaseObject
-
-    Public Enabled As Boolean = True
-
-    Public WithEvents comKey As New ComboBox
-
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 160) 'Setup the base rectangles.
-
-
-        'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
-        'Create the output.
-        Outputs(New String() {"Input State|InputState"})
-
-        'Set the title.
-        Title = "Is key pressed"
-
-        comKey.Location = Position + New Point(15, 20)
-        comKey.Items.AddRange([Enum].GetNames(GetType(SlimDX.DirectInput.Key)))
-        comKey.SelectedItem = SlimDX.DirectInput.Key.DownArrow.ToString
-        comKey.DropDownStyle = ComboBoxStyle.DropDownList
-        AddControl(comKey)
-
-        HID.Create()
-    End Sub
-
-    Public Overrides Sub Moving()
-
-        comKey.Location = Rect.Location + New Point(15, 20)
-    End Sub
-
-    Public Overrides Sub Dispose()
-        MyBase.Dispose()
-        HID.Dispose()
-        comKey.Dispose()
-    End Sub
-
-    Public LastState As Boolean = False
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        MyBase.Receive(Data, sender)
-
-        Select Case sender.Index
-            Case 0
-                Enabled = Data
-
-            Case 1
-                If Not Enabled Then Return
-                HID.Keyboard.Poll()
-                If HID.Keyboard.GetCurrentState.IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) And Not LastState Then
-                    LastState = True
-
-                    Send(New InputState(1, Me))
-                ElseIf LastState Then
-                    Send(New InputState(0, Me))
-                    LastState = False
-                End If
-
-        End Select
-    End Sub
-
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Key", comKey.SelectedItem, False)
-
-        MyBase.Load(g)
-    End Sub
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
-
-        g.Set_Value("Key", comKey.SelectedItem)
-
-        Return g
-    End Function
-
-End Class
 
 Public Structure InputState
     ''' <summary>
@@ -108,24 +30,29 @@ Public Class HID
     Private Shared DirectInput As DirectInput
     Public Shared Keyboard As Keyboard
 
-    Private Shared Created As Integer = 0
-    Public Shared Sub Create()
-        Created += 1
-        If Created > 1 Then Return
+    Private Shared Used As Integer = 0
+    Public Shared Sub Create(Optional ByVal CreateKeyboard As Boolean = True)
+        Used += 1
+        If Used = 1 Then
+            DirectInput = New DirectInput
+        End If
 
-        DirectInput = New DirectInput
 
-        Keyboard = New Keyboard(DirectInput)
-        Keyboard.Acquire()
-        Keyboard.Poll()
+        If CreateKeyboard Then
+            Keyboard = New Keyboard(DirectInput)
+            Keyboard.Acquire()
+            Keyboard.Poll()
+        End If
     End Sub
 
-    Public Shared Sub Dispose()
-        Created -= 1
-        If Created > 0 Then Return
+    Public Shared Sub Dispose(Optional ByVal DisposeKeyboard As Boolean = True)
+        Used -= 1
+        If Used > 0 Then Return
 
-        Keyboard.Unacquire()
-        Keyboard.Dispose()
+        If Keyboard IsNot Nothing And DisposeKeyboard Then
+            Keyboard.Unacquire()
+            Keyboard.Dispose()
+        End If
 
         DirectInput.Dispose()
     End Sub

@@ -23,7 +23,6 @@ Public Class fgDisplayAsString
         Return g
     End Function
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-
         g.Get_Value("Data", Data)
 
         MyBase.Load(g)

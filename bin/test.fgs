@@ -12,7 +12,7 @@ Object0{
 Object1{
 	Name=Plugins.fgCounter;
 	Position=30,245;
-	Output=1,7,1;
+	Output=2,7,1,2,0;
 	Input=3,0;
 }
 Object2{
@@ -20,7 +20,7 @@ Object2{
 	Position=195,330;
 	UserData=2;
 	Output=1,4,0;
-	Input=0,1;
+	Input=1,1;
 }
 Object3{
 	Name=Plugins.fgCounter;
@@ -32,7 +32,7 @@ Object4{
 	Name=Plugins.fgDisplayAsString;
 	Position=320,330;
 	Input=1;
-	Data=6;
+	Data=14;
 }
 Object5{
 	Name=Plugins.fgDisplayAsString;
@@ -54,5 +54,5 @@ Object7{
 	Position=195,230;
 	Output=1,0,0;
 	Input=0,1;
-	Key=A;
+	Key=Home;
 }
