@@ -27,7 +27,7 @@ End Structure
 ''' Human interface device
 ''' </summary>
 Public Class HID
-    Private Shared DirectInput As DirectInput
+    Public Shared DirectInput As DirectInput
     Public Shared Keyboard As Keyboard
     Public Shared Mouse As Mouse
 
@@ -35,10 +35,16 @@ Public Class HID
     Private Shared UsedMice As Integer = 0
     Private Shared UsedKeyboards As Integer = 0
 
+    Public Shared Joysticks As New List(Of JoystickInfo)
+
     Public Shared Sub Create(Optional ByVal CreateKeyboard As Boolean = False, Optional ByVal CreateMouse As Boolean = False)
         Used += 1
         If Used = 1 Then
             DirectInput = New DirectInput
+
+            For Each Device As DeviceInstance In DirectInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly)
+                Joysticks.Add(New JoystickInfo(Device.InstanceName, Device))
+            Next
         End If
 
 
@@ -46,7 +52,6 @@ Public Class HID
             UsedKeyboards += 1
             If UsedKeyboards = 1 Then
                 Keyboard = New Keyboard(DirectInput)
-                'Keyboard.SetCooperativeLevel(FormHandle, CooperativeLevel.Background)
                 Keyboard.Acquire()
                 Keyboard.Poll()
             End If
@@ -84,4 +89,17 @@ Public Class HID
         If Used > 0 Then Return
         DirectInput.Dispose()
     End Sub
+End Class
+Public Class JoystickInfo
+    Public Name As String
+    Public Device As DeviceInstance
+
+    Sub New(ByVal Name As String, ByVal Device As DeviceInstance)
+        Me.Name = Name
+        Me.Device = Device
+    End Sub
+
+    Public Overrides Function ToString() As String
+        Return Name
+    End Function
 End Class

@@ -17,6 +17,10 @@ Step#1
 	Input.vb is messy and should be cleaned-up.
 	Checkup on BaseObject  it may have goten messy.
 	
+	Stop loading file after error.
+
+	Fix the resizing of DisplayAsString. (does not put title text back after resizing.)
+	Save width and height of form.
 	
 	
 Step#2
