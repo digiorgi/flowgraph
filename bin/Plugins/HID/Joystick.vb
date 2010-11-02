@@ -202,8 +202,10 @@ Public Class fgGetJoystickAxis
     Public Sub SendAxis(ByVal Axis As Integer, ByVal ID As Integer)
         If chkReverse(ID).Checked = False Then
             Send(Axis * 0.0001, ID)
+            Output(ID).Note = "Axis=" & Axis * 0.0001
         Else
             Send((-Axis * 0.0001) + 1, ID)
+            Output(ID).Note = "Axis=" & (-Axis * 0.0001) + 1
         End If
 
     End Sub
