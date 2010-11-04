@@ -27,6 +27,7 @@ Partial Class frmMain
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnSaveAs = New System.Windows.Forms.Button()
         Me.lblToolTip = New System.Windows.Forms.Label()
+        Me.chkDraw = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'btnOpen
@@ -71,12 +72,25 @@ Partial Class frmMain
         Me.lblToolTip.UseMnemonic = False
         Me.lblToolTip.Visible = False
         '
+        'chkDraw
+        '
+        Me.chkDraw.AutoSize = True
+        Me.chkDraw.Checked = True
+        Me.chkDraw.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkDraw.Location = New System.Drawing.Point(257, 16)
+        Me.chkDraw.Name = "chkDraw"
+        Me.chkDraw.Size = New System.Drawing.Size(51, 17)
+        Me.chkDraw.TabIndex = 4
+        Me.chkDraw.Text = "Draw"
+        Me.chkDraw.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(525, 463)
+        Me.Controls.Add(Me.chkDraw)
         Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.btnSaveAs)
         Me.Controls.Add(Me.btnSave)
@@ -93,5 +107,6 @@ Partial Class frmMain
     Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents btnSaveAs As System.Windows.Forms.Button
     Friend WithEvents lblToolTip As System.Windows.Forms.Label
+    Friend WithEvents chkDraw As System.Windows.Forms.CheckBox
 
 End Class

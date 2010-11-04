@@ -1,5 +1,6 @@
 ﻿'AddMenuObject|Joystick,Plugins.fgJoystick,70|Input
-'AddMenuObject|Joystick Axis,Plugins.fgGetJoystickAxis,100|Input
+'AddMenuObject|Joystick Axis,Plugins.fgGetJoystickAxis,80|Input
+'AddMenuObject|Joystick Buttons,Plugins.fgGetJoystickButtons,90|Input
 Imports SlimDX.DirectInput
 
 'Input:
@@ -232,5 +233,74 @@ Public Class fgGetJoystickAxis
         End If
 
     End Sub
+
+End Class
+
+Public Class fgGetJoystickButtons
+    Inherits BaseObject
+
+    Private WithEvents numButtons As New NumericUpDown
+
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 90, 35) 'Setup the base rectangles.
+
+
+        'Create the inputs.
+        Inputs(New String() {"Joystick State|JoystickState"})
+        'Create the output.
+        Outputs(New String() {"Button|Number"})
+
+        'Set the title.
+        Title = "Joystick Buttons"
+
+        numButtons.Minimum = 0
+        numButtons.Maximum = 1000
+        numButtons.Width = 60
+        numButtons.Location = Position + New Point(15, 15)
+        AddControl(numButtons)
+
+        HID.Create(True)
+    End Sub
+
+    Public Overrides Sub Moving()
+        numButtons.Location = Rect.Location + New Point(15, 15)
+    End Sub
+
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+        HID.Dispose(True)
+        numButtons.Dispose()
+    End Sub
+
+    Public LastState As Boolean = False
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Dim state As JoystickState = DirectCast(Data, JoystickState)
+        numButtons.Maximum = state.GetButtons.Length - 1
+
+        If state.GetButtons(numButtons.Value) <> LastState Then
+            If state.GetButtons(numButtons.Value) = 0 Then
+                Send(0)
+                LastState = False
+            Else
+                Send(1)
+                LastState = True
+            End If
+
+        End If
+
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Button", numButtons.Value, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Button", numButtons.Value)
+
+        Return g
+    End Function
 
 End Class

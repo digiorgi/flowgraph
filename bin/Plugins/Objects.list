@@ -12,7 +12,8 @@
 'AddMenuObject|Timer,Plugins.fgTimer|Math
 //AddMenuObject|Counter2,Plugins.fgCounter,60|Math
 'AddMenuObject|Joystick,Plugins.fgJoystick,70|Input
-'AddMenuObject|Joystick Axis,Plugins.fgGetJoystickAxis,100|Input
+'AddMenuObject|Joystick Axis,Plugins.fgGetJoystickAxis,80|Input
+'AddMenuObject|Joystick Buttons,Plugins.fgGetJoystickButtons,90|Input
 'AddMenuObject|KeyPressed,Plugins.fgKeyPressed,70|Input
 'AddMenuObject|Keyboard,Plugins.fgKeyboard,70|Input
 'AddMenuObject|Mouse,Plugins.fgMouse,70|Input

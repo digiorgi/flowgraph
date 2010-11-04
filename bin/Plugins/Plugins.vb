@@ -210,6 +210,7 @@ Public Module Plugins
 
 #Region "Auto draw"
     Event DrawEvent()
+    Public Draw As Boolean = True
     Private DoNotDraw As Boolean = True
 
     ''' <summary>
@@ -217,6 +218,7 @@ Public Module Plugins
     ''' </summary>
     ''' <param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
     Public Sub DoDraw(Optional ByVal HeighPriority As Boolean = False)
+        If Not Draw Then Return
 
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
         If HeighPriority Then

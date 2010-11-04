@@ -344,4 +344,7 @@ Public Class frmMain
     End Sub
 #End Region
 
+    Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
+        Draw = chkDraw.Checked
+    End Sub
 End Class
