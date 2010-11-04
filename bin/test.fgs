@@ -1,8 +1,8 @@
 //Version=0.985 FileVersion=1\\
 Main{
-	Width=736;
-	Height=492;
-	Objects=9;
+	Width=891;
+	Height=602;
+	Objects=13;
 	FileVersion=0.5;
 }
 Object0{
@@ -22,11 +22,11 @@ Object2{
 	Name=Plugins.fgTimer;
 	Position=20,140;
 	UserData=10;
-	Output=3,0,1,3,1,5,1;
+	Output=5,0,1,3,1,5,1,10,1,11,1;
 	Input=0,0;
 }
 Object3{
-	Name=Plugins.fgMouse;
+	Name=Plugins.fgRawMouse;
 	Position=225,195;
 	Output=0`1,4,0`0;
 	Input=0,1;
@@ -62,7 +62,7 @@ Object7{
 	Name=Plugins.fgDisplayAsString;
 	Position=580,335;
 	Input=1;
-	Data=0;
+	Data=0.5;
 }
 Object8{
 	Name=Plugins.fgGetJoystickButtons;
@@ -76,4 +76,28 @@ Object9{
 	Position=580,405;
 	Input=1;
 	Data=0;
+}
+Object10{
+	Name=Plugins.fgLocalMouse;
+	Position=255,410;
+	Output=0`1,12,0`0;
+	Input=0,1;
+}
+Object11{
+	Name=Plugins.fgGlobalMouse;
+	Position=250,475;
+	Output=0`1,13,0`0;
+	Input=0,1;
+}
+Object12{
+	Name=Plugins.fgDisplayAsString;
+	Position=340,425;
+	Input=1;
+	Data=867;
+}
+Object13{
+	Name=Plugins.fgDisplayAsString;
+	Position=340,490;
+	Input=1;
+	Data=793;
 }
