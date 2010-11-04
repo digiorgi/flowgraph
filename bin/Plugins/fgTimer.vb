@@ -6,7 +6,7 @@ Public Class fgTimer
 
     Private WithEvents numInterval As New NumericUpDown
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 120, 60) 'Setup the base rectangles.
+        Setup(UserData, Position, 120) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Tick"})

@@ -2,7 +2,7 @@
 Main{
 	Width=736;
 	Height=492;
-	Objects=7;
+	Objects=9;
 	FileVersion=0.5;
 }
 Object0{
@@ -14,7 +14,7 @@ Object0{
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
-	Position=465,125;
+	Position=475,125;
 	Input=1;
 	Data=0;
 }
@@ -33,20 +33,20 @@ Object3{
 }
 Object4{
 	Name=Plugins.fgDisplayAsString;
-	Position=465,210;
+	Position=475,210;
 	Input=1;
 	Data=0;
 }
 Object5{
 	Name=Plugins.fgJoystick;
-	Position=155,260;
-	Output=1,6,0;
+	Position=225,260;
+	Output=2,6,0,8,0;
 	Input=0,1;
 	Joystick=RGT Force Feedback Pro;
 }
 Object6{
 	Name=Plugins.fgGetJoystickAxis;
-	Position=380,260;
+	Position=475,260;
 	Output=0`0`0`0`0`1,7,0`0`0;
 	Input=1;
 	Rev0=False;
@@ -60,7 +60,20 @@ Object6{
 }
 Object7{
 	Name=Plugins.fgDisplayAsString;
-	Position=480,335;
+	Position=580,335;
+	Input=1;
+	Data=0;
+}
+Object8{
+	Name=Plugins.fgGetJoystickButtons;
+	Position=475,405;
+	Output=1,9,0;
+	Input=1;
+	Button=6;
+}
+Object9{
+	Name=Plugins.fgDisplayAsString;
+	Position=580,405;
 	Input=1;
 	Data=0;
 }
