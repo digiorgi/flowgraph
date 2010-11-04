@@ -1,23 +1,23 @@
-﻿####BUGS####
+﻿There 'should' be no bugs or 'clean-ups' before moving to the next 'step'.
+The objects can be added at anytime. But be aware there could be changes that will brake objects.
+
+####BUGS####
 	Stop loading file after error.
 
 	Fix the resizing of DisplayAsString. (does not put title text back after resizing.)
 
+####Clean-Ups#### <Means make things orderly and comment things.
+	frmMain
+	Plugins.vb
+	All new input code.
+
+
+
 Step#1
-	
-	#################################
-	##########Comment stuff##########
-	#################################
 
 	Menu:
 		Clip menu to client area.
 		Center menu at mouse position when opened. and group change.
-
-	Cleanup frmMain(the code...)
-	Clean Plugins.vb and maybe rename it.
-	Input.vb is messy and should be cleaned-up.
-	Checkup on BaseObject  it may have goten messy.
-	
 	
 	
 	
@@ -30,10 +30,29 @@ Step#2
 		Disable plugin e.g. "-fgAdd.vb"
 
 	Add support for C# plugins
+
+
+Step#3
+
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
+	Add the abllty to save a config file for objects. ****There may not really be a need for this****
+		e.g. Save the text of DisplayAsString so you could load it later.
 
-Step#3 Add objects:
+
+	Change the Dots(inputs, outputs) to arrows pointing the way.
+
+
+Step#4
+	SimpleD needs support for groups inside groups. (for folders)
+
+	Folders (Allow you to put objects in folders.)
+			Each folder would have one input(As Object) and one output(As Object).
+
+
+
+
+Objects to add:   **There should be atleast one object scripted in C#.** (After step#2 is Done.)
 	Math:
 		Minus
 		Round
@@ -50,7 +69,6 @@ Step#3 Add objects:
 
 	Misc:
 		Get varable from object.
-		Timer: In(Enabled, Interval) Out(Tick)
 
 	Input:
 		Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
@@ -59,6 +77,9 @@ Step#3 Add objects:
 		InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
 
 	MIDI:
+		Still need to figerout how channels are going to be handled.
+			I may just have a All check box then when unchecked you could set a channel?
+
 		Input device	In(Enabled, DeviceID)			Out(MidiMessage)
 		Output device	In(Enabled, DeviceID, MidiMessage)
 		Controller		In(Controller, InputHandler)	Out(MidiMessage)
