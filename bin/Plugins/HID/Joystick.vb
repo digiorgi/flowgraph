@@ -1,6 +1,6 @@
-﻿'AddMenuObject|Joystick,Plugins.fgJoystick,70|Input
-'AddMenuObject|Joystick Axis,Plugins.fgGetJoystickAxis,80|Input
-'AddMenuObject|Joystick Buttons,Plugins.fgGetJoystickButtons,90|Input
+﻿'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
+'AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
+'AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
 Imports SlimDX.DirectInput
 
 'Input:

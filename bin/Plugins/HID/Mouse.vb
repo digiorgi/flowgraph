@@ -1,4 +1,6 @@
-﻿'AddMenuObject|Mouse,Plugins.fgMouse,70|Input
+﻿'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
+'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
+'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,70|Input,Mouse
 Imports SlimDX.DirectInput
 
 'Input:
@@ -7,7 +9,7 @@ Imports SlimDX.DirectInput
 '	Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
 '	InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
 
-Public Class fgMouse
+Public Class fgRawMouse
     Inherits BaseObject
 
     Public Enabled As Boolean = True
@@ -21,7 +23,7 @@ Public Class fgMouse
         Outputs(New String() {"Mouse State|MouseState", "X|Number", "Y|Number"})
 
         'Set the title.
-        Title = "Mouse"
+        Title = "Raw Mouse"
 
         HID.Create(, True)
     End Sub
@@ -67,5 +69,103 @@ Public Class fgMouse
         Next
         Return False
     End Function
+
+End Class
+
+Public Class fgLocalMouse
+    Inherits BaseObject
+
+    Public Enabled As Boolean = True
+
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 65) 'Setup the base rectangles.
+
+        'Create the inputs.
+        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        'Create the output.
+        Outputs(New String() {"Position|Point", "X|Number", "Y|Number"})
+
+        'Set the title.
+        Title = "Local Mouse"
+    End Sub
+
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+    End Sub
+
+    Private LastState As Point
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        MyBase.Receive(Data, sender)
+
+        Select Case sender.Index
+            Case 0
+                Enabled = Data
+
+            Case 1
+                If Not Enabled Then Return
+
+                Dim state As Point = Mouse.Location
+                If state <> LastState Then
+                    Send(state, 0)
+                End If
+                If state.X <> LastState.X Then
+                    Send(state.X, 1)
+                End If
+                If state.Y <> LastState.Y Then
+                    Send(state.Y, 2)
+                End If
+
+                LastState = state
+        End Select
+    End Sub
+
+End Class
+
+Public Class fgGlobalMouse
+    Inherits BaseObject
+
+    Public Enabled As Boolean = True
+
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 70) 'Setup the base rectangles.
+
+        'Create the inputs.
+        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        'Create the output.
+        Outputs(New String() {"Position|Point", "X|Number", "Y|Number"})
+
+        'Set the title.
+        Title = "Global Mouse"
+    End Sub
+
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+    End Sub
+
+    Private LastState As Point
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        MyBase.Receive(Data, sender)
+
+        Select Case sender.Index
+            Case 0
+                Enabled = Data
+
+            Case 1
+                If Not Enabled Then Return
+
+                Dim state As Point = Cursor.Position
+                If state <> LastState Then
+                    Send(state, 0)
+                End If
+                If state.X <> LastState.X Then
+                    Send(state.X, 1)
+                End If
+                If state.Y <> LastState.Y Then
+                    Send(state.Y, 2)
+                End If
+
+                LastState = state
+        End Select
+    End Sub
 
 End Class
