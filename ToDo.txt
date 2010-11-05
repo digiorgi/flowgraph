@@ -2,8 +2,6 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-	Stop loading file after error.
-
 	Fix the resizing of DisplayAsString. (does not put title text back after resizing.)
 
 ####Clean-Ups#### <Means make things orderly and comment things.
@@ -14,12 +12,6 @@ The objects can be added at anytime. But be aware there could be changes that wi
 
 
 Step#1
-
-	Menu:
-		Clip menu to client area.
-		Center menu at mouse position when opened. and group change.
-	
-	
 	
 Step#2
 

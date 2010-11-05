@@ -42,6 +42,7 @@ Public Module Plugins
 
     Public Form As Control
 
+    
 #Region "Grid"
     'The snap grid size.
     Public GridSize As Integer = 5
@@ -130,7 +131,6 @@ Public Module Plugins
 
 #Region "Open & Save"
 
-
     ''' <summary>
     ''' Loads the main plugin stuff.
     ''' </summary>
@@ -143,6 +143,7 @@ Public Module Plugins
 
         AddObject_Setup()
     End Sub
+
 
     Public LoadedFile As String = ""
     Public Const FileVersion = 0.5
@@ -173,10 +174,15 @@ Public Module Plugins
         Dim numObj As Integer = g.Get_Value("Objects")
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
+
             Dim pos As String() = Split(g.Get_Value("position"), ",")
             Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata"))
-            'Objects(obj).Load(g)
 
+            If obj = -1 Then
+                MsgBox("Could not create object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                ClearObjects()
+                Return
+            End If
         Next
 
         For n As Integer = 0 To numObj
@@ -270,7 +276,7 @@ Public Module Plugins
             Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position, UserData}))
             Return Objects.Count - 1
         Catch ex As Exception
-            MsgBox("Could not create object: " & Name)
+            'MsgBox("Could not create object: " & Name)
             Return -1
         End Try
     End Function

@@ -29,9 +29,6 @@
 
 Module modMain
 
-
-
-   
     Public Sub Load_PluginSystem()
         AddHandler AddControlEvent, AddressOf AddControl
         AddHandler RemoveControlEvent, AddressOf RemoveControl
