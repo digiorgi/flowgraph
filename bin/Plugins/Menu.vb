@@ -104,7 +104,6 @@ Public Module Menu
     Private Title As String = "Main"
     Private TitleRect As RectangleF
 
-
     ''' <summary>
     ''' Open a dropdown menu with the items.
     ''' </summary>
@@ -122,10 +121,7 @@ Public Module Menu
         'Set the tool to menu.
         Tool = ToolType.Menu
 
-        'Update the rectangle position and size.
-        Rect.Location = MenuStartPosition
-        TitleRect.Location = MenuStartPosition
-        UpdateRectSize()
+        UpdateRect()
 
         'Draw the newly opened menu.
         DoDraw(True)
@@ -141,7 +137,7 @@ Public Module Menu
 
                     Item = Item.Parent
                     Title = Item.Name
-                    UpdateRectSize()
+                    UpdateRect()
                 Else
                 End If
                 Return New MenuNode(MenuResult.SelectedGroup)
@@ -156,7 +152,7 @@ Public Module Menu
 
                         Item = Item.Children(n)
                         Title = Item.Name
-                        UpdateRectSize()
+                        UpdateRect()
 
                         Return ReturnNode
                     Else
@@ -214,17 +210,29 @@ Public Module Menu
         g.DrawRectangle(Pens.Black, Rect)
     End Sub
 
-    Private Sub UpdateRectSize()
+    Private Sub UpdateRect()
+        'Set the min width to 60.
         Dim Width As Integer = 60
+        'Look in each node and see if there is any with a biger width.
         For Each Node As MenuNode In Item.Children
             If Node.Width > Width Then
                 Width = Node.Width
             End If
         Next
+        'Set the size of the rectangle.
         Rect.Size = New Size(Width, (Item.Children.Count * 12) + 13)
-        TitleRect.Size = Nothing
-    End Sub
+        TitleRect.Size = Nothing 'Set the title rectangle to nothing so next draw it will find it.
 
+        'Center over mouse start position.
+        Rect.X = MenuStartPosition.X - (Rect.Width * 0.5)
+        Rect.Y = MenuStartPosition.Y - (Rect.Height * 0.5)
+
+        'Clip the menu to the window.
+        If Rect.X < 0 Then Rect.X = 1
+        If Rect.Y < 0 Then Rect.Y = 1
+        If Rect.Right > Form.ClientSize.Width Then Rect.X = Form.ClientSize.Width - Rect.Width - 1
+        If Rect.Bottom > Form.ClientSize.Height Then Rect.Y = Form.ClientSize.Height - Rect.Height - 1
+    End Sub
 
     ''' <summary>
     ''' Add a menu node to a node list.

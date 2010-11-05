@@ -1,7 +1,7 @@
 //Version=0.985 FileVersion=1\\
 Main{
-	Width=891;
-	Height=602;
+	Width=692;
+	Height=550;
 	Objects=13;
 	FileVersion=0.5;
 }
@@ -93,11 +93,11 @@ Object12{
 	Name=Plugins.fgDisplayAsString;
 	Position=340,425;
 	Input=1;
-	Data=867;
+	Data=140;
 }
 Object13{
 	Name=Plugins.fgDisplayAsString;
 	Position=340,490;
 	Input=1;
-	Data=793;
+	Data=428;
 }

@@ -29,15 +29,17 @@
 
 Public Class frmMain
    
+    Public SaveOnExit As Boolean = True
 
 #Region "Load & Close"
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If Not SaveOnExit Then Return
+
         'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
         If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
             btnSave_Click(sender, e)
         End If
-
     End Sub
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -58,6 +60,10 @@ Public Class frmMain
                     If x + Me.Width > scr.Right Then x = scr.Right - Me.Width 'If the window is too far right. Then set it to the right of the screen.
                     If y + Me.Height > scr.Bottom Then y = scr.Bottom - Me.Height 'If the window is too far down. Then set it to the bottom of the screen.
                     Me.Location = New Point(x, y) 'Set the window location.
+
+
+                Case "nosaveonexit"
+                    SaveOnExit = False
 
                 Case Else
                     If IO.File.Exists(args(a)) Then

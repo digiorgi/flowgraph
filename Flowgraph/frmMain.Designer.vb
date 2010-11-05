@@ -64,7 +64,7 @@ Partial Class frmMain
         Me.lblToolTip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblToolTip.CausesValidation = False
         Me.lblToolTip.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.lblToolTip.Location = New System.Drawing.Point(305, 22)
+        Me.lblToolTip.Location = New System.Drawing.Point(468, 9)
         Me.lblToolTip.Name = "lblToolTip"
         Me.lblToolTip.Size = New System.Drawing.Size(45, 15)
         Me.lblToolTip.TabIndex = 3
