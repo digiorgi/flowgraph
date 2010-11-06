@@ -20,3 +20,4 @@
 'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
+'AddMenuObject|Input,Plugins.MIDI_Input|MIDI
