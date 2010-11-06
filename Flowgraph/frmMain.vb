@@ -30,6 +30,7 @@
 Public Class frmMain
    
     Public SaveOnExit As Boolean = True
+    Private ToolTipText As String = ""
 
 #Region "Load & Close"
 
@@ -45,8 +46,10 @@ Public Class frmMain
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.Text = "Flowgraph v" & Application.ProductVersion.ToString
 
+        'Set the current directory to the exe path.
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Environment.GetCommandLineArgs(0))
 
+        'Do command line stuff.
         Dim args As String() = Environment.GetCommandLineArgs
         For a As Integer = 1 To args.Length - 1
             Select Case LCase(args(a))
@@ -75,11 +78,10 @@ Public Class frmMain
 
     Private FileToOpen As String = ""
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
-     
-
+        'Load the plugin stuff.
         Load_PluginSystem()
-        Load_Main(Me) 'Load all the stuff in mod main. (auto draw, connector pen, etc..)
 
+        'If there is a file to open then open it.
         If FileToOpen <> "" Then Open(FileToOpen)
     End Sub
 
@@ -279,8 +281,6 @@ Public Class frmMain
 
     End Sub
 #End Region
-
-    Private ToolTipText As String = ""
 
     'Draw everything.
     Private Sub frmMain_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint

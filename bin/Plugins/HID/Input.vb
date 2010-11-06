@@ -1,27 +1,77 @@
-﻿Imports SlimDX.DirectInput
+﻿'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
+Imports SlimDX.DirectInput
 
-'Input:
-'	Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
-'	Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
-'	Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
-'	InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
+Public Class fgAxisToBoolean
+    Inherits BaseObject
 
-Public Structure InputState
-    ''' <summary>
-    ''' currently from 0 to 1
-    ''' </summary>
-    Public Axis As Single
-    Public Parent As Object
+    Private WithEvents numSwitchOn As New NumericUpDown
 
-    Sub New(ByVal Axis As Single, ByVal Parent As Object)
-        Me.Axis = Axis
-        Me.Parent = Parent
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 90, 35) 'Setup the base rectangles.
+
+
+        'Create the inputs.
+        Inputs(New String() {"Axis|Number,Axis"})
+        'Create the output.
+        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+
+        'Set the title.
+        Title = "Joystick Buttons"
+
+        numSwitchOn.Minimum = 0
+        numSwitchOn.Maximum = 1
+        numSwitchOn.Increment = 0.1
+        numSwitchOn.DecimalPlaces = 2
+        numSwitchOn.Value = 0.5
+        numSwitchOn.Width = 60
+        numSwitchOn.Location = Position + New Point(15, 20)
+        AddControl(numSwitchOn)
+
+        HID.Create(True)
     End Sub
 
-    Public Overrides Function ToString() As String
-        Return Axis
+    Public Overrides Sub Moving()
+        numSwitchOn.Location = Rect.Location + New Point(15, 20)
+    End Sub
+
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+        HID.Dispose(True)
+        numSwitchOn.Dispose()
+    End Sub
+
+    Public LastState As Boolean = False
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        If Data >= numSwitchOn.Value Then
+            If LastState = False Then
+                LastState = True
+                Send(False, 0)
+                Send(True, 1)
+            End If
+        Else
+            If LastState = True Then
+                LastState = False
+                Send(True, 0)
+                Send(False, 1)
+            End If
+        End If
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("SwitchOn", numSwitchOn.Value, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("SwitchOn", numSwitchOn.Value)
+
+        Return g
     End Function
-End Structure
+
+End Class
+
 
 ''' <summary>
 ''' Human interface device

@@ -245,6 +245,7 @@ Public MustInherit Class BaseObject
         BackGround.Size = SnapToGrid(New Size(Width, Height - 15))
 
         TitleBar.Width = Rect.Width
+        TitleRect = Nothing
     End Sub
 
     ''' <summary>
@@ -375,7 +376,6 @@ Public MustInherit Class BaseObject
 
 #End Region
 
-
 #Region "Mouse & Menu"
     Friend Menu As New MenuNode("", True)
 
@@ -435,7 +435,6 @@ Public MustInherit Class BaseObject
     End Sub
 
 #End Region
-
 
     Public Overrides Function ToString() As String
         Return Title

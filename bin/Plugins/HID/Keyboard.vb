@@ -1,14 +1,8 @@
-﻿'AddMenuObject|KeyPressed,Plugins.fgKeyPressed,70|Input
-'AddMenuObject|Keyboard,Plugins.fgKeyboard,70|Input
+﻿'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
+'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 Imports SlimDX.DirectInput
 
-'Input:
-'	Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
-'	Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
-'	Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
-'	InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
-
-Public Class fgKeyPressed
+Public Class fgGetKey
     Inherits BaseObject
 
     Public Enabled As Boolean = True
@@ -22,10 +16,10 @@ Public Class fgKeyPressed
         'Create the inputs.
         Inputs(New String() {"Enabled|Boolean", "Tick", "Keyboard State|KeyboardState"})
         'Create the output.
-        Outputs(New String() {"Input State|InputState"})
+        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
 
         'Set the title.
-        Title = "Is key pressed"
+        Title = "Get key"
 
 
         comKey.Location = Position + New Point(15, 20)
@@ -60,13 +54,15 @@ Public Class fgKeyPressed
                 HID.Keyboard.Poll()
                 If HID.Keyboard.GetCurrentState.IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
                     If LastState = False Then
-                        Send(New InputState(1, Me))
+                        Send(False, 0)
+                        Send(True, 1)
                         LastState = True
                     End If
 
                 Else
                     If LastState = True Then
-                        Send(New InputState(0, Me))
+                        Send(True, 0)
+                        Send(False, 1)
                         LastState = False
                     End If
                 End If
@@ -75,13 +71,15 @@ Public Class fgKeyPressed
                 If Not Enabled Then Return
                 If DirectCast(Data, KeyboardState).IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
                     If LastState = False Then
-                        Send(New InputState(1, Me))
+                        Send(False, 0)
+                        Send(True, 1)
                         LastState = True
                     End If
 
                 Else
                     If LastState = True Then
-                        Send(New InputState(0, Me))
+                        Send(True, 0)
+                        Send(False, 1)
                         LastState = False
                     End If
                 End If

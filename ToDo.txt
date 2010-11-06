@@ -2,14 +2,8 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-	Fix the resizing of DisplayAsString. (does not put title text back after resizing.)
 
 ####Clean-Ups#### <Means make things orderly and comment things.
-	frmMain
-	Plugins.vb
-	All new input code.
-
-
 
 Step#1
 	
@@ -19,10 +13,10 @@ Step#2
 		AddReference e.g. "'AddReference|System.Drawing.dll,SomethingElse.dll"
 
 	Compiler command line:
-		Disable plugin e.g. "-fgAdd.vb"
+		
 
 	Add support for C# plugins
-
+		Im thinking of just having a libary named csPlugins.dll
 
 Step#3
 
