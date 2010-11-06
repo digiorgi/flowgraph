@@ -1,8 +1,6 @@
 ﻿'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
-Imports SlimDX.DirectInput
-
 Public Class fgRawMouse
     Inherits BaseObject
 
@@ -27,7 +25,7 @@ Public Class fgRawMouse
         HID.Dispose(, True)
     End Sub
 
-    Private LastState As New MouseState
+    Private LastState As New SlimDX.DirectInput.MouseState
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
         MyBase.Receive(Data, sender)
 
@@ -38,7 +36,7 @@ Public Class fgRawMouse
             Case 1
                 If Not Enabled Then Return
                 HID.Mouse.Poll()
-                Dim state As MouseState = HID.Mouse.GetCurrentState
+                Dim state As SlimDX.DirectInput.MouseState = HID.Mouse.GetCurrentState
                 If StateChanged(state) Then
                     Send(state, 0)
                 End If
@@ -53,7 +51,7 @@ Public Class fgRawMouse
         End Select
     End Sub
 
-    Private Function StateChanged(ByVal State As MouseState) As Boolean
+    Private Function StateChanged(ByVal State As SlimDX.DirectInput.MouseState) As Boolean
         If State.X <> LastState.X Then Return True
         If State.Y <> LastState.Y Then Return True
         If State.Z <> LastState.Z Then Return True

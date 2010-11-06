@@ -1,0 +1,35 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+PluginCompiler
+</name>
+</assembly>
+<members>
+<member name="M:PluginCompiler.Module1.Log(System.String)">
+	<summary>
+ Log some text to the console.
+ </summary>
+	<param name="Text">The text to put on the console</param>
+</member><member name="P:PluginCompiler.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:PluginCompiler.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:PluginCompiler.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:PluginCompiler.modPlugins.sAdd(System.String)">
+	<summary>
+ Add some text to the source.
+ </summary>
+	<param name="Text"></param>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

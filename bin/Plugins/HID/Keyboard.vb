@@ -1,7 +1,5 @@
 ﻿'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
-Imports SlimDX.DirectInput
-
 Public Class fgGetKey
     Inherits BaseObject
 
@@ -69,7 +67,7 @@ Public Class fgGetKey
 
             Case 2
                 If Not Enabled Then Return
-                If DirectCast(Data, KeyboardState).IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
+                If DirectCast(Data, SlimDX.DirectInput.KeyboardState).IsPressed([Enum].Parse(GetType(SlimDX.DirectInput.Key), comKey.SelectedItem.ToString)) Then
                     If LastState = False Then
                         Send(False, 0)
                         Send(True, 1)

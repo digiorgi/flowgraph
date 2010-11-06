@@ -9,9 +9,6 @@ Step#1
 	
 Step#2
 
-	Plugin compiler
-		AddReference e.g. "'AddReference|System.Drawing.dll,SomethingElse.dll"
-
 	Compiler command line:
 		
 
@@ -61,6 +58,10 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 		Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
 		Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
 		InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
+
+	Output:
+		
+
 
 	MIDI:
 		Still need to figerout how channels are going to be handled.

@@ -1,5 +1,4 @@
-﻿Imports System.ComponentModel
-
+﻿
 #Region "License & Contact"
 'License:
 '   Copyright (c) 2010 Raymond Ellis
