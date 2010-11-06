@@ -1,7 +1,6 @@
 ﻿'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
 'AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
 'AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
-Imports SlimDX.DirectInput
 
 Public Class fgJoystick
     Inherits BaseObject
@@ -10,7 +9,7 @@ Public Class fgJoystick
 
     Private WithEvents comJoy As New ComboBox
 
-    Public Joystick As Joystick
+    Public Joystick As SlimDX.DirectInput.Joystick
 
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
         Setup(UserData, Position, 220) 'Setup the base rectangles.
@@ -70,7 +69,7 @@ Public Class fgJoystick
                 If Not Enabled Then Return
 
                 Joystick.Poll()
-                Dim state As JoystickState = Joystick.GetCurrentState
+                Dim state As SlimDX.DirectInput.JoystickState = Joystick.GetCurrentState
                 If Not state.Equals(LastState) Then
                     LastState = state
                     Send(state)
@@ -79,13 +78,13 @@ Public Class fgJoystick
         End Select
     End Sub
 
-    Private LastState As New JoystickState
+    Private LastState As New SlimDX.DirectInput.JoystickState
 
     Private Sub comJoy_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comJoy.SelectedIndexChanged
         'Try to create the device.
         Try
-            Joystick = New Joystick(HID.DirectInput, HID.Joysticks(comJoy.SelectedIndex).Device.InstanceGuid)
-            Joystick.SetCooperativeLevel(Form.Handle, CooperativeLevel.Exclusive + CooperativeLevel.Background)
+            Joystick = New SlimDX.DirectInput.Joystick(HID.DirectInput, HID.Joysticks(comJoy.SelectedIndex).Device.InstanceGuid)
+            Joystick.SetCooperativeLevel(Form.Handle, SlimDX.DirectInput.CooperativeLevel.Exclusive + SlimDX.DirectInput.CooperativeLevel.Background)
 
         Catch ex As Exception
             MsgBox("Error! Could not create joystick device.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error")
@@ -93,8 +92,8 @@ Public Class fgJoystick
         Finally
             Joystick.Acquire()
 
-            For Each deviceObject As DeviceObjectInstance In Joystick.GetObjects()
-                If (deviceObject.ObjectType And ObjectDeviceType.Axis) <> 0 Then
+            For Each deviceObject As SlimDX.DirectInput.DeviceObjectInstance In Joystick.GetObjects()
+                If (deviceObject.ObjectType And SlimDX.DirectInput.ObjectDeviceType.Axis) <> 0 Then
                     Joystick.GetObjectPropertiesById(CInt(deviceObject.ObjectType)).SetRange(0, 10000)
                 End If
             Next
@@ -193,9 +192,9 @@ Public Class fgGetJoystickAxis
         End Select
     End Sub
 
-    Private LastState As New JoystickState
+    Private LastState As New SlimDX.DirectInput.JoystickState
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Dim state As JoystickState = DirectCast(Data, JoystickState)
+        Dim state As SlimDX.DirectInput.JoystickState = DirectCast(Data, SlimDX.DirectInput.JoystickState)
 
         If Not state.Equals(LastState) Then
 
@@ -268,7 +267,7 @@ Public Class fgGetJoystickButtons
 
     Public LastState As Boolean = False
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Dim state As JoystickState = DirectCast(Data, JoystickState)
+        Dim state As SlimDX.DirectInput.JoystickState = DirectCast(Data, SlimDX.DirectInput.JoystickState)
         numButtons.Maximum = state.GetButtons.Length - 1
 
         If state.GetButtons(numButtons.Value) <> LastState Then

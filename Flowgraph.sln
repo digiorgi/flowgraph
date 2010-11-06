@@ -5,6 +5,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Flowgraph", "Flowgraph\Flow
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Plugins", "Plugins\Plugins.vbproj", "{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PluginCompiler", "PluginCompiler\PluginCompiler.vbproj", "{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Debug|x86.ActiveCfg = Debug|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Debug|x86.Build.0 = Debug|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Release|Any CPU.ActiveCfg = Release|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Release|x86.ActiveCfg = Release|x86
+		{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

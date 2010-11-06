@@ -1,5 +1,5 @@
 ﻿'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
-Imports SlimDX.DirectInput
+'AddReferences(SlimDX.dll)
 
 Public Class fgAxisToBoolean
     Inherits BaseObject
@@ -77,9 +77,9 @@ End Class
 ''' Human interface device
 ''' </summary>
 Public Class HID
-    Public Shared DirectInput As DirectInput
-    Public Shared Keyboard As Keyboard
-    Public Shared Mouse As Mouse
+    Public Shared DirectInput As SlimDX.DirectInput.DirectInput
+    Public Shared Keyboard As SlimDX.DirectInput.Keyboard
+    Public Shared Mouse As SlimDX.DirectInput.Mouse
 
     Private Shared Used As Integer = 0
     Private Shared UsedMice As Integer = 0
@@ -90,9 +90,9 @@ Public Class HID
     Public Shared Sub Create(Optional ByVal CreateKeyboard As Boolean = False, Optional ByVal CreateMouse As Boolean = False)
         Used += 1
         If Used = 1 Then
-            DirectInput = New DirectInput
+            DirectInput = New SlimDX.DirectInput.DirectInput
 
-            For Each Device As DeviceInstance In DirectInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly)
+            For Each Device As SlimDX.DirectInput.DeviceInstance In DirectInput.GetDevices(SlimDX.DirectInput.DeviceClass.GameController, SlimDX.DirectInput.DeviceEnumerationFlags.AttachedOnly)
                 Joysticks.Add(New JoystickInfo(Device.InstanceName, Device))
             Next
         End If
@@ -101,7 +101,7 @@ Public Class HID
         If CreateKeyboard Then
             UsedKeyboards += 1
             If UsedKeyboards = 1 Then
-                Keyboard = New Keyboard(DirectInput)
+                Keyboard = New SlimDX.DirectInput.Keyboard(DirectInput)
                 Keyboard.Acquire()
                 Keyboard.Poll()
             End If
@@ -109,7 +109,7 @@ Public Class HID
         If CreateMouse Then
             UsedMice += 1
             If UsedMice = 1 Then
-                Mouse = New Mouse(DirectInput)
+                Mouse = New SlimDX.DirectInput.Mouse(DirectInput)
                 Mouse.Acquire()
                 Mouse.Poll()
             End If
@@ -142,9 +142,9 @@ Public Class HID
 End Class
 Public Class JoystickInfo
     Public Name As String
-    Public Device As DeviceInstance
+    Public Device As SlimDX.DirectInput.DeviceInstance
 
-    Sub New(ByVal Name As String, ByVal Device As DeviceInstance)
+    Sub New(ByVal Name As String, ByVal Device As SlimDX.DirectInput.DeviceInstance)
         Me.Name = Name
         Me.Device = Device
     End Sub
