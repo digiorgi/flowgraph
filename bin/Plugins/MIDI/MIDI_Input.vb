@@ -2,11 +2,13 @@
 Public Class MIDI_Input
     Inherits BaseObject
 
-    Private Enabled As Boolean = False
+    Private Enabled As Boolean = True
 
     Private WithEvents Device As Sanford.Multimedia.Midi.InputDevice
 
-    Private WithEvents numChannel As New NumericUpDown
+    Private numChannel As New NumericUpDown
+    Private WithEvents chkAllChannels As New CheckBox
+
     Private WithEvents comDevices As New ComboBox
 
 #Region "Object stuff"
@@ -19,13 +21,18 @@ Public Class MIDI_Input
         Inputs(New String() {"Enable|Boolean", "Channel|Number"})
 
         'Set the title.
-        Title = "Timer"
+        Title = "MIDI Input"
+
+        chkAllChannels.Text = "All channels"
+        chkAllChannels.Width = 85
+        chkAllChannels.Location = Rect.Location + New Point(110, 50)
+        AddControl(chkAllChannels)
 
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
-        numChannel.Width = 60
-        numChannel.Location = Rect.Location + New Point(70, 50)
+        numChannel.Width = 40
+        numChannel.Location = Rect.Location + New Point(65, 50)
         AddControl(numChannel)
 
       
@@ -48,19 +55,20 @@ Public Class MIDI_Input
     End Sub
 
     Public Overrides Sub Dispose()
+        chkAllChannels.Dispose()
         numChannel.Dispose()
         comDevices.Dispose()
 
         If Device IsNot Nothing Then
-            Device.StopRecording()
-            Device.Dispose()
+            Device.Close()
             Device = Nothing
         End If
         MyBase.Dispose()
     End Sub
 
     Public Overrides Sub Moving()
-        numChannel.Location = Rect.Location + New Point(70, 50)
+        chkAllChannels.Location = Rect.Location + New Point(110, 50)
+        numChannel.Location = Rect.Location + New Point(65, 50)
         comDevices.Location = Rect.Location + New Point(15, 25)
     End Sub
 
@@ -85,20 +93,44 @@ Public Class MIDI_Input
         End Select
     End Sub
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("DeviceID", comDevices.SelectedIndex)
+        g.Get_Value("AllChannels", chkAllChannels.Checked)
+        Try
+            g.Get_Value("Channel", numChannel.Value)
+        Catch ex As Exception
+        End Try
+
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("DeviceID", comDevices.SelectedIndex)
+        g.Set_Value("AllChannels", chkAllChannels.Checked)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+
 #End Region
 
 #Region "Control events"
 
     Private Sub comDevices_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comDevices.SelectedIndexChanged
-        If comDevices.SelectedIndex = 0 Then Return
+        If comDevices.SelectedIndex = -1 Then Return
         If Device IsNot Nothing Then
-            Device.Dispose()
+               Device.Close()
+            Device = Nothing
         End If
 
 
         Try
             'Create the device.
-            Device = New Sanford.Multimedia.Midi.InputDevice(comDevices.SelectedIndex - 1)
+            Device = New Sanford.Multimedia.Midi.InputDevice(comDevices.SelectedIndex)
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error!")
             Device = Nothing
@@ -108,10 +140,10 @@ Public Class MIDI_Input
             Device.StartRecording()
         End If
     End Sub
-    Private Sub numChannel_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numChannel.ValueChanged
 
+    Private Sub chkAllChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkAllChannels.CheckedChanged
+        numChannel.Enabled = Not chkAllChannels.Checked
     End Sub
-
 #End Region
 
 #Region "MIDI events"
@@ -119,21 +151,24 @@ Public Class MIDI_Input
         MsgBox(e.Error.Message)
     End Sub
 
-
     Private Sub Device_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles Device.ChannelMessageReceived
-        MsgBox("Input")
+        If Not chkAllChannels.Checked Then
+            If Not e.Message.MidiChannel = numChannel.Value - 1 Then Return
+        End If
+
+        Send(New Sanford.Multimedia.Midi.ChannelMessageBuilder(e.Message), 0)
     End Sub
 
     Private Sub Device_SysCommonMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysCommonMessageEventArgs) Handles Device.SysCommonMessageReceived
-        MsgBox("Input")
+        Send(New Sanford.Multimedia.Midi.SysCommonMessageBuilder(e.Message), 1)
     End Sub
 
     Private Sub Device_SysExMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysExMessageEventArgs) Handles Device.SysExMessageReceived
-        MsgBox("Input")
+        Send(e.Message, 2)
     End Sub
 
     Private Sub Device_SysRealtimeMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysRealtimeMessageEventArgs) Handles Device.SysRealtimeMessageReceived
-        MsgBox("Input")
+        Send(e.Message, 3)
     End Sub
 #End Region
 

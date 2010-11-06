@@ -35,6 +35,11 @@ Public Class frmMain
 #Region "Load & Close"
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        'Dispose all objects.
+        For Each obj As Object In Objects
+            obj.Dispose()
+        Next
+
         If Not SaveOnExit Then Return
 
         'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.

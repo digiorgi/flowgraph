@@ -2,7 +2,7 @@
 Main{
 	Width=719;
 	Height=505;
-	Objects=1;
+	Objects=2;
 	FileVersion=0.5;
 }
 Object0{
@@ -14,7 +14,18 @@ Object0{
 }
 Object1{
 	Name=Plugins.MIDI_Input;
-	Position=275,155;
-	Output=0`0`0`0;
+	Position=75,190;
+	Output=1,2,1`0`0`0;
 	Input=0,0;
+	DeviceID=2;
+	AllChannels=True;
+	Channel=1;
+}
+Object2{
+	Name=Plugins.MIDI_Output;
+	Position=365,190;
+	Input=0,1,0,0,0;
+	DeviceID=0;
+	MessageChannels=True;
+	Channel=1;
 }

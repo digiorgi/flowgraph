@@ -21,3 +21,4 @@
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
 'AddMenuObject|Input,Plugins.MIDI_Input|MIDI
+'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
