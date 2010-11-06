@@ -134,7 +134,7 @@ Public Module Plugins
     ''' <summary>
     ''' Loads the main plugin stuff.
     ''' </summary>
-    Public Sub Load_Main(ByVal form As Control)
+    Public Sub Load_Plugin(ByVal form As Control)
         'Setup the auto draw timmer.
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
@@ -167,29 +167,34 @@ Public Module Plugins
         If g.Get_Value("FileVersion") <> FileVersion Then
             MsgBox("Wrong file version." & Environment.NewLine _
                    & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
-                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error opening")
+                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
             Return
         End If
 
+        'Get the number of objects.
         Dim numObj As Integer = g.Get_Value("Objects")
-        For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
-
+        For n As Integer = 0 To numObj 'Loop thrugh each object.
+            g = sd.Get_Group("Object" & n) 'Get the object.
+            'Get the position.
             Dim pos As String() = Split(g.Get_Value("position"), ",")
-            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata"))
+            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata")) 'Get the object.
 
+            'Show error if could not create object.
             If obj = -1 Then
                 MsgBox("Could not create object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 ClearObjects()
+                LoadedFile = ""
                 Return
             End If
         Next
 
+        'Load each object.
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
             Objects(n).Load(g)
         Next
 
+        'Set the loaded file
         LoadedFile = File
     End Sub
 
@@ -202,15 +207,16 @@ Public Module Plugins
         g.Set_Value("Objects", Objects.Count - 1)
         g.Set_Value("FileVersion", FileVersion)
 
+        'Save each object.
         For Each obj As Object In Objects
             sd.Add_Group(obj.Save)
         Next
 
+        'Save to file.
         sd.ToFile(File)
 
         LoadedFile = File
     End Sub
-
 
 #End Region
 

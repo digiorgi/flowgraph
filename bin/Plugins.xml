@@ -99,7 +99,7 @@ Plugins
 	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
 	<param name="Groups"></param>
 	<remarks></remarks>
-</member><member name="M:Plugins.Plugins.Load_Main(System.Windows.Forms.Control)">
+</member><member name="M:Plugins.Plugins.Load_Plugin(System.Windows.Forms.Control)">
 	<summary>
  Loads the main plugin stuff.
  </summary>
@@ -124,10 +124,6 @@ Plugins
 	<param name="ObjectList">Will fill string with each line that has "AddMenuObject".
  Unlis set to "DoNotFill"</param>
 	<remarks></remarks>
-</member><member name="F:Plugins.InputState.Axis">
-	<summary>
- currently from 0 to 1
- </summary>
 </member><member name="T:Plugins.HID">
 	<summary>
  Human interface device

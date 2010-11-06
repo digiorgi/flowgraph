@@ -11,11 +11,12 @@
 'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
 'AddMenuObject|Timer,Plugins.fgTimer|Math
 //AddMenuObject|Counter2,Plugins.fgCounter,60|Math
+'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
 'AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
 'AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
-'AddMenuObject|KeyPressed,Plugins.fgKeyPressed,70|Input
-'AddMenuObject|Keyboard,Plugins.fgKeyboard,70|Input
+'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
+'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
-'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,70|Input,Mouse
+'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse

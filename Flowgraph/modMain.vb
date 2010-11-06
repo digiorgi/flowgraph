@@ -34,6 +34,8 @@ Module modMain
         AddHandler RemoveControlEvent, AddressOf RemoveControl
 
         AddHandler DrawEvent, AddressOf Draw
+
+        Load_Plugin(frmMain) 'Load the plugin stuff. (auto draw, connector pen, etc..)
     End Sub
 
     Private Sub Draw()

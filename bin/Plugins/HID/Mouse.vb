@@ -1,13 +1,7 @@
 ﻿'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
-'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,70|Input,Mouse
+'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
 Imports SlimDX.DirectInput
-
-'Input:
-'	Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
-'	Mouse:		In(Enabled, Tick)	Out(Position, DownButtons, UpButtons)
-'	Joystick:	In(Enabled, Tick, Joystick ID) Out(Joystick state)
-'	InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
 
 Public Class fgRawMouse
     Inherits BaseObject
@@ -132,7 +126,7 @@ Public Class fgGlobalMouse
         'Create the inputs.
         Inputs(New String() {"Enabled|Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Position|Point", "X|Number", "Y|Number"})
+        Outputs(New String() {"Position|Point", "X|Number,Axis", "Y|Number,Axis"})
 
         'Set the title.
         Title = "Global Mouse"
