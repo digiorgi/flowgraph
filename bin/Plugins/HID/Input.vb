@@ -16,7 +16,7 @@ Public Class fgAxisToBoolean
         Outputs(New String() {"Up|Boolean", "Down|Boolean"})
 
         'Set the title.
-        Title = "Joystick Buttons"
+        Title = "Axis to boolean"
 
         numSwitchOn.Minimum = 0
         numSwitchOn.Maximum = 1

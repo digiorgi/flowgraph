@@ -93,21 +93,21 @@ Public Class frmMain
         Mouse.Location = e.Location
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
-            For Each obj As Object In Objects
-                If obj.IntersectsWithOutput(Mouse) Then
+            For i As Integer = Objects.Count - 1 To 0 Step -1
+                If Objects(i).IntersectsWithOutput(Mouse) Then
 
-                    obj.Output(obj.Intersection).Disconnect()
+                    Objects(i).Output(Objects(i).Intersection).Disconnect()
 
                     Return
-                ElseIf obj.IntersectsWithInput(Mouse) Then
-                    obj.Input(obj.Intersection).Disconnect()
+                ElseIf Objects(i).IntersectsWithInput(Mouse) Then
+                    Objects(i).Input(Objects(i).Intersection).Disconnect()
 
                     Return
                 End If
 
                 'If the mouse intersects with the title bar then move the object.
-                If Mouse.IntersectsWith(obj.Rect) Then
-                    obj.MouseDoubleClick(e)
+                If Mouse.IntersectsWith(Objects(i).Rect) Then
+                    Objects(i).MouseDoubleClick(e)
 
                     Return
                 End If
@@ -126,21 +126,21 @@ Public Class frmMain
             Case ToolType.None
                 If e.Button = Windows.Forms.MouseButtons.Left Then
 
-                    For Each obj As Object In Objects
+                    For i As Integer = Objects.Count - 1 To 0 Step -1
                         'If the mouse intersects with the title bar then move the object.
-                        If Mouse.IntersectsWith(obj.TitleBar) Then
+                        If Mouse.IntersectsWith(Objects(i).TitleBar) Then
                             Tool = ToolType.Move
-                            ToolObject = obj.Index
-                            ToolOffset = Mouse.Location - DirectCast(obj.Rect, Rectangle).Location
+                            ToolObject = Objects(i).Index
+                            ToolOffset = Mouse.Location - DirectCast(Objects(i).Rect, Rectangle).Location
 
                             Return
                         End If
 
 
-                        If obj.IntersectsWithOutput(Mouse) Then
+                        If Objects(i).IntersectsWithOutput(Mouse) Then
                             Tool = ToolType.Connect
-                            ToolObject = obj.Index
-                            ToolInt = obj.Intersection
+                            ToolObject = Objects(i).Index
+                            ToolInt = Objects(i).Intersection
                             ToolOffset = e.Location
 
                             Return
@@ -149,9 +149,9 @@ Public Class frmMain
 
                 End If
 
-                For Each obj As Object In Objects
-                    If Mouse.IntersectsWith(obj.Rect) Then
-                        obj.MouseDown(e)
+                For i As Integer = Objects.Count - 1 To 0 Step -1
+                    If Mouse.IntersectsWith(Objects(i).Rect) Then
+                        Objects(i).MouseDown(e)
                         Return
                     End If
                 Next
@@ -169,9 +169,9 @@ Public Class frmMain
         Select Case Tool
             Case ToolType.None
                 'Check to see if the mouse is in a object.
-                For Each obj As Object In Objects
-                    If Mouse.IntersectsWith(obj.Rect) Then
-                        obj.MouseUp(e)
+                For i As Integer = Objects.Count - 1 To 0 Step -1
+                    If Mouse.IntersectsWith(Objects(i).Rect) Then
+                        Objects(i).MouseUp(e)
                         Return
                     End If
                 Next
@@ -184,10 +184,10 @@ Public Class frmMain
                     Menu_MouseUp()
                     DoDraw(True)
                 ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-                    For Each obj As Object In Objects
-                        If Mouse.IntersectsWith(obj.Rect) Then
+                    For i As Integer = Objects.Count - 1 To 0 Step -1
+                        If Mouse.IntersectsWith(Objects(i).Rect) Then
                             Tool = ToolType.None
-                            obj.MouseUp(e)
+                            Objects(i).MouseUp(e)
                             DoDraw(True)
                             Return
                         End If
@@ -204,14 +204,14 @@ Public Class frmMain
             Case ToolType.Connect
                 Tool = ToolType.None
 
-                For Each obj As Object In Objects
-                    If obj.Index <> ToolObject Then
-                        If obj.IntersectsWithInput(Mouse) Then
+                For i As Integer = Objects.Count - 1 To 0 Step -1
+                    If Objects(i).Index <> ToolObject Then
+                        If Objects(i).IntersectsWithInput(Mouse) Then
 
                             'Try and connect.
-                            If Objects(ToolObject).Output(ToolInt).Add(obj.Index, obj.Intersection) Then
+                            If Objects(ToolObject).Output(ToolInt).Add(Objects(i).Index, Objects(i).Intersection) Then
                                 'Add one to connected if it successfully connected.
-                                obj.Input(obj.Intersection).Connected += 1
+                                Objects(i).Input(Objects(i).Intersection).Connected += 1
                             End If
 
 
@@ -238,14 +238,14 @@ Public Class frmMain
         End If
 
         'Check it see if the mouse is hovering over a input or a output.
-        For Each obj As Object In Objects 'Loop through each object until we found a input/output or we made it through them all.
-            If obj.IntersectsWithInput(Mouse) Then 'Check input.
-                ToolTipText = obj.Input(obj.Intersection).ToString
+        For i As Integer = Objects.Count - 1 To 0 Step -1 'Loop through each object until we found a input/output or we made it through them all.
+            If Objects(i).IntersectsWithInput(Mouse) Then 'Check input.
+                ToolTipText = Objects(i).Input(Objects(i).Intersection).ToString
 
                 'DoDraw()
                 Exit For
-            ElseIf obj.IntersectsWithOutput(Mouse) Then 'Check output.
-                ToolTipText = obj.Output(obj.Intersection).ToString
+            ElseIf Objects(i).IntersectsWithOutput(Mouse) Then 'Check output.
+                ToolTipText = Objects(i).Output(Objects(i).Intersection).ToString
 
                 'DoDraw()
                 Exit For
@@ -258,9 +258,9 @@ Public Class frmMain
         Select Case Tool
             Case ToolType.None
                 'Check to see if the mouse is in a object.
-                For Each obj As Object In Objects
-                    If Mouse.IntersectsWith(obj.Rect) Then
-                        obj.MouseMove(e)
+                For i As Integer = Objects.Count - 1 To 0 Step -1
+                    If Mouse.IntersectsWith(Objects(i).Rect) Then
+                        Objects(i).MouseMove(e)
                         Return
                     End If
                 Next
@@ -287,8 +287,8 @@ Public Class frmMain
         e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality
 
         'Draw the objects.
-        For Each obj As Object In Objects
-            obj.Draw(e.Graphics)
+        For i As Integer = 0 To Objects.Count - 1
+            Objects(i).Draw(e.Graphics)
         Next
 
         'Draw the connectors.
