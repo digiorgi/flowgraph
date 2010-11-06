@@ -2,7 +2,7 @@
 Main{
 	Width=719;
 	Height=505;
-	Objects=0;
+	Objects=1;
 	FileVersion=0.5;
 }
 Object0{
@@ -10,5 +10,11 @@ Object0{
 	Position=5,95;
 	UserData=10;
 	Output=0;
+	Input=0,0;
+}
+Object1{
+	Name=Plugins.MIDI_Input;
+	Position=275,155;
+	Output=0`0`0`0;
 	Input=0,0;
 }
