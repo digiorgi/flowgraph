@@ -23,6 +23,8 @@ Public Class fgJoystick
         'Set the title.
         Title = "Joystick"
 
+        HID.Create(True)
+
         comJoy.Width = 190
         comJoy.Location = Position + New Point(15, 20)
         comJoy.DropDownStyle = ComboBoxStyle.DropDownList
@@ -30,7 +32,7 @@ Public Class fgJoystick
         comJoy.SelectedIndex = 0
         AddControl(comJoy)
 
-        HID.Create(True)
+
     End Sub
 
     Public Overrides Sub Moving()

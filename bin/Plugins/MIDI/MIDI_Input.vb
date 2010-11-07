@@ -156,7 +156,7 @@ Public Class MIDI_Input
             If Not e.Message.MidiChannel = numChannel.Value - 1 Then Return
         End If
 
-        Send(New Sanford.Multimedia.Midi.ChannelMessageBuilder(e.Message), 0)
+        Send(e.Message, 0)
     End Sub
 
     Private Sub Device_SysCommonMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysCommonMessageEventArgs) Handles Device.SysCommonMessageReceived

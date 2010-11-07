@@ -6,7 +6,13 @@ Plugins
 </name>
 </assembly>
 <members>
-<member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:Plugins.MIDI_SimulatePedals.ReleaseNote(System.Int32)">
+	<summary>
+ Release note at ID
+ </summary>
+	<param name="ID"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
