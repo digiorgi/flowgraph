@@ -1,21 +1,21 @@
 //Version=0.985 FileVersion=1\\
 Main{
-	Width=719;
-	Height=505;
-	Objects=2;
+	Width=936;
+	Height=604;
+	Objects=7;
 	FileVersion=0.5;
 }
 Object0{
 	Name=Plugins.fgTimer;
-	Position=5,95;
+	Position=5,45;
 	UserData=10;
-	Output=0;
+	Output=1,3,1;
 	Input=0,0;
 }
 Object1{
 	Name=Plugins.MIDI_Input;
-	Position=75,190;
-	Output=1,2,1`0`0`0;
+	Position=5,290;
+	Output=1,6,1`0`0`0;
 	Input=0,0;
 	DeviceID=2;
 	AllChannels=True;
@@ -23,9 +23,51 @@ Object1{
 }
 Object2{
 	Name=Plugins.MIDI_Output;
-	Position=365,190;
+	Position=565,270;
 	Input=0,1,0,0,0;
 	DeviceID=0;
 	MessageChannels=True;
 	Channel=1;
+}
+Object3{
+	Name=Plugins.fgJoystick;
+	Position=5,95;
+	Output=1,4,0;
+	Input=0,1;
+	Joystick=RGT Force Feedback Pro;
+}
+Object4{
+	Name=Plugins.fgGetJoystickAxis;
+	Position=145,145;
+	Output=0`0`0`0`0`1,5,0`0`0;
+	Input=1;
+	Rev0=False;
+	Rev1=False;
+	Rev2=False;
+	Rev3=False;
+	Rev4=False;
+	Rev5=True;
+	Rev6=False;
+	Rev7=False;
+}
+Object5{
+	Name=Plugins.fgAxisToBoolean;
+	Position=230,220;
+	Output=0`2,6,2,7,0;
+	Input=1;
+	SwitchOn=0.9;
+}
+Object6{
+	Name=Plugins.MIDI_SimulatePedals;
+	Position=320,270;
+	Output=1,2,1;
+	Input=0,1,1,0,0;
+	MessageChannels=True;
+	Channel=1;
+}
+Object7{
+	Name=Plugins.fgDisplayAsString;
+	Position=355,225;
+	Input=1;
+	Data=False;
 }
