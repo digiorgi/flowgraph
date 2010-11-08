@@ -175,6 +175,13 @@ Public Module Plugins
         Dim numObj As Integer = g.Get_Value("Objects")
         For n As Integer = 0 To numObj 'Loop thrugh each object.
             g = sd.Get_Group("Object" & n) 'Get the object.
+            If g Is Nothing Then
+                MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                ClearObjects()
+                LoadedFile = ""
+                Return
+            End If
+
             'Get the position.
             Dim pos As String() = Split(g.Get_Value("position"), ",")
             Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata")) 'Get the object.

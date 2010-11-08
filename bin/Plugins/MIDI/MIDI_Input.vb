@@ -93,7 +93,15 @@ Public Class MIDI_Input
         End Select
     End Sub
 
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+    End Sub
+
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("DeviceID", comDevices.SelectedIndex)
         g.Get_Value("AllChannels", chkAllChannels.Checked)
         Try
@@ -108,6 +116,7 @@ Public Class MIDI_Input
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("DeviceID", comDevices.SelectedIndex)
         g.Set_Value("AllChannels", chkAllChannels.Checked)
         g.Set_Value("Channel", numChannel.Value)
@@ -160,7 +169,7 @@ Public Class MIDI_Input
     End Sub
 
     Private Sub Device_SysCommonMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysCommonMessageEventArgs) Handles Device.SysCommonMessageReceived
-        Send(New Sanford.Multimedia.Midi.SysCommonMessageBuilder(e.Message), 1)
+        Send(e.Message, 1)
     End Sub
 
     Private Sub Device_SysExMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysExMessageEventArgs) Handles Device.SysExMessageReceived
