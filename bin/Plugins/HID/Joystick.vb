@@ -16,9 +16,9 @@ Public Class fgJoystick
 
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Joystick State|JoystickState"})
+        Outputs(New String() {"Joystick State,JoystickState"})
 
         'Set the title.
         Title = "Joystick"
@@ -117,11 +117,11 @@ Public Class fgGetJoystickAxis
 
 
         'Create the inputs.
-        Inputs(New String() {"Joystick State|JoystickState"})
+        Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"X|Number,Axis", "Y|Number,Axis", "Z|Number,Axis", _
-                              "RotationX|Number,Axis", "RotationY|Number,Axis", "RotationZ|Number,Axis", _
-                              "Slider1|Number,Axis", "Slider2|Number,Axis"})
+        Outputs(New String() {"X,Number,Axis", "Y|Number,Axis", "Z,Number,Axis", _
+                              "RotationX,Number,Axis", "RotationY,Number,Axis", "RotationZ,Number,Axis", _
+                              "Slider1,Number,Axis", "Slider2,Number,Axis"})
 
         'Set the title.
         Title = "Joystick Axis"
@@ -244,9 +244,9 @@ Public Class fgGetJoystickButtons
 
 
         'Create the inputs.
-        Inputs(New String() {"Joystick State|JoystickState"})
+        Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Joystick Buttons"

@@ -15,9 +15,9 @@ Public Class MIDI_Output
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
         Setup(UserData, Position, 230) 'Setup the base rectangles.
 
-        Inputs(New String() {"Enable|Boolean", _
-                             "Channel Message|ChannelMessage", "SysCommonMessage|SysCommonMessage", _
-                             "SysExMessage|SysExMessage", "SysRealtimeMessage|SysRealtimeMessage"})
+        Inputs(New String() {"Enable,Boolean", _
+                             "Channel Message,ChannelMessage,ChannelMessageBuilder", "SysCommonMessage,SysCommonMessage,SysCommonMessageBuilder", _
+                             "SysExMessage,SysExMessage", "SysRealtimeMessage,SysRealtimeMessage"})
 
         'Set the title.
         Title = "MIDI Output"

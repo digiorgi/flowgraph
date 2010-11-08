@@ -12,9 +12,9 @@ Public Class fgCounter
         Setup(UserData, Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Value|Number"})
+        Outputs(New String() {"Value,Number"})
 
-        Inputs(New String() {"Enable|Boolean", "Reset"})
+        Inputs(New String() {"Enable,Boolean", "Reset"})
 
         'Set the title.
         Title = "Counter"

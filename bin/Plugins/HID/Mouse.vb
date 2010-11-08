@@ -10,9 +10,9 @@ Public Class fgRawMouse
         Setup(UserData, Position, 60) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Mouse State|MouseState", "X|Number", "Y|Number"})
+        Outputs(New String() {"Mouse State,MouseState", "X,Number", "Y,Number"})
 
         'Set the title.
         Title = "Raw Mouse"
@@ -85,9 +85,9 @@ Public Class fgLocalMouse
         Setup(UserData, Position, 65) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Position|Point", "X|Number", "Y|Number"})
+        Outputs(New String() {"Position,Point", "X,Number", "Y,Number"})
 
         'Set the title.
         Title = "Local Mouse"
@@ -146,9 +146,9 @@ Public Class fgGlobalMouse
         Setup(UserData, Position, 70) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Position|Point", "X|Number,Axis", "Y|Number,Axis"})
+        Outputs(New String() {"Position,Point", "X,Number,Axis", "Y,Number,Axis"})
 
         'Set the title.
         Title = "Global Mouse"

@@ -23,13 +23,13 @@ Public Class fgAdd
         ReDim Values(InputCount - 1)
         Dim inp(InputCount - 1) As String
         For n As Integer = 0 To InputCount - 1
-            inp(n) = "Value " & n & "|Number"
+            inp(n) = "Value " & n & ",Number"
         Next
 
         'Create the inputs.
         Inputs(inp)
         'Create the output.
-        Outputs(New String() {"Equals|Number"})
+        Outputs(New String() {"Equals,Number"})
 
         'Set the title.
         Title = "Add"

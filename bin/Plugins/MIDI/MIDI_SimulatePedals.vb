@@ -15,9 +15,9 @@ Public Class MIDI_SimulatePedals
         Setup(UserData, Position, 160) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message|ChannelMessage"})
+        Outputs(New String() {"Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable|Boolean", "Channel Message|ChannelMessage", "Sustain|Boolean", "Sostenuto|Boolean", "Soft|Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage", "Sustain,Boolean", "Sostenuto,Boolean", "Soft,Boolean"})
 
         'Set the title.
         Title = "Simulate Pedals"
@@ -190,11 +190,8 @@ Public Class MIDI_SimulatePedals
         g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
         g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
-        Try
-            g.Get_Value("Channel", numChannel.Value)
-        Catch ex As Exception
-        End Try
 
+        g.Get_Value("Channel", numChannel.Value, False)
         MyBase.Load(g)
     End Sub
 

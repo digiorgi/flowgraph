@@ -198,7 +198,13 @@ Public Module Plugins
         'Load each object.
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
-            Objects(n).Load(g)
+            'Try and load each object.
+            Try
+                Objects(n).Load(g)
+            Catch ex As Exception
+                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name") & vbNewLine _
+                      & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
+            End Try
         Next
 
         'Set the loaded file

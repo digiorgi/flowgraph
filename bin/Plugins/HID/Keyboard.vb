@@ -12,9 +12,9 @@ Public Class fgGetKey
 
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick", "Keyboard State|KeyboardState"})
+        Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Get key"
@@ -111,9 +111,9 @@ Public Class fgKeyboard
         Setup(UserData, Position, 60) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Keyboard State|KeyboardState"})
+        Outputs(New String() {"Keyboard State,KeyboardState"})
 
         'Set the title.
         Title = "Keyboard"

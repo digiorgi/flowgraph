@@ -20,6 +20,7 @@
 'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
+'AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
 'AddMenuObject|Input,Plugins.MIDI_Input|MIDI
 'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI

@@ -483,7 +483,7 @@ Public Class DataFlowBase
 
         'We need to get the types(if any) from the name.
         'Frist we split name.
-        Dim Types As String() = Split(Name, "|")
+        Dim Types As String() = Split(Name, ",")
         If Types.Length = 0 Then 'If we did not find anything after spliting.
             Me.Name = Name 'Then we just set the name.
         Else
@@ -667,7 +667,7 @@ Public Class DataFlowBase
             Next
             'Make sure everything connected.
             If Connected <> data(0) Then
-                Throw New Exception("Connections do not match!")
+                Throw New Exception("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title)
             End If
 
         End If
