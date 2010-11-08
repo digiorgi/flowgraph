@@ -533,6 +533,12 @@ Public Class DataFlowBase
         'Make sure the object we are connecting to is a input.
         If Objects(obj1).Input Is Nothing Then Return False
 
+        'Make sure the object we are connecting to doesnot already have it's max connections.
+        If Objects(obj1).input(Index1).MaxConnected > -1 Then
+            If Objects(obj1).Input(Index1).Connected >= Objects(obj1).Input(Index1).MaxConnected Then Return False
+        End If
+
+
         'Make sure the object can connect to that type.
         Dim FoundType As Boolean = False
         If DataType.Count > 0 And Objects(obj1).Input(Index1).DataType.Count > 0 Then

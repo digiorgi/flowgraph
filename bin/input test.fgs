@@ -10,6 +10,7 @@ Object0{
 	Position=140,50;
 	Output=0`1,1,0;
 	Input=0,1,0;
+	Enabled=True;
 	Key=Pause;
 }
 Object1{
@@ -24,12 +25,14 @@ Object2{
 	UserData=10;
 	Output=4,0,1,3,1,8,1,9,1;
 	Input=0,0;
+	Enabled=True;
 }
 Object3{
 	Name=Plugins.fgJoystick;
 	Position=140,115;
 	Output=2,4,0,6,0;
 	Input=0,1;
+	Enabled=True;
 	Joystick=RGT Force Feedback Pro;
 }
 Object4{
@@ -70,24 +73,26 @@ Object8{
 	Position=140,165;
 	Output=0`1,10,0`0;
 	Input=0,1;
+	Enabled=True;
 }
 Object9{
 	Name=Plugins.fgGlobalMouse;
 	Position=140,230;
 	Output=0`1,11,0`0;
 	Input=0,1;
+	Enabled=True;
 }
 Object10{
 	Name=Plugins.fgDisplayAsString;
 	Position=210,180;
 	Input=1;
-	Data=216;
+	Data=92;
 }
 Object11{
 	Name=Plugins.fgDisplayAsString;
 	Position=215,245;
 	Input=1;
-	Data=872;
+	Data=1933;
 }
 Object12{
 	Name=Plugins.fgAxisToBoolean;

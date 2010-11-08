@@ -31,13 +31,13 @@ Public Class fgAdd
         ReDim Values(InputCount - 1)
         Dim inp(InputCount - 1) As String
         For n As Integer = 0 To InputCount - 1
-            inp(n) = "Value " & n & "|Number"
+            inp(n) = "Value " & n & ",Number"
         Next
 
         'Create the inputs.
         Inputs(inp)
         'Create the output.
-        Outputs(New String() {"Equals|Number"})
+        Outputs(New String() {"Equals,Number"})
 
         'Set the title.
         Title = "Add"
@@ -72,9 +72,9 @@ Public Class fgCounter
         Setup(UserData, Position, 120, 60) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Value|Number"})
+        Outputs(New String() {"Value,Number"})
 
-        Inputs(New String() {"Enable|Boolean", "Reset"})
+        Inputs(New String() {"Enable,Boolean", "Reset"})
 
         'Set the title.
         Title = "Counter"
@@ -152,7 +152,7 @@ Public Class fgDisplayAsString
 
         'Create one input.
         Inputs(New String() {"Value to display."})
-        Input(0).MaxConnected = 1 'Only allow one connection.
+        'Input(0).MaxConnected = 1 'Only allow one connection.
 
         'Set the title.
         Title = "Display as string"
@@ -231,7 +231,7 @@ Public Class fgTimer
         'Create one output.
         Outputs(New String() {"Tick"})
 
-        Inputs(New String() {"Enable|Boolean", "Interval|Number"})
+        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
 
         'Set the title.
         Title = "Timer"
@@ -272,7 +272,18 @@ Public Class fgTimer
         End Select
     End Sub
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", tmr.Enabled, False)
 
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", tmr.Enabled)
+
+        Return g
+    End Function
 
     Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
         Send(Nothing)
@@ -769,7 +780,7 @@ Public Class DataFlowBase
 
         'We need to get the types(if any) from the name.
         'Frist we split name.
-        Dim Types As String() = Split(Name, "|")
+        Dim Types As String() = Split(Name, ",")
         If Types.Length = 0 Then 'If we did not find anything after spliting.
             Me.Name = Name 'Then we just set the name.
         Else
@@ -818,6 +829,12 @@ Public Class DataFlowBase
 
         'Make sure the object we are connecting to is a input.
         If Objects(obj1).Input Is Nothing Then Return False
+
+        'Make sure the object we are connecting to doesnot already have it's max connections.
+        If Objects(obj1).input(Index1).MaxConnected > -1 Then
+            If Objects(obj1).Input(Index1).Connected >= Objects(obj1).Input(Index1).MaxConnected Then Return False
+        End If
+
 
         'Make sure the object can connect to that type.
         Dim FoundType As Boolean = False
@@ -953,7 +970,7 @@ Public Class DataFlowBase
             Next
             'Make sure everything connected.
             If Connected <> data(0) Then
-                Throw New Exception("Connections do not match!")
+                Throw New Exception("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title)
             End If
 
         End If
@@ -1504,6 +1521,13 @@ Public Module Plugins
         Dim numObj As Integer = g.Get_Value("Objects")
         For n As Integer = 0 To numObj 'Loop thrugh each object.
             g = sd.Get_Group("Object" & n) 'Get the object.
+            If g Is Nothing Then
+                MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                ClearObjects()
+                LoadedFile = ""
+                Return
+            End If
+
             'Get the position.
             Dim pos As String() = Split(g.Get_Value("position"), ",")
             Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata")) 'Get the object.
@@ -1520,7 +1544,13 @@ Public Module Plugins
         'Load each object.
         For n As Integer = 0 To numObj
             g = sd.Get_Group("Object" & n)
-            Objects(n).Load(g)
+            'Try and load each object.
+            Try
+                Objects(n).Load(g)
+            Catch ex As Exception
+                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name") & vbNewLine _
+                      & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
+            End Try
         Next
 
         'Set the loaded file
@@ -2099,9 +2129,9 @@ Public Class fgAxisToBoolean
 
 
         'Create the inputs.
-        Inputs(New String() {"Axis|Number,Axis"})
+        Inputs(New String() {"Axis,Number,Axis"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Axis to boolean"
@@ -2259,12 +2289,14 @@ Public Class fgJoystick
 
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Joystick State|JoystickState"})
+        Outputs(New String() {"Joystick State,JoystickState"})
 
         'Set the title.
         Title = "Joystick"
+
+        HID.Create(True)
 
         comJoy.Width = 190
         comJoy.Location = Position + New Point(15, 20)
@@ -2273,7 +2305,7 @@ Public Class fgJoystick
         comJoy.SelectedIndex = 0
         AddControl(comJoy)
 
-        HID.Create(True)
+
     End Sub
 
     Public Overrides Sub Moving()
@@ -2291,6 +2323,8 @@ Public Class fgJoystick
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("Joystick", comJoy.SelectedItem, False)
 
         MyBase.Load(g)
@@ -2298,6 +2332,7 @@ Public Class fgJoystick
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("Joystick", comJoy.SelectedItem.ToString)
 
         Return g
@@ -2355,11 +2390,11 @@ Public Class fgGetJoystickAxis
 
 
         'Create the inputs.
-        Inputs(New String() {"Joystick State|JoystickState"})
+        Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"X|Number,Axis", "Y|Number,Axis", "Z|Number,Axis", _
-                              "RotationX|Number,Axis", "RotationY|Number,Axis", "RotationZ|Number,Axis", _
-                              "Slider1|Number,Axis", "Slider2|Number,Axis"})
+        Outputs(New String() {"X,Number,Axis", "Y|Number,Axis", "Z,Number,Axis", _
+                              "RotationX,Number,Axis", "RotationY,Number,Axis", "RotationZ,Number,Axis", _
+                              "Slider1,Number,Axis", "Slider2,Number,Axis"})
 
         'Set the title.
         Title = "Joystick Axis"
@@ -2482,9 +2517,9 @@ Public Class fgGetJoystickButtons
 
 
         'Create the inputs.
-        Inputs(New String() {"Joystick State|JoystickState"})
+        Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Joystick Buttons"
@@ -2557,9 +2592,9 @@ Public Class fgGetKey
 
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick", "Keyboard State|KeyboardState"})
+        Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Get key"
@@ -2631,6 +2666,7 @@ Public Class fgGetKey
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("Key", comKey.SelectedItem, False)
 
         MyBase.Load(g)
@@ -2638,6 +2674,7 @@ Public Class fgGetKey
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("Key", comKey.SelectedItem)
 
         Return g
@@ -2654,9 +2691,9 @@ Public Class fgKeyboard
         Setup(UserData, Position, 60) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Keyboard State|KeyboardState"})
+        Outputs(New String() {"Keyboard State,KeyboardState"})
 
         'Set the title.
         Title = "Keyboard"
@@ -2683,6 +2720,19 @@ Public Class fgKeyboard
 
         End Select
     End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
 End Class
 'AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 'AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
@@ -2696,9 +2746,9 @@ Public Class fgRawMouse
         Setup(UserData, Position, 60) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Mouse State|MouseState", "X|Number", "Y|Number"})
+        Outputs(New String() {"Mouse State,MouseState", "X,Number", "Y,Number"})
 
         'Set the title.
         Title = "Raw Mouse"
@@ -2748,6 +2798,18 @@ Public Class fgRawMouse
         Return False
     End Function
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
 End Class
 
 Public Class fgLocalMouse
@@ -2759,9 +2821,9 @@ Public Class fgLocalMouse
         Setup(UserData, Position, 65) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Position|Point", "X|Number", "Y|Number"})
+        Outputs(New String() {"Position,Point", "X,Number", "Y,Number"})
 
         'Set the title.
         Title = "Local Mouse"
@@ -2797,6 +2859,18 @@ Public Class fgLocalMouse
         End Select
     End Sub
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
 End Class
 
 Public Class fgGlobalMouse
@@ -2808,9 +2882,9 @@ Public Class fgGlobalMouse
         Setup(UserData, Position, 70) 'Setup the base rectangles.
 
         'Create the inputs.
-        Inputs(New String() {"Enabled|Boolean", "Tick"})
+        Inputs(New String() {"Enabled,Boolean", "Tick"})
         'Create the output.
-        Outputs(New String() {"Position|Point", "X|Number,Axis", "Y|Number,Axis"})
+        Outputs(New String() {"Position,Point", "X,Number,Axis", "Y,Number,Axis"})
 
         'Set the title.
         Title = "Global Mouse"
@@ -2846,5 +2920,815 @@ Public Class fgGlobalMouse
         End Select
     End Sub
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
 End Class
+'AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
+Public Class MIDI_AxisToController
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private numChannel As New NumericUpDown
+
+    Private WithEvents comController As New ComboBox
+    Private Controller As Integer
+
+#Region "Object stuff"
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 230, 65) 'Setup the base rectangles.
+
+        'Create one output.
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
+
+        Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
+
+        'Set the title.
+        Title = "Axis to controller"
+
+        numChannel.Minimum = 1
+        numChannel.Maximum = 16
+        numChannel.Width = 40
+        numChannel.Location = Rect.Location + New Point(65, 40)
+        AddControl(numChannel)
+
+        comController.Width = 200
+        comController.Location = Rect.Location + New Point(15, 15)
+        comController.DropDownStyle = ComboBoxStyle.DropDownList
+        comController.Items.AddRange([Enum].GetNames(GetType(Sanford.Multimedia.Midi.ControllerType)))
+        comController.SelectedItem = Sanford.Multimedia.Midi.ControllerType.HoldPedal1.ToString
+        AddControl(comController)
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        numChannel.Dispose()
+        comController.Dispose()
+
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        numChannel.Location = Rect.Location + New Point(65, 40)
+        comController.Location = Rect.Location + New Point(15, 15)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'Input axis
+                If Not Enabled Then Return
+                If Data.GetType = GetType(Boolean) Then
+                    If Data = True Then
+                        Data = 1
+                    Else
+                        Data = 0
+                    End If
+                End If
+                Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
+                message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller
+                message.Data1 = Controller
+                message.Data2 = Data * 127
+                message.MidiChannel = numChannel.Value - 1
+                Send(message)
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 43)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+
+        Dim tmpController As Integer = -1
+        g.Get_Value("Controller", tmpController, False)
+        If Not tmpController = -1 Then
+            comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
+        End If
+
+        g.Get_Value("Channel", numChannel.Value, False)
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("Controller", Controller)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+#End Region
+
+#Region "Control events"
+
+    Private Sub comController_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
+        If comController.SelectedIndex = -1 Then Return
+        Controller = [Enum].Parse(GetType(Sanford.Multimedia.Midi.ControllerType), comController.SelectedItem.ToString)
+    End Sub
+
+#End Region
+
+End Class
+
+'AddMenuObject|Input,Plugins.MIDI_Input|MIDI
+'AddReferences(Sanford.Slim.dll)
+Public Class MIDI_Input
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private WithEvents Device As Sanford.Multimedia.Midi.InputDevice
+
+    Private numChannel As New NumericUpDown
+    Private WithEvents chkAllChannels As New CheckBox
+
+    Private WithEvents comDevices As New ComboBox
+
+#Region "Object stuff"
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 230) 'Setup the base rectangles.
+
+        'Create one output.
+        Outputs(New String() {"Channel Message,ChannelMessage", "SysCommonMessage,SysCommonMessage", "SysExMessage,SysExMessage", "SysRealtimeMessage,SysRealtimeMessage"})
+
+        Inputs(New String() {"Enable,Boolean", "Channel,Number"})
+
+        'Set the title.
+        Title = "MIDI Input"
+
+        chkAllChannels.Text = "All channels"
+        chkAllChannels.Width = 85
+        chkAllChannels.Location = Rect.Location + New Point(110, 50)
+        AddControl(chkAllChannels)
+
+
+        numChannel.Minimum = 1
+        numChannel.Maximum = 16
+        numChannel.Width = 40
+        numChannel.Location = Rect.Location + New Point(65, 50)
+        AddControl(numChannel)
+
+      
+
+        If Sanford.Multimedia.Midi.InputDevice.DeviceCount > 0 Then
+            comDevices.Width = 200
+            comDevices.Location = Rect.Location + New Point(15, 25)
+            comDevices.DropDownStyle = ComboBoxStyle.DropDownList
+
+            For i As Integer = 0 To Sanford.Multimedia.Midi.InputDevice.DeviceCount - 1
+                comDevices.Items.Add(Sanford.Multimedia.Midi.InputDevice.GetDeviceCapabilities(i).name)
+            Next
+            comDevices.SelectedIndex = 0
+
+            AddControl(comDevices)
+        Else
+            MsgBox("Could not find any MIDI input devices!", MsgBoxStyle.Critical, "Error")
+        End If
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        chkAllChannels.Dispose()
+        numChannel.Dispose()
+        comDevices.Dispose()
+
+        If Device IsNot Nothing Then
+            Device.Close()
+            Device = Nothing
+        End If
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        chkAllChannels.Location = Rect.Location + New Point(110, 50)
+        numChannel.Location = Rect.Location + New Point(65, 50)
+        comDevices.Location = Rect.Location + New Point(15, 25)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+
+                    If Device IsNot Nothing Then
+                        If Enabled = True Then
+                            Device.StartRecording()
+                        Else
+                            Device.StopRecording()
+                        End If
+                    End If
+                End If
+
+
+            Case 1 'Channel
+                numChannel.Value = Data
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("DeviceID", comDevices.SelectedIndex)
+        g.Get_Value("AllChannels", chkAllChannels.Checked)
+        Try
+            g.Get_Value("Channel", numChannel.Value)
+        Catch ex As Exception
+        End Try
+
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("DeviceID", comDevices.SelectedIndex)
+        g.Set_Value("AllChannels", chkAllChannels.Checked)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+
+#End Region
+
+#Region "Control events"
+
+    Private Sub comDevices_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comDevices.SelectedIndexChanged
+        If comDevices.SelectedIndex = -1 Then Return
+        If Device IsNot Nothing Then
+               Device.Close()
+            Device = Nothing
+        End If
+
+
+        Try
+            'Create the device.
+            Device = New Sanford.Multimedia.Midi.InputDevice(comDevices.SelectedIndex)
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error!")
+            Device = Nothing
+        End Try
+
+        If Enabled Then
+            Device.StartRecording()
+        End If
+    End Sub
+
+    Private Sub chkAllChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkAllChannels.CheckedChanged
+        numChannel.Enabled = Not chkAllChannels.Checked
+    End Sub
+#End Region
+
+#Region "MIDI events"
+    Private Sub Device_Error(ByVal sender As Object, ByVal e As Sanford.Multimedia.ErrorEventArgs) Handles Device.Error
+        MsgBox(e.Error.Message)
+    End Sub
+
+    Private Sub Device_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles Device.ChannelMessageReceived
+        If Not chkAllChannels.Checked Then
+            If Not e.Message.MidiChannel = numChannel.Value - 1 Then Return
+        End If
+
+        Send(e.Message, 0)
+    End Sub
+
+    Private Sub Device_SysCommonMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysCommonMessageEventArgs) Handles Device.SysCommonMessageReceived
+        Send(e.Message, 1)
+    End Sub
+
+    Private Sub Device_SysExMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysExMessageEventArgs) Handles Device.SysExMessageReceived
+        Send(e.Message, 2)
+    End Sub
+
+    Private Sub Device_SysRealtimeMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.SysRealtimeMessageEventArgs) Handles Device.SysRealtimeMessageReceived
+        Send(e.Message, 3)
+    End Sub
+#End Region
+
+End Class
+
+'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
+'AddReferences(Sanford.Slim.dll)
+Public Class MIDI_Output
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private WithEvents Device As Sanford.Multimedia.Midi.OutputDevice
+
+    Private numChannel As New NumericUpDown
+    Private WithEvents chkMessageChannels As New CheckBox
+
+    Private WithEvents comDevices As New ComboBox
+
+#Region "Object stuff"
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 230) 'Setup the base rectangles.
+
+        Inputs(New String() {"Enable,Boolean", _
+                             "Channel Message,ChannelMessage,ChannelMessageBuilder", "SysCommonMessage,SysCommonMessage,SysCommonMessageBuilder", _
+                             "SysExMessage,SysExMessage", "SysRealtimeMessage,SysRealtimeMessage"})
+
+        'Set the title.
+        Title = "MIDI Output"
+
+        chkMessageChannels.Text = "Same as message"
+        chkMessageChannels.Width = 115
+        chkMessageChannels.Checked = True
+        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
+        AddControl(chkMessageChannels)
+
+
+        numChannel.Minimum = 1
+        numChannel.Maximum = 16
+        numChannel.Width = 40
+        numChannel.Enabled = False
+        numChannel.Location = Rect.Location + New Point(65, 50)
+        AddControl(numChannel)
+
+
+
+        If Sanford.Multimedia.Midi.OutputDevice.DeviceCount > 0 Then
+            comDevices.Width = 200
+            comDevices.Location = Rect.Location + New Point(15, 25)
+            comDevices.DropDownStyle = ComboBoxStyle.DropDownList
+
+            For i As Integer = 0 To Sanford.Multimedia.Midi.OutputDevice.DeviceCount - 1
+                comDevices.Items.Add(Sanford.Multimedia.Midi.OutputDevice.GetDeviceCapabilities(i).name)
+            Next
+            comDevices.SelectedIndex = 0
+
+            AddControl(comDevices)
+        Else
+            MsgBox("Could not find any MIDI output devices!", MsgBoxStyle.Critical, "Error")
+        End If
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        chkMessageChannels.Dispose()
+        numChannel.Dispose()
+        comDevices.Dispose()
+
+        If Device IsNot Nothing Then
+            Device.Close()
+            Device = Nothing
+        End If
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
+        numChannel.Location = Rect.Location + New Point(65, 50)
+        comDevices.Location = Rect.Location + New Point(15, 25)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'ChannelMessage
+                If Not Enabled Then Return
+
+                If chkMessageChannels.Checked Then
+                    If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessageBuilder) Then
+                        Data.Build()
+                        Device.Send(Data.Result)
+                    ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
+                        Device.Send(Data)
+                    Else
+                        MsgBox("Not ChannelMessageBuilder or ChannelMessage", MsgBoxStyle.Critical, "Error")
+                        Return
+                    End If
+                Else
+
+                    Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
+                    If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessageBuilder) Then
+                        message = Data
+                    ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
+                        message = New Sanford.Multimedia.Midi.ChannelMessageBuilder(Data)
+                    Else
+                        MsgBox("Not ChannelMessageBuilder or ChannelMessage", MsgBoxStyle.Critical, "Error")
+                        Return
+                    End If
+
+                    message.MidiChannel = numChannel.Value - 1
+                    message.Build()
+                    Device.Send(message.Result)
+
+                End If
+
+
+            Case 2 'SysCommonMessage
+                If Not Enabled Then Return
+                If Data.GetType = GetType(Sanford.Multimedia.Midi.SysCommonMessageBuilder) Then
+                    Dim message As Sanford.Multimedia.Midi.SysCommonMessageBuilder = Data
+                    message.Build()
+                    Device.Send(message.Result)
+                ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.SysCommonMessage) Then
+                    Device.Send(Data)
+                Else
+                    MsgBox("Not SysCommonMessageBuilder or SysCommonMessage", MsgBoxStyle.Critical, "Error")
+                    Return
+                End If
+
+            Case 3 'SysExMessage
+                If Not Enabled Then Return
+                Device.Send(Data)
+
+            Case 4 'SysRealtimeMessage
+                If Not Enabled Then Return
+                Device.Send(Data)
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("DeviceID", comDevices.SelectedIndex)
+        g.Get_Value("MessageChannels", chkMessageChannels.Checked)
+        Try
+            g.Get_Value("Channel", numChannel.Value)
+        Catch ex As Exception
+        End Try
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("DeviceID", comDevices.SelectedIndex)
+        g.Set_Value("MessageChannels", chkMessageChannels.Checked)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+#End Region
+
+#Region "Control events"
+
+    Private Sub comDevices_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comDevices.SelectedIndexChanged
+        If comDevices.SelectedIndex = -1 Then Return
+        If Device IsNot Nothing Then
+            Device.Close()
+            Device = Nothing
+        End If
+
+
+        Try
+            'Create the device.
+            Device = New Sanford.Multimedia.Midi.OutputDevice(comDevices.SelectedIndex)
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error!")
+            Device = Nothing
+        End Try
+    End Sub
+
+    Private Sub chkAllChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
+        numChannel.Enabled = Not chkMessageChannels.Checked
+    End Sub
+#End Region
+
+#Region "MIDI events"
+    Private Sub Device_Error(ByVal sender As Object, ByVal e As Sanford.Multimedia.ErrorEventArgs) Handles Device.Error
+        MsgBox(e.Error.Message)
+    End Sub
+#End Region
+
+End Class
+
+'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+
+Public Class MIDI_SimulatePedals
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+
+    Private numChannel As New NumericUpDown
+    Private chkRemoveOldNotes As New CheckBox
+    Private chkFilterOtherChannels As New CheckBox
+
+#Region "Object stuff"
+    Public Sub New(ByVal Position As Point, ByVal UserData As String)
+        Setup(UserData, Position, 160) 'Setup the base rectangles.
+
+        'Create one output.
+        Outputs(New String() {"Channel Message,ChannelMessage,ChannelMessageBuilder"})
+
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage", "Sustain,Boolean", "Sostenuto,Boolean", "Soft,Boolean"})
+
+        'Set the title.
+        Title = "Simulate Pedals"
+
+        chkRemoveOldNotes.Text = "Remove old notes"
+        chkRemoveOldNotes.Width = 115
+        chkRemoveOldNotes.Checked = True
+        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
+        AddControl(chkRemoveOldNotes)
+
+        chkFilterOtherChannels.Text = "Filter out other channels"
+        chkFilterOtherChannels.Width = 139
+        chkFilterOtherChannels.Checked = False
+        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
+        AddControl(chkFilterOtherChannels)
+
+        numChannel.Minimum = 1
+        numChannel.Maximum = 16
+        numChannel.Width = 40
+        numChannel.Location = Rect.Location + New Point(70, 20)
+        AddControl(numChannel)
+
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        chkRemoveOldNotes.Dispose()
+        chkFilterOtherChannels.Dispose()
+        numChannel.Dispose()
+
+
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
+        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
+        numChannel.Location = Rect.Location + New Point(70, 20)
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 20, Rect.Y + 23)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'ChannelMessage
+                If Not Enabled Then Return
+                If Data.MidiChannel <> numChannel.Value - 1 Then
+                    If chkFilterOtherChannels.Checked Then
+                        Return
+                    Else
+                        Send(Data)
+                        Return
+                    End If
+                End If
+
+                Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
+                If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
+                    message = New Sanford.Multimedia.Midi.ChannelMessageBuilder(Data)
+                Else
+                    message = Data
+                End If
+
+
+
+                'Is it a note (on or off)?
+                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn Or _
+                    message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff) Then
+
+                    'Is the note on? (volume more then 0)
+                    If message.Data2 > 0 Then
+
+                        'If alter note for left pedal is checked then  if the pedal is down then lower the volume.
+                        If SoftPressed Then
+                            message.Data2 = message.Data2 * 0.3
+                        End If
+
+
+                        'Pedals
+                        If Note(message.Data1) = Notes.Sostenuto Then
+                            If Not SostenutoPressed Then
+                                Note(message.Data1) = Notes.Pressed
+
+                            ElseIf chkRemoveOldNotes.Checked Then
+                                ReleaseNote(message.Data1)
+                                Note(message.Data1) = Notes.Sostenuto
+                            End If
+
+                        ElseIf SustainPressed Then
+                            If Note(message.Data1) = Notes.SustainReleased And chkRemoveOldNotes.Checked Then
+                                ReleaseNote(message.Data1)
+                            Else
+                                SustainList.Add(message.Data1)
+                            End If
+                            Note(message.Data1) = Notes.SustainPressed
+
+                        Else
+                            Note(message.Data1) = Notes.Pressed
+                        End If
+
+                    Else
+                        Select Case Note(message.Data1)
+                            Case Notes.Sostenuto
+                                If SostenutoPressed Then
+                                    Return
+                                Else
+                                    Note(message.Data1) = Notes.Released
+                                End If
+
+                            Case Notes.SustainPressed
+                                If SustainPressed Then
+                                    Note(message.Data1) = Notes.SustainReleased
+                                    Return
+                                Else
+                                    Note(message.Data1) = Notes.Released
+                                End If
+                            Case Notes.SustainReleased
+                                If SustainPressed Then
+                                    Return
+                                Else
+                                    Note(message.Data1) = Notes.Released
+                                End If
+
+                            Case Notes.Pressed
+                                Note(message.Data1) = Notes.Released
+                                message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+
+                        End Select
+                    End If
+
+                End If
+
+                Send(message)
+
+            Case 2 'Sustain pedal
+                SustainPressed = Data
+                If SustainPressed Then
+                    PressSustain()
+                Else
+                    ReleaseSustain()
+                End If
+
+            Case 3 'Sostenuto pedal
+                SostenutoPressed = Data
+                If SostenutoPressed Then
+                    PressSostenuto()
+                Else
+                    ReleaseSostenuto()
+                End If
+
+
+            Case 4 'Soft pedal
+                SoftPressed = Data
+
+
+        End Select
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
+        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
+
+        g.Get_Value("Channel", numChannel.Value, False)
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
+        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+#End Region
+
+#Region "Simulate MIDI pedals"
+    Private Note(127) As Byte 'Used to hold notes.
+
+    Private SostenutoList As New List(Of Byte)
+    Private SustainList As New List(Of Byte)
+    Private SustainPressed, SostenutoPressed, SoftPressed As Boolean
+
+    Private Enum Notes
+        Released = 0
+        Pressed = 1
+        Sostenuto = 2 'Is the sostenuto pedal holding the note.
+        SustainPressed = 3 'Sustain pedal is down And the note.
+        SustainReleased = 4 'Meaning the note was released but the sustain pedal is still down.
+    End Enum
+
+
+    ''' <summary>
+    ''' Release note at ID
+    ''' </summary>
+    ''' <param name="ID"></param>
+    ''' <remarks></remarks>
+    Private Sub ReleaseNote(ByVal ID As Integer)
+        Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
+        tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+        tmp.Data1 = ID
+        tmp.Data2 = 0
+        Note(ID) = Notes.Released
+        Send(tmp)
+    End Sub
+
+    Private Sub PressSustain()
+        'Check for down keys and set them to sustain.
+        For n As Byte = 0 To Note.Length - 1
+            If Note(n) = Notes.Pressed Then
+                Note(n) = Notes.SustainPressed
+                SustainList.Add(n)
+            End If
+        Next
+
+    End Sub
+    Private Sub ReleaseSustain()
+        Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
+        tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+        tmp.Data2 = 0
+        For Each n As Byte In SustainList
+            If Note(n) = Notes.SustainReleased Then
+                Note(n) = Notes.Released
+                tmp.Data1 = n
+                Send(tmp)
+            End If
+        Next
+        SustainList.Clear()
+    End Sub
+
+    Private Sub PressSostenuto()
+        For n As Byte = 0 To Note.Length - 1
+            If Note(n) = Notes.Pressed Or Note(n) = Notes.SustainPressed Then
+                Note(n) = Notes.Sostenuto
+                SostenutoList.Add(n)
+            End If
+        Next
+    End Sub
+    Private Sub ReleaseSostenuto()
+        Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
+        tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+        tmp.MidiChannel = 0
+        tmp.Data2 = 0
+        For Each n As Byte In SostenutoList
+            Note(n) = Notes.Released
+            tmp.Data1 = n
+            Send(tmp)
+        Next
+        SostenutoList.Clear()
+    End Sub
+
+#End Region
+
+End Class
+
 End Namespace

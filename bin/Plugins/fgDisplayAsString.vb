@@ -7,7 +7,7 @@ Public Class fgDisplayAsString
 
         'Create one input.
         Inputs(New String() {"Value to display."})
-        Input(0).MaxConnected = 1 'Only allow one connection.
+        'Input(0).MaxConnected = 1 'Only allow one connection.
 
         'Set the title.
         Title = "Display as string"

@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_Output
     Inherits BaseObject
 
