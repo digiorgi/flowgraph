@@ -15,10 +15,9 @@ Public Class MIDI_Output
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
         Setup(UserData, Position, 230) 'Setup the base rectangles.
 
-        'Create one output.
-        'Outputs(New String() {"Channel Message|ChannelMessage", "SysCommonMessage|SysCommonMessage", "SysExMessage|SysExMessage", "SysRealtimeMessage|SysRealtimeMessage"})
-
-        Inputs(New String() {"Enable|Boolean", "Channel Message|ChannelMessage", "SysCommonMessage|SysCommonMessage", "SysExMessage|SysExMessage", "SysRealtimeMessage|SysRealtimeMessage"})
+        Inputs(New String() {"Enable|Boolean", _
+                             "Channel Message|ChannelMessage", "SysCommonMessage|SysCommonMessage", _
+                             "SysExMessage|SysExMessage", "SysRealtimeMessage|SysRealtimeMessage"})
 
         'Set the title.
         Title = "MIDI Output"
@@ -69,7 +68,7 @@ Public Class MIDI_Output
     End Sub
 
     Public Overrides Sub Moving()
-        chkMessageChannels.Location = Rect.Location + New Point(130, 50)
+        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
         numChannel.Location = Rect.Location + New Point(65, 50)
         comDevices.Location = Rect.Location + New Point(15, 25)
     End Sub
@@ -112,10 +111,40 @@ Public Class MIDI_Output
                     Device.Send(message.Result)
 
                 End If
+
+
+            Case 2 'SysCommonMessage
+                If Not Enabled Then Return
+                If Data.GetType = GetType(Sanford.Multimedia.Midi.SysCommonMessageBuilder) Then
+                    Dim message As Sanford.Multimedia.Midi.SysCommonMessageBuilder = Data
+                    message.Build()
+                    Device.Send(message.Result)
+                ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.SysCommonMessage) Then
+                    Device.Send(Data)
+                Else
+                    MsgBox("Not SysCommonMessageBuilder or SysCommonMessage", MsgBoxStyle.Critical, "Error")
+                    Return
+                End If
+
+            Case 3 'SysExMessage
+                If Not Enabled Then Return
+                Device.Send(Data)
+
+            Case 4 'SysRealtimeMessage
+                If Not Enabled Then Return
+                Device.Send(Data)
         End Select
     End Sub
 
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+    End Sub
+
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("DeviceID", comDevices.SelectedIndex)
         g.Get_Value("MessageChannels", chkMessageChannels.Checked)
         Try
@@ -129,6 +158,7 @@ Public Class MIDI_Output
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("DeviceID", comDevices.SelectedIndex)
         g.Set_Value("MessageChannels", chkMessageChannels.Checked)
         g.Set_Value("Channel", numChannel.Value)

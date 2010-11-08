@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+
 Public Class MIDI_SimulatePedals
     Inherits BaseObject
 
@@ -6,12 +7,12 @@ Public Class MIDI_SimulatePedals
 
 
     Private numChannel As New NumericUpDown
-    Private WithEvents chkMergeChannels As New CheckBox
     Private chkRemoveOldNotes As New CheckBox
+    Private chkFilterOtherChannels As New CheckBox
 
 #Region "Object stuff"
     Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 230) 'Setup the base rectangles.
+        Setup(UserData, Position, 160) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Channel Message|ChannelMessage"})
@@ -21,23 +22,22 @@ Public Class MIDI_SimulatePedals
         'Set the title.
         Title = "Simulate Pedals"
 
-        chkMergeChannels.Text = "Merge channels"
-        chkMergeChannels.Width = 115
-        chkMergeChannels.Checked = True
-        chkMergeChannels.Location = Rect.Location + New Point(110, 50)
-        AddControl(chkMergeChannels)
-
         chkRemoveOldNotes.Text = "Remove old notes"
         chkRemoveOldNotes.Width = 115
         chkRemoveOldNotes.Checked = True
-        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 15)
+        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
         AddControl(chkRemoveOldNotes)
+
+        chkFilterOtherChannels.Text = "Filter out other channels"
+        chkFilterOtherChannels.Width = 139
+        chkFilterOtherChannels.Checked = False
+        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
+        AddControl(chkFilterOtherChannels)
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Enabled = False
-        numChannel.Location = Rect.Location + New Point(65, 50)
+        numChannel.Location = Rect.Location + New Point(70, 20)
         AddControl(numChannel)
 
 
@@ -45,7 +45,7 @@ Public Class MIDI_SimulatePedals
 
     Public Overrides Sub Dispose()
         chkRemoveOldNotes.Dispose()
-        chkMergeChannels.Dispose()
+        chkFilterOtherChannels.Dispose()
         numChannel.Dispose()
 
 
@@ -53,6 +53,15 @@ Public Class MIDI_SimulatePedals
     End Sub
 
     Public Overrides Sub Moving()
+        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
+        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
+        numChannel.Location = Rect.Location + New Point(70, 20)
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 20, Rect.Y + 23)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -65,12 +74,23 @@ Public Class MIDI_SimulatePedals
 
             Case 1 'ChannelMessage
                 If Not Enabled Then Return
+                If Data.MidiChannel <> numChannel.Value - 1 Then
+                    If chkFilterOtherChannels.Checked Then
+                        Return
+                    Else
+                        Send(Data)
+                        Return
+                    End If
+                End If
+
                 Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
                 If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
                     message = New Sanford.Multimedia.Midi.ChannelMessageBuilder(Data)
                 Else
                     message = Data
                 End If
+
+
 
                 'Is it a note (on or off)?
                 If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn Or _
@@ -81,7 +101,7 @@ Public Class MIDI_SimulatePedals
 
                         'If alter note for left pedal is checked then  if the pedal is down then lower the volume.
                         If SoftPressed Then
-                            message.Data2 = 40
+                            message.Data2 = message.Data2 * 0.3
                         End If
 
 
@@ -137,24 +157,23 @@ Public Class MIDI_SimulatePedals
                         End Select
                     End If
 
-
-                    Send(message)
-
-
-                Else
-                    Send(message)
                 End If
 
+                Send(message)
 
             Case 2 'Sustain pedal
                 SustainPressed = Data
-                If SustainPressed = False Then
+                If SustainPressed Then
+                    PressSustain()
+                Else
                     ReleaseSustain()
                 End If
 
             Case 3 'Sostenuto pedal
                 SostenutoPressed = Data
-                If SostenutoPressed = False Then
+                If SostenutoPressed Then
+                    PressSostenuto()
+                Else
                     ReleaseSostenuto()
                 End If
 
@@ -168,7 +187,9 @@ Public Class MIDI_SimulatePedals
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("MessageChannels", chkMergeChannels.Checked)
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
+        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
         Try
             g.Get_Value("Channel", numChannel.Value)
         Catch ex As Exception
@@ -180,19 +201,14 @@ Public Class MIDI_SimulatePedals
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("MessageChannels", chkMergeChannels.Checked)
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
+        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
         g.Set_Value("Channel", numChannel.Value)
 
 
         Return g
     End Function
-#End Region
-
-#Region "Control events"
-
-    Private Sub chkMergeChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMergeChannels.CheckedChanged
-        numChannel.Enabled = Not chkMergeChannels.Checked
-    End Sub
 #End Region
 
 #Region "Simulate MIDI pedals"
@@ -216,7 +232,7 @@ Public Class MIDI_SimulatePedals
     ''' </summary>
     ''' <param name="ID"></param>
     ''' <remarks></remarks>
-    Public Sub ReleaseNote(ByVal ID As Integer)
+    Private Sub ReleaseNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
         tmp.Data1 = ID
@@ -225,7 +241,7 @@ Public Class MIDI_SimulatePedals
         Send(tmp)
     End Sub
 
-    Friend Sub PressSustain()
+    Private Sub PressSustain()
         'Check for down keys and set them to sustain.
         For n As Byte = 0 To Note.Length - 1
             If Note(n) = Notes.Pressed Then
@@ -233,8 +249,9 @@ Public Class MIDI_SimulatePedals
                 SustainList.Add(n)
             End If
         Next
+
     End Sub
-    Friend Sub ReleaseSustain()
+    Private Sub ReleaseSustain()
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
         tmp.Data2 = 0
@@ -248,7 +265,7 @@ Public Class MIDI_SimulatePedals
         SustainList.Clear()
     End Sub
 
-    Friend Sub PressSostenuto()
+    Private Sub PressSostenuto()
         For n As Byte = 0 To Note.Length - 1
             If Note(n) = Notes.Pressed Or Note(n) = Notes.SustainPressed Then
                 Note(n) = Notes.Sostenuto
@@ -256,7 +273,7 @@ Public Class MIDI_SimulatePedals
             End If
         Next
     End Sub
-    Friend Sub ReleaseSostenuto()
+    Private Sub ReleaseSostenuto()
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
         tmp.MidiChannel = 0

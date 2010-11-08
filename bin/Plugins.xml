@@ -6,13 +6,7 @@ Plugins
 </name>
 </assembly>
 <members>
-<member name="M:Plugins.MIDI_SimulatePedals.ReleaseNote(System.Int32)">
-	<summary>
- Release note at ID
- </summary>
-	<param name="ID"></param>
-	<remarks></remarks>
-</member><member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:Plugins.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
@@ -266,6 +260,12 @@ Plugins
 	<param name="Item">The item to add the node to.</param>
 	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
 	<param name="Groups"></param>
+	<remarks></remarks>
+</member><member name="M:Plugins.MIDI_SimulatePedals.ReleaseNote(System.Int32)">
+	<summary>
+ Release note at ID
+ </summary>
+	<param name="ID"></param>
 	<remarks></remarks>
 </member><member name="P:Plugins.My.Resources.Resources.ResourceManager">
 	<summary>

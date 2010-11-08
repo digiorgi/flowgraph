@@ -86,6 +86,7 @@ Public Class fgGetKey
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("Key", comKey.SelectedItem, False)
 
         MyBase.Load(g)
@@ -93,6 +94,7 @@ Public Class fgGetKey
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("Key", comKey.SelectedItem)
 
         Return g
@@ -138,4 +140,17 @@ Public Class fgKeyboard
 
         End Select
     End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
 End Class

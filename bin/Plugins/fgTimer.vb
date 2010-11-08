@@ -52,7 +52,18 @@ Public Class fgTimer
         End Select
     End Sub
 
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", tmr.Enabled, False)
 
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", tmr.Enabled)
+
+        Return g
+    End Function
 
     Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
         Send(Nothing)

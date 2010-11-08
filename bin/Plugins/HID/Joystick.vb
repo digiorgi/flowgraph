@@ -50,6 +50,8 @@ Public Class fgJoystick
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
         g.Get_Value("Joystick", comJoy.SelectedItem, False)
 
         MyBase.Load(g)
@@ -57,6 +59,7 @@ Public Class fgJoystick
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
+        g.Set_Value("Enabled", Enabled)
         g.Set_Value("Joystick", comJoy.SelectedItem.ToString)
 
         Return g
