@@ -16,9 +16,9 @@ Public Class MIDI_Input
         Setup(UserData, Position, 230) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message|ChannelMessage", "SysCommonMessage|SysCommonMessage", "SysExMessage|SysExMessage", "SysRealtimeMessage|SysRealtimeMessage"})
+        Outputs(New String() {"Channel Message,ChannelMessage", "SysCommonMessage,SysCommonMessage", "SysExMessage,SysExMessage", "SysRealtimeMessage,SysRealtimeMessage"})
 
-        Inputs(New String() {"Enable|Boolean", "Channel|Number"})
+        Inputs(New String() {"Enable,Boolean", "Channel,Number"})
 
         'Set the title.
         Title = "MIDI Input"

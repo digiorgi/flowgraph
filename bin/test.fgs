@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=9;
+	Objects=10;
 	FileVersion=0.5;
 }
 Object0{
@@ -26,7 +26,7 @@ Object1{
 Object2{
 	Name=Plugins.MIDI_Output;
 	Position=650,260;
-	Input=0,1,0,0,0;
+	Input=0,2,0,0,0;
 	Enabled=True;
 	DeviceID=0;
 	MessageChannels=True;
@@ -43,7 +43,7 @@ Object3{
 Object4{
 	Name=Plugins.fgGetJoystickAxis;
 	Position=145,145;
-	Output=0`1,8,0`0`0`0`1,5,0`0`0;
+	Output=0`1,8,0`0`0`0`1,5,0`1,10,1`0;
 	Input=1;
 	Rev0=False;
 	Rev1=True;
@@ -51,7 +51,7 @@ Object4{
 	Rev3=False;
 	Rev4=False;
 	Rev5=True;
-	Rev6=False;
+	Rev6=True;
 	Rev7=False;
 }
 Object5{
@@ -89,4 +89,13 @@ Object9{
 	Position=340,160;
 	Input=1;
 	Data=False;
+}
+Object10{
+	Name=Plugins.MIDI_AxisToController;
+	Position=490,125;
+	Output=1,2,1;
+	Input=0,1;
+	Enabled=True;
+	Controller=64;
+	Channel=1;
 }

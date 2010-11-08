@@ -11,7 +11,7 @@ Public Class fgTimer
         'Create one output.
         Outputs(New String() {"Tick"})
 
-        Inputs(New String() {"Enable|Boolean", "Interval|Number"})
+        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
 
         'Set the title.
         Title = "Timer"

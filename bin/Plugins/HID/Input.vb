@@ -11,9 +11,9 @@ Public Class fgAxisToBoolean
 
 
         'Create the inputs.
-        Inputs(New String() {"Axis|Number,Axis"})
+        Inputs(New String() {"Axis,Number,Axis"})
         'Create the output.
-        Outputs(New String() {"Up|Boolean", "Down|Boolean"})
+        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
         'Set the title.
         Title = "Axis to boolean"
