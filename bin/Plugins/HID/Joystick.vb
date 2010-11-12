@@ -23,13 +23,13 @@ Public Class fgJoystick
         'Set the title.
         Title = "Joystick"
 
-        HID.Create(True)
+        HID.Create()
 
         comJoy.Width = 190
         comJoy.Location = Position + New Point(15, 20)
         comJoy.DropDownStyle = ComboBoxStyle.DropDownList
         comJoy.Items.AddRange(HID.Joysticks.ToArray)
-        comJoy.SelectedIndex = 0
+        'comJoy.SelectedIndex = 0
         AddControl(comJoy)
 
 
@@ -41,7 +41,7 @@ Public Class fgJoystick
 
     Public Overrides Sub Dispose()
         MyBase.Dispose()
-        HID.Dispose(True)
+        HID.Dispose()
         comJoy.Dispose()
         If Joystick IsNot Nothing Then
             Joystick.Unacquire()
@@ -72,6 +72,7 @@ Public Class fgJoystick
 
             Case 1
                 If Not Enabled Then Return
+                If Joystick Is Nothing Then Return
 
                 Joystick.Poll()
                 Dim state As SlimDX.DirectInput.JoystickState = Joystick.GetCurrentState
@@ -257,7 +258,6 @@ Public Class fgGetJoystickButtons
         numButtons.Location = Position + New Point(15, 20)
         AddControl(numButtons)
 
-        HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
@@ -266,7 +266,6 @@ Public Class fgGetJoystickButtons
 
     Public Overrides Sub Dispose()
         MyBase.Dispose()
-        HID.Dispose(True)
         numButtons.Dispose()
     End Sub
 

@@ -46,7 +46,7 @@ Public Class MIDI_Input
             For i As Integer = 0 To Sanford.Multimedia.Midi.InputDevice.DeviceCount - 1
                 comDevices.Items.Add(Sanford.Multimedia.Midi.InputDevice.GetDeviceCapabilities(i).name)
             Next
-            comDevices.SelectedIndex = 0
+            'comDevices.SelectedIndex = 0
 
             AddControl(comDevices)
         Else

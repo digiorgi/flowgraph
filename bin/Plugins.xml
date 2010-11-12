@@ -211,7 +211,7 @@ Plugins
 	<remarks></remarks>
 </member><member name="M:Plugins.DataFlowBase.Add(System.Int32,System.Int32)">
 	<summary>
- Add a input.
+ Connect a input to this output.
  </summary>
 	<param name="obj1"></param>
 	<param name="Index1"></param>

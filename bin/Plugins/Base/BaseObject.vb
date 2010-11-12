@@ -516,7 +516,7 @@ Public Class DataFlowBase
 
 #Region "Add & Disconnect"
     ''' <summary>
-    ''' Add a input.
+    ''' Connect a input to this output.
     ''' </summary>
     ''' <param name="obj1"></param>
     ''' <param name="Index1"></param>
