@@ -213,7 +213,9 @@ Public Class MIDI_SimulatePedals
 
     Private SostenutoList As New List(Of Byte)
     Private SustainList As New List(Of Byte)
-    Private SustainPressed, SostenutoPressed, SoftPressed As Boolean
+    Private SustainPressed As Boolean = False
+    Private SostenutoPressed As Boolean = False
+    Private SoftPressed As Boolean = False
 
     Private Enum Notes
         Released = 0

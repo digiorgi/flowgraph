@@ -35,17 +35,18 @@ Public Class frmMain
 #Region "Load & Close"
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+
+        If SaveOnExit Then
+            'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
+            If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
+                btnSave_Click(sender, e)
+            End If
+        End If
+
         'Dispose all objects.
         For Each obj As Object In Objects
             obj.Dispose()
         Next
-
-        If Not SaveOnExit Then Return
-
-        'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
-        If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
-            btnSave_Click(sender, e)
-        End If
     End Sub
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
