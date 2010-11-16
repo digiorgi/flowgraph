@@ -2,8 +2,7 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-	Does not load joystick device.
-
+	
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
