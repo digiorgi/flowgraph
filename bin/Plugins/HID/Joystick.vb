@@ -52,7 +52,16 @@ Public Class fgJoystick
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("Joystick", comJoy.SelectedItem, False)
+        'g.Get_Value("Joystick", comJoy.SelectedText, False)
+        Dim tmpJoy As String = g.Get_Value("Joystick")
+        If tmpJoy <> "" Then
+            For i As Integer = 0 To comJoy.Items.Count - 1
+                If LCase(comJoy.Items(i).ToString) = LCase(tmpJoy) Then
+                    comJoy.SelectedIndex = i
+                    Exit For
+                End If
+            Next
+        End If
 
         MyBase.Load(g)
     End Sub
@@ -73,10 +82,9 @@ Public Class fgJoystick
             Case 1
                 If Not Enabled Then Return
                 If Joystick Is Nothing Then Return
-
                 Joystick.Poll()
                 Dim state As SlimDX.DirectInput.JoystickState = Joystick.GetCurrentState
-                If Not state.Equals(LastState) Then
+                If Not JoystickStateEquals(state, LastState) Then
                     LastState = state
                     Send(state)
                 End If
@@ -104,10 +112,36 @@ Public Class fgJoystick
                 End If
             Next
 
+            Joystick.Poll()
+            LastState = Joystick.GetCurrentState
+
             Enabled = True
         End Try
     End Sub
 End Class
+
+Public Module JoystickHelper
+    Public Function JoystickStateEquals(ByVal s1 As SlimDX.DirectInput.JoystickState, ByVal s2 As SlimDX.DirectInput.JoystickState) As Boolean
+        'Still needs the rest of the values.
+        If s1.X <> s2.X Then Return False
+        If s1.Y <> s2.Y Then Return False
+        If s1.Z <> s2.Z Then Return False
+
+        If s1.RotationX <> s2.RotationX Then Return False
+        If s1.RotationY <> s2.RotationY Then Return False
+        If s1.RotationZ <> s2.RotationZ Then Return False
+
+        If s1.GetSliders(0) <> s2.GetSliders(0) Then Return False
+        If s1.GetSliders(1) <> s2.GetSliders(1) Then Return False
+
+        For i As Integer = 0 To 127
+            If s1.IsPressed(i) <> s2.IsPressed(i) Then Return False
+        Next
+
+
+        Return True
+    End Function
+End Module
 
 Public Class fgGetJoystickAxis
     Inherits BaseObject
@@ -247,7 +281,7 @@ Public Class fgGetJoystickButtons
         'Create the inputs.
         Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
+        Outputs(New String() {"Released,Boolean", "Pressed,Boolean"})
 
         'Set the title.
         Title = "Joystick Buttons"

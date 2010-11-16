@@ -331,6 +331,16 @@ Public Class frmMain
     End Sub
 
 #Region "Open Save SaveAs buttons"
+
+
+    Private Sub btnNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNew.Click
+        If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
+            ClearObjects()
+            LoadedFile = ""
+            DoDraw(True)
+        End If
+    End Sub
+
     Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
         Dim ofd As New OpenFileDialog
         ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
@@ -359,4 +369,5 @@ Public Class frmMain
     Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
         Draw = chkDraw.Checked
     End Sub
+
 End Class

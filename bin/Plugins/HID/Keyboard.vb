@@ -14,7 +14,7 @@ Public Class fgGetKey
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})
         'Create the output.
-        Outputs(New String() {"Up,Boolean", "Down,Boolean"})
+        Outputs(New String() {"Released,Boolean", "Pressed,Boolean"})
 
         'Set the title.
         Title = "Get key"

@@ -28,11 +28,12 @@ Partial Class frmMain
         Me.btnSaveAs = New System.Windows.Forms.Button()
         Me.lblToolTip = New System.Windows.Forms.Label()
         Me.chkDraw = New System.Windows.Forms.CheckBox()
+        Me.btnNew = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnOpen
         '
-        Me.btnOpen.Location = New System.Drawing.Point(12, 12)
+        Me.btnOpen.Location = New System.Drawing.Point(93, 12)
         Me.btnOpen.Name = "btnOpen"
         Me.btnOpen.Size = New System.Drawing.Size(75, 23)
         Me.btnOpen.TabIndex = 0
@@ -41,7 +42,7 @@ Partial Class frmMain
         '
         'btnSave
         '
-        Me.btnSave.Location = New System.Drawing.Point(94, 12)
+        Me.btnSave.Location = New System.Drawing.Point(175, 12)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(75, 23)
         Me.btnSave.TabIndex = 1
@@ -50,7 +51,7 @@ Partial Class frmMain
         '
         'btnSaveAs
         '
-        Me.btnSaveAs.Location = New System.Drawing.Point(176, 12)
+        Me.btnSaveAs.Location = New System.Drawing.Point(257, 12)
         Me.btnSaveAs.Name = "btnSaveAs"
         Me.btnSaveAs.Size = New System.Drawing.Size(75, 23)
         Me.btnSaveAs.TabIndex = 2
@@ -77,12 +78,21 @@ Partial Class frmMain
         Me.chkDraw.AutoSize = True
         Me.chkDraw.Checked = True
         Me.chkDraw.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDraw.Location = New System.Drawing.Point(257, 16)
+        Me.chkDraw.Location = New System.Drawing.Point(338, 16)
         Me.chkDraw.Name = "chkDraw"
         Me.chkDraw.Size = New System.Drawing.Size(51, 17)
         Me.chkDraw.TabIndex = 4
         Me.chkDraw.Text = "Draw"
         Me.chkDraw.UseVisualStyleBackColor = True
+        '
+        'btnNew
+        '
+        Me.btnNew.Location = New System.Drawing.Point(12, 12)
+        Me.btnNew.Name = "btnNew"
+        Me.btnNew.Size = New System.Drawing.Size(75, 23)
+        Me.btnNew.TabIndex = 0
+        Me.btnNew.Text = "New"
+        Me.btnNew.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -94,6 +104,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.btnSaveAs)
         Me.Controls.Add(Me.btnSave)
+        Me.Controls.Add(Me.btnNew)
         Me.Controls.Add(Me.btnOpen)
         Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -108,5 +119,6 @@ Partial Class frmMain
     Friend WithEvents btnSaveAs As System.Windows.Forms.Button
     Friend WithEvents lblToolTip As System.Windows.Forms.Label
     Friend WithEvents chkDraw As System.Windows.Forms.CheckBox
+    Friend WithEvents btnNew As System.Windows.Forms.Button
 
 End Class
