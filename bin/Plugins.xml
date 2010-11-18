@@ -99,8 +99,12 @@ Plugins
 </member><member name="M:Plugins.BaseObject.Setup(System.String,System.Drawing.Point,System.Int32,System.Int32)">
 	<summary>
  Create rectangles. using the position and size.
+ This should AllWays be called before creating inputs/outputs.
  </summary>
 	<param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
+	<param name="Position">NOT client position.</param>
+	<param name="Width">Client size</param>
+	<param name="Height">Client size</param>
 </member><member name="M:Plugins.BaseObject.Dispose">
 	<summary>
  Distroys everything in the object.
@@ -132,20 +136,20 @@ Plugins
 	<summary>
  Draw lines connecting outputs to inputs.
  </summary>
-</member><member name="M:Plugins.BaseObject.SetSize(System.Int32,System.Int32)">
+</member><member name="M:Plugins.BaseObject.SetSize(System.Int32,System.Int32,System.Boolean)">
 	<summary>
  Set the size of the object.
  Will call Resizing.
  </summary>
 	<param name="Width"></param>
 	<param name="Height"></param>
-	<remarks></remarks>
+	<param name="IsClientSize"></param>
 </member><member name="M:Plugins.BaseObject.Resizing">
 	<summary>
  Is called when the object is being resized.
  </summary>
 	<remarks></remarks>
-</member><member name="M:Plugins.BaseObject.SetPosition(System.Int32,System.Int32)">
+</member><member name="M:Plugins.BaseObject.SetPosition(System.Int32,System.Int32,System.Boolean)">
 	<summary>
  Sets the position of the object.
  Will call Moving.
@@ -167,13 +171,13 @@ Plugins
 	<summary>
  Create inputs.
  </summary>
-	<param name="Names">array of strings. e.g. {"NameOfInput|Type1|Type2", "Input2"}</param>
+	<param name="Names">array of strings. e.g. {"NameOfInput,Type1,Type2", "Input2"}</param>
 	<remarks></remarks>
 </member><member name="M:Plugins.BaseObject.Outputs(System.String[])">
 	<summary>
  Create outputs.
  </summary>
-	<param name="Names">array of strings. e.g. {"NameOfOutput|Type1|Type2", "Output2"}</param>
+	<param name="Names">array of strings. e.g. {"NameOfOutput,Type1,Type2", "Output2"}</param>
 </member><member name="M:Plugins.BaseObject.MenuSelected(Plugins.Menu.MenuNode)">
 	<summary>
  Is called when somthing in the menu was selected.

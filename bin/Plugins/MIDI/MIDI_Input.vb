@@ -13,8 +13,8 @@ Public Class MIDI_Input
     Private WithEvents comDevices As New ComboBox
 
 #Region "Object stuff"
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 230) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 205) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessage", "SysCommonMessage,SysCommonMessage", "SysExMessage,SysExMessage", "SysRealtimeMessage,SysRealtimeMessage"})
@@ -26,21 +26,21 @@ Public Class MIDI_Input
 
         chkAllChannels.Text = "All channels"
         chkAllChannels.Width = 85
-        chkAllChannels.Location = Rect.Location + New Point(110, 50)
+        chkAllChannels.Location = Position + New Point(95, 35)
         AddControl(chkAllChannels)
 
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Location = Rect.Location + New Point(65, 50)
+        numChannel.Location = Position + New Point(45, 35)
         AddControl(numChannel)
 
-      
+
 
         If Sanford.Multimedia.Midi.InputDevice.DeviceCount > 0 Then
             comDevices.Width = 200
-            comDevices.Location = Rect.Location + New Point(15, 25)
+            comDevices.Location = Position + New Point(0, 10)
             comDevices.DropDownStyle = ComboBoxStyle.DropDownList
 
             For i As Integer = 0 To Sanford.Multimedia.Midi.InputDevice.DeviceCount - 1
@@ -68,9 +68,9 @@ Public Class MIDI_Input
     End Sub
 
     Public Overrides Sub Moving()
-        chkAllChannels.Location = Rect.Location + New Point(110, 50)
-        numChannel.Location = Rect.Location + New Point(65, 50)
-        comDevices.Location = Rect.Location + New Point(15, 25)
+        chkAllChannels.Location = Rect.Location + New Point(95, 35)
+        numChannel.Location = Position + New Point(45, 35)
+        comDevices.Location = Position + New Point(0, 10)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -97,7 +97,7 @@ Public Class MIDI_Input
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 38)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)

@@ -11,8 +11,8 @@ Public Class MIDI_SimulatePedals
     Private chkFilterOtherChannels As New CheckBox
 
 #Region "Object stuff"
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 160) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 145) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessage,ChannelMessageBuilder"})
@@ -25,19 +25,19 @@ Public Class MIDI_SimulatePedals
         chkRemoveOldNotes.Text = "Remove old notes"
         chkRemoveOldNotes.Width = 115
         chkRemoveOldNotes.Checked = True
-        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
+        chkRemoveOldNotes.Location = Position + New Point(5, 45)
         AddControl(chkRemoveOldNotes)
 
         chkFilterOtherChannels.Text = "Filter out other channels"
         chkFilterOtherChannels.Width = 139
         chkFilterOtherChannels.Checked = False
-        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
+        chkFilterOtherChannels.Location = Position + New Point(5, 25)
         AddControl(chkFilterOtherChannels)
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Location = Rect.Location + New Point(70, 20)
+        numChannel.Location = Position + New Point(55, 5)
         AddControl(numChannel)
 
 
@@ -53,15 +53,15 @@ Public Class MIDI_SimulatePedals
     End Sub
 
     Public Overrides Sub Moving()
-        chkRemoveOldNotes.Location = Rect.Location + New Point(20, 60)
-        chkFilterOtherChannels.Location = Rect.Location + New Point(20, 40)
-        numChannel.Location = Rect.Location + New Point(70, 20)
+        chkRemoveOldNotes.Location = Position + New Point(5, 45)
+        chkFilterOtherChannels.Location = Position + New Point(5, 25)
+        numChannel.Location = Position + New Point(55, 5)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 20, Rect.Y + 23)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X + 5, Position.Y + 8)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)

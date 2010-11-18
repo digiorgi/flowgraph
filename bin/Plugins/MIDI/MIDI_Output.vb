@@ -13,8 +13,8 @@ Public Class MIDI_Output
     Private WithEvents comDevices As New ComboBox
 
 #Region "Object stuff"
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 230) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 205) 'Setup the base rectangles.
 
         Inputs(New String() {"Enable,Boolean", _
                              "Channel Message,ChannelMessage,ChannelMessageBuilder", "SysCommonMessage,SysCommonMessage,SysCommonMessageBuilder", _
@@ -24,9 +24,9 @@ Public Class MIDI_Output
         Title = "MIDI Output"
 
         chkMessageChannels.Text = "Same as message"
-        chkMessageChannels.Width = 115
+        chkMessageChannels.Width = 113
         chkMessageChannels.Checked = True
-        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
+        chkMessageChannels.Location = Position + New Point(86, 35)
         AddControl(chkMessageChannels)
 
 
@@ -34,14 +34,14 @@ Public Class MIDI_Output
         numChannel.Maximum = 16
         numChannel.Width = 40
         numChannel.Enabled = False
-        numChannel.Location = Rect.Location + New Point(65, 50)
+        numChannel.Location = Position + New Point(45, 35)
         AddControl(numChannel)
 
 
 
         If Sanford.Multimedia.Midi.OutputDevice.DeviceCount > 0 Then
             comDevices.Width = 200
-            comDevices.Location = Rect.Location + New Point(15, 25)
+            comDevices.Location = Position + New Point(0, 10)
             comDevices.DropDownStyle = ComboBoxStyle.DropDownList
 
             For i As Integer = 0 To Sanford.Multimedia.Midi.OutputDevice.DeviceCount - 1
@@ -140,7 +140,7 @@ Public Class MIDI_Output
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 53)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 38)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)

@@ -11,8 +11,8 @@ Public Class fgJoystick
 
     Public Joystick As SlimDX.DirectInput.Joystick
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 220) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 220) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -26,7 +26,7 @@ Public Class fgJoystick
         HID.Create()
 
         comJoy.Width = 190
-        comJoy.Location = Position + New Point(15, 20)
+        comJoy.Location = Position + New Point(0, 5)
         comJoy.DropDownStyle = ComboBoxStyle.DropDownList
         comJoy.Items.AddRange(HID.Joysticks.ToArray)
         'comJoy.SelectedIndex = 0
@@ -36,7 +36,7 @@ Public Class fgJoystick
     End Sub
 
     Public Overrides Sub Moving()
-        comJoy.Location = Rect.Location + New Point(15, 20)
+        comJoy.Location = Position + New Point(0, 5)
     End Sub
 
     Public Overrides Sub Dispose()
@@ -147,8 +147,8 @@ Public Class fgGetJoystickAxis
     Inherits BaseObject
 
     Private chkReverse(7) As CheckBox
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 80) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 50) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -161,23 +161,23 @@ Public Class fgGetJoystickAxis
         'Set the title.
         Title = "Joystick Axis"
 
-        For i As Integer = 1 To 8
+        For i As Integer = 0 To 7
             Dim chk As New CheckBox
             chk.Text = "Rev"
             chk.Width = 46
             chk.Height = 15
-            chk.Tag = i - 1
-            chk.Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
+            chk.Tag = i
+            chk.Location = Position + New Point(4, (15 * i))
             AddHandler chk.CheckedChanged, AddressOf ReverseChange
 
-            chkReverse(i - 1) = chk
+            chkReverse(i) = chk
             AddControl(chk)
         Next
     End Sub
 
     Public Overrides Sub Moving()
-        For i As Integer = 1 To 8
-            chkReverse(i - 1).Location = New Point(Rect.X + 19, Rect.Y + (15 * i))
+        For i As Integer = 0 To 7
+            chkReverse(i).Location = Position + New Point(4, (15 * i))
         Next
     End Sub
 
@@ -274,8 +274,8 @@ Public Class fgGetJoystickButtons
 
     Private WithEvents numButtons As New NumericUpDown
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 90, 35) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 90, 35) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -289,13 +289,13 @@ Public Class fgGetJoystickButtons
         numButtons.Minimum = 0
         numButtons.Maximum = 1000
         numButtons.Width = 60
-        numButtons.Location = Position + New Point(15, 20)
+        numButtons.Location = Position + New Point(0, 5)
         AddControl(numButtons)
 
     End Sub
 
     Public Overrides Sub Moving()
-        numButtons.Location = Rect.Location + New Point(15, 20)
+        numButtons.Location = Position + New Point(0, 5)
     End Sub
 
     Public Overrides Sub Dispose()

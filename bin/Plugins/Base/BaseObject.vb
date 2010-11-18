@@ -50,18 +50,33 @@ Public MustInherit Class BaseObject
 
     Public UserData As String = ""
 
+    Private ClientRect As Rectangle
+
 #Region "Setup & Dispose"
+
     ''' <summary>
     ''' Create rectangles. using the position and size.
+    ''' This should AllWays be called before creating inputs/outputs.
     ''' </summary>
     ''' <param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
-    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 30)
+    ''' <param name="Position">NOT client position.</param>
+    ''' <param name="Width">Client size</param>
+    ''' <param name="Height">Client size</param>
+    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 15)
         Me.UserData = UserData
         Name = MyClass.GetType.FullName 'Needed for every object that is created with the add menu.
         Index = Objects.Count 'Needed for every object!
 
+        Position = SnapToGrid(Position)
+        Width = SnapToGrid(Width)
+        Height = SnapToGrid(Height)
+
+        ClientRect = New Rectangle(Position + New Point(0, 15), New Size(Width, Height))
+
+        Height += 15
+
         'Create the main rectangle.
-        Rect = SnapToGrid(New Rectangle(Position, New Size(Width, Height)))
+        Rect = New Rectangle(Position, New Size(Width, Height))
 
         'Set the size of the title.  Used to drag the object around.
         TitleBar = New Rectangle(Rect.Location, New Size(Rect.Width, 15))
@@ -209,7 +224,7 @@ Public MustInherit Class BaseObject
         End If
         g.DrawString(Title, SystemFonts.DefaultFont, SystemBrushes.ActiveCaptionText, TitleRect) 'Draw the title string.
 
-
+        g.DrawRectangle(Pens.Yellow, ClientRect)
     End Sub
 
     ''' <summary>
@@ -232,17 +247,40 @@ Public MustInherit Class BaseObject
 
 #Region "Set Position and Size"
 
+    Friend ReadOnly Property Position As Point
+        Get
+            Return ClientRect.Location
+        End Get
+    End Property
+    Friend ReadOnly Property Size As Size
+        Get
+            Return ClientRect.Size
+        End Get
+    End Property
+
     ''' <summary>
     ''' Set the size of the object.
     ''' Will call Resizing.
     ''' </summary>
     ''' <param name="Width"></param>
     ''' <param name="Height"></param>
-    ''' <remarks></remarks>
-    Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer)
+    ''' <param name="IsClientSize"></param>
+    Public Sub SetSize(ByVal Width As Integer, ByVal Height As Integer, Optional ByVal IsClientSize As Boolean = False)
+        'Change from client size to normal size.
+        If IsClientSize Then
+            If Input IsNot Nothing Then Width += 15
+            If Output IsNot Nothing Then Width += 15
+            Height += 15
+        End If
+
         Rect.Size = SnapToGrid(New Size(Width, Height))
 
         BackGround.Size = SnapToGrid(New Size(Width, Height - 15))
+
+        Dim inp, out As Short
+        If Input IsNot Nothing Then inp = 15
+        If Output IsNot Nothing Then out = 15
+        ClientRect = New Rectangle(Rect.Location + New Point(inp, 15), New Size(Width - inp - out, Height - 15))
 
         TitleBar.Width = Rect.Width
         TitleRect = Nothing
@@ -259,12 +297,21 @@ Public MustInherit Class BaseObject
     ''' Sets the position of the object.
     ''' Will call Moving.
     ''' </summary>
-    Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer)
+    Public Sub SetPosition(ByVal x As Integer, ByVal y As Integer, Optional ByVal IsClientPosition As Boolean = False)
+        If IsClientPosition Then
+            If Input IsNot Nothing Then x -= 15
+            y -= 15
+        End If
+
         'Update the positions of the rectangles.
         Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
         TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
         TitleBar.Location = Rect.Location
         BackGround.Location = New Point(Rect.X, Rect.Y + 15)
+
+        Dim inp As Short
+        If Input IsNot Nothing Then inp = 15
+        ClientRect.Location = Rect.Location + New Point(inp, 15)
 
         'Tell everyone that wants to know that, we are moving!
         Moving()
@@ -276,6 +323,8 @@ Public MustInherit Class BaseObject
     ''' </summary>
     Public Overridable Sub Moving()
     End Sub
+
+
 #End Region
 
 #Region "Send & Receive"
@@ -309,7 +358,7 @@ Public MustInherit Class BaseObject
     ''' <summary>
     ''' Create inputs.
     ''' </summary>
-    ''' <param name="Names">array of strings. e.g. {"NameOfInput|Type1|Type2", "Input2"}</param>
+    ''' <param name="Names">array of strings. e.g. {"NameOfInput,Type1,Type2", "Input2"}</param>
     ''' <remarks></remarks>
     Protected Sub Inputs(ByVal Names As String())
         ReDim Input(Names.Length - 1)
@@ -317,26 +366,31 @@ Public MustInherit Class BaseObject
             Input(n) = New DataFlowBase(Index, n, Names(n))
         Next
 
+
+        Dim tmpHeight As Integer = Rect.Height
         'Set the height if the current height is smaller.
         If Rect.Height < 15 + (15 * Input.Length) Then
-            SetSize(Rect.Width, 15 + (15 * Input.Length))
+            tmpHeight = 15 + (15 * Input.Length)
         End If
+        SetSize(Rect.Width + 15, tmpHeight)
     End Sub
 
     ''' <summary>
     ''' Create outputs.
     ''' </summary>
-    ''' <param name="Names">array of strings. e.g. {"NameOfOutput|Type1|Type2", "Output2"}</param>
+    ''' <param name="Names">array of strings. e.g. {"NameOfOutput,Type1,Type2", "Output2"}</param>
     Protected Sub Outputs(ByVal Names As String())
         ReDim Output(Names.Length - 1)
         For n As Integer = 0 To Names.Length - 1
             Output(n) = New DataFlowBase(Index, n, Names(n), True)
         Next
 
+        Dim tmpHeight As Integer = Rect.Height
         'Set the height if the current height is smaller.
         If Rect.Height < 16 + (15 * Output.Length) Then
-            SetSize(Rect.Width, 16 + (15 * Output.Length))
+            tmpHeight=16 + (15 * Output.Length)
         End If
+        SetSize(Rect.Width + 15, tmpHeight)
     End Sub
 
     Public Intersection As Integer
