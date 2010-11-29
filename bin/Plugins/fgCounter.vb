@@ -8,8 +8,8 @@ Public Class fgCounter
 
     Private WithEvents btnReset As New Button
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 120, 60) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 105, 45) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Value,Number"})
@@ -24,7 +24,7 @@ Public Class fgCounter
 
 
         btnReset.Text = "Reset"
-        btnReset.Location = Position + New Point(15, 30)
+        btnReset.Location = Position + New Point(5, 15)
         AddControl(btnReset)
 
     End Sub
@@ -35,7 +35,7 @@ Public Class fgCounter
     End Sub
 
     Public Overrides Sub Moving()
-        btnReset.Location = Rect.Location + New Point(15, 30)
+        btnReset.Location = Position + New Point(5, 15)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)

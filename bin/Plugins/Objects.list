@@ -9,6 +9,7 @@
 'AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 'AddMenuObject|Counter,Plugins.fgCounter,60|Math
 'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
+'AddMenuObject|FPS,Plugins.fgFPS,60|Misc
 'AddMenuObject|Timer,Plugins.fgTimer|Math
 //AddMenuObject|Counter2,Plugins.fgCounter,60|Math
 'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input

@@ -85,7 +85,7 @@ Plugins
  Add a new object from the class name.
  </summary>
 	<param name="Name">ex: 'Plugins.fgAdd'</param>
-	<param name="Position">You shouldn't need help here.</param>
+	<param name="StartPosition">You shouldn't need help here.</param>
 	<returns>-1 if not found. other wise returns object index.</returns>
 	<remarks></remarks>
 </member><member name="M:Plugins.Plugins.SearchForItems(System.String,System.String@,System.Boolean)">
@@ -102,7 +102,7 @@ Plugins
  This should AllWays be called before creating inputs/outputs.
  </summary>
 	<param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
-	<param name="Position">NOT client position.</param>
+	<param name="StartPosition">NOT client position.</param>
 	<param name="Width">Client size</param>
 	<param name="Height">Client size</param>
 </member><member name="M:Plugins.BaseObject.Dispose">

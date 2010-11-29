@@ -7,8 +7,8 @@ Public Class fgGetKey
 
     Public WithEvents comKey As New ComboBox
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 160) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 120) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -20,7 +20,7 @@ Public Class fgGetKey
         Title = "Get key"
 
 
-        comKey.Location = Position + New Point(15, 20)
+        comKey.Location = Position + New Point(0, 5)
         comKey.Items.AddRange([Enum].GetNames(GetType(SlimDX.DirectInput.Key)))
         comKey.SelectedItem = SlimDX.DirectInput.Key.Pause.ToString
         comKey.DropDownStyle = ComboBoxStyle.DropDownList
@@ -30,7 +30,7 @@ Public Class fgGetKey
     End Sub
 
     Public Overrides Sub Moving()
-        comKey.Location = Rect.Location + New Point(15, 20)
+        comKey.Location = Position + New Point(0, 5)
     End Sub
 
     Public Overrides Sub Dispose()
@@ -107,8 +107,8 @@ Public Class fgKeyboard
 
     Public Enabled As Boolean = True
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 60) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 30) 'Setup the base rectangles.
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick"})
