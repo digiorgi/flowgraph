@@ -6,8 +6,8 @@ Public Class fgRawMouse
 
     Public Enabled As Boolean = True
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 60) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 40) 'Setup the base rectangles.
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick"})
@@ -81,8 +81,8 @@ Public Class fgLocalMouse
 
     Public Enabled As Boolean = True
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 65) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 40) 'Setup the base rectangles.
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick"})
@@ -142,8 +142,8 @@ Public Class fgGlobalMouse
 
     Public Enabled As Boolean = True
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 70) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 40) 'Setup the base rectangles.
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick"})

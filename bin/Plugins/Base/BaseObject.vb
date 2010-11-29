@@ -59,24 +59,24 @@ Public MustInherit Class BaseObject
     ''' This should AllWays be called before creating inputs/outputs.
     ''' </summary>
     ''' <param name="UserData">User data is not used by BaseObject, but it needs to be saved so the object will open right.</param>
-    ''' <param name="Position">NOT client position.</param>
+    ''' <param name="StartPosition">NOT client position.</param>
     ''' <param name="Width">Client size</param>
     ''' <param name="Height">Client size</param>
-    Protected Sub Setup(ByVal UserData As String, ByVal Position As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 15)
+    Protected Sub Setup(ByVal UserData As String, ByVal StartPosition As Point, ByVal Width As Integer, Optional ByVal Height As Integer = 15)
         Me.UserData = UserData
         Name = MyClass.GetType.FullName 'Needed for every object that is created with the add menu.
         Index = Objects.Count 'Needed for every object!
 
-        Position = SnapToGrid(Position)
+        StartPosition = SnapToGrid(StartPosition)
         Width = SnapToGrid(Width)
         Height = SnapToGrid(Height)
 
-        ClientRect = New Rectangle(Position + New Point(0, 15), New Size(Width, Height))
+        ClientRect = New Rectangle(StartPosition + New Point(0, 15), New Size(Width, Height))
 
         Height += 15
 
         'Create the main rectangle.
-        Rect = New Rectangle(Position, New Size(Width, Height))
+        Rect = New Rectangle(StartPosition, New Size(Width, Height))
 
         'Set the size of the title.  Used to drag the object around.
         TitleBar = New Rectangle(Rect.Location, New Size(Rect.Width, 15))

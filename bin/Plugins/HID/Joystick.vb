@@ -12,7 +12,7 @@ Public Class fgJoystick
     Public Joystick As SlimDX.DirectInput.Joystick
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 220) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 190) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -275,7 +275,7 @@ Public Class fgGetJoystickButtons
     Private WithEvents numButtons As New NumericUpDown
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 90, 35) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 60) 'Setup the base rectangles.
 
 
         'Create the inputs.

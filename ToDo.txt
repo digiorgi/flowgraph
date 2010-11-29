@@ -22,9 +22,6 @@ Step#3
 
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
-	Add the abllty to save a config file for objects. ****There may not really be a need for this****
-		e.g. Save the text of DisplayAsString so you could load it later.
-
 
 	Change the Dots(inputs, outputs) to arrows pointing the way.
 
@@ -46,7 +43,7 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 		Devide
 
 	Logic:
-		Equals	In(Object1,Object2)		Out(Equals|Boolean)
+		Equals	In(Object1,Object2)		Out(Equals,Boolean)
 		Numbers:
 			Greater Then
 			Less Than
@@ -67,10 +64,4 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 
 	MIDI:
-		Still need to figerout how channels are going to be handled.
-			I may just have a All check box then when unchecked you could set a channel?
-
-		Input device	In(Enabled, DeviceID)			Out(MidiMessage)
-		Output device	In(Enabled, DeviceID, MidiMessage)
 		Controller		In(Controller, InputHandler)	Out(MidiMessage)
-		AlterNote		In(MidiMessage, SustainInput, SostenutoInput, SoftInput) Out(MidiMessage)

@@ -5,8 +5,8 @@ Public Class fgTimer
     Private WithEvents tmr As New Timer
 
     Private WithEvents numInterval As New NumericUpDown
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 120) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 90) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Tick"})
@@ -20,7 +20,7 @@ Public Class fgTimer
         numInterval.Minimum = 0
         numInterval.Maximum = 1000000
         numInterval.Width = 85
-        numInterval.Location = Position + New Point(15, 20)
+        numInterval.Location = Position + New Point(0, 5)
         AddControl(numInterval)
 
 
@@ -39,7 +39,7 @@ Public Class fgTimer
     End Sub
 
     Public Overrides Sub Moving()
-        numInterval.Location = Rect.Location + New Point(15, 20)
+        numInterval.Location = Position + New Point(0, 5)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)

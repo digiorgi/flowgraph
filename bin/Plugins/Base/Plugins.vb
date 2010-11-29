@@ -285,14 +285,14 @@ Public Module Plugins
     ''' Add a new object from the class name.
     ''' </summary>
     ''' <param name="Name">ex: 'Plugins.fgAdd'</param>
-    ''' <param name="Position">You shouldn't need help here.</param>
+    ''' <param name="StartPosition">You shouldn't need help here.</param>
     ''' <returns>-1 if not found. other wise returns object index.</returns>
     ''' <remarks></remarks>
-    Public Function AddObject(ByVal Name As String, ByVal Position As Point, Optional ByVal UserData As String = "") As Integer
+    Public Function AddObject(ByVal Name As String, ByVal StartPosition As Point, Optional ByVal UserData As String = "") As Integer
         'NOTE: I am pretty sure there is a faster way to do this.
         'But I got this working first, so until it is a problem it will stay like this.
         Try
-            Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {Position, UserData}))
+            Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {StartPosition, UserData}))
             Return Objects.Count - 1
         Catch ex As Exception
             'MsgBox("Could not create object: " & Name)

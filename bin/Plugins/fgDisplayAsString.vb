@@ -2,8 +2,8 @@
 Public Class fgDisplayAsString
     Inherits BaseObject
 
-    Public Sub New(ByVal Position As Point, ByVal UserData As String)
-        Setup(UserData, Position, 120) 'Setup the base rectangles.
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -68,7 +68,7 @@ Public Class fgDisplayAsString
 
 
         'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 15)
+        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Position)
     End Sub
 
 End Class

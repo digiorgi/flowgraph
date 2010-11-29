@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=10;
+	Objects=11;
 	FileVersion=0.5;
 }
 Object0{
@@ -92,10 +92,15 @@ Object9{
 }
 Object10{
 	Name=Plugins.MIDI_AxisToController;
-	Position=490,125;
+	Position=435,155;
 	Output=1,2,1;
 	Input=0,1;
 	Enabled=True;
 	Controller=64;
 	Channel=1;
+}
+Object11{
+	Name=Plugins.fgFPS;
+	Position=580,5;
+	Input=0;
 }
