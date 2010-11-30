@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=11;
+	Objects=12;
 	FileVersion=0.5;
 }
 Object0{
@@ -16,7 +16,7 @@ Object0{
 Object1{
 	Name=Plugins.MIDI_Input;
 	Position=5,290;
-	Output=1,6,1`0`0`0;
+	Output=2,6,1,12,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
 	DeviceID=2;
@@ -25,7 +25,7 @@ Object1{
 }
 Object2{
 	Name=Plugins.MIDI_Output;
-	Position=650,260;
+	Position=680,225;
 	Input=0,2,0,0,0;
 	Enabled=True;
 	DeviceID=0;
@@ -63,7 +63,7 @@ Object5{
 }
 Object6{
 	Name=Plugins.MIDI_SimulatePedals;
-	Position=470,275;
+	Position=480,240;
 	Output=1,2,1;
 	Input=0,1,1,1,0;
 	Enabled=True;
@@ -103,4 +103,15 @@ Object11{
 	Name=Plugins.fgFPS;
 	Position=580,5;
 	Input=0;
+}
+Object12{
+	Name=Plugins.MIDI_Keyboard;
+	Position=260,335;
+	UserData=61-40;
+	Output=0;
+	Input=0,1;
+	Enabled=True;
+	RemoveOldNotes=True;
+	FilterOtherChannels=False;
+	Channel=1;
 }
