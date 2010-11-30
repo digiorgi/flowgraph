@@ -16,7 +16,7 @@ Object0{
 Object1{
 	Name=Plugins.MIDI_Input;
 	Position=5,290;
-	Output=2,6,1,12,1`0`0`0;
+	Output=1,6,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
 	DeviceID=2;
@@ -64,7 +64,7 @@ Object5{
 Object6{
 	Name=Plugins.MIDI_SimulatePedals;
 	Position=480,240;
-	Output=1,2,1;
+	Output=2,2,1,12,1;
 	Input=0,1,1,1,0;
 	Enabled=True;
 	RemoveOldNotes=True;
