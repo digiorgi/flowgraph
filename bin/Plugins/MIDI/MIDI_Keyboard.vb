@@ -24,7 +24,7 @@ Public Class MIDI_Keyboard
             NumKeys = 12
             Offset = 64
         End Try
-        Width = NumKeys * 10
+        Width = NumKeys * 5.9
 
         Setup(UserData, StartPosition, Width, 115) 'Setup the base rectangles.
 
@@ -81,29 +81,110 @@ Public Class MIDI_Keyboard
 
         g.FillRectangle(Brushes.White, Position.X, Position.Y + 60, Width, 50)
 
-        Dim OctavePos As Byte = SetBounds(Offset, 0, 11) + 4
+        Dim OctavePos As Byte = SetBounds(Offset + 4, 0, 11) '+ 4
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 60
+        Dim p As Integer = -1
 
-        For i As Integer = 0 To NumKeys - 1
+        For n As Integer = 0 To NumKeys - 1
             OctavePos += 1
             If OctavePos = 12 Then OctavePos = 0
+            Select Case OctavePos
+                Case 0, 2, 4, 5, 7, 9, 11
+                    p += 1
+            End Select
 
             Select Case OctavePos
-
-                Case 0, 2, 4, 5, 7, 9, 11
-                    If Note(Offset + i - 4) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * i), y + 20, 10, 30)
+                Case 0 'C
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y, 6, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
                     End If
 
-                Case 1, 3, 6, 8, 10
+                Case 1 'C#
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 6, y, 6, 25)
+                    Else
+                        g.FillRectangle(Brushes.Black, x + (10 * p) + 6, y, 6, 25)
+                    End If
 
-                    Dim b As Brush = Brushes.Black
-                    If Note(Offset + i - 4) = True Then b = Brushes.Green
-                    g.FillRectangle(b, x + (10 * i), y, 7, 20)
+                Case 2 'D
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+                Case 3 'D#
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
+                    Else
+                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
+                    End If
+
+                Case 4 'E
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p) + 3, y, 7, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+                Case 5 'F
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y, 6, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+                Case 6 'F#
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 6, y, 6, 25)
+                    Else
+                        g.FillRectangle(Brushes.Black, x + (10 * p) + 6, y, 6, 25)
+                    End If
+
+                Case 7 'G
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+                Case 8 'G#
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
+                    Else
+                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
+                    End If
+
+                Case 9 'A
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+                Case 10 'A#
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
+                    Else
+                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
+                    End If
+
+                Case 11 'B
+                    If Note(Offset + n - 4) Then
+                        g.FillRectangle(Brushes.Green, x + (10 * p) + 3, y, 7, 25)
+                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    End If
+
+
+                    'Case 0, 2, 4, 5, 7, 9, 11
+                    '    If Note(Offset + i - 4) Then
+                    '        g.FillRectangle(Brushes.Green, x + (10 * i), y + 20, 10, 30)
+                    '    End If
+
+                    'Case 1, 3, 6, 8, 10
+
+                    '    Dim b As Brush = Brushes.Black
+                    '    If Note(Offset + i - 4) = True Then b = Brushes.Green
+                    '    g.FillRectangle(b, x + (10 * i), y, 7, 20)
 
             End Select
-            'g.FillRectangle(Brushes.White
         Next
 
     End Sub
@@ -175,6 +256,214 @@ Public Class MIDI_Keyboard
 
         Return g
     End Function
+
+    Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
+        'Is the mouse over the keyboard?
+        Dim x As Integer = Position.X
+        Dim y As Integer = Position.Y + 60
+        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
+            Dim OctavePos As Byte = SetBounds(Offset + 4, 0, 11) '+ 4
+            Dim p As Integer = -1
+
+            For n As Integer = 0 To NumKeys - 1
+                OctavePos += 1
+                If OctavePos = 12 Then OctavePos = 0
+                Select Case OctavePos
+                    Case 0, 2, 4, 5, 7, 9, 11
+                        p += 1
+                End Select
+
+                Select Case OctavePos
+                    Case 0 'C
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 1 'C#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+
+                    Case 2 'D
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 3 'D#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 4 'E
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 5 'F
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 6 'F#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
+                            PressNote(Offset + n - 4)
+                        End If
+
+                    Case 7 'G
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 8 'G#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 9 'A
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 10 'A#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 11 'B
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            PressNote(Offset + n - 4)
+                            Return
+                        End If
+
+
+                End Select
+            Next
+
+            Return
+        End If
+        MyBase.MouseDown(e)
+    End Sub
+    Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
+        'Is the mouse over the keyboard?
+        Dim x As Integer = Position.X
+        Dim y As Integer = Position.Y + 60
+        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
+            Dim OctavePos As Byte = SetBounds(Offset + 4, 0, 11) '+ 4
+            Dim p As Integer = -1
+
+            For n As Integer = 0 To NumKeys - 1
+                OctavePos += 1
+                If OctavePos = 12 Then OctavePos = 0
+                Select Case OctavePos
+                    Case 0, 2, 4, 5, 7, 9, 11
+                        p += 1
+                End Select
+
+                Select Case OctavePos
+                    Case 0 'C
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 1 'C#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+
+                    Case 2 'D
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 3 'D#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 4 'E
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 5 'F
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 6 'F#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                        End If
+
+                    Case 7 'G
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 8 'G#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 9 'A
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 10 'A#
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+                    Case 11 'B
+                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
+                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
+                            ReleaseNote(Offset + n - 4)
+                            Return
+                        End If
+
+
+                End Select
+            Next
+            Return
+        End If
+        MyBase.MouseUp(e)
+    End Sub
 #End Region
 
 #Region "Misc stuff"
@@ -192,15 +481,17 @@ Public Class MIDI_Keyboard
         tmp.Data2 = 0
         Note(ID) = False
         Send(tmp)
+        DoDraw(True)
     End Sub
 
     Private Sub PressNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
         tmp.Data1 = ID
-        tmp.Data2 = 128
+        tmp.Data2 = 127
         Note(ID) = True
         Send(tmp)
+        DoDraw(True)
     End Sub
 
     ''' <summary>
