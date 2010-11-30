@@ -23,6 +23,8 @@
 'AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
 'AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
 'AddMenuObject|Input,Plugins.MIDI_Input|MIDI
-'AddMenuObject|Keyboard 61keys,Plugins.MIDI_Keyboard,120,61-40|MIDI
+'AddMenuObject|Keyboard 128keys,Plugins.MIDI_Keyboard,120,128-0-0-11|MIDI
+'AddMenuObject|Keyboard 88keys,Plugins.MIDI_Keyboard,120,88-26-5-4|MIDI
+'AddMenuObject|Keyboard 61keys,Plugins.MIDI_Keyboard,120,61-40-4-4|MIDI
 'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
