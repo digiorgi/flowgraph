@@ -65,3 +65,4 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 	MIDI:
 		Controller		In(Controller, InputHandler)	Out(MidiMessage)
+		Keyboard Needs colored channels.
