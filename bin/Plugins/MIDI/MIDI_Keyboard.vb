@@ -1,6 +1,7 @@
-﻿'AddMenuObject|Keyboard 128keys,Plugins.MIDI_Keyboard,120,128-0-0-11|MIDI
-'AddMenuObject|Keyboard 88keys,Plugins.MIDI_Keyboard,120,88-26-5-4|MIDI
-'AddMenuObject|Keyboard 61keys,Plugins.MIDI_Keyboard,120,61-40-4-4|MIDI
+﻿'AddMenuObject|Keyboard 128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI
+'AddMenuObject|Keyboard 88keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI
+'AddMenuObject|Keyboard 61keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI
+'AddMenuObject|Keyboard 24keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI
 
 Public Class MIDI_Keyboard
     Inherits BaseObject
@@ -12,7 +13,7 @@ Public Class MIDI_Keyboard
     Private chkFilterOtherChannels As New CheckBox
 
     Private NumKeys As Byte
-    Private Offset, Offset2, OctaveOffset As Byte
+    Private Offset, OctaveOffset As Byte
     Private Width As Integer
 
 #Region "Object stuff"
@@ -21,13 +22,11 @@ Public Class MIDI_Keyboard
             Dim data() As String = Split(UserData, "-")
             NumKeys = data(0)
             Offset = data(1)
-            Offset2 = data(2)
-            OctaveOffset = data(3)
+            OctaveOffset = data(2)
         Catch ex As Exception
             NumKeys = 24
-            Offset = 62
-            Offset2 = 2
-            OctaveOffset = 4
+            Offset = 60
+            OctaveOffset = 0
         End Try
         Width = NumKeys * 5.9
 
@@ -56,6 +55,7 @@ Public Class MIDI_Keyboard
         numChannel.Location = Position + New Point(55, 0)
         AddControl(numChannel)
 
+        ReDim Note(NumKeys - 1)
         For i As Integer = 0 To Note.Length - 1
             Note(i) = New NoteT
         Next
@@ -81,10 +81,10 @@ Public Class MIDI_Keyboard
 
         g.FillRectangle(Brushes.White, Position.X, Position.Y + 40, Width, 50)
 
-        Dim OctavePos As Byte = SetBounds(Offset + OctaveOffset, 0, 11) '+ 4
+        Dim OctavePos As SByte = OctaveOffset - 1
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
-        Dim p As Integer = -1
+        Dim p As SByte = -1
 
         For n As Integer = 0 To NumKeys - 1
             OctavePos += 1
@@ -94,7 +94,7 @@ Public Class MIDI_Keyboard
                     p += 1
             End Select
 
-            Dim Note As NoteT = Me.Note(Offset + n - Offset2)
+            Dim Note As NoteT = Me.Note(n)
             Dim brush As Brush = Brushes.Black
             If Not chkFilterOtherChannels.Checked Then
                 If Note.Channel(0) Then
@@ -220,6 +220,8 @@ Public Class MIDI_Keyboard
                     message = Data
                 End If
 
+               
+
                 Dim NoteOn As Boolean = False
 
                 'Is it a note (on or off)?
@@ -237,18 +239,25 @@ Public Class MIDI_Keyboard
                 ElseIf message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller And _
                     (message.Data1 = Sanford.Multimedia.Midi.ControllerType.AllSoundOff Or message.Data1 = Sanford.Multimedia.Midi.ControllerType.AllNotesOff) Then
                     ResetNotes()
+                    GoTo Send
                 End If
 
-                'Is the note on? (volume more then 0)
-                If NoteOn Then
-                    'Note(message.Data1) = True
-                    Note(message.Data1).Press(message.MidiChannel)
-                Else
-                    'Note(message.Data1) = False
-                    Note(message.Data1).Release(message.MidiChannel)
+                'Check to see if the note is within the keyboard size.
+                If message.Data1 >= Offset And message.Data1 + 1 <= Offset + NumKeys Then
+                    'Is the note on? (volume more then 0)
+                    If NoteOn Then
+                        'Note(message.Data1) = True
+                        Note(message.Data1 - Offset).Press(message.MidiChannel)
+                    Else
+                        'Note(message.Data1) = False
+                        Note(message.Data1 - Offset).Release(message.MidiChannel)
+                    End If
                 End If
 
 
+
+
+Send:
                 Send(message)
                 DoDraw(True)
         End Select
@@ -279,8 +288,8 @@ Public Class MIDI_Keyboard
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
         If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
-            Dim OctavePos As Byte = SetBounds(Offset + OctaveOffset, 0, 11) '+ 4
-            Dim p As Integer = -1
+            Dim OctavePos As SByte = OctaveOffset - 1
+            Dim p As SByte = -1
 
             For n As Integer = 0 To NumKeys - 1
                 OctavePos += 1
@@ -291,16 +300,16 @@ Public Class MIDI_Keyboard
                 End Select
 
                 Select Case OctavePos
-                    Case 0 'C
+                    Case 0, 5 'C & F
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
-                    Case 1 'C#
+                    Case 1, 6 'C# & F#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
@@ -308,65 +317,40 @@ Public Class MIDI_Keyboard
                     Case 2 'D
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
-                    Case 3 'D#
+                    Case 3, 10 'D# & A#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
-                    Case 4 'E
+                    Case 4, 11 'E & B
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
-                        End If
-
-                    Case 5 'F
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 6 'F#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            PressNote(Offset + n - Offset2)
                         End If
 
                     Case 7 'G
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
                     Case 8 'G#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
                     Case 9 'A
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 10 'A#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            PressNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 11 'B
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(Offset + n - Offset2)
+                            PressNote(n)
                             Return
                         End If
 
@@ -383,8 +367,8 @@ Public Class MIDI_Keyboard
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
         If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
-            Dim OctavePos As Byte = SetBounds(Offset + OctaveOffset, 0, 11) '+ 4
-            Dim p As Integer = -1
+            Dim OctavePos As SByte = OctaveOffset - 1
+            Dim p As SByte = -1
 
             For n As Integer = 0 To NumKeys - 1
                 OctavePos += 1
@@ -395,16 +379,16 @@ Public Class MIDI_Keyboard
                 End Select
 
                 Select Case OctavePos
-                    Case 0 'C
+                    Case 0, 5 'C & F
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n) '(Offset + n - Offset2)
                             Return
                         End If
 
-                    Case 1 'C#
+                    Case 1, 6 'C# & F#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
@@ -412,65 +396,40 @@ Public Class MIDI_Keyboard
                     Case 2 'D
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
-                    Case 3 'D#
+                    Case 3, 10 'D# & A#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
-                    Case 4 'E
+                    Case 4, 11 'E & B
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
-                        End If
-
-                    Case 5 'F
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 6 'F#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
                         End If
 
                     Case 7 'G
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
                     Case 8 'G#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
                     Case 9 'A
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 10 'A#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
-                            Return
-                        End If
-
-                    Case 11 'B
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
@@ -484,7 +443,7 @@ Public Class MIDI_Keyboard
 #End Region
 
 #Region "Misc stuff"
-    Private Note(127) As NoteT
+    Private Note() As NoteT
 
     Private Class NoteT
         Public Channel(15) As Boolean
@@ -525,7 +484,7 @@ Public Class MIDI_Keyboard
     Private Sub ReleaseNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
-        tmp.Data1 = ID
+        tmp.Data1 = ID + Offset
         tmp.Data2 = 0
         Note(ID).Release(tmp.MidiChannel)
         Send(tmp)
@@ -535,28 +494,12 @@ Public Class MIDI_Keyboard
     Private Sub PressNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
-        tmp.Data1 = ID
+        tmp.Data1 = ID + Offset
         tmp.Data2 = 127
         Note(ID).Press(tmp.MidiChannel)
         Send(tmp)
         DoDraw(True)
     End Sub
-
-    ''' <summary>
-    ''' This will wrap a number around so it is in the boundaries.
-    ''' v1 changed to byte and removed max trys.
-    ''' </summary>
-    Public Function SetBounds(ByVal value As Byte, ByVal Min As Byte, ByVal Max As Byte) As Single
-Restart:
-        If value < Min Then
-            value = Max + (value - Min)
-            GoTo Restart
-        ElseIf value > Max Then
-            value = Min + (value - Max)
-            GoTo Restart
-        End If
-        Return value
-    End Function
 #End Region
 
 End Class
