@@ -1,7 +1,7 @@
-﻿'AddMenuObject|Keyboard 128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI
-'AddMenuObject|Keyboard 88keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI
-'AddMenuObject|Keyboard 61keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI
-'AddMenuObject|Keyboard 24keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI
+﻿'AddMenuObject|128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI,Keyboards
+'AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
+'AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
+'AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
 
 Public Class MIDI_Keyboard
     Inherits BaseObject
@@ -287,7 +287,7 @@ Send:
         'Is the mouse over the keyboard?
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
-        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
+        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) And Enabled Then
             Dim OctavePos As SByte = OctaveOffset - 1
             Dim p As SByte = -1
 
@@ -366,7 +366,7 @@ Send:
         'Is the mouse over the keyboard?
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
-        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) Then
+        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) And Enabled Then
             Dim OctavePos As SByte = OctaveOffset - 1
             Dim p As SByte = -1
 

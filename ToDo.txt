@@ -2,7 +2,9 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-	
+	Not a full bug but it should be fixed. At somepoint.
+		Menu currently draws when ever you move the mouse. Even if nothing changed.
+		Tooltip calls the draw when I don't think it needs to be.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
@@ -19,6 +21,7 @@ Step#2
 		Im thinking of just having a libary named csPlugins.dll
 
 Step#3
+	Sort menu items by name.
 
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
@@ -64,7 +67,9 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 
 	MIDI:
-		Controller		In(Controller, InputHandler)	Out(MidiMessage)
+		GetController
+		GetNote
+		Debug	Like Pedals debug.
 		Input:
 			Add a checkbox to 'fix' controller events. (Mainly note On and Off.)
 
