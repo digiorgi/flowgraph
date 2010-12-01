@@ -56,7 +56,9 @@ Public Class MIDI_Keyboard
         numChannel.Location = Position + New Point(55, 0)
         AddControl(numChannel)
 
-
+        For i As Integer = 0 To 127
+            Note(i) = New NoteT
+        Next
     End Sub
 
     Public Overrides Sub Dispose()
@@ -92,82 +94,68 @@ Public Class MIDI_Keyboard
                     p += 1
             End Select
 
+
+            Dim brush As Brush = Brushes.Black
+            If Note(Offset + n - Offset2).Pressed Then
+                brush = Note(Offset + n - Offset2).GetBrush
+            End If
+
             Select Case OctavePos
                 Case 0 'C
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y, 6, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p), y, 6, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 1 'C#
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 6, y, 6, 25)
-                    Else
-                        g.FillRectangle(Brushes.Black, x + (10 * p) + 6, y, 6, 25)
-                    End If
+                    g.FillRectangle(brush, x + (10 * p) + 6, y, 6, 25)
 
                 Case 2 'D
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 3 'D#
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
-                    Else
-                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
-                    End If
+                    g.FillRectangle(brush, x + (10 * p) + 7, y, 6, 25)
 
                 Case 4 'E
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p) + 3, y, 7, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p) + 3, y, 7, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 5 'F
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y, 6, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p), y, 6, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 6 'F#
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 6, y, 6, 25)
-                    Else
-                        g.FillRectangle(Brushes.Black, x + (10 * p) + 6, y, 6, 25)
-                    End If
+                    g.FillRectangle(brush, x + (10 * p) + 6, y, 6, 25)
 
                 Case 7 'G
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 8 'G#
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
-                    Else
-                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
-                    End If
+                    g.FillRectangle(brush, x + (10 * p) + 7, y, 6, 25)
 
                 Case 9 'A
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p) + 2, y, 5, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p) + 2, y, 5, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
                 Case 10 'A#
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.DarkGreen, x + (10 * p) + 7, y, 6, 25)
-                    Else
-                        g.FillRectangle(Brushes.Black, x + (10 * p) + 7, y, 6, 25)
-                    End If
+                    g.FillRectangle(brush, x + (10 * p) + 7, y, 6, 25)
 
                 Case 11 'B
-                    If Note(Offset + n - Offset2) Then
-                        g.FillRectangle(Brushes.Green, x + (10 * p) + 3, y, 7, 25)
-                        g.FillRectangle(Brushes.Green, x + (10 * p), y + 25, 10, 25)
+                    If brush IsNot Brushes.Black Then
+                        g.FillRectangle(brush, x + (10 * p) + 3, y, 7, 25)
+                        g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
 
 
@@ -197,14 +185,14 @@ Public Class MIDI_Keyboard
 
             Case 1 'ChannelMessage
                 If Not Enabled Then Return
-                If Data.MidiChannel <> numChannel.Value - 1 Then
-                    If chkFilterOtherChannels.Checked Then
-                        Return
-                    Else
-                        Send(Data)
-                        Return
-                    End If
-                End If
+                'If Data.MidiChannel <> numChannel.Value - 1 Then
+                '    If chkFilterOtherChannels.Checked Then
+                '        Return
+                '    Else
+                '        Send(Data)
+                '        Return
+                '    End If
+                'End If
 
                 Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
                 If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
@@ -213,23 +201,37 @@ Public Class MIDI_Keyboard
                     message = Data
                 End If
 
-
+                Dim NoteOn As Boolean = False
 
                 'Is it a note (on or off)?
-                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn Or _
-                    message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff) Then
-
-                    'Is the note on? (volume more then 0)
+                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
-                        Note(message.Data1) = True
+                        NoteOn = True
                     Else
-                        Note(message.Data1) = False
+                        NoteOn = False
                     End If
-                    DoDraw(True)
 
+                ElseIf message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff Then
+                    NoteOn = False
+
+
+                ElseIf message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller And _
+                    (message.Data1 = Sanford.Multimedia.Midi.ControllerType.AllSoundOff Or message.Data1 = Sanford.Multimedia.Midi.ControllerType.AllNotesOff) Then
+                    ResetNotes()
                 End If
 
+                'Is the note on? (volume more then 0)
+                If NoteOn Then
+                    'Note(message.Data1) = True
+                    Note(message.Data1).Press(message.MidiChannel)
+                Else
+                    'Note(message.Data1) = False
+                    Note(message.Data1).Release(message.MidiChannel)
+                End If
+
+
                 Send(message)
+                DoDraw(True)
         End Select
     End Sub
 
@@ -463,7 +465,78 @@ Public Class MIDI_Keyboard
 #End Region
 
 #Region "Misc stuff"
-    Private Note(127) As Boolean
+    Private Note(127) As NoteT
+
+    Private Class NoteT
+        Public Channel(15) As Boolean
+
+        Public Function Pressed() As Boolean
+            For Each ch As Boolean In Channel
+                If ch Then Return True
+            Next
+            Return False
+        End Function
+
+        Public Sub Press(ByVal Channel As Byte)
+            Me.Channel(Channel) = True
+        End Sub
+        Public Sub Release(ByVal Channel As Byte)
+            Me.Channel(Channel) = False
+        End Sub
+        Public Sub Reset()
+            For i As Integer = 0 To 15
+                Channel(i) = False
+            Next
+        End Sub
+
+        Public Function GetBrush() As Brush
+            Dim c As Color
+            If Channel(0) Then
+                c = Color.Aqua
+            ElseIf Channel(1) Then
+                c = Color.Blue
+            ElseIf Channel(2) Then
+                c = Color.Green
+            ElseIf Channel(3) Then
+                c = Color.Red
+            ElseIf Channel(4) Then
+                c = Color.Purple
+            ElseIf Channel(5) Then
+                c = Color.Brown
+            ElseIf Channel(6) Then
+                c = Color.Gray
+            ElseIf Channel(7) Then
+                c = Color.Orange
+            ElseIf Channel(8) Then
+                c = Color.Teal
+            ElseIf Channel(9) Then
+                c = Color.Yellow
+            ElseIf Channel(10) Then
+                c = Color.BlueViolet
+            ElseIf Channel(11) Then
+                c = Color.LawnGreen
+            ElseIf Channel(12) Then
+                c = Color.Pink
+            ElseIf Channel(13) Then
+                c = Color.Tan
+            ElseIf Channel(14) Then
+                c = Color.DarkGreen
+            ElseIf Channel(15) Then
+                c = Color.Coral
+            End If
+            Return New SolidBrush(c)
+        End Function
+
+        
+
+    End Class
+
+    Private Sub ResetNotes()
+        For i As Integer = 0 To 127
+            Note(i).Reset()
+        Next
+        DoDraw(True)
+    End Sub
 
     ''' <summary>
     ''' Release note at ID
@@ -475,7 +548,7 @@ Public Class MIDI_Keyboard
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
         tmp.Data1 = ID
         tmp.Data2 = 0
-        Note(ID) = False
+        Note(ID).Release(tmp.MidiChannel)
         Send(tmp)
         DoDraw(True)
     End Sub
@@ -485,7 +558,7 @@ Public Class MIDI_Keyboard
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
         tmp.Data1 = ID
         tmp.Data2 = 127
-        Note(ID) = True
+        Note(ID).Press(tmp.MidiChannel)
         Send(tmp)
         DoDraw(True)
     End Sub

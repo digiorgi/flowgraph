@@ -19,7 +19,7 @@ Object1{
 	Output=1,6,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
-	DeviceID=0;
+	DeviceID=2;
 	AllChannels=True;
 	Channel=1;
 }
