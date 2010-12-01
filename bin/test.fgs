@@ -1,8 +1,8 @@
 //Version=0.985 FileVersion=1\\
 Main{
-	Width=1160;
-	Height=570;
-	Objects=13;
+	Width=910;
+	Height=485;
+	Objects=12;
 	FileVersion=0.5;
 }
 Object0{
@@ -64,7 +64,7 @@ Object5{
 Object6{
 	Name=Plugins.MIDI_SimulatePedals;
 	Position=480,240;
-	Output=1,13,1;
+	Output=1,12,1;
 	Input=0,1,1,1,0;
 	Enabled=True;
 	RemoveOldNotes=True;
@@ -106,18 +106,8 @@ Object11{
 }
 Object12{
 	Name=Plugins.MIDI_Keyboard;
-	Position=260,335;
-	UserData=61-40-4-4;
-	Output=0;
-	Input=0,0;
-	Enabled=True;
-	FilterOtherChannels=False;
-	Channel=1;
-}
-Object13{
-	Name=Plugins.MIDI_Keyboard;
-	Position=260,450;
-	UserData=128-0-0-11;
+	Position=115,370;
+	UserData=88-21-9;
 	Output=1,2,1;
 	Input=0,1;
 	Enabled=True;

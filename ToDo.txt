@@ -70,4 +70,3 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 		Keyboard:
 			Add a check box to disable other channel colors.
-			Make the Note size to the number of notes. (So we are not always holding 128 nots when we are only using 61.)

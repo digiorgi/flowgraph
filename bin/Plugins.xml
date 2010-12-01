@@ -102,11 +102,6 @@ Plugins
  </summary>
 	<param name="ID"></param>
 	<remarks></remarks>
-</member><member name="M:Plugins.MIDI_Keyboard.SetBounds(System.Byte,System.Byte,System.Byte)">
-	<summary>
- This will wrap a number around so it is in the boundaries.
- v1 changed to byte and removed max trys.
- </summary>
 </member><member name="M:Plugins.BaseObject.Setup(System.String,System.Drawing.Point,System.Int32,System.Int32)">
 	<summary>
  Create rectangles. using the position and size.
