@@ -2,9 +2,6 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-	Not a full bug but it should be fixed. At somepoint.
-		Menu currently draws when ever you move the mouse. Even if nothing changed.
-		Tooltip calls the draw when I don't think it needs to be.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 

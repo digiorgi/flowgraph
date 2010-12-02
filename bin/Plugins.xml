@@ -262,6 +262,10 @@ Plugins
  </summary>
 	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
 	<param name="Item">The item for the menu to use.</param>
+</member><member name="M:Plugins.Menu.Menu_MouseMove">
+	<summary>
+ Returns false if noting changed.
+ </summary>
 </member><member name="M:Plugins.Menu.AddNode(Plugins.Menu.MenuNode,System.String[],System.String[])">
 	<summary>
  Add a menu node to a node list.
