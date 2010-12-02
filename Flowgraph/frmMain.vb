@@ -237,29 +237,33 @@ Public Class frmMain
     Private Sub frmMain_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseMove
         Mouse.Location = e.Location
 
+
+        '###Tooltip
         'Reset tooltip text to noting.
-        If Not ToolTipText = "" Then
-            ToolTipText = ""
-            DoDraw()
-        End If
+        ToolTipText = ""
 
         'Check it see if the mouse is hovering over a input or a output.
         For i As Integer = Objects.Count - 1 To 0 Step -1 'Loop through each object until we found a input/output or we made it through them all.
             If Objects(i).IntersectsWithInput(Mouse) Then 'Check input.
                 ToolTipText = Objects(i).Input(Objects(i).Intersection).ToString
-
-                'DoDraw()
                 Exit For
             ElseIf Objects(i).IntersectsWithOutput(Mouse) Then 'Check output.
                 ToolTipText = Objects(i).Output(Objects(i).Intersection).ToString
-
-                'DoDraw()
                 Exit For
             End If
         Next
+        'If there is tooltip text to display then display it.
+        If Not ToolTipText = "" Then
+            If lblToolTip.Text <> ToolTipText Or lblToolTip.Visible = False Then
+                lblToolTip.Text = ToolTipText
+                lblToolTip.Location = Mouse.Location + New Point(10, 17)
+                lblToolTip.Visible = True
+            End If
+        Else 'Other wise we disable the tooltib label.
+            lblToolTip.Visible = False
+        End If
 
-
-
+        '###End Tooltip
 
         Select Case Tool
             Case ToolType.None
@@ -272,11 +276,10 @@ Public Class frmMain
                 Next
 
             Case ToolType.Menu
-                DoDraw(True)
+                If Menu_MouseMove() Then DoDraw(True)
 
             Case ToolType.Move
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
-
                 DoDraw(True)
 
             Case ToolType.Connect
@@ -311,23 +314,6 @@ Public Class frmMain
                 Menu_Draw(e.Graphics)
 
         End Select
-
-        'If there is tooltip text to draw then draw it.
-        If Not ToolTipText = "" Then
-            'Dim s As SizeF = e.Graphics.MeasureString(ToolTipText, DefaultFont)
-            'e.Graphics.FillRectangle(SystemBrushes.Info, Mouse.X + 10, Mouse.Y + 17, s.Width + 2, s.Height + 2)
-            'e.Graphics.DrawString(ToolTipText, DefaultFont, SystemBrushes.InfoText, Mouse.X + 11, Mouse.Y + 18)
-
-            If lblToolTip.Text <> ToolTipText Or lblToolTip.Visible = False Then
-                lblToolTip.Text = ToolTipText
-                lblToolTip.Location = Mouse.Location + New Point(10, 17)
-                lblToolTip.Visible = True
-            End If
-        Else
-            lblToolTip.Visible = False
-        End If
-
-
     End Sub
 
 #Region "Open Save SaveAs buttons"

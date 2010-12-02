@@ -177,6 +177,29 @@ Public Module Menu
         Return New MenuNode(MenuResult.Closed)
     End Function
 
+
+    Private LastSelected As Integer
+    ''' <summary>
+    ''' Returns false if noting changed.
+    ''' </summary>
+    Public Function Menu_MouseMove() As Boolean
+        If Not Mouse.IntersectsWith(Rect) Then
+            If LastSelected > -1 Then
+                LastSelected = -1
+                Return True
+            Else
+                Return False
+            End If
+        End If
+        For n As Integer = 1 To Item.Children.Count
+            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) And n <> LastSelected Then
+                LastSelected = n
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
     Public Sub Menu_Draw(ByVal g As Graphics)
         'Resize the title rectangle if needed.
         If TitleRect.Size = Nothing Then
@@ -187,7 +210,7 @@ Public Module Menu
             TitleRect.Location = New PointF(Rect.X + (Rect.Width * 0.5) - (TitleRect.Width * 0.5), Rect.Y - 1)
         End If
 
-        'Draw the back ground.
+        'Draw the background.
         g.FillRectangle(SystemBrushes.Menu, Rect)
 
         'Draw deviding line betwen the title and the items.
