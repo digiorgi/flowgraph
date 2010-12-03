@@ -38,7 +38,6 @@ Public Class MIDI_Keyboard
         Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
 
-
         'Set the title.
         Title = "MIDI Keyboard"
 
@@ -207,9 +206,6 @@ Public Class MIDI_Keyboard
                 If Data.MidiChannel <> numChannel.Value - 1 Then
                     If chkFilterOtherChannels.Checked Then
                         Return
-                        'Else
-                        'Send(Data)
-                        'Return
                     End If
                 End If
 
@@ -246,10 +242,8 @@ Public Class MIDI_Keyboard
                 If message.Data1 >= Offset And message.Data1 + 1 <= Offset + NumKeys Then
                     'Is the note on? (volume more then 0)
                     If NoteOn Then
-                        'Note(message.Data1) = True
                         Note(message.Data1 - Offset).Press(message.MidiChannel)
                     Else
-                        'Note(message.Data1) = False
                         Note(message.Data1 - Offset).Release(message.MidiChannel)
                     End If
                 End If

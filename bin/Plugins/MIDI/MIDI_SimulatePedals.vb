@@ -92,71 +92,74 @@ Public Class MIDI_SimulatePedals
 
 
 
+                Dim NoteOn As Boolean = False
+
                 'Is it a note (on or off)?
-                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn Or _
-                    message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff) Then
-
-                    'Is the note on? (volume more then 0)
+                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
-
-                        'If alter note for left pedal is checked then  if the pedal is down then lower the volume.
-                        If SoftPressed Then
-                            message.Data2 = message.Data2 * 0.3
-                        End If
-
-
-                        'Pedals
-                        If Note(message.Data1) = Notes.Sostenuto Then
-                            If Not SostenutoPressed Then
-                                Note(message.Data1) = Notes.Pressed
-
-                            ElseIf chkRemoveOldNotes.Checked Then
-                                ReleaseNote(message.Data1)
-                                Note(message.Data1) = Notes.Sostenuto
-                            End If
-
-                        ElseIf SustainPressed Then
-                            If Note(message.Data1) = Notes.SustainReleased And chkRemoveOldNotes.Checked Then
-                                ReleaseNote(message.Data1)
-                            Else
-                                SustainList.Add(message.Data1)
-                            End If
-                            Note(message.Data1) = Notes.SustainPressed
-
-                        Else
-                            Note(message.Data1) = Notes.Pressed
-                        End If
-
+                        NoteOn = True
                     Else
-                        Select Case Note(message.Data1)
-                            Case Notes.Sostenuto
-                                If SostenutoPressed Then
-                                    Return
-                                Else
-                                    Note(message.Data1) = Notes.Released
-                                End If
-
-                            Case Notes.SustainPressed
-                                If SustainPressed Then
-                                    Note(message.Data1) = Notes.SustainReleased
-                                    Return
-                                Else
-                                    Note(message.Data1) = Notes.Released
-                                End If
-                            Case Notes.SustainReleased
-                                If SustainPressed Then
-                                    Return
-                                Else
-                                    Note(message.Data1) = Notes.Released
-                                End If
-
-                            Case Notes.Pressed
-                                Note(message.Data1) = Notes.Released
-                                message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
-
-                        End Select
+                        NoteOn = False
+                    End If
+                ElseIf message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff Then
+                    NoteOn = False
+                End If
+                'Is the note on?
+                If NoteOn Then
+                    'If the pedal is down then lower the volume.
+                    If SoftPressed Then
+                        message.Data2 = message.Data2 * 0.3
                     End If
 
+                    'Pedals
+                    If Note(message.Data1) = Notes.Sostenuto Then
+                        If Not SostenutoPressed Then
+                            Note(message.Data1) = Notes.Pressed
+
+                        ElseIf chkRemoveOldNotes.Checked Then
+                            ReleaseNote(message.Data1)
+                            Note(message.Data1) = Notes.Sostenuto
+                        End If
+
+                    ElseIf SustainPressed Then
+                        If Note(message.Data1) = Notes.SustainReleased And chkRemoveOldNotes.Checked Then
+                            ReleaseNote(message.Data1)
+                        Else
+                            SustainList.Add(message.Data1)
+                        End If
+                        Note(message.Data1) = Notes.SustainPressed
+
+                    Else
+                        Note(message.Data1) = Notes.Pressed
+                    End If
+
+                Else
+                    Select Case Note(message.Data1)
+                        Case Notes.Sostenuto
+                            If SostenutoPressed Then
+                                Return
+                            Else
+                                Note(message.Data1) = Notes.Released
+                            End If
+
+                        Case Notes.SustainPressed
+                            If SustainPressed Then
+                                Note(message.Data1) = Notes.SustainReleased
+                                Return
+                            Else
+                                Note(message.Data1) = Notes.Released
+                            End If
+                        Case Notes.SustainReleased
+                            If SustainPressed Then
+                                Return
+                            Else
+                                Note(message.Data1) = Notes.Released
+                            End If
+
+                        Case Notes.Pressed
+                            Note(message.Data1) = Notes.Released
+                            message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+                    End Select
                 End If
 
                 Send(message)
@@ -224,7 +227,6 @@ Public Class MIDI_SimulatePedals
         SustainPressed = 3 'Sustain pedal is down And the note.
         SustainReleased = 4 'Meaning the note was released but the sustain pedal is still down.
     End Enum
-
 
     ''' <summary>
     ''' Release note at ID
