@@ -25,6 +25,7 @@ Public Class MIDI_Input
         Title = "MIDI Input"
 
         chkAllChannels.Text = "All channels"
+        chkAllChannels.Checked = True
         chkAllChannels.Width = 85
         chkAllChannels.Location = Position + New Point(95, 35)
         AddControl(chkAllChannels)
@@ -46,7 +47,6 @@ Public Class MIDI_Input
             For i As Integer = 0 To Sanford.Multimedia.Midi.InputDevice.DeviceCount - 1
                 comDevices.Items.Add(Sanford.Multimedia.Midi.InputDevice.GetDeviceCapabilities(i).name)
             Next
-            'comDevices.SelectedIndex = 0
 
             AddControl(comDevices)
         Else

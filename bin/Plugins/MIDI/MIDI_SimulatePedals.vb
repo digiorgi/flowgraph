@@ -15,9 +15,9 @@ Public Class MIDI_SimulatePedals
         Setup(UserData, StartPosition, 145) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message,ChannelMessage,ChannelMessageBuilder"})
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage", "Sustain,Boolean", "Sostenuto,Boolean", "Soft,Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder", "Sustain,Boolean", "Sostenuto,Boolean", "Soft,Boolean"})
 
         'Set the title.
         Title = "Simulate Pedals"
