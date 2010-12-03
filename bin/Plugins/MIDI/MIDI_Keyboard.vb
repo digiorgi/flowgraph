@@ -33,9 +33,9 @@ Public Class MIDI_Keyboard
         Setup(UserData, StartPosition, Width, 95) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message,ChannelMessage,ChannelMessageBuilder"})
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
 
 

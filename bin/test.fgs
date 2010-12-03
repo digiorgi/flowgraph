@@ -63,8 +63,8 @@ Object5{
 }
 Object6{
 	Name=Plugins.MIDI_SimulatePedals;
-	Position=480,240;
-	Output=1,12,1;
+	Position=355,260;
+	Output=2,12,1,2,1;
 	Input=0,1,1,1,0;
 	Enabled=True;
 	RemoveOldNotes=True;
@@ -106,9 +106,9 @@ Object11{
 }
 Object12{
 	Name=Plugins.MIDI_Keyboard;
-	Position=115,370;
+	Position=355,365;
 	UserData=88-21-9;
-	Output=1,2,1;
+	Output=0;
 	Input=0,1;
 	Enabled=True;
 	FilterOtherChannels=False;
