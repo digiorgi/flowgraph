@@ -29,3 +29,4 @@
 'AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
 'AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+'AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
