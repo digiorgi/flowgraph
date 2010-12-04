@@ -34,7 +34,6 @@ Public Class MIDI_Keyboard
 
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
-
         Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
 
@@ -63,7 +62,6 @@ Public Class MIDI_Keyboard
     Public Overrides Sub Dispose()
         chkFilterOtherChannels.Dispose()
         numChannel.Dispose()
-
 
         MyBase.Dispose()
     End Sub
@@ -175,19 +173,6 @@ Public Class MIDI_Keyboard
                         g.FillRectangle(brush, x + (10 * p) + 2, y, 5, 25)
                         g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
-
-
-                    'Case 0, 2, 4, 5, 7, 9, 11
-                    '    If Note(Offset + i - 4) Then
-                    '        g.FillRectangle(Brushes.Green, x + (10 * i), y + 20, 10, 30)
-                    '    End If
-
-                    'Case 1, 3, 6, 8, 10
-
-                    '    Dim b As Brush = Brushes.Black
-                    '    If Note(Offset + i - 4) = True Then b = Brushes.Green
-                    '    g.FillRectangle(b, x + (10 * i), y, 7, 20)
-
             End Select
         Next
 
@@ -376,7 +361,7 @@ Send:
                     Case 0, 5 'C & F
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n) '(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
@@ -478,6 +463,7 @@ Send:
     Private Sub ReleaseNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+        tmp.MidiChannel = numChannel.Value - 1
         tmp.Data1 = ID + Offset
         tmp.Data2 = 0
         Note(ID).Release(tmp.MidiChannel)
@@ -488,6 +474,7 @@ Send:
     Private Sub PressNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
+        tmp.MidiChannel = numChannel.Value - 1
         tmp.Data1 = ID + Offset
         tmp.Data2 = 127
         Note(ID).Press(tmp.MidiChannel)
