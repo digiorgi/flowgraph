@@ -8,10 +8,6 @@ The objects can be added at anytime. But be aware there could be changes that wi
 Step#1
 	
 Step#2
-	
-	Change size and pos of the BaseObject to client sizes/pos.  (Rect, Setup(,,Width,Height))
-		That way things can change with out it messing-up objects.
-	
 	Allow objects to send Requests for new data from a input. (Object1 is connected to Object2 and Object2 wants a update so it asks object1.)
 	
 	Add support for C# plugins

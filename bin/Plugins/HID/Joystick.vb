@@ -148,7 +148,7 @@ Public Class fgGetJoystickAxis
 
     Private chkReverse(7) As CheckBox
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 50) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 50, 125) 'Setup the base rectangles.
 
 
         'Create the inputs.
