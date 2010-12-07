@@ -26,7 +26,7 @@ Public Class fgJoystick
         HID.Create()
 
         comJoy.Width = 190
-        comJoy.Location = Position + New Point(0, 5)
+        comJoy.Location = Position
         comJoy.DropDownStyle = ComboBoxStyle.DropDownList
         comJoy.Items.AddRange(HID.Joysticks.ToArray)
         'comJoy.SelectedIndex = 0
@@ -36,7 +36,7 @@ Public Class fgJoystick
     End Sub
 
     Public Overrides Sub Moving()
-        comJoy.Location = Position + New Point(0, 5)
+        comJoy.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
@@ -289,13 +289,13 @@ Public Class fgGetJoystickButtons
         numButtons.Minimum = 0
         numButtons.Maximum = 1000
         numButtons.Width = 60
-        numButtons.Location = Position + New Point(0, 5)
+        numButtons.Location = Position
         AddControl(numButtons)
 
     End Sub
 
     Public Overrides Sub Moving()
-        numButtons.Location = Position + New Point(0, 5)
+        numButtons.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()

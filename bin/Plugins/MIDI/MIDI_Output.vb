@@ -26,7 +26,7 @@ Public Class MIDI_Output
         chkMessageChannels.Text = "Same as message"
         chkMessageChannels.Width = 113
         chkMessageChannels.Checked = True
-        chkMessageChannels.Location = Position + New Point(86, 35)
+        chkMessageChannels.Location = Position + New Point(86, 25)
         AddControl(chkMessageChannels)
 
 
@@ -34,14 +34,14 @@ Public Class MIDI_Output
         numChannel.Maximum = 16
         numChannel.Width = 40
         numChannel.Enabled = False
-        numChannel.Location = Position + New Point(45, 35)
+        numChannel.Location = Position + New Point(45, 25)
         AddControl(numChannel)
 
 
 
         If Sanford.Multimedia.Midi.OutputDevice.DeviceCount > 0 Then
             comDevices.Width = 200
-            comDevices.Location = Position + New Point(0, 10)
+            comDevices.Location = Position
             comDevices.DropDownStyle = ComboBoxStyle.DropDownList
 
             For i As Integer = 0 To Sanford.Multimedia.Midi.OutputDevice.DeviceCount - 1
@@ -69,9 +69,9 @@ Public Class MIDI_Output
     End Sub
 
     Public Overrides Sub Moving()
-        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
-        numChannel.Location = Rect.Location + New Point(65, 50)
-        comDevices.Location = Rect.Location + New Point(15, 25)
+        chkMessageChannels.Location = Position + New Point(86, 25)
+        numChannel.Location = Position + New Point(45, 25)
+        comDevices.Location = Position
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -140,7 +140,7 @@ Public Class MIDI_Output
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 38)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 28)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)

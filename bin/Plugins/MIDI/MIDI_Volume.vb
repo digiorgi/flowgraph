@@ -70,7 +70,7 @@ Public Class MIDI_Volume
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Volume:", DefaultFont, DefaultFontBrush, Position.X, Position.Y)
+        g.DrawString("Volume:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 3)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
