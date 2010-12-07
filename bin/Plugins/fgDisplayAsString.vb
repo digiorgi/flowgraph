@@ -57,7 +57,7 @@ Public Class fgDisplayAsString
             'Did the size change?
             If DataSize <> OldSize Then
                 'If so then we set the size of the base object
-                MyBase.SetSize(15 + DataSize.Width, 15 + DataSize.Height)
+                MyBase.SetSize(DataSize.Width, DataSize.Height, True)
                 OldSize = DataSize 'Then set the old size.
             End If
 

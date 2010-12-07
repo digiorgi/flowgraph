@@ -7,7 +7,7 @@ Public Class fgAxisToBoolean
     Private WithEvents numSwitchOn As New NumericUpDown
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 60, 5) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 60) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -24,14 +24,14 @@ Public Class fgAxisToBoolean
         numSwitchOn.DecimalPlaces = 2
         numSwitchOn.Value = 0.5
         numSwitchOn.Width = 60
-        numSwitchOn.Location = Position + New Point(0, 5)
+        numSwitchOn.Location = Position
         AddControl(numSwitchOn)
 
         HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
-        numSwitchOn.Location = Position + New Point(0, 5)
+        numSwitchOn.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()

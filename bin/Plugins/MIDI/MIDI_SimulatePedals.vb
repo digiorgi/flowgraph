@@ -25,19 +25,19 @@ Public Class MIDI_SimulatePedals
         chkRemoveOldNotes.Text = "Remove old notes"
         chkRemoveOldNotes.Width = 115
         chkRemoveOldNotes.Checked = True
-        chkRemoveOldNotes.Location = Position + New Point(5, 45)
+        chkRemoveOldNotes.Location = Position + New Point(5, 40)
         AddControl(chkRemoveOldNotes)
 
         chkFilterOtherChannels.Text = "Filter out other channels"
         chkFilterOtherChannels.Width = 139
         chkFilterOtherChannels.Checked = False
-        chkFilterOtherChannels.Location = Position + New Point(5, 25)
+        chkFilterOtherChannels.Location = Position + New Point(5, 20)
         AddControl(chkFilterOtherChannels)
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Location = Position + New Point(55, 5)
+        numChannel.Location = Position + New Point(55, 0)
         AddControl(numChannel)
 
 
@@ -53,15 +53,15 @@ Public Class MIDI_SimulatePedals
     End Sub
 
     Public Overrides Sub Moving()
-        chkRemoveOldNotes.Location = Position + New Point(5, 45)
-        chkFilterOtherChannels.Location = Position + New Point(5, 25)
-        numChannel.Location = Position + New Point(55, 5)
+        chkRemoveOldNotes.Location = Position + New Point(5, 40)
+        chkFilterOtherChannels.Location = Position + New Point(5, 20)
+        numChannel.Location = Position + New Point(55, 0)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X + 5, Position.Y + 8)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X + 5, Position.Y + 3)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)

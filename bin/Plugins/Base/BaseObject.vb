@@ -71,7 +71,7 @@ Public MustInherit Class BaseObject
         Width = SnapToGrid(Width)
         Height = SnapToGrid(Height)
 
-        ClientRect = New Rectangle(StartPosition + New Point(0, 15), New Size(Width, Height))
+        ClientRect = New Rectangle(StartPosition + New Point(0, 16), New Size(Width - 1, Height - 2))
 
         Height += 15
 
@@ -270,7 +270,7 @@ Public MustInherit Class BaseObject
         If IsClientSize Then
             If Input IsNot Nothing Then Width += 15
             If Output IsNot Nothing Then Width += 15
-            Height += 15
+            Height += 16
         End If
 
         Rect.Size = SnapToGrid(New Size(Width, Height))
@@ -279,8 +279,8 @@ Public MustInherit Class BaseObject
 
         Dim inp, out As Short
         If Input IsNot Nothing Then inp = 15
-        If Output IsNot Nothing Then out = 15
-        ClientRect = New Rectangle(Rect.Location + New Point(inp, 15), New Size(Width - inp - out, Height - 15))
+        If Output IsNot Nothing Then out = 14
+        ClientRect = New Rectangle(Rect.Location + New Point(inp, 16), New Size(Width - inp - out - 1, Height - 17))
 
         TitleBar.Width = Rect.Width
         TitleRect = Nothing
@@ -387,8 +387,8 @@ Public MustInherit Class BaseObject
 
         Dim tmpHeight As Integer = Rect.Height
         'Set the height if the current height is smaller.
-        If Rect.Height < 16 + (15 * Output.Length) Then
-            tmpHeight=16 + (15 * Output.Length)
+        If Rect.Height < 15 + (15 * Output.Length) Then
+            tmpHeight = 15 + (15 * Output.Length)
         End If
         SetSize(Rect.Width + 15, tmpHeight)
     End Sub

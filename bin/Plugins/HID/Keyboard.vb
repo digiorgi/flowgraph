@@ -20,17 +20,18 @@ Public Class fgGetKey
         Title = "Get key"
 
 
-        comKey.Location = Position + New Point(0, 5)
+        comKey.Location = Position
         comKey.Items.AddRange([Enum].GetNames(GetType(SlimDX.DirectInput.Key)))
         comKey.SelectedItem = SlimDX.DirectInput.Key.Pause.ToString
         comKey.DropDownStyle = ComboBoxStyle.DropDownList
+        comKey.Width = Size.Width
         AddControl(comKey)
 
         HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
-        comKey.Location = Position + New Point(0, 5)
+        comKey.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
