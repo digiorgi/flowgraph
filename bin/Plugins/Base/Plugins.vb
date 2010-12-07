@@ -248,11 +248,11 @@ Public Module Plugins
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
         If HeighPriority Then
             RaiseEvent DrawEvent()
+            DoNotDraw = True
 
         Else 'Other wise we wait for the timer.
             DoNotDraw = False 'Tell the timer it can draw.
         End If
-
     End Sub
 
     Private WithEvents tmrDraw As New Timer
@@ -367,3 +367,4 @@ Public Module Plugins
 #End Region
 
 End Module
+

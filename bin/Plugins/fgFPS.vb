@@ -34,13 +34,12 @@ Public Class fgFPS
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         'Draw the base stuff like the title outputs etc..
         MyBase.Draw(g)
-
-        'Draw the value.
-        g.DrawString("FPS= " & LastFPS, DefaultFont, DefaultFontBrush, Position.X + 1, Position.Y + 1)
-        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X + 1, Position.Y + 12)
-
         FPS += 1
         FrameCount += 1
+
+        'Draw the value.
+        g.DrawString("FPS= " & LastFPS, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
+        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X, Position.Y + 11)
     End Sub
 
     Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
