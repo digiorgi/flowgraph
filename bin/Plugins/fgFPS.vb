@@ -9,8 +9,6 @@ Public Class fgFPS
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 120, 30) 'Setup the base rectangles.
 
-        Inputs(New String() {"Enable,Boolean"})
-
         'Set the title.
         Title = "FPS"
 
@@ -21,13 +19,6 @@ Public Class fgFPS
     Public Overrides Sub Dispose()
         tmr.Dispose()
         MyBase.Dispose()
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                tmr.Enabled = Data
-        End Select
     End Sub
 
 

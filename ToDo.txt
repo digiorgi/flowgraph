@@ -61,7 +61,8 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 	MIDI:
 		GetController
-		GetNote
+		GetSetNote
+		Filter objects
 		Debug	Like Pedals debug.
 		Input:
 			Add a checkbox to 'fix' controller events. (Mainly note On and Off.)

@@ -234,7 +234,7 @@ Public Module Plugins
 #End Region
 
 #Region "Auto draw"
-    Event DrawEvent()
+    Event DrawEvent(ByVal region As Rectangle)
     Public Draw As Boolean = True
     Private DoNotDraw As Boolean = True
 
@@ -247,19 +247,22 @@ Public Module Plugins
 
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
         If HeighPriority Then
-            RaiseEvent DrawEvent()
+            RaiseEvent DrawEvent(Rectangle.Empty)
             DoNotDraw = True
 
         Else 'Other wise we wait for the timer.
             DoNotDraw = False 'Tell the timer it can draw.
         End If
     End Sub
+    Public Sub DoDraw(ByVal region As Rectangle)
+        RaiseEvent DrawEvent(region)
+    End Sub
 
     Private WithEvents tmrDraw As New Timer
     Private Sub tmrDraw_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmrDraw.Tick
         If DoNotDraw Then Return
 
-        RaiseEvent DrawEvent()
+        RaiseEvent DrawEvent(Rectangle.Empty)
 
         DoNotDraw = True
     End Sub

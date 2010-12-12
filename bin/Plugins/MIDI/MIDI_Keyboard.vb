@@ -238,7 +238,8 @@ Public Class MIDI_Keyboard
 
 Send:
                 Send(message)
-                DoDraw(True)
+                DoDraw(Rect)
+                'DoDraw(True)
         End Select
     End Sub
 
@@ -468,7 +469,7 @@ Send:
         tmp.Data2 = 0
         Note(ID).Release(tmp.MidiChannel)
         Send(tmp)
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 
     Private Sub PressNote(ByVal ID As Integer)
@@ -479,7 +480,7 @@ Send:
         tmp.Data2 = 127
         Note(ID).Press(tmp.MidiChannel)
         Send(tmp)
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 #End Region
 

@@ -38,8 +38,12 @@ Module modMain
         Load_Plugin(frmMain) 'Load the plugin stuff. (auto draw, connector pen, etc..)
     End Sub
 
-    Private Sub Draw()
-        frmMain.Invalidate()
+    Private Sub Draw(ByVal region As Rectangle)
+        If region.IsEmpty Then
+            frmMain.Invalidate()
+        Else
+            frmMain.Invalidate(region)
+        End If
     End Sub
 
     Public Sub AddControl(ByVal Control As Control)
