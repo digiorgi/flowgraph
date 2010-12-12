@@ -215,7 +215,7 @@ Public Class frmMain
                         If Objects(i).IntersectsWithInput(Mouse) Then
 
                             'Try and connect.
-                            If Objects(ToolObject).Output(ToolInt).Add(Objects(i).Index, Objects(i).Intersection) Then
+                            If Objects(ToolObject).Output(ToolInt).TryConnect(Objects(i).Index, Objects(i).Intersection) Then
                                 'Add one to connected if it successfully connected.
                                 Objects(i).Input(Objects(i).Intersection).Connected += 1
                             End If
@@ -297,7 +297,9 @@ Public Class frmMain
 
         'Draw the objects.
         For i As Integer = 0 To Objects.Count - 1
-            Objects(i).Draw(e.Graphics)
+            If e.ClipRectangle.IntersectsWith(Objects(i).rect) Then
+                Objects(i).Draw(e.Graphics)
+            End If
         Next
 
         'Draw the connectors.

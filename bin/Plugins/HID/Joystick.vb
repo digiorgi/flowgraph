@@ -167,7 +167,7 @@ Public Class fgGetJoystickAxis
             chk.Width = 46
             chk.Height = 15
             chk.Tag = i
-            chk.Location = Position + New Point(4, (15 * i))
+            chk.Location = Position + New Point(0, (15 * i))
             AddHandler chk.CheckedChanged, AddressOf ReverseChange
 
             chkReverse(i) = chk

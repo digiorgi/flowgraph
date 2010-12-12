@@ -71,7 +71,7 @@ Public MustInherit Class BaseObject
         Width = SnapToGrid(Width)
         Height = SnapToGrid(Height)
 
-        ClientRect = New Rectangle(StartPosition + New Point(0, 16), New Size(Width - 1, Height - 2))
+        ClientRect = New Rectangle(StartPosition + New Point(1, 16), New Size(Width - 2, Height - 2))
 
         Height += 15
 
@@ -273,14 +273,18 @@ Public MustInherit Class BaseObject
             Height += 16
         End If
 
+        'Snap to the grid.
+        Width = SnapToGrid(Width)
+        Height = SnapToGrid(Height)
+
         Rect.Size = SnapToGrid(New Size(Width, Height))
 
         BackGround.Size = SnapToGrid(New Size(Width, Height - 15))
 
         Dim inp, out As Short
-        If Input IsNot Nothing Then inp = 15
+        If Input IsNot Nothing Then inp = 14
         If Output IsNot Nothing Then out = 14
-        ClientRect = New Rectangle(Rect.Location + New Point(inp, 16), New Size(Width - inp - out - 1, Height - 17))
+        ClientRect = New Rectangle(Rect.Location + New Point(inp + 1, 16), New Size((Width - 2) - inp - out, Height - 17))
 
         TitleBar.Width = Rect.Width
         TitleRect = Nothing
@@ -303,15 +307,18 @@ Public MustInherit Class BaseObject
             y -= 15
         End If
 
+        x = SnapToGrid(x)
+        y = SnapToGrid(y)
+
         'Update the positions of the rectangles.
-        Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
+        Rect.Location = New Point(x, y)
         TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
         TitleBar.Location = Rect.Location
         BackGround.Location = New Point(Rect.X, Rect.Y + 15)
 
         Dim inp As Short
-        If Input IsNot Nothing Then inp = 15
-        ClientRect.Location = Rect.Location + New Point(inp, 15)
+        If Input IsNot Nothing Then inp = 14
+        ClientRect.Location = Rect.Location + New Point(inp + 1, 16)
 
         'Tell everyone that wants to know that, we are moving!
         Moving()
@@ -568,14 +575,14 @@ Public Class DataFlowBase
         Return str & vbNewLine & Note
     End Function
 
-#Region "Add & Disconnect"
+#Region "Connect & Disconnect"
     ''' <summary>
     ''' Connect a input to this output.
     ''' </summary>
     ''' <param name="obj1"></param>
     ''' <param name="Index1"></param>
     ''' <returns>True if successfully added.</returns>
-    Public Function Add(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
+    Public Function TryConnect(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
         If Flow Is Nothing Then Return False 'Return false if its a input.
 
         'Return false if we are already at the max connections.
@@ -723,7 +730,7 @@ Public Class DataFlowBase
         Else
 
             For i As Integer = 1 To data.Length - 1 Step 2
-                Add(data(i), data(i + 1))
+                TryConnect(data(i), data(i + 1))
             Next
             'Make sure everything connected.
             If Connected <> data(0) Then

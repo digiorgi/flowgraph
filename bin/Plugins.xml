@@ -219,7 +219,7 @@ Plugins
  </summary>
 	<param name="e"></param>
 	<remarks></remarks>
-</member><member name="M:Plugins.DataFlowBase.Add(System.Int32,System.Int32)">
+</member><member name="M:Plugins.DataFlowBase.TryConnect(System.Int32,System.Int32)">
 	<summary>
  Connect a input to this output.
  </summary>
