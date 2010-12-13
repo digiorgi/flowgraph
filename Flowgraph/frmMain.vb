@@ -182,12 +182,12 @@ Public Class frmMain
                     End If
                 Next
                 If e.Button = Windows.Forms.MouseButtons.Right Then
-                    Menu_Open(-1, AddItem)
+                    Plugins.Menu.Open(-1, AddItem)
                 End If
 
             Case ToolType.Menu
                 If e.Button = Windows.Forms.MouseButtons.Left Then
-                    Menu_MouseUp()
+                    Plugins.Menu.MouseUp()
                     DoDraw(True)
                 ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
                     For i As Integer = Objects.Count - 1 To 0 Step -1
@@ -198,7 +198,7 @@ Public Class frmMain
                             Return
                         End If
                     Next
-                    Menu_Open(-1, AddItem)
+                    Plugins.Menu.Open(-1, AddItem)
                 End If
 
 
@@ -276,7 +276,7 @@ Public Class frmMain
                 Next
 
             Case ToolType.Menu
-                If Menu_MouseMove() Then DoDraw(True)
+                If Plugins.Menu.MouseMove() Then DoDraw(Plugins.Menu.Rect)
 
             Case ToolType.Move
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
@@ -313,7 +313,7 @@ Public Class frmMain
                 e.Graphics.DrawLine(ConnectorPen, ToolOffset, Mouse.Location)
 
             Case ToolType.Menu
-                Menu_Draw(e.Graphics)
+                If e.ClipRectangle.IntersectsWith(Plugins.Menu.Rect) Then Plugins.Menu.Draw(e.Graphics)
 
         End Select
     End Sub

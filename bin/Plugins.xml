@@ -184,7 +184,7 @@ Plugins
  Create outputs.
  </summary>
 	<param name="Names">array of strings. e.g. {"NameOfOutput,Type1,Type2", "Output2"}</param>
-</member><member name="M:Plugins.BaseObject.MenuSelected(Plugins.Menu.MenuNode)">
+</member><member name="M:Plugins.BaseObject.MenuSelected(Plugins.Menu.Node)">
 	<summary>
  Is called when somthing in the menu was selected.
  BaseObject just checks if remove was selected.
@@ -243,30 +243,17 @@ Plugins
 	<summary>
  Human interface device
  </summary>
-</member><member name="M:Plugins.Menu.MenuNode.#ctor(Plugins.Menu.MenuResult)">
-	<summary>Is used when the menu sends the object the node.</summary>
-	<param name="Result">What was the menus results?</param>
-</member><member name="M:Plugins.Menu.MenuNode.#ctor(System.String,System.String,System.Int32)">
-	<summary>Create a node</summary>
-	<param name="Name">The name that will display in the menu.</param>
-	<param name="ClassName">The name of the class to create for adding objects.</param>
-	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
-</member><member name="M:Plugins.Menu.MenuNode.#ctor(System.String,System.Boolean,System.Int32)">
-	<summary>Create a node</summary>
-	<param name="Name">The name that will display in the menu.</param>
-	<param name="IsGroup">Is this node going to have children?</param>
-	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
-</member><member name="M:Plugins.Menu.Menu_Open(System.Int32,Plugins.Menu.MenuNode)">
+</member><member name="M:Plugins.Menu.Menu.Open(System.Int32,Plugins.Menu.Node)">
 	<summary>
  Open a dropdown menu with the items.
  </summary>
 	<param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
 	<param name="Item">The item for the menu to use.</param>
-</member><member name="M:Plugins.Menu.Menu_MouseMove">
+</member><member name="M:Plugins.Menu.Menu.MouseMove">
 	<summary>
  Returns false if noting changed.
  </summary>
-</member><member name="M:Plugins.Menu.AddNode(Plugins.Menu.MenuNode,System.String[],System.String[])">
+</member><member name="M:Plugins.Menu.Menu.AddNode(Plugins.Menu.Node,System.String[],System.String[])">
 	<summary>
  Add a menu node to a node list.
  Usefull to add groups.
@@ -275,6 +262,19 @@ Plugins
 	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
 	<param name="Groups"></param>
 	<remarks></remarks>
+</member><member name="M:Plugins.Menu.Node.#ctor(Plugins.Menu.Result)">
+	<summary>Is used when the menu sends the object the node.</summary>
+	<param name="Result">What was the menus results?</param>
+</member><member name="M:Plugins.Menu.Node.#ctor(System.String,System.String,System.Int32)">
+	<summary>Create a node</summary>
+	<param name="Name">The name that will display in the menu.</param>
+	<param name="ClassName">The name of the class to create for adding objects.</param>
+	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
+</member><member name="M:Plugins.Menu.Node.#ctor(System.String,System.Boolean,System.Int32)">
+	<summary>Create a node</summary>
+	<param name="Name">The name that will display in the menu.</param>
+	<param name="IsGroup">Is this node going to have children?</param>
+	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
 </member><member name="M:Plugins.MIDI_SimulatePedals.ReleaseNote(System.Int32)">
 	<summary>
  Release note at ID

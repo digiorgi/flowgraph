@@ -85,7 +85,7 @@ Public MustInherit Class BaseObject
         BackGround = New Rectangle(Rect.X, Rect.Y + 15, Rect.Width, Rect.Height - 15)
 
         'Add remove to the object menu.
-        Menu.Add(New MenuNode("Remove", False))
+        MenuItems.Add(New Menu.Node("Remove", False))
     End Sub
 
     ''' <summary>
@@ -115,7 +115,7 @@ Public MustInherit Class BaseObject
         End Get
         Set(ByVal value As String)
             _Title = value
-            Menu.Name = value
+            MenuItems.Name = value
         End Set
     End Property
 
@@ -438,7 +438,7 @@ Public MustInherit Class BaseObject
 #End Region
 
 #Region "Mouse & Menu"
-    Friend Menu As New MenuNode("", True)
+    Friend MenuItems As New Menu.Node("", True)
 
     ''' <summary>
     ''' Is called when somthing in the menu was selected.
@@ -446,7 +446,7 @@ Public MustInherit Class BaseObject
     ''' </summary>
     ''' <param name="Result"></param>
     ''' <remarks></remarks>
-    Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
+    Public Overridable Sub MenuSelected(ByVal Result As Menu.Node)
         Select Case LCase(Result.Name)
             Case "remove"
                 RemoveAt(Index)
@@ -491,7 +491,7 @@ Public MustInherit Class BaseObject
     ''' <remarks></remarks>
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            Menu_Open(Index, Menu)
+            Menu.open(Index, MenuItems)
         End If
     End Sub
 
