@@ -282,7 +282,7 @@ Public Module Plugins
 
 #Region "Adding objects"
     'The items in the add object menu.
-    Public AddItem As New MenuNode("Add object", True)
+    Public AddItem As New Menu.Node("Add object", True)
 
     ''' <summary>
     ''' Add a new object from the class name.
@@ -348,10 +348,10 @@ Public Module Plugins
                 Dim SplitLine As String() = Split(line, "|")
                 Select Case SplitLine.Length
                     Case 2 'No groups. 
-                        AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
+                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
 
                     Case 3 'Has Group(s) 
-                        AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
+                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
 
                 End Select
 

@@ -1,50 +1,23 @@
-﻿'AddMenuObject|FPS,Plugins.fgFPS,60|Misc
+﻿'AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
 Public Class fgFPS
     Inherits BaseObject
 
-    Private WithEvents tmr As New Timer
-
-    Private FrameCount, FPS, LastFPS As Integer
+    Private FrameCount As Integer
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 120, 30) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 120, 15) 'Setup the base rectangles.
 
         'Set the title.
-        Title = "FPS"
+        Title = "Frames"
 
-        tmr.Interval = 1000
-        tmr.Enabled = True
-    End Sub
-
-    Public Overrides Sub Dispose()
-        tmr.Dispose()
-        MyBase.Dispose()
     End Sub
 
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         'Draw the base stuff like the title outputs etc..
         MyBase.Draw(g)
-        FPS += 1
         FrameCount += 1
 
-        'Draw the value.
-        g.DrawString("FPS= " & LastFPS, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
-        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X, Position.Y + 11)
-    End Sub
-
-    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-        If FPS = 1 And LastFPS = 1 Then
-            FPS = 0
-            LastFPS = 0
-        ElseIf FPS = 1 And LastFPS = 0 Then
-            Return
-        Else
-            LastFPS = FPS
-            FPS = 0
-        End If
-
-
-        DoDraw()
+        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
     End Sub
 End Class

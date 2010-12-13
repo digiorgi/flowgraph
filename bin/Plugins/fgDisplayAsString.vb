@@ -12,7 +12,7 @@ Public Class fgDisplayAsString
         'Set the title.
         Title = "Display as string"
 
-        Menu.Add(New MenuNode("Set String", , 70))
+        MenuItems.Add(New Menu.Node("Set String", , 70))
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
@@ -28,10 +28,10 @@ Public Class fgDisplayAsString
         MyBase.Load(g)
     End Sub
 
-    Public Overrides Sub MenuSelected(ByVal Result As Menu.MenuNode)
+    Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
         MyBase.MenuSelected(Result)
 
-        If Result.Result = MenuResult.SelectedItem Then
+        If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
             If Result.Name = "Set String" Then
                 Me.Data = InputBox("Set string", "THIS IS THE TITLE")
             End If
@@ -45,7 +45,7 @@ Public Class fgDisplayAsString
         DataSize = Nothing 'Set the data size to nothing so we will check the size later.
 
         'Tell auto draw we want to draw.
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
