@@ -36,6 +36,12 @@ Plugins
  This sets the value of a property.
  If it can not find the property it creates it.
  </summary>
+</member><member name="M:Plugins.SimpleD.Group.Set_Value(System.String,System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ Does not create if value is eaqual to devault value.
+ </summary>
 </member><member name="M:Plugins.SimpleD.Group.Set_Value(System.Windows.Forms.Control)">
 	<summary>
  This sets the value of a property.
@@ -48,7 +54,7 @@ Plugins
 	<param name="Name">The name of the property to get the value from.</param>
 </member><member name="M:Plugins.SimpleD.Group.Get_Value(System.String,System.Object@,System.Boolean)">
 	<summary>
- Will not set value if no value found.
+ Will not get value if no value found.
  </summary>
 	<param name="Name"></param>
 	<param name="Value"></param>

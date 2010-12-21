@@ -1,109 +1,16 @@
-//Version=0.985 FileVersion=1\\
-Main{
-	Width=666;
-	Height=303;
-	Objects=13;
-	FileVersion=0.5;
-}
-Object0{
-	Name=Plugins.fgGetKey;
-	Position=140,50;
-	Output=0`1,1,0;
-	Input=0,1,0;
-	Enabled=True;
-	Key=Pause;
-}
-Object1{
-	Name=Plugins.fgDisplayAsString;
-	Position=315,65;
-	Input=1;
-	Data=False;
-}
-Object2{
-	Name=Plugins.fgTimer;
-	Position=5,95;
-	UserData=10;
-	Output=4,0,1,3,1,8,1,9,1;
-	Input=0,0;
-	Enabled=True;
-}
-Object3{
-	Name=Plugins.fgJoystick;
-	Position=140,115;
-	Output=2,4,0,6,0;
-	Input=0,1;
-	Enabled=True;
-	Joystick=RGT Force Feedback Pro;
-}
-Object4{
-	Name=Plugins.fgGetJoystickAxis;
-	Position=375,100;
-	Output=0`1,12,0`0`0`0`1,5,0`0`0;
-	Input=1;
-	Rev0=False;
-	Rev1=True;
-	Rev2=False;
-	Rev3=False;
-	Rev4=False;
-	Rev5=True;
-	Rev6=True;
-	Rev7=False;
-}
-Object5{
-	Name=Plugins.fgDisplayAsString;
-	Position=465,175;
-	Input=1;
-	Data=0;
-}
-Object6{
-	Name=Plugins.fgGetJoystickButtons;
-	Position=375,240;
-	Output=1,7,0`0;
-	Input=1;
-	Button=6;
-}
-Object7{
-	Name=Plugins.fgDisplayAsString;
-	Position=470,240;
-	Input=1;
-	Data=True;
-}
-Object8{
-	Name=Plugins.fgLocalMouse;
-	Position=140,165;
-	Output=0`1,10,0`0;
-	Input=0,1;
-	Enabled=True;
-}
-Object9{
-	Name=Plugins.fgGlobalMouse;
-	Position=140,230;
-	Output=0`1,11,0`0;
-	Input=0,1;
-	Enabled=True;
-}
-Object10{
-	Name=Plugins.fgDisplayAsString;
-	Position=210,180;
-	Input=1;
-	Data=92;
-}
-Object11{
-	Name=Plugins.fgDisplayAsString;
-	Position=215,245;
-	Input=1;
-	Data=1933;
-}
-Object12{
-	Name=Plugins.fgAxisToBoolean;
-	Position=465,95;
-	Output=0`1,13,0;
-	Input=1;
-	SwitchOn=0.9;
-}
-Object13{
-	Name=Plugins.fgDisplayAsString;
-	Position=565,110;
-	Input=1;
-	Data=False;
-}
+//Version=0.986 FileVersion=1\\
+Main{Width=685;Height=340;Objects=13;FileVersion=0.5;}
+Object0{Name=Plugins.fgGetKey;Position=140,50;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}
+Object1{Name=Plugins.fgDisplayAsString;Position=315,65;Input=1;Data=False;}
+Object2{Name=Plugins.fgTimer;Position=5,95;UserData=10;Output=4,0,1,3,1,8,1,9,1;Input=0,0;Enabled=True;}
+Object3{Name=Plugins.fgJoystick;Position=140,115;Output=2,4,0,6,0;Input=0,1;Enabled=True;Joystick=RGT Force Feedback Pro;}
+Object4{Name=Plugins.fgGetJoystickAxis;Position=375,100;Output=0`1,12,0`0`0`0`1,5,0`0`0;Input=1;Rev1=True;Rev5=True;Rev6=True;}
+Object5{Name=Plugins.fgDisplayAsString;Position=465,175;Input=1;Data=0;}
+Object6{Name=Plugins.fgGetJoystickButtons;Position=375,240;Output=1,7,0`0;Input=1;Button=6;}
+Object7{Name=Plugins.fgDisplayAsString;Position=470,240;Input=1;Data=True;}
+Object8{Name=Plugins.fgLocalMouse;Position=140,165;Output=0`1,10,0`0;Input=0,1;Enabled=True;}
+Object9{Name=Plugins.fgGlobalMouse;Position=140,230;Output=0`1,11,0`0;Input=0,1;Enabled=True;}
+Object10{Name=Plugins.fgDisplayAsString;Position=210,180;Input=1;Data=243;}
+Object11{Name=Plugins.fgDisplayAsString;Position=215,245;Input=1;Data=562;}
+Object12{Name=Plugins.fgAxisToBoolean;Position=465,95;Output=0`1,13,0;Input=1;SwitchOn=0.9;}
+Object13{Name=Plugins.fgDisplayAsString;Position=565,110;Input=1;Data=False;}

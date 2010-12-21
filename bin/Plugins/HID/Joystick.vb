@@ -192,7 +192,7 @@ Public Class fgGetJoystickAxis
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
         For Each chk As CheckBox In chkReverse
-            g.Get_Value(chk.Text & chk.Tag, chk.Checked)
+            g.Get_Value(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         MyBase.Load(g)
@@ -203,7 +203,7 @@ Public Class fgGetJoystickAxis
 
         'Save all the reverse check boxs state.
         For Each chk As CheckBox In chkReverse
-            g.Set_Value(chk.Text & chk.Tag, chk.Checked)
+            g.Set_Value(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         Return g
