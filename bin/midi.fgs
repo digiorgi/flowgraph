@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=13;
+	Objects=14;
 	FileVersion=0.5;
 }
 Object0{
@@ -43,7 +43,7 @@ Object3{
 Object4{
 	Name=Plugins.fgGetJoystickAxis;
 	Position=145,145;
-	Output=0`1,8,0`0`0`0`1,5,0`1,10,1`0;
+	Output=0`1,8,0`0`0`0`1,5,0`1,14,0`0;
 	Input=1;
 	Rev0=False;
 	Rev1=True;
@@ -102,7 +102,6 @@ Object10{
 Object11{
 	Name=Plugins.fgFPS;
 	Position=580,5;
-	Input=0;
 }
 Object12{
 	Name=Plugins.MIDI_Keyboard;
@@ -121,4 +120,11 @@ Object13{
 	Input=0,1;
 	Enabled=True;
 	Volume=128;
+}
+Object14{
+	Name=Plugins.fgAxisToBoolean;
+	Position=365,100;
+	Output=0`1,10,1;
+	Input=1;
+	SwitchOn=0.9;
 }

@@ -35,7 +35,6 @@ Namespace Menu
     End Enum
 
     Public Module Menu
-
         Public MenuStartPosition As Point
 
         Private Item As Node
@@ -52,9 +51,6 @@ Namespace Menu
         ''' <param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
         ''' <param name="Item">The item for the menu to use.</param>
         Public Sub Open(ByVal ObjectIndex As Integer, ByVal Item As Node)
-            Title = Item.Name
-
-            Menu.Item = Item
             Menu.ObjectIndex = ObjectIndex
 
             'Set the menu start position to the current mouse position.
@@ -63,7 +59,7 @@ Namespace Menu
             'Set the tool to menu.
             Tool = ToolType.Menu
 
-            UpdateRect()
+            Update(Item)
 
             'Draw the newly opened menu.
             DoDraw(True)
@@ -76,10 +72,7 @@ Namespace Menu
 
                 If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y, Rect.Width, 12)) Then
                     If Item.Parent IsNot Nothing Then
-
-                        Item = Item.Parent
-                        Title = Item.Name
-                        UpdateRect()
+                        Update(Item.Parent)
                     Else
                     End If
                     Return New Node(Result.SelectedGroup)
@@ -92,10 +85,7 @@ Namespace Menu
                             Item.Children(n).SetResult(Result.SelectedGroup)
                             Dim ReturnNode As Node = Item.Children(n)
 
-                            Item = Item.Children(n)
-                            Title = Item.Name
-                            UpdateRect()
-
+                            Update(Item.Children(n))
                             Return ReturnNode
                         Else
 
@@ -175,7 +165,11 @@ Namespace Menu
             g.DrawRectangle(Pens.Black, Rect)
         End Sub
 
-        Private Sub UpdateRect()
+        Private Sub Update(ByVal Item As Node)
+            Title = Item.Name
+            Menu.Item = Item
+
+
             'Set the min width to 60.
             Dim Width As Integer = 60
             'Look in each node and see if there is any with a biger width.
@@ -329,5 +323,21 @@ Namespace Menu
                 Return Name
             End If
         End Function
+
+        ''' <summary>
+        ''' Sorts All children. even the childrens children+.
+        ''' </summary>
+        Public Sub Sort()
+            If Not IsGroup Then Return
+            Children.Sort(Function(a As Node, b As Node)
+                              Return a.Name.CompareTo(b.Name)
+                          End Function)
+
+            For Each child As Node In Children
+                If child.IsGroup Then
+                    child.Sort()
+                End If
+            Next
+        End Sub
     End Class
 End Namespace

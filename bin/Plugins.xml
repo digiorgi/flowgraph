@@ -275,6 +275,10 @@ Plugins
 	<param name="Name">The name that will display in the menu.</param>
 	<param name="IsGroup">Is this node going to have children?</param>
 	<param name="Width">The first node in each group. Specifies the width of the menu.</param>
+</member><member name="M:Plugins.Menu.Node.Sort">
+	<summary>
+ Sorts All children. even the childrens children+.
+ </summary>
 </member><member name="M:Plugins.MIDI_SimulatePedals.ReleaseNote(System.Int32)">
 	<summary>
  Release note at ID
