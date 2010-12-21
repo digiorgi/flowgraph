@@ -32,8 +32,10 @@
 Namespace SimpleD
     Module Info
         Public Const IllegalCharacters As String = "{}=;"
-        Public Const Version = 0.985
+        Public Const Version = 0.986
         Public Const FileVersion = 1
+        '0.985
+        'Added: default value to Set_Value.
         '0.985
         'Added  : FileVersion So I can easley tell if the file has changed.
         'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
@@ -276,6 +278,21 @@ Endy:
         ''' <summary>
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
+        ''' Does not create if value is eaqual to devault value.
+        ''' </summary>
+        Public Sub Set_Value(ByVal Name As String, ByVal Value As String, ByVal DefaultValue As String)
+            If Name = "" Or Value = "" Then Return
+            If Value = DefaultValue Then Return 'Return if the value is the default value.
+            Dim tmp As Prop = Find(Name) 'Find the property.
+            If tmp = Nothing Then 'If it could not find the property then.
+                Propertys.Add(New Prop(Name, Value)) 'Add the property.
+            Else
+                tmp.Value = Value 'Set the value.
+            End If
+        End Sub
+        ''' <summary>
+        ''' This sets the value of a property.
+        ''' If it can not find the property it creates it.
         ''' </summary>
         Public Sub Set_Value(ByVal Control As Control)
             Dim Value As String = GetValueFromObject(Control) 'Find the property from a object and set the value.
@@ -297,7 +314,7 @@ Endy:
             Return Find(Name).Value 'Find the property and return the value.
         End Function
         ''' <summary>
-        ''' Will not set value if no value found.
+        ''' Will not get value if no value found.
         ''' </summary>
         ''' <param name="Name"></param>
         ''' <param name="Value"></param>

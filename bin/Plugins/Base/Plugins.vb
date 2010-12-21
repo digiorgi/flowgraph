@@ -226,9 +226,11 @@ Public Module Plugins
         Next
 
         'Save to file.
-        sd.ToFile(File)
+        sd.ToFile(File, "")
 
         LoadedFile = File
+
+        DoDraw()
     End Sub
 
 #End Region
