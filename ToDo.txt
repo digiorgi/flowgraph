@@ -9,15 +9,15 @@ Step#1
 	
 Step#2
 	Allow objects to send Requests for new data from a input. (Object1 is connected to Object2 and Object2 wants a update so it asks object1.)
-	
+		Don't see a use for it yet.  (It would require other objects to support it.  So it would make making a object harder.)
+
 	Add support for C# plugins
 		Im thinking of just having a libary named csPlugins.dll
+			That will not work right.  So need a nother idea.  (problem is that the C# library, would need to be linked to vb and vb to c#. Would then create a loop.)
+
 
 Step#3
-	Sort menu items by name.
-
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
-
 
 	Change the Dots(inputs, outputs) to arrows pointing the way.
 
@@ -39,7 +39,7 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 		Devide
 
 	Logic:
-		Equals	In(Object1,Object2)		Out(Equals,Boolean)
+		Equals	In(Object1,Object2)		Out(Equals as Boolean)
 		Numbers:
 			Greater Then
 			Less Than

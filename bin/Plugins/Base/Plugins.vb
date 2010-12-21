@@ -309,7 +309,7 @@ Public Module Plugins
 
             'The plugins have changed. So lets find all of the objects.
 
-            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.??", IO.SearchOption.AllDirectories)
+            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.vb", IO.SearchOption.AllDirectories)
             Dim ObjectList As String = ""
             For Each File As String In Scripts
                 SearchForItems(File, ObjectList)
@@ -366,6 +366,8 @@ Public Module Plugins
 
         Loop Until sr.EndOfStream Or (StartIndex = -1 And Not SearchWholeFile)
         sr.Close()
+
+        AddItem.Sort()
     End Sub
 #End Region
 
