@@ -33,6 +33,7 @@ Public Module Plugins
     'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont
     Public DefaultFontBrush As Brush = SystemBrushes.ControlText
+    Public InputImage, OutputImage As Image
 
     'The pen used to connect objects.
     Public ConnectorPen As New Pen(Color.FromArgb(80, 80, 80), 3)
@@ -138,6 +139,9 @@ Public Module Plugins
         'Setup the auto draw timmer.
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
+
+        InputImage = Image.FromFile("Input.png")
+        OutputImage = Image.FromFile("Output.png")
 
         Plugins.Form = form
 
