@@ -19,7 +19,15 @@ Step#2
 Step#3
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 
-	Change the Dots(inputs, outputs) to arrows pointing the way.
+	Tooltip regions.  Would allow controls or rectangles. e.g.
+		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
+		Tooltip.Update(#,textbox1, Optional text)
+		Tooltip.Remove(#)
+
+
+
+Step#GUI
+	Zoom and movment. (Should just need to put objects in an image or something.)
 
 
 Step#4

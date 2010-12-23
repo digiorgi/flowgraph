@@ -204,14 +204,16 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
-                g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
             Next
         End If
 
@@ -224,7 +226,8 @@ Public MustInherit Class BaseObject
         End If
         g.DrawString(Title, SystemFonts.DefaultFont, SystemBrushes.ActiveCaptionText, TitleRect) 'Draw the title string.
 
-        g.DrawRectangle(Pens.Yellow, ClientRect)
+        'Draws the client size.
+        'g.DrawRectangle(Pens.Yellow, ClientRect)
     End Sub
 
     ''' <summary>
@@ -232,7 +235,6 @@ Public MustInherit Class BaseObject
     ''' </summary>
     Public Sub DrawConnectors(ByVal g As Graphics)
         If Output Is Nothing Then Return
-
 
         For n As Integer = 0 To Output.Length - 1
             If Output(n).IsNotEmpty Then
@@ -429,10 +431,10 @@ Public MustInherit Class BaseObject
     End Function
 
     Public Function GetInputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.X + 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
+        Return New PointF(Rect.X + 3, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
     Public Function GetOutputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.Right - 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
+        Return New PointF(Rect.Right - 3, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
 
 #End Region
