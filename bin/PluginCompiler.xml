@@ -6,11 +6,86 @@ PluginCompiler
 </name>
 </assembly>
 <members>
-<member name="M:PluginCompiler.Module1.Log(System.String)">
+<member name="M:PluginCompiler.modMain.Log(System.String,System.Boolean)">
 	<summary>
  Log some text to the console.
  </summary>
 	<param name="Text">The text to put on the console</param>
+</member><member name="M:PluginCompiler.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+	<summary>
+ Load from string.
+ </summary>
+	<param name="Data"></param>
+	<param name="FromFile">If set to true then it will load from the file specfied in data</param>
+	<remarks></remarks>
+</member><member name="M:PluginCompiler.SimpleD.SimpleD.Create_Group(System.String)">
+	<summary>
+ Create a group.
+ Will return other group if names match.
+ </summary>
+	<param name="Name">The name of the group.</param>
+</member><member name="M:PluginCompiler.SimpleD.SimpleD.FromFile(System.String)">
+	<summary>
+ Load the SimpleData from a file.
+ </summary>
+	<param name="File"></param>
+	<returns>True if loaded false if not.</returns>
+	<remarks></remarks>
+</member><member name="M:PluginCompiler.SimpleD.Group.Combine(PluginCompiler.SimpleD.Group)">
+	<summary>
+ Conbines the group with this group.
+ </summary>
+	<param name="Group">Overides all the propertys with the propertys in the group.</param>
+</member><member name="M:PluginCompiler.SimpleD.Group.Set_Value(System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+</member><member name="M:PluginCompiler.SimpleD.Group.Set_Value(System.String,System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ Does not create if value is eaqual to devault value.
+ </summary>
+</member><member name="M:PluginCompiler.SimpleD.Group.Set_Value(System.Windows.Forms.Control)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+</member><member name="M:PluginCompiler.SimpleD.Group.Get_Value(System.String)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Name">The name of the property to get the value from.</param>
+</member><member name="M:PluginCompiler.SimpleD.Group.Get_Value(System.String,System.Object@,System.Boolean)">
+	<summary>
+ Will not get value if no value found.
+ </summary>
+	<param name="Name"></param>
+	<param name="Value"></param>
+	<param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
+</member><member name="M:PluginCompiler.SimpleD.Group.Get_Value(System.Windows.Forms.Control)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Control">The control to get the property from.</param>
+</member><member name="M:PluginCompiler.SimpleD.Group.GetValueFromObject(System.Object)">
+	<summary>
+ Retuns "Could_Not_Find_Value" if it can not find the value.
+ </summary>
+	<param name="Obj"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:PluginCompiler.SimpleD.Group.Find(System.String)">
+	<summary>
+ Find a property from the name.
+ </summary>
+	<param name="Name">The name of the property.</param>
+	<returns>The property.</returns>
+</member><member name="M:PluginCompiler.CompileFGS.sAdd(System.String)">
+	<summary>
+ Add some text to the source.
+ </summary>
 </member><member name="P:PluginCompiler.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.

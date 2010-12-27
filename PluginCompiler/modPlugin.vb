@@ -129,7 +129,7 @@ Module modPlugins
     ''' </summary>
     ''' <param name="Text"></param>
     ''' <remarks></remarks>
-    Public Sub sAdd(ByVal Text As String)
+    Private Sub sAdd(ByVal Text As String)
         Source &= Environment.NewLine & Text
     End Sub
 

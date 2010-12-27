@@ -34,8 +34,9 @@ Namespace SimpleD
         Public Const IllegalCharacters As String = "{}=;"
         Public Const Version = 0.986
         Public Const FileVersion = 1
-        '0.985
+        '0.986
         'Added: default value to Set_Value.
+        'Changed: Control to Windows.Forms.Control
         '0.985
         'Added  : FileVersion So I can easley tell if the file has changed.
         'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
@@ -294,7 +295,7 @@ Endy:
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
         ''' </summary>
-        Public Sub Set_Value(ByVal Control As Control)
+        Public Sub Set_Value(ByVal Control As Windows.Forms.Control)
             Dim Value As String = GetValueFromObject(Control) 'Find the property from a object and set the value.
             Dim tmp As Prop = Find(Control.Name) 'Find the property.
             If tmp = Nothing Then 'If it could not find the property then.
@@ -331,7 +332,7 @@ Endy:
         ''' Get the value from a property.
         ''' </summary>
         ''' <param name="Control">The control to get the property from.</param>
-        Public Function Get_Value(ByVal Control As Control) As String
+        Public Function Get_Value(ByVal Control As Windows.Forms.Control) As String
             Return Find(Control.Name).Value 'Find the property from a object and return the value.
         End Function
 #End Region

@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_SimulatePedals
     Inherits BaseObject

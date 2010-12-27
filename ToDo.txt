@@ -2,6 +2,7 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
+Does not always clear after loading a new fgs.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
@@ -28,6 +29,7 @@ Step#3
 
 Step#GUI
 	Zoom and movment. (Should just need to put objects in an image or something.)
+						That will not work for zooming. (Because of controls.)
 
 
 Step#4

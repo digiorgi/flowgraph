@@ -1,6 +1,7 @@
 ﻿'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
 'AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
 'AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
+'Include(HID\Input.vb)
 
 Public Class fgJoystick
     Inherits BaseObject

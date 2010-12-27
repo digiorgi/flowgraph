@@ -2,6 +2,7 @@
 'AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
 'AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
 'AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
+'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_Keyboard
     Inherits BaseObject
