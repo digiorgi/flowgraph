@@ -1,5 +1,6 @@
 ﻿'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
+'Include(HID\Input.vb)
 Public Class fgGetKey
     Inherits BaseObject
 
@@ -9,7 +10,7 @@ Public Class fgGetKey
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 120) 'Setup the base rectangles.
-
+        File = "HID\Keyboard.vb"
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})

@@ -31,6 +31,7 @@ Public MustInherit Class BaseObject
     Public Index As Integer = -1
 
     Private Name As String = "NoName"
+    Protected File As String = ""
 
     'Output
     Public Output() As DataFlowBase
@@ -163,6 +164,7 @@ Public MustInherit Class BaseObject
         Dim tmp As String = ""
 
         g.Set_Value("Name", Name)
+        g.Set_Value("File", File, "")
         g.Set_Value("Position", Rect.X & "," & Rect.Y)
         g.Set_Value("UserData", UserData)
 

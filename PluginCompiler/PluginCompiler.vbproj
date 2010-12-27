@@ -9,7 +9,7 @@
     </SchemaVersion>
     <ProjectGuid>{9A1FFDE6-A8DF-4E90-BA50-509C27DA590C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>PluginCompiler.Module1</StartupObject>
+    <StartupObject>PluginCompiler.modMain</StartupObject>
     <RootNamespace>PluginCompiler</RootNamespace>
     <AssemblyName>PluginCompiler</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -69,8 +70,10 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompileFGS.vb" />
     <Compile Include="modPlugin.vb" />
-    <Compile Include="Module1.vb" />
+    <Compile Include="modMain.vb" />
+    <Compile Include="..\bin\Plugins\Base\SimpleD.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
