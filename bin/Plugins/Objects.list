@@ -10,6 +10,7 @@
 'AddMenuObject|Counter,Plugins.fgCounter,60|Math
 'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
 'AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
+'AddMenuObject|Slider,Plugins.fgSlider
 'AddMenuObject|Timer,Plugins.fgTimer|Math
 'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
