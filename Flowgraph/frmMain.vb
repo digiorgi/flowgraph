@@ -77,6 +77,8 @@ Public Class frmMain
                 Case Else
                     If IO.File.Exists(args(a)) Then
                         FileToOpen = args(a)
+                    ElseIf IO.File.Exists(args(a) & ".fgs") Then
+                        FileToOpen = args(a) & ".fgs"
                     End If
             End Select
         Next

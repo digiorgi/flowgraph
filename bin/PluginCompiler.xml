@@ -6,12 +6,7 @@ PluginCompiler
 </name>
 </assembly>
 <members>
-<member name="M:PluginCompiler.modMain.Log(System.String,System.Boolean)">
-	<summary>
- Log some text to the console.
- </summary>
-	<param name="Text">The text to put on the console</param>
-</member><member name="M:PluginCompiler.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
+<member name="M:PluginCompiler.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
@@ -82,6 +77,11 @@ PluginCompiler
  </summary>
 	<param name="Name">The name of the property.</param>
 	<returns>The property.</returns>
+</member><member name="M:PluginCompiler.modMain.Log(System.String,System.Boolean)">
+	<summary>
+ Log some text to the console.
+ </summary>
+	<param name="Text">The text to put on the console</param>
 </member><member name="M:PluginCompiler.CompileFGS.sAdd(System.String)">
 	<summary>
  Add some text to the source.
