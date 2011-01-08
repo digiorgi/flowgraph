@@ -311,7 +311,7 @@ Public Module Plugins
 
     Private Sub AddObject_Setup()
         'Is the plugins library newer then the objects file?
-        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\Objects.list") Then
+        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\MenuObjects.list") Then
 
             'The plugins have changed. So lets find all of the objects.
 
@@ -322,13 +322,13 @@ Public Module Plugins
             Next
 
             'Write all of the objects found to the file.
-            Dim sw As New IO.StreamWriter("Plugins\Objects.list", False)
+            Dim sw As New IO.StreamWriter("Plugins\MenuObjects.list", False)
             sw.Write(ObjectList)
             sw.Close()
 
         Else
             'Objects.list is newer, so lets get the items from it.
-            SearchForItems("Plugins\Objects.list")
+            SearchForItems("Plugins\MenuObjects.list")
         End If
     End Sub
 
@@ -364,9 +364,9 @@ Public Module Plugins
                 'Fill object list(if not "DoNotFill").
                 If ObjectList = "DoNotFill" Then
                 ElseIf ObjectList = "" Then
-                    ObjectList = line
+                    ObjectList = line.Remove(0, 1)
                 Else
-                    ObjectList &= vbNewLine & line
+                    ObjectList &= vbNewLine & line.Remove(0, 1)
                 End If
             End If
 

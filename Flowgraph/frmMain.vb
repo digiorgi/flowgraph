@@ -103,17 +103,18 @@ Public Class frmMain
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For i As Integer = Objects.Count - 1 To 0 Step -1
                 If Objects(i).IntersectsWithOutput(Mouse) Then
-
                     Objects(i).Output(Objects(i).Intersection).Disconnect()
+                    DoDraw(True)
 
                     Return
                 ElseIf Objects(i).IntersectsWithInput(Mouse) Then
                     Objects(i).Input(Objects(i).Intersection).Disconnect()
+                    DoDraw(True)
 
                     Return
                 End If
 
-                'If the mouse intersects with the title bar then move the object.
+                'If the mouse intersects with a object then send the duble click event to the object.
                 If Mouse.IntersectsWith(Objects(i).Rect) Then
                     Objects(i).MouseDoubleClick(e)
 

@@ -2,36 +2,23 @@
 Public Class fgSlider
     Inherits BaseObject
 
-    Private WithEvents prg As New ProgressBar
     Private Enabled As Boolean = True
 
+    Private Value As Integer
+
+
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
 
         'Create one output.
         Outputs(New String() {"Value,Number"})
 
-        Inputs(New String() {"Enable,Boolean", "Value"})
+        Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
 
         'Set the title.
         Title = "Slider"
 
-        prg.Width = 100
-        prg.Minimum = 0
-        prg.Maximum = prg.Width
-        prg.Value = prg.Maximum * 0.5
-        prg.Style = ProgressBarStyle.Continuous
-        prg.Location = Position
-        AddControl(prg)
-    End Sub
-
-    Public Overrides Sub Dispose()
-        prg.Dispose()
-        MyBase.Dispose()
-    End Sub
-
-    Public Overrides Sub Moving()
-        prg.Location = Position
+        Value = MyBase.Size.Width * 0.5
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -40,33 +27,65 @@ Public Class fgSlider
                 Enabled = Data
 
             Case 1 'Set value
-                prg.Value = Data * prg.Maximum
+                If Not Enabled Then Return
+                If Data.GetType Is GetType(Boolean) Then
+                    If Data = True Then
+                        Value = Size.Width
+                    Else
+                        Value = 0
+                    End If
+                Else
+                    Value = Data * Size.Width
+                End If
+
+
         End Select
+
+        DoDraw(Rect)
     End Sub
 
-    Private Sub prg_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles prg.MouseDown
+    Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseDown(e)
+        If Not Enabled Then Return
         If e.Button = MouseButtons.Left Then
-            If e.X >= prg.Width Then
-                prg.Value = prg.Maximum
-            ElseIf e.X <= 0 Then
-                prg.Value = prg.Minimum
+            Dim x As Integer = e.X - Position.X
+            If x >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
             Else
-                prg.Value = e.X
+                Value = x
             End If
-            Send(prg.Value / prg.Maximum)
+            Send(x / Size.Width)
+            DoDraw(Rect)
         End If
     End Sub
 
-    Private Sub prg_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles prg.MouseMove
+    Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseMove(e)
+        If Not Enabled Then Return
         If e.Button = MouseButtons.Left Then
-            If e.X >= prg.Width Then
-                prg.Value = prg.Maximum
-            ElseIf e.X <= 0 Then
-                prg.Value = prg.Minimum
+            Dim x As Integer = e.X - Position.X
+            If X >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
             Else
-                prg.Value = e.X
+                Value = x
             End If
-            Send(prg.Value / prg.Maximum)
+            Send(x / Size.Width)
+            DoDraw(Rect)
         End If
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        If Enabled Then
+            g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value, 20)
+        Else
+            g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value, 20)
+        End If
+        g.DrawString(Math.Round(Value / Size.Width * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
     End Sub
 End Class
