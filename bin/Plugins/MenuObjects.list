@@ -1,0 +1,32 @@
+AddMenuObject|Add2,Plugins.fgAdd,,2|Math,Add
+AddMenuObject|Add3,Plugins.fgAdd,,3|Math,Add
+AddMenuObject|Add4,Plugins.fgAdd,,4|Math,Add
+AddMenuObject|Add5,Plugins.fgAdd,,5|Math,Add
+AddMenuObject|Add6,Plugins.fgAdd,,6|Math,Add
+AddMenuObject|Add7,Plugins.fgAdd,,7|Math,Add
+AddMenuObject|Add8,Plugins.fgAdd,,8|Math,Add
+AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
+AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
+AddMenuObject|Counter,Plugins.fgCounter,60|Math
+AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
+AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
+AddMenuObject|Slider,Plugins.fgSlider
+AddMenuObject|Timer,Plugins.fgTimer|Math
+AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
+AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
+AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
+AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
+AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
+AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
+AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
+AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
+AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
+AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
+AddMenuObject|Input,Plugins.MIDI_Input|MIDI
+AddMenuObject|128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI,Keyboards
+AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
+AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
+AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
+AddMenuObject|Output,Plugins.MIDI_Output|MIDI
+AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
