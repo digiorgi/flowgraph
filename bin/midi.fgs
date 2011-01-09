@@ -8,7 +8,7 @@ Object4{Name=Plugins.fgGetJoystickAxis;Position=25,145;Output=0`1,7,0`0`0`0`1,5,
 Object5{Name=Plugins.fgAxisToBoolean;Position=115,195;Output=0`1,6,2;Input=1;SwitchOn=0.9;}
 Object6{Name=Plugins.MIDI_SimulatePedals;Position=355,175;Output=2,10,1,2,1;Input=0,1,1,1,0;}
 Object7{Name=Plugins.fgAxisToBoolean;Position=115,145;Output=0`1,6,3;Input=1;SwitchOn=0.9;}
-Object8{Name=Plugins.MIDI_AxisToController;Position=435,270;Output=1,2,1;Input=0,1;Enabled=True;Controller=64;Channel=1;}
+Object8{Name=Plugins.MIDI_SetController;Position=435,270;Output=1,2,1;Input=0,1;Enabled=True;Controller=64;Channel=1;}
 Object9{Name=Plugins.fgFPS;Position=580,5;}
 Object10{Name=Plugins.MIDI_Keyboard;Position=355,40;UserData=88-21-9;Output=0;Input=0,1;}
 Object11{Name=Plugins.MIDI_Volume;Position=250,300;Output=1,6,1;Input=0,1;Enabled=True;Volume=128;}

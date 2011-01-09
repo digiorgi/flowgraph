@@ -1,5 +1,5 @@
-﻿'AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
-Public Class MIDI_AxisToController
+﻿'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
+Public Class MIDI_SetController
     Inherits BaseObject
 
     Private Enabled As Boolean = True
@@ -19,7 +19,7 @@ Public Class MIDI_AxisToController
         Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
 
         'Set the title.
-        Title = "Axis to controller"
+        Title = "Set controller"
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
