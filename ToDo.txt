@@ -79,3 +79,5 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 		Keyboard:
 			Add a check box to disable other channel colors.
+
+		Some sort of MID player.

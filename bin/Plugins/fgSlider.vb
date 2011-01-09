@@ -10,9 +10,7 @@ Public Class fgSlider
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
 
-        'Create one output.
         Outputs(New String() {"Value,Number"})
-
         Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
 
         'Set the title.

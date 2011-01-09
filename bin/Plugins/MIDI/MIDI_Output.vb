@@ -188,7 +188,7 @@ Public Class MIDI_Output
         End Try
     End Sub
 
-    Private Sub chkAllChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
+    Private Sub chkMessageChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
         numChannel.Enabled = Not chkMessageChannels.Checked
     End Sub
 #End Region
