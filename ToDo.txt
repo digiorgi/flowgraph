@@ -2,7 +2,6 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-Does not always clear after loading a new fgs.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
@@ -33,8 +32,6 @@ Step#GUI
 
 
 Step#4
-	SimpleD needs support for groups inside groups. (for folders)
-
 	Folders (Allow you to put objects in folders.)
 			Each folder would have one input(As Object) and one output(As Object).
 

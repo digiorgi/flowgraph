@@ -355,10 +355,15 @@ Public Class frmMain
             Save(sfd.FileName)
         End If
     End Sub
+
+    Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click
+        frmAbout.ShowDialog()
+    End Sub
 #End Region
 
     Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
         Draw = chkDraw.Checked
     End Sub
 
+  
 End Class

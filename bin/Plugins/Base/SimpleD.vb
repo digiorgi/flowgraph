@@ -32,8 +32,13 @@
 Namespace SimpleD
     Module Info
         Public Const IllegalCharacters As String = "{}=;"
-        Public Const Version = 0.986
+        Public Const Version = 0.99
         Public Const FileVersion = 1
+        '0.99
+        'Added  : Can now have groups inside of groups.
+        'Added  : GetValue(Control,Value)  Gets the property from the control name. Then sets the contols value, if the control is known.
+        'Changed: Spliting is now done with a few options not a string.
+        'Fixed  : SetValue(Control) now check throgh known controls for the right value.
         '0.986
         'Added: default value to Set_Value.
         'Changed: Control to Windows.Forms.Control
@@ -124,22 +129,31 @@ Namespace SimpleD
 #End Region
 
 #Region "To String/File"
-        Public Overloads Function ToString(Optional ByVal Split As String = vbNewLine & vbTab) As String
+
+        Public Sub ToFile(ByVal File As String, Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True)
+            Dim sw As New IO.StreamWriter(File)
+            sw.Write(ToString(SplitWithNewLine, SplitWithTabs))
+            sw.Close()
+        End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="SplitWithNewLine">Split propertys and groups using a newline?</param>
+        ''' <param name="SplitWithTabs">Split propertys and groups using tabs?
+        ''' Does not use tabs if newline is disabled.</param>
+        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True) As String
             If Groups.Count = 0 Then Return ""
+            If SplitWithNewLine = False Then SplitWithTabs = False
 
             Dim tmp As String = "//Version=" & Version & " FileVersion=" & FileVersion & "\\"
             For n As Integer = 0 To Groups.Count - 1
-                tmp &= vbNewLine & Groups(n).ToString(Split)
+                tmp &= vbNewLine & Groups(n).ToString(SplitWithNewLine, If(SplitWithTabs, 1, 0))
             Next
 
             Return tmp
 
         End Function
-        Public Sub ToFile(ByVal File As String, Optional ByVal Split As String = vbNewLine & vbTab)
-            Dim sw As New IO.StreamWriter(File)
-            sw.Write(ToString(Split))
-            sw.Close()
-        End Sub
 #End Region
 
 #Region "From String/File"
@@ -167,76 +181,84 @@ Namespace SimpleD
                 If tmp = "//" Then
                     InComment = True
                     n += 1
-                    GoTo NextG
                 ElseIf tmp = "\\" Then
                     InComment = False
                     n += 1
-                    GoTo NextG
-                ElseIf tmp = vbNewLine Then
-                    InComment = False
-                    n += 1
-                    GoTo NextG
+                    'ElseIf tmp = vbNewLine Then
+                    '    InComment = False
+                    '    n += 1
+                    '    GoTo NextG
 
 
                 ElseIf Not InComment Then
 
                     'Find the start so we can get the name.
                     Dim Start As Integer = Data.IndexOf("{", n)
+                    If Start = -1 Then Return
                     'Now get the name.
-                    Dim gName As String = Trim(Data.Substring(n, Start - n).Trim(vbTab))
+                    Dim gName As String = Trim(Data.Substring(n, Start - n).Trim(New Char() {vbCr, vbLf, vbTab}))
                     n = Start + 1
 
                     Dim Group As New Group(gName)
                     Groups.Add(Group)
 
-                    'Now lets get all of the propertys from the group.
-                    Do
-                        If n + 2 > Data.Length Then GoTo Endy
-                        tmp = Data.Substring(n, 2)
-                        If tmp = "//" Then
-                            InComment = True
-                            n += 1
-                            GoTo Nextp
-                        ElseIf tmp = "\\" Then
-                            InComment = False
-                            n += 1
-                            GoTo Nextp
-                        ElseIf tmp = vbNewLine Then
-                            InComment = False
-                            n += 1
-                            GoTo Nextp
-
-
-                        ElseIf Not InComment Then
-                            Dim Equals As Integer = Data.IndexOf("=", n)
-                            Dim PropName As String = Trim(Data.Substring(n, Equals - n).Trim(vbTab))
-                            n = Equals
-                            Dim PropEnd As Integer = Data.IndexOf(";", n)
-                            Dim PropValue As String = Trim(Data.Substring(n + 1, PropEnd - n - 1).Trim(vbTab))
-                            n = PropEnd
-
-                            Group.Set_Value(PropName, PropValue)
-
-
-                        End If
-
-
-
-NextP:                  'Next Property.
-                        n += 1
-                    Loop Until Data.Substring(n, 1) = "}"
+                    GetGroup(Data, n, Group)
+                    If n + 2 > Data.Length Then Return
                 End If
 
 
-
-NextG:
                 n += 1
             Loop Until n >= Data.Length - 1
 
 
-Endy:
+        End Sub
+
+        Private Sub GetGroup(ByVal Data As String, ByRef n As Integer, ByVal Group As Group)
+            Dim tmp As String
+            Dim InComment As Boolean = False
+            'Now lets get all of the propertys from the group.
+            Do
+                If n + 2 > Data.Length Then Return
+                tmp = Data.Substring(n, 2)
+                If tmp = "//" Then
+                    InComment = True
+                    n += 1
+                ElseIf tmp = "\\" Then
+                    InComment = False
+                    n += 1
 
 
+                ElseIf Not InComment Then
+                    Dim Equals As Integer = Data.IndexOf("=", n)
+                    Dim GroupStart As Integer = Data.IndexOf("{", n)
+                    Dim GroupEnd As Integer = Data.IndexOf("}", n)
+                    If Equals = -1 And GroupStart = -1 Then Return
+                    If GroupEnd < GroupStart And GroupEnd < Equals Then
+                        n = GroupEnd
+                        Return
+                    End If
+                    'Is the next thing a group or property?
+                    If Equals > -1 And ((Equals < GroupStart) Or GroupStart = -1) Then
+                        Dim PropName As String = Trim(Data.Substring(n, Equals - n).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = Equals
+                        Dim PropEnd As Integer = Data.IndexOf(";", n)
+                        Dim PropValue As String = Trim(Data.Substring(n + 1, PropEnd - n - 1).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = PropEnd
+                        Group.Set_Value(PropName, PropValue)
+                    ElseIf GroupStart > -1 Then
+
+                        Dim gName As String = Trim(Data.Substring(n, GroupStart - n).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = GroupStart + 1
+
+                        Dim NewGroup As New Group(gName)
+                        Group.Add_Group(NewGroup)
+                        GetGroup(Data, n, NewGroup)
+                    End If
+
+                End If
+
+                n += 1
+            Loop Until Data.Substring(n, 1) = "}"
         End Sub
 #End Region
 
@@ -246,10 +268,51 @@ Endy:
         Public Name As String
 
         Private Propertys As New List(Of Prop)
+        Private Groups As New List(Of Group)
 
         Public Sub New(ByVal Name As String)
             Me.Name = Name
         End Sub
+
+
+#Region "Group"
+
+
+        ''' <summary>
+        ''' Create a group.
+        ''' Will return other group if names match.
+        ''' </summary>
+        ''' <param name="Name">The name of the group.</param>
+        Public Function Create_Group(ByVal Name As String) As Group
+            Dim tmp As Group = Get_Group(Name) 'Search for a group with the name.
+            If tmp Is Nothing Then 'If group not found then.
+                tmp = New Group(Name) 'Create a new group.
+                Groups.Add(tmp) 'Add the new group to the list.
+            End If
+            Return tmp 'Return the group.
+        End Function
+        Public Sub Add_Group(ByVal Group As Group)
+            'First lets see if we can find a group.
+            Dim tmp As Group = Get_Group(Group.Name)
+            If tmp IsNot Nothing Then
+                'We found a group so lets combine them.
+                tmp.Combine(Group)
+            Else
+                'We did not find any other groups so add it to the list.
+                Groups.Add(Group)
+            End If
+        End Sub
+        Public Function Get_Group(ByVal Name As String) As Group
+            Name = LCase(Name)
+            For Each Group As Group In Groups
+                If Name = LCase(Group.Name) Then
+                    Return Group
+                End If
+            Next
+            Return Nothing
+        End Function
+
+#End Region
 
         ''' <summary>
         ''' Conbines the group with this group.
@@ -258,6 +321,10 @@ Endy:
         Public Sub Combine(ByVal Group As Group)
             For Each Prop As Prop In Group.Propertys
                 Set_Value(Prop.Name, Prop.Value)
+            Next
+
+            For Each Grp As Group In Group.Groups
+                Add_Group(Grp)
             Next
         End Sub
 
@@ -328,10 +395,37 @@ Endy:
                 Value = prop.Value 'Find the property and return the value.
             End If
         End Sub
+
         ''' <summary>
-        ''' Get the value from a property.
+        ''' Sets the value of the control to the proprety with the same name.
+        ''' Known controls: TextBox,Label,CheckBox,RadioButton,NumericUpDown,NumericUpDownAcceleration,ProgressBar
         ''' </summary>
         ''' <param name="Control">The control to get the property from.</param>
+        ''' <param name="Value">Returns value if control is unknown.</param>
+        Public Sub Get_Value(ByRef Control As Windows.Forms.Control, ByRef Value As String)
+            Dim TempValue As String = Find(Control.Name).Value 'Find the property from the control name.
+
+            Dim obj As Object = Control
+            Select Case Control.GetType
+                Case GetType(Windows.Forms.TextBox), GetType(Windows.Forms.Label)
+                    obj.Text = TempValue
+
+                Case GetType(Windows.Forms.CheckBox), GetType(Windows.Forms.RadioButton)
+                    obj.Checked = TempValue
+
+                Case GetType(Windows.Forms.NumericUpDown), GetType(Windows.Forms.NumericUpDownAcceleration), GetType(Windows.Forms.ProgressBar)
+                    obj.Value = TempValue
+
+                Case Else
+                    'Throw New Exception("Could not find object type.")
+                    Value = TempValue
+            End Select
+        End Sub
+        ''' <summary>
+        ''' Uses the name of the control to find the property value.
+        ''' </summary>
+        ''' <param name="Control"></param>
+        ''' <returns>Property value.</returns>
         Public Function Get_Value(ByVal Control As Windows.Forms.Control) As String
             Return Find(Control.Name).Value 'Find the property from a object and return the value.
         End Function
@@ -345,6 +439,20 @@ Endy:
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Function GetValueFromObject(ByVal Obj As Object) As String
+
+            Select Case Obj.GetType
+                Case GetType(Windows.Forms.TextBox), GetType(Windows.Forms.Label)
+                    Return Obj.Text
+
+                Case GetType(Windows.Forms.CheckBox), GetType(Windows.Forms.RadioButton)
+                    Return Obj.Checked
+
+                Case GetType(Windows.Forms.NumericUpDown), GetType(Windows.Forms.NumericUpDownAcceleration), GetType(Windows.Forms.ProgressBar)
+                    Return Obj.Value
+
+            End Select
+
+            'Unknown control, so lets see if we can find the right value.
             Dim Value As String = "Could_Not_Find_Value"
             Try 'Try and get the value.
                 Value = Obj.Value
@@ -381,16 +489,39 @@ Endy:
             Return Nothing
         End Function
 
-        Public Overloads Function ToString(Optional ByVal Split As String = "") As String
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="SplitWithNewLine">Split propertys and groups using a newline?</param>
+        ''' <param name="TabCount">Split propertys and groups using tabs?
+        ''' Does not use tabs if newline is disabled.</param>
+        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal TabCount As Integer = 1) As String
             If Propertys.Count = 0 Then Return ""
+            If TabCount < 0 Then TabCount = 0
 
+            'Setup spliting.
+            Dim Split As String = ""
+            If SplitWithNewLine Then
+                Split = vbNewLine & New String(vbTab, TabCount)
+            End If
+
+            'Name and start of group.
             Dim tmp As String = Name & "{"
+
+            'Add the properys from the group.
             For n As Integer = 0 To Propertys.Count - 1
                 tmp &= Split & Propertys(n).Name & "=" & Propertys(n).Value & ";"
             Next
 
-            Return tmp & Trim(Split.Trim(vbTab)) & "}"
+            'Get all the groups in the group.
+            For Each Grp As Group In Groups
+                tmp &= Split & Grp.ToString(SplitWithNewLine, If(TabCount = 0, 0, TabCount + 1))
+            Next
 
+            '} end of group.
+            tmp &= If(SplitWithNewLine, vbNewLine, "") & If(TabCount - 1 > 0, New String(vbTab, TabCount - 1), "") & "}"
+
+            Return tmp
         End Function
 
         Overloads Shared Operator +(ByVal left As Group, ByVal right As Group) As Group
