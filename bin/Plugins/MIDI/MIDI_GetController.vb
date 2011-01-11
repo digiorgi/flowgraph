@@ -6,7 +6,7 @@ Public Class MIDI_GetController
 
 
     Private numChannel As New NumericUpDown
-    Private WithEvents chkMessageChannels As New CheckBox
+    Private WithEvents chkChannels As New CheckBox
 
     Private WithEvents comController As New ComboBox
     Private Controller As Integer
@@ -29,11 +29,11 @@ Public Class MIDI_GetController
         numChannel.Location = Position + New Point(45, 25)
         AddControl(numChannel)
 
-        chkMessageChannels.Text = "Any channel"
-        chkMessageChannels.Width = 113
-        chkMessageChannels.Checked = True
-        chkMessageChannels.Location = Position + New Point(86, 24)
-        AddControl(chkMessageChannels)
+        chkChannels.Text = "Any channel"
+        chkChannels.Width = 113
+        chkChannels.Checked = True
+        chkChannels.Location = Position + New Point(86, 24)
+        AddControl(chkChannels)
 
         comController.Width = 200
         comController.Location = Position
@@ -46,7 +46,7 @@ Public Class MIDI_GetController
 
     Public Overrides Sub Dispose()
         numChannel.Dispose()
-        chkMessageChannels.Dispose()
+        chkChannels.Dispose()
         comController.Dispose()
 
         MyBase.Dispose()
@@ -54,7 +54,7 @@ Public Class MIDI_GetController
 
     Public Overrides Sub Moving()
         numChannel.Location = Position + New Point(45, 25)
-        chkMessageChannels.Location = Position + New Point(86, 24)
+        chkChannels.Location = Position + New Point(86, 24)
         comController.Location = Position
     End Sub
 
@@ -68,7 +68,7 @@ Public Class MIDI_GetController
 
             Case 1 'Channel message
                 If Not Enabled Then Return
-                If chkMessageChannels.Checked Then
+                If chkChannels.Checked Then
                     If Data.MidiChannel <> numChannel.Value - 1 Then
                         Return
                     End If
@@ -96,7 +96,7 @@ Public Class MIDI_GetController
             comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
         End If
 
-        g.Get_Value("AnyChannels", chkMessageChannels.Checked, False)
+        g.Get_Value("AnyChannels", chkChannels.Checked, False)
 
         g.Get_Value("Channel", numChannel.Value, False)
 
@@ -108,7 +108,7 @@ Public Class MIDI_GetController
 
         g.Set_Value("Enabled", Enabled)
         g.Set_Value("Controller", Controller)
-        g.Set_Value("AnyChannels", chkMessageChannels.Checked)
+        g.Set_Value("AnyChannels", chkChannels.Checked)
         g.Set_Value("Channel", numChannel.Value)
 
 
@@ -117,8 +117,8 @@ Public Class MIDI_GetController
 #End Region
 
 #Region "Control events"
-    Private Sub chkMessageChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
-        numChannel.Enabled = Not chkMessageChannels.Checked
+    Private Sub chkChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkChannels.CheckedChanged
+        numChannel.Enabled = Not chkChannels.Checked
     End Sub
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
