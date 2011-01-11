@@ -11,13 +11,14 @@ Public Class MIDI_Volume
         Setup(UserData, StartPosition, 95) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message,ChannelMessageBuilder,ChannelMessage"})
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessageBuilder,ChannelMessage"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessageBuilder,ChannelMessage", "Volume,Number,Boolean"})
 
         'Set the title.
         Title = "MIDI Volume"
 
+        numVolume.Minimum = 1
         numVolume.Maximum = 128
         numVolume.Width = 50
         numVolume.Value = 128
@@ -44,7 +45,7 @@ Public Class MIDI_Volume
                 End If
 
 
-            Case 1 'Input axis
+            Case 1 'Channel Message
                 If Not Enabled Then Return
 
                 Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
@@ -59,11 +60,15 @@ Public Class MIDI_Volume
                 'Is it a note (on or off)?
                 If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
-                        message.data2 = numvolume.value - 1
+                        message.Data2 = numVolume.Value - 1
                     End If
                 End If
 
                 Send(message)
+
+            Case 2 'Volume
+                If Not Enabled Then Return
+                numVolume.Value = (Data * 127) + 1
         End Select
     End Sub
 
