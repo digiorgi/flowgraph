@@ -283,7 +283,6 @@ Public Class frmMain
 
             Case ToolType.Move
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
-                DoDraw(True)
 
             Case ToolType.Connect
                 DoDraw(True)
@@ -321,7 +320,7 @@ Public Class frmMain
         End Select
     End Sub
 
-#Region "Open Save SaveAs buttons"
+#Region "Controls"
 
 
     Private Sub btnNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNew.Click
@@ -359,11 +358,11 @@ Public Class frmMain
     Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click
         frmAbout.ShowDialog()
     End Sub
-#End Region
 
     Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
         Draw = chkDraw.Checked
     End Sub
+#End Region
 
   
 End Class
