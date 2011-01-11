@@ -213,6 +213,8 @@ Public Module Plugins
 
         'Set the loaded file
         LoadedFile = File
+
+        DoDraw()
     End Sub
 
     Public Sub Save(ByVal File As String)
@@ -230,11 +232,9 @@ Public Module Plugins
         Next
 
         'Save to file.
-        sd.ToFile(File, "")
+        sd.ToFile(File)
 
         LoadedFile = File
-
-        DoDraw()
     End Sub
 
 #End Region
