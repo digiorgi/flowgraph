@@ -314,6 +314,9 @@ Public MustInherit Class BaseObject
         x = SnapToGrid(x)
         y = SnapToGrid(y)
 
+        'There is no point in doing anything if the new position is the same as the old.
+        If x = Rect.X And y = Rect.Y Then Return
+
         'Update the positions of the rectangles.
         Rect.Location = New Point(x, y)
         TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
@@ -326,6 +329,8 @@ Public MustInherit Class BaseObject
 
         'Tell everyone that wants to know that, we are moving!
         Moving()
+
+        DoDraw(True)
     End Sub
 
     ''' <summary>
