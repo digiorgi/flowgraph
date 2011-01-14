@@ -45,7 +45,15 @@ Module CompileFGS
                 Console.WriteLine("Object " & name & " file(" & file & ") does NOT exist.")
                 Return
             End If
-            Files.Add(file)
+
+            Dim FoundFile As Boolean = False
+            For f As Integer = 0 To Files.Count - 1
+                If LCase(Files(f)) = LCase(file) Then
+                    FoundFile = True
+                    Exit For
+                End If
+            Next
+            If Not FoundFile Then Files.Add(file)
         Next
 
         Log(" Done", False)
@@ -85,7 +93,7 @@ Restart:
         Next
         'If there are any new(included) files. Then we add them to the file list and check them.
         If NewFiles.Count > 0 Then
-            StartI = Files.Count - 1
+            StartI = Files.Count ' - 1
             For Each nFile As String In NewFiles
                 nFile = "Plugins\" & nFile
                 Dim Exists As Boolean = False
@@ -119,6 +127,19 @@ Restart:
         'End the namespace.
         sAdd("End Namespace")
 
+        sAdd("Namespace Flowgraph")
+        Files = New List(Of String)
+        Files.AddRange(New String() {"..\Flowgraph\frmMain.vb", "..\Flowgraph\frmMain.Designer.vb", _
+                                    "..\Flowgraph\frmAbout.vb", "..\Flowgraph\frmAbout.Designer.vb", _
+                                    "..\Flowgraph\modMain.vb"})
+
+        For Each file As String In Files
+            Dim sr As New IO.StreamReader(file)
+            sAdd(sr.ReadToEnd)
+            sr.Close()
+        Next
+
+        sAdd("End Namespace")
 
         'Save the source to a file for debuging.
         Dim sw As New IO.StreamWriter("fgsSource.vb")
@@ -168,7 +189,11 @@ Restart:
             .OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
             .GenerateExecutable = True
             .GenerateInMemory = False
-            .MainClass = "frmMain"
+            .MainClass = "Flowgraph.frmMain"
+            '.MainClass = "Flowgraph.modMain"
+            'MsgBox(.MainClass)
+
+            '.CompilerOptions
             '.EmbeddedResources.Add()
 
 
@@ -189,10 +214,13 @@ Restart:
         Dim Provider As CodeDomProvider = New Microsoft.VisualBasic.VBCodeProvider()
 
         'Compile the plugin.
-        Results = Provider.CompileAssemblyFromFile(Params, { _
-                                                   "..\Flowgraph\modMain.vb", _
-                                                   "..\Flowgraph\frmMain.vb", "..\Flowgraph\frmMain.Designer.vb", "..\Flowgraph\frmMain.resx", _
-                                                            "fgsSource.vb"})
+        'Results = Provider.CompileAssemblyFromFile(Params, { _
+        '                                           "..\Flowgraph\modMain.vb", _
+        '                                           "..\Flowgraph\frmMain.vb", "..\Flowgraph\frmMain.Designer.vb", "..\Flowgraph\frmMain.resx", _
+        '                                                    "fgsSource.vb"})
+
+        Results = Provider.CompileAssemblyFromFile(Params, "fgsSource.vb")
+
 
         'Return the results.
         Return Results

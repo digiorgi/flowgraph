@@ -28,6 +28,14 @@
 #End Region
 
 Module modMain
+    Public frmMain As New frmMain
+    Public frmAbout As New frmAbout
+
+    Sub Main()
+
+
+        Application.Run(frmMain)
+    End Sub
 
     Public Sub Load_PluginSystem()
         AddHandler AddControlEvent, AddressOf AddControl
