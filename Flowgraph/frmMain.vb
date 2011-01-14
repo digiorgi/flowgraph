@@ -356,7 +356,8 @@ Public Class frmMain
     End Sub
 
     Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click
-        frmAbout.ShowDialog()
+        modMain.frmAbout.ShowDialog()
+        ' frmAbout.ShowDialog()
     End Sub
 
     Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged

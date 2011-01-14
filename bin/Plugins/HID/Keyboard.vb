@@ -1,7 +1,7 @@
 ﻿'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 'Include(HID\Input.vb)
-'Include(Base\BaseObject.vb,Base\SimpleD.vb)
+'Include(Base\Plugins.vb,Base\BaseObject.vb,Base\SimpleD.vb,Base\Menu.vb)
 Public Class fgGetKey
     Inherits BaseObject
 

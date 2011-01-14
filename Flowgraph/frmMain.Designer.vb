@@ -22,7 +22,6 @@ Partial Class frmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.btnOpen = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnSaveAs = New System.Windows.Forms.Button()
@@ -118,7 +117,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.btnNew)
         Me.Controls.Add(Me.btnOpen)
         Me.DoubleBuffered = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmMain"
         Me.Text = "Flowgraph"
         Me.ResumeLayout(False)
