@@ -18,6 +18,7 @@ Step#2
 
 Step#3
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
+		Need a way for the compiler to remove unneeded code from scripts.
 
 	Tooltip regions.  Would allow controls or rectangles. e.g.
 		Tooltip.Add(textbox1, "Add some text.") 'Returns index.

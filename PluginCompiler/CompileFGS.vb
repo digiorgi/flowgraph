@@ -140,6 +140,7 @@ Restart:
 
         sAdd("End Namespace")
 
+        Source = Source.Replace("If FileToOpen <> """" Then Open(FileToOpen)", FGS_ToCode(fgsFile))
      
         'Save the source to a file for debuging.
         Dim sw As New IO.StreamWriter("fgsSource.vb")
@@ -175,6 +176,54 @@ Restart:
             Log(Environment.NewLine & "Successfully compiled.")
         End If
     End Sub
+
+    Public Const FileVersion = 0.5
+    Public Function FGS_ToCode(ByVal fgs As String) As String
+        Dim sd As New SimpleD.SimpleD(fgs, True)
+        Dim g As SimpleD.Group = sd.Get_Group("Main")
+       
+
+        'Make sure the versions match.
+        If g.Get_Value("FileVersion") <> FileVersion Then
+            MsgBox("Wrong file version." & Environment.NewLine _
+                   & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
+                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
+            Return ""
+        End If
+
+        Dim Code As String = "Me.ClientSize = New Size(" & g.Get_Value("Width") & "," & g.Get_Value("Height") & ")"
+
+        'Get the number of objects.
+        Dim numObj As Integer = g.Get_Value("Objects")
+        For n As Integer = 0 To numObj 'Loop thrugh each object.
+            g = sd.Get_Group("Object" & n) 'Get the object.
+            If g Is Nothing Then
+                MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                Return ""
+            End If
+
+            Code &= vbNewLine
+            Code &= "Objects.Add(New " & g.Get_Value("name") & "(New Point(" & g.Get_Value("position") & "),""" & g.Get_Value("userdata") & """))"
+
+        Next
+        'Dim a As New SimpleD.Group
+
+        Code &= vbNewLine & "Dim sd As New SimpleD.SimpleD(""" & sd.ToString(False).Replace(Environment.NewLine, "") & """)"
+
+        'Load each object.
+        For n As Integer = 0 To numObj
+            g = sd.Get_Group("Object" & n)
+            'Try and load each object.
+            Code &= vbNewLine & "Try" & vbNewLine
+            Code &= "Objects(" & n & ").Load(sd.Get_Group(""Object" & n & """))"
+            Code &= vbNewLine & "Catch ex As Exception"
+            Code &= vbNewLine & "MsgBox(""Could not load object# " & n & """ & Environment.NewLine & ""Name: " & g.Get_Value("name") & """ & Environment.NewLine" _
+                  & " & ""Execption="" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, ""Error loading object"")"
+            Code &= vbNewLine & "End Try"
+        Next
+
+        Return Code
+    End Function
 #End Region
 
 #Region "The real compiling"
@@ -190,11 +239,8 @@ Restart:
             .GenerateExecutable = True
             .GenerateInMemory = False
             .MainClass = "Flowgraph.frmMain"
-            '.MainClass = "Flowgraph.modMain"
-            'MsgBox(.MainClass)
 
-            '.CompilerOptions
-            '.EmbeddedResources.Add()
+            .CompilerOptions = "/target:winexe"
 
 
 #If DEBUG Then
