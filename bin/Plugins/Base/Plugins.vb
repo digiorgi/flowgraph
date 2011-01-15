@@ -144,10 +144,11 @@ Public Module Plugins
         OutputImage = Image.FromFile("Output.png")
 
         Plugins.Form = form
-
-        AddObject_Setup()
+        'RemoveFromFGS
+        AddObject_Setup()'EndRemoveFromFGS
     End Sub
 
+    'RemoveFromFGS
 
     Public LoadedFile As String = ""
     Public Const FileVersion = 0.5
@@ -237,6 +238,7 @@ Public Module Plugins
         LoadedFile = File
     End Sub
 
+    'EndRemoveFromFGS
 #End Region
 
 #Region "Auto draw"
@@ -309,6 +311,7 @@ Public Module Plugins
         End Try
     End Function
 
+    'RemoveFromFGS
     Private Sub AddObject_Setup()
         'Is the plugins library newer then the objects file?
         If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\MenuObjects.list") Then
@@ -375,6 +378,7 @@ Public Module Plugins
 
         AddItem.Sort()
     End Sub
+    'EndRemoveFromFGS
 #End Region
 
 End Module

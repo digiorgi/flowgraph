@@ -622,99 +622,10 @@ Public Module Plugins
         OutputImage = Image.FromFile("Output.png")
 
         Plugins.Form = form
-
-        AddObject_Setup()
+        
     End Sub
 
-
-    Public LoadedFile As String = ""
-    Public Const FileVersion = 0.5
-
-    Public Sub Open(ByVal File As String)
-        If Not IO.File.Exists(File) Then
-            MsgBox("Could not find file:" & vbNewLine & File, , "Error loading")
-            Return
-        End If
-
-        ClearObjects()
-
-        Dim sd As New SimpleD.SimpleD
-        sd.FromFile(File)
-
-        Dim g As SimpleD.Group = sd.Get_Group("Main")
-        Form.ClientSize = New Size(g.Get_Value("Width"), g.Get_Value("Height"))
-
-
-        'Make sure the versions match.
-        If g.Get_Value("FileVersion") <> FileVersion Then
-            MsgBox("Wrong file version." & Environment.NewLine _
-                   & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
-                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
-            Return
-        End If
-
-        'Get the number of objects.
-        Dim numObj As Integer = g.Get_Value("Objects")
-        For n As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.Get_Group("Object" & n) 'Get the object.
-            If g Is Nothing Then
-                MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
-                ClearObjects()
-                LoadedFile = ""
-                Return
-            End If
-
-            'Get the position.
-            Dim pos As String() = Split(g.Get_Value("position"), ",")
-            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata")) 'Get the object.
-
-            'Show error if could not create object.
-            If obj = -1 Then
-                MsgBox("Could not create object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
-                ClearObjects()
-                LoadedFile = ""
-                Return
-            End If
-        Next
-
-        'Load each object.
-        For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
-            'Try and load each object.
-            Try
-                Objects(n).Load(g)
-            Catch ex As Exception
-                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name") & vbNewLine _
-                      & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
-            End Try
-        Next
-
-        'Set the loaded file
-        LoadedFile = File
-
-        DoDraw()
-    End Sub
-
-    Public Sub Save(ByVal File As String)
-
-        Dim sd As New SimpleD.SimpleD
-        Dim g As SimpleD.Group = sd.Create_Group("Main")
-        g.Set_Value("Width", Form.ClientSize.Width)
-        g.Set_Value("Height", Form.ClientSize.Height)
-        g.Set_Value("Objects", Objects.Count - 1)
-        g.Set_Value("FileVersion", FileVersion)
-
-        'Save each object.
-        For Each obj As Object In Objects
-            sd.Add_Group(obj.Save)
-        Next
-
-        'Save to file.
-        sd.ToFile(File)
-
-        LoadedFile = File
-    End Sub
-
+    
 #End Region
 
 #Region "Auto draw"
@@ -787,72 +698,7 @@ Public Module Plugins
         End Try
     End Function
 
-    Private Sub AddObject_Setup()
-        'Is the plugins library newer then the objects file?
-        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\MenuObjects.list") Then
-
-            'The plugins have changed. So lets find all of the objects.
-
-            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.vb", IO.SearchOption.AllDirectories)
-            Dim ObjectList As String = ""
-            For Each File As String In Scripts
-                SearchForItems(File, ObjectList)
-            Next
-
-            'Write all of the objects found to the file.
-            Dim sw As New IO.StreamWriter("Plugins\MenuObjects.list", False)
-            sw.Write(ObjectList)
-            sw.Close()
-
-        Else
-            'Objects.list is newer, so lets get the items from it.
-            SearchForItems("Plugins\MenuObjects.list")
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Search thru a file and fill the add object menu. With found objects.
-    ''' </summary>
-    ''' <param name="File">The file to search thru.</param>
-    ''' <param name="ObjectList">Will fill string with each line that has "AddMenuObject".
-    ''' Unlis set to "DoNotFill"</param>
-    ''' <remarks></remarks>
-    Private Sub SearchForItems(ByVal File As String, Optional ByRef ObjectList As String = "DoNotFill", Optional ByVal SearchWholeFile As Boolean = False)
-        Dim sr As New IO.StreamReader(File)
-        Dim StartIndex As Integer
-        Do
-            Dim line As String = sr.ReadLine 'Get the next line out of the file.
-            StartIndex = line.IndexOf("AddMenuObject", StringComparison.OrdinalIgnoreCase) 'Get the index of "AddMenuObject".
-
-            'If we found "AddMenuObject" then.
-            If StartIndex > -1 Then
-                'Should split like:
-                'AddMenuObject|Name,ClassName,Optional Width|Group1,Group2,Group3,etc..
-                'Groups are optional.
-                Dim SplitLine As String() = Split(line, "|")
-                Select Case SplitLine.Length
-                    Case 2 'No groups. 
-                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
-
-                    Case 3 'Has Group(s) 
-                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
-
-                End Select
-
-                'Fill object list(if not "DoNotFill").
-                If ObjectList = "DoNotFill" Then
-                ElseIf ObjectList = "" Then
-                    ObjectList = line.Remove(0, 1)
-                Else
-                    ObjectList &= vbNewLine & line.Remove(0, 1)
-                End If
-            End If
-
-        Loop Until sr.EndOfStream Or (StartIndex = -1 And Not SearchWholeFile)
-        sr.Close()
-
-        AddItem.Sort()
-    End Sub
+    
 #End Region
 
 End Module
@@ -1360,7 +1206,7 @@ Public MustInherit Class BaseObject
     ''' <remarks></remarks>
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            Menu.open(Index, MenuItems)
+            Menu.Open(Index, MenuItems)
         End If
     End Sub
 
@@ -2606,12 +2452,7 @@ Public Class frmMain
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
-        If SaveOnExit Then
-            'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
-            If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
-                btnSave_Click(sender, e)
-            End If
-        End If
+        
 
         'Dispose all objects.
         For Each obj As Object In Objects
@@ -2640,18 +2481,14 @@ Public Class frmMain
                     If y + Me.Height > scr.Bottom Then y = scr.Bottom - Me.Height 'If the window is too far down. Then set it to the bottom of the screen.
                     Me.Location = New Point(x, y) 'Set the window location.
 
-
-                Case "nosaveonexit"
-                    SaveOnExit = False
-
-                Case Else
-                    If IO.File.Exists(args(a)) Then
-                        FileToOpen = args(a)
-                    ElseIf IO.File.Exists(args(a) & ".fgs") Then
-                        FileToOpen = args(a) & ".fgs"
-                    End If
+                    
             End Select
         Next
+
+        btnNew.Dispose()
+        btnOpen.Dispose()
+        btnSave.Dispose()
+        btnSaveAs.Dispose()
     End Sub
 
     Private FileToOpen As String = ""
@@ -2691,18 +2528,7 @@ End Try
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For i As Integer = Objects.Count - 1 To 0 Step -1
-                If Objects(i).IntersectsWithOutput(Mouse) Then
-                    Objects(i).Output(Objects(i).Intersection).Disconnect()
-                    DoDraw(True)
-
-                    Return
-                ElseIf Objects(i).IntersectsWithInput(Mouse) Then
-                    Objects(i).Input(Objects(i).Intersection).Disconnect()
-                    DoDraw(True)
-
-                    Return
-                End If
-
+                
                 'If the mouse intersects with a object then send the duble click event to the object.
                 If Mouse.IntersectsWith(Objects(i).Rect) Then
                     Objects(i).MouseDoubleClick(e)
@@ -2734,17 +2560,8 @@ End Try
                             Return
                         End If
 
-
-                        If Objects(i).IntersectsWithOutput(Mouse) Then
-                            Tool = ToolType.Connect
-                            ToolObject = Objects(i).Index
-                            ToolInt = Objects(i).Intersection
-                            ToolOffset = e.Location
-
-                            Return
-                        End If
+                        
                     Next
-
                 End If
 
                 For i As Integer = Objects.Count - 1 To 0 Step -1
@@ -2773,9 +2590,7 @@ End Try
                         Return
                     End If
                 Next
-                If e.Button = Windows.Forms.MouseButtons.Right Then
-                    Plugins.Menu.Open(-1, AddItem)
-                End If
+                
 
             Case ToolType.Menu
                 If e.Button = Windows.Forms.MouseButtons.Left Then
@@ -2793,34 +2608,11 @@ End Try
                     Plugins.Menu.Open(-1, AddItem)
                 End If
 
-
             Case ToolType.Move
                     Tool = ToolType.None
 
 
-
-            Case ToolType.Connect
-                Tool = ToolType.None
-
-                For i As Integer = Objects.Count - 1 To 0 Step -1
-                    If Objects(i).Index <> ToolObject Then
-                        If Objects(i).IntersectsWithInput(Mouse) Then
-
-                            'Try and connect.
-                            If Objects(ToolObject).Output(ToolInt).TryConnect(Objects(i).Index, Objects(i).Intersection) Then
-                                'Add one to connected if it successfully connected.
-                                Objects(i).Input(Objects(i).Intersection).Connected += 1
-                            End If
-
-
-                            Exit For
-                        End If
-                    End If
-                Next
-
-
-                DoDraw(True)
-
+                
         End Select
 
     End Sub
@@ -2873,9 +2665,7 @@ End Try
             Case ToolType.Move
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
 
-            Case ToolType.Connect
-                DoDraw(True)
-
+                
 
         End Select
 
@@ -2899,50 +2689,17 @@ End Try
         Next
 
 
-        Select Case Tool
-            Case ToolType.Connect 'If we are using teh connect tool then draw the line.
-                e.Graphics.DrawLine(ConnectorPen, ToolOffset, Mouse.Location)
-
+        Select Case Tool 
             Case ToolType.Menu
                 If e.ClipRectangle.IntersectsWith(Plugins.Menu.Rect) Then Plugins.Menu.Draw(e.Graphics)
 
         End Select
+
     End Sub
 
 #Region "Controls"
 
-
-    Private Sub btnNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNew.Click
-        If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
-            ClearObjects()
-            LoadedFile = ""
-            DoDraw(True)
-        End If
-    End Sub
-
-    Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
-        Dim ofd As New OpenFileDialog
-        ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
-        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Open(ofd.FileName)
-        End If
-    End Sub
-
-    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
-        If LoadedFile = "" Then
-            btnSaveAs_Click(sender, e)
-        Else
-            Save(LoadedFile)
-        End If
-    End Sub
-
-    Private Sub btnSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveAs.Click
-        Dim sfd As New SaveFileDialog
-        sfd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
-        If sfd.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Save(sfd.FileName)
-        End If
-    End Sub
+    
 
     Dim About As New frmAbout
     Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click

@@ -36,12 +36,14 @@ Public Class frmMain
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
+        'RemoveFromFGS
         If SaveOnExit Then
             'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
             If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
                 btnSave_Click(sender, e)
             End If
         End If
+        'EndRemoveFromFGS
 
         'Dispose all objects.
         For Each obj As Object In Objects
@@ -70,7 +72,7 @@ Public Class frmMain
                     If y + Me.Height > scr.Bottom Then y = scr.Bottom - Me.Height 'If the window is too far down. Then set it to the bottom of the screen.
                     Me.Location = New Point(x, y) 'Set the window location.
 
-
+                    'RemoveFromFGS
                 Case "nosaveonexit"
                     SaveOnExit = False
 
@@ -80,8 +82,14 @@ Public Class frmMain
                     ElseIf IO.File.Exists(args(a) & ".fgs") Then
                         FileToOpen = args(a) & ".fgs"
                     End If
+                    'EndRemoveFromFGS
             End Select
         Next
+
+        'AddToFGSbtnNew.Dispose()
+        'AddToFGSbtnOpen.Dispose()
+        'AddToFGSbtnSave.Dispose()
+        'AddToFGSbtnSaveAs.Dispose()
     End Sub
 
     Private FileToOpen As String = ""
@@ -102,6 +110,7 @@ Public Class frmMain
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For i As Integer = Objects.Count - 1 To 0 Step -1
+                'RemoveFromFGS
                 If Objects(i).IntersectsWithOutput(Mouse) Then
                     Objects(i).Output(Objects(i).Intersection).Disconnect()
                     DoDraw(True)
@@ -113,7 +122,7 @@ Public Class frmMain
 
                     Return
                 End If
-
+                'EndRemoveFromFGS
                 'If the mouse intersects with a object then send the duble click event to the object.
                 If Mouse.IntersectsWith(Objects(i).Rect) Then
                     Objects(i).MouseDoubleClick(e)
@@ -145,7 +154,7 @@ Public Class frmMain
                             Return
                         End If
 
-
+                        'RemoveFromFGS
                         If Objects(i).IntersectsWithOutput(Mouse) Then
                             Tool = ToolType.Connect
                             ToolObject = Objects(i).Index
@@ -154,8 +163,8 @@ Public Class frmMain
 
                             Return
                         End If
+                        'EndRemoveFromFGS
                     Next
-
                 End If
 
                 For i As Integer = Objects.Count - 1 To 0 Step -1
@@ -184,9 +193,11 @@ Public Class frmMain
                         Return
                     End If
                 Next
+                'RemoveFromFGS
                 If e.Button = Windows.Forms.MouseButtons.Right Then
                     Plugins.Menu.Open(-1, AddItem)
                 End If
+                'EndRemoveFromFGS
 
             Case ToolType.Menu
                 If e.Button = Windows.Forms.MouseButtons.Left Then
@@ -204,12 +215,11 @@ Public Class frmMain
                     Plugins.Menu.Open(-1, AddItem)
                 End If
 
-
             Case ToolType.Move
                     Tool = ToolType.None
 
 
-
+                'RemoveFromFGS
             Case ToolType.Connect
                 Tool = ToolType.None
 
@@ -231,7 +241,7 @@ Public Class frmMain
 
 
                 DoDraw(True)
-
+                'EndRemoveFromFGS
         End Select
 
     End Sub
@@ -284,9 +294,10 @@ Public Class frmMain
             Case ToolType.Move
                 Objects(ToolObject).SetPosition(e.X - ToolOffset.X, e.Y - ToolOffset.Y)
 
+                'RemoveFromFGS
             Case ToolType.Connect
                 DoDraw(True)
-
+                'EndRemoveFromFGS
 
         End Select
 
@@ -310,19 +321,20 @@ Public Class frmMain
         Next
 
 
-        Select Case Tool
+        Select Case Tool 'RemoveFromFGS
             Case ToolType.Connect 'If we are using teh connect tool then draw the line.
                 e.Graphics.DrawLine(ConnectorPen, ToolOffset, Mouse.Location)
-
+                'EndRemoveFromFGS
             Case ToolType.Menu
                 If e.ClipRectangle.IntersectsWith(Plugins.Menu.Rect) Then Plugins.Menu.Draw(e.Graphics)
 
         End Select
+
     End Sub
 
 #Region "Controls"
 
-
+    'RemoveFromFGS
     Private Sub btnNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNew.Click
         If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
             ClearObjects()
@@ -354,6 +366,7 @@ Public Class frmMain
             Save(sfd.FileName)
         End If
     End Sub
+    'EndRemoveFromFGS
 
     Dim About As New frmAbout
     Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click

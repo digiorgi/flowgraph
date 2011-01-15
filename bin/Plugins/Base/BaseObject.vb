@@ -500,7 +500,7 @@ Public MustInherit Class BaseObject
     ''' <remarks></remarks>
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            Menu.open(Index, MenuItems)
+            Menu.Open(Index, MenuItems)
         End If
     End Sub
 
