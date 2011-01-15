@@ -140,8 +140,22 @@ Restart:
 
         sAdd("End Namespace")
 
+        'Add the fgs to the code.
         Source = Source.Replace("If FileToOpen <> """" Then Open(FileToOpen)", FGS_ToCode(fgsFile))
-     
+
+        'Remove stuff from code.
+        Do
+            Dim Start As Integer = Source.IndexOf("'RemoveFromFGS")
+            Dim Count As Integer = 17 + Source.IndexOf("'EndRemoveFromFGS", Start) - Start
+
+            Source = Source.Remove(Start, Count)
+        Loop Until Source.Contains("'RemoveFromFGS") = False
+        'Add any extras.
+        Do
+            Source = Source.Replace("'AddToFGS", "")
+        Loop Until Source.Contains("'AddToFGS") = False
+
+
         'Save the source to a file for debuging.
         Dim sw As New IO.StreamWriter("fgsSource.vb")
         sw.Write(Source)
