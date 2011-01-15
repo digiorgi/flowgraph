@@ -130,8 +130,7 @@ Restart:
         sAdd("Namespace Flowgraph")
         Files = New List(Of String)
         Files.AddRange(New String() {"..\Flowgraph\frmMain.vb", "..\Flowgraph\frmMain.Designer.vb", _
-                                    "..\Flowgraph\frmAbout.vb", "..\Flowgraph\frmAbout.Designer.vb", _
-                                    "..\Flowgraph\modMain.vb"})
+                                    "..\Flowgraph\frmAbout.vb", "..\Flowgraph\frmAbout.Designer.vb"})
 
         For Each file As String In Files
             Dim sr As New IO.StreamReader(file)
@@ -141,6 +140,7 @@ Restart:
 
         sAdd("End Namespace")
 
+     
         'Save the source to a file for debuging.
         Dim sw As New IO.StreamWriter("fgsSource.vb")
         sw.Write(Source)

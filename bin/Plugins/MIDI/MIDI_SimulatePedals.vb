@@ -30,7 +30,7 @@ Public Class MIDI_SimulatePedals
         AddControl(chkRemoveOldNotes)
 
         chkFilterOtherChannels.Text = "Filter out other channels"
-        chkFilterOtherChannels.Width = 139
+        chkFilterOtherChannels.Width = 145
         chkFilterOtherChannels.Checked = False
         chkFilterOtherChannels.Location = Position + New Point(5, 20)
         AddControl(chkFilterOtherChannels)

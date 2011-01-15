@@ -209,11 +209,11 @@ Namespace Menu
 
                 Case 2
                     'Is it width or a class?
-                    Try
-                        If Data(1) <> "" Then Node.Width = Data(1)
-                    Catch ex As Exception
+                    If Data(1).GetType = GetType(String) Then
                         Node.ClassName = Data(1)
-                    End Try
+                    Else
+                        Node.Width = Data(1)
+                    End If
 
                 Case 3
                     Node.ClassName = Data(1)

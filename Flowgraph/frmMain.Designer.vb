@@ -33,27 +33,27 @@ Partial Class frmMain
         '
         'btnOpen
         '
-        Me.btnOpen.Location = New System.Drawing.Point(93, 12)
+        Me.btnOpen.Location = New System.Drawing.Point(70, 8)
         Me.btnOpen.Name = "btnOpen"
-        Me.btnOpen.Size = New System.Drawing.Size(75, 23)
+        Me.btnOpen.Size = New System.Drawing.Size(56, 20)
         Me.btnOpen.TabIndex = 0
         Me.btnOpen.Text = "Open"
         Me.btnOpen.UseVisualStyleBackColor = True
         '
         'btnSave
         '
-        Me.btnSave.Location = New System.Drawing.Point(175, 12)
+        Me.btnSave.Location = New System.Drawing.Point(155, 8)
         Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(75, 23)
+        Me.btnSave.Size = New System.Drawing.Size(56, 20)
         Me.btnSave.TabIndex = 1
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
         '
         'btnSaveAs
         '
-        Me.btnSaveAs.Location = New System.Drawing.Point(257, 12)
+        Me.btnSaveAs.Location = New System.Drawing.Point(217, 8)
         Me.btnSaveAs.Name = "btnSaveAs"
-        Me.btnSaveAs.Size = New System.Drawing.Size(75, 23)
+        Me.btnSaveAs.Size = New System.Drawing.Size(56, 20)
         Me.btnSaveAs.TabIndex = 2
         Me.btnSaveAs.Text = "Save as"
         Me.btnSaveAs.UseVisualStyleBackColor = True
@@ -65,7 +65,7 @@ Partial Class frmMain
         Me.lblToolTip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblToolTip.CausesValidation = False
         Me.lblToolTip.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.lblToolTip.Location = New System.Drawing.Point(468, 9)
+        Me.lblToolTip.Location = New System.Drawing.Point(471, 8)
         Me.lblToolTip.Name = "lblToolTip"
         Me.lblToolTip.Size = New System.Drawing.Size(45, 15)
         Me.lblToolTip.TabIndex = 3
@@ -78,7 +78,7 @@ Partial Class frmMain
         Me.chkDraw.AutoSize = True
         Me.chkDraw.Checked = True
         Me.chkDraw.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDraw.Location = New System.Drawing.Point(419, 16)
+        Me.chkDraw.Location = New System.Drawing.Point(375, 12)
         Me.chkDraw.Name = "chkDraw"
         Me.chkDraw.Size = New System.Drawing.Size(51, 17)
         Me.chkDraw.TabIndex = 4
@@ -87,18 +87,18 @@ Partial Class frmMain
         '
         'btnNew
         '
-        Me.btnNew.Location = New System.Drawing.Point(12, 12)
+        Me.btnNew.Location = New System.Drawing.Point(8, 8)
         Me.btnNew.Name = "btnNew"
-        Me.btnNew.Size = New System.Drawing.Size(75, 23)
+        Me.btnNew.Size = New System.Drawing.Size(56, 20)
         Me.btnNew.TabIndex = 0
         Me.btnNew.Text = "New"
         Me.btnNew.UseVisualStyleBackColor = True
         '
         'btnAbout
         '
-        Me.btnAbout.Location = New System.Drawing.Point(338, 12)
+        Me.btnAbout.Location = New System.Drawing.Point(313, 8)
         Me.btnAbout.Name = "btnAbout"
-        Me.btnAbout.Size = New System.Drawing.Size(75, 23)
+        Me.btnAbout.Size = New System.Drawing.Size(56, 20)
         Me.btnAbout.TabIndex = 2
         Me.btnAbout.Text = "About"
         Me.btnAbout.UseVisualStyleBackColor = True
