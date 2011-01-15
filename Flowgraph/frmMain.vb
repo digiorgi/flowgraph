@@ -355,15 +355,44 @@ Public Class frmMain
         End If
     End Sub
 
+    Dim About As New frmAbout
     Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click
-        modMain.frmAbout.ShowDialog()
+        ' modMain.frmAbout.ShowDialog()
         ' frmAbout.ShowDialog()
+        About.ShowDialog()
     End Sub
 
     Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
-        Draw = chkDraw.Checked
+        Plugins.Draw = chkDraw.Checked
+        If chkDraw.Checked Then Me.Invalidate()
     End Sub
 #End Region
 
+#Region "Plugin stuff"
+    Public Sub Load_PluginSystem()
+        AddHandler AddControlEvent, AddressOf AddControl
+        AddHandler RemoveControlEvent, AddressOf RemoveControl
+
+        AddHandler DrawEvent, AddressOf Draw
+
+        Load_Plugin(Me) 'Load the plugin stuff. (auto draw, connector pen, etc..)
+    End Sub
+
+    Private Sub Draw(ByVal region As Rectangle)
+        If region.IsEmpty Then
+            Me.Invalidate()
+        Else
+            Me.Invalidate(region)
+        End If
+    End Sub
+
+    Public Sub AddControl(ByVal Control As Control)
+        Me.Controls.Add(Control)
+        lblToolTip.BringToFront()
+    End Sub
+    Public Sub RemoveControl(ByVal Control As Control)
+        Me.Controls.Remove(Control)
+    End Sub
+#End Region
   
 End Class
