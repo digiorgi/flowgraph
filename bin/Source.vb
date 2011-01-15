@@ -149,6 +149,7 @@ Public Class fgDisplayAsString
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
+        File = "fgDisplayAsString.vb"
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -157,7 +158,7 @@ Public Class fgDisplayAsString
         'Set the title.
         Title = "Display as string"
 
-        Menu.Add(New MenuNode("Set String", , 70))
+        MenuItems.Add(New Menu.Node("Set String", , 70))
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
@@ -173,10 +174,10 @@ Public Class fgDisplayAsString
         MyBase.Load(g)
     End Sub
 
-    Public Overrides Sub MenuSelected(ByVal Result As Menu.MenuNode)
+    Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
         MyBase.MenuSelected(Result)
 
-        If Result.Result = MenuResult.SelectedItem Then
+        If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
             If Result.Name = "Set String" Then
                 Me.Data = InputBox("Set string", "THIS IS THE TITLE")
             End If
@@ -190,7 +191,7 @@ Public Class fgDisplayAsString
         DataSize = Nothing 'Set the data size to nothing so we will check the size later.
 
         'Tell auto draw we want to draw.
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
@@ -202,7 +203,7 @@ Public Class fgDisplayAsString
             'Did the size change?
             If DataSize <> OldSize Then
                 'If so then we set the size of the base object
-                MyBase.SetSize(15 + DataSize.Width, 15 + DataSize.Height)
+                MyBase.SetSize(DataSize.Width, DataSize.Height, True)
                 OldSize = DataSize 'Then set the old size.
             End If
 
@@ -218,64 +219,117 @@ Public Class fgDisplayAsString
 
 End Class
 
-'AddMenuObject|FPS,Plugins.fgFPS,60|Misc
+'AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
 Public Class fgFPS
     Inherits BaseObject
 
-    Private WithEvents tmr As New Timer
-
-    Private FrameCount, FPS, LastFPS As Integer
+    Private FrameCount As Integer
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 120, 30) 'Setup the base rectangles.
-
-        Inputs(New String() {"Enable,Boolean"})
+        Setup(UserData, StartPosition, 120, 15) 'Setup the base rectangles.
 
         'Set the title.
-        Title = "FPS"
+        Title = "Frames"
 
-        tmr.Interval = 1000
-        tmr.Enabled = True
-    End Sub
-
-    Public Overrides Sub Dispose()
-        tmr.Dispose()
-        MyBase.Dispose()
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                tmr.Enabled = Data
-        End Select
     End Sub
 
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         'Draw the base stuff like the title outputs etc..
         MyBase.Draw(g)
-
-        'Draw the value.
-        g.DrawString("FPS= " & LastFPS, DefaultFont, DefaultFontBrush, Position.X + 1, Position.Y + 1)
-        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X + 1, Position.Y + 12)
-
-        FPS += 1
         FrameCount += 1
+
+        g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
+    End Sub
+End Class
+
+'AddMenuObject|Slider,Plugins.fgSlider
+Public Class fgSlider
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private Value As Integer
+
+
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
+
+        Outputs(New String() {"Value,Number"})
+        Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
+
+        'Set the title.
+        Title = "Slider"
+
+        Value = MyBase.Size.Width * 0.5
     End Sub
 
-    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-        If FPS = 1 And LastFPS = 1 Then
-            FPS = 0
-            LastFPS = 0
-        ElseIf FPS = 1 And LastFPS = 0 Then
-            Return
-        Else
-            LastFPS = FPS
-            FPS = 0
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                Enabled = Data
+
+            Case 1 'Set value
+                If Not Enabled Then Return
+                If Data.GetType Is GetType(Boolean) Then
+                    If Data = True Then
+                        Value = Size.Width
+                    Else
+                        Value = 0
+                    End If
+                Else
+                    Value = Data * Size.Width
+                End If
+
+
+        End Select
+
+        DoDraw(Rect)
+    End Sub
+
+    Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseDown(e)
+        If Not Enabled Then Return
+        If e.Button = MouseButtons.Left Then
+            Dim x As Integer = e.X - Position.X
+            If x >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
+            Else
+                Value = x
+            End If
+            Send(x / Size.Width)
+            DoDraw(Rect)
         End If
+    End Sub
 
+    Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseMove(e)
+        If Not Enabled Then Return
+        If e.Button = MouseButtons.Left Then
+            Dim x As Integer = e.X - Position.X
+            If X >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
+            Else
+                Value = x
+            End If
+            Send(x / Size.Width)
+            DoDraw(Rect)
+        End If
+    End Sub
 
-        DoDraw()
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        If Enabled Then
+            g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value, 20)
+        Else
+            g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value, 20)
+        End If
+        g.DrawString(Math.Round(Value / Size.Width * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
     End Sub
 End Class
 
@@ -287,7 +341,8 @@ Public Class fgTimer
 
     Private WithEvents numInterval As New NumericUpDown
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 90) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
+        File = "fgTimer.vb"
 
         'Create one output.
         Outputs(New String() {"Tick"})
@@ -301,7 +356,7 @@ Public Class fgTimer
         numInterval.Minimum = 0
         numInterval.Maximum = 1000000
         numInterval.Width = 85
-        numInterval.Location = Position + New Point(0, 5)
+        numInterval.Location = Position
         AddControl(numInterval)
 
 
@@ -320,7 +375,7 @@ Public Class fgTimer
     End Sub
 
     Public Overrides Sub Moving()
-        numInterval.Location = Position + New Point(0, 5)
+        numInterval.Location = Position
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -389,6 +444,7 @@ Public MustInherit Class BaseObject
     Public Index As Integer = -1
 
     Private Name As String = "NoName"
+    Protected File As String = ""
 
     'Output
     Public Output() As DataFlowBase
@@ -429,7 +485,7 @@ Public MustInherit Class BaseObject
         Width = SnapToGrid(Width)
         Height = SnapToGrid(Height)
 
-        ClientRect = New Rectangle(StartPosition + New Point(0, 15), New Size(Width, Height))
+        ClientRect = New Rectangle(StartPosition + New Point(1, 16), New Size(Width - 2, Height - 2))
 
         Height += 15
 
@@ -443,7 +499,7 @@ Public MustInherit Class BaseObject
         BackGround = New Rectangle(Rect.X, Rect.Y + 15, Rect.Width, Rect.Height - 15)
 
         'Add remove to the object menu.
-        Menu.Add(New MenuNode("Remove", False))
+        MenuItems.Add(New Menu.Node("Remove", False))
     End Sub
 
     ''' <summary>
@@ -473,7 +529,7 @@ Public MustInherit Class BaseObject
         End Get
         Set(ByVal value As String)
             _Title = value
-            Menu.Name = value
+            MenuItems.Name = value
         End Set
     End Property
 
@@ -521,6 +577,7 @@ Public MustInherit Class BaseObject
         Dim tmp As String = ""
 
         g.Set_Value("Name", Name)
+        g.Set_Value("File", File, "")
         g.Set_Value("Position", Rect.X & "," & Rect.Y)
         g.Set_Value("UserData", UserData)
 
@@ -562,14 +619,16 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
-                g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
             Next
         End If
 
@@ -582,7 +641,8 @@ Public MustInherit Class BaseObject
         End If
         g.DrawString(Title, SystemFonts.DefaultFont, SystemBrushes.ActiveCaptionText, TitleRect) 'Draw the title string.
 
-        g.DrawRectangle(Pens.Yellow, ClientRect)
+        'Draws the client size.
+        'g.DrawRectangle(Pens.Yellow, ClientRect)
     End Sub
 
     ''' <summary>
@@ -590,7 +650,6 @@ Public MustInherit Class BaseObject
     ''' </summary>
     Public Sub DrawConnectors(ByVal g As Graphics)
         If Output Is Nothing Then Return
-
 
         For n As Integer = 0 To Output.Length - 1
             If Output(n).IsNotEmpty Then
@@ -628,17 +687,21 @@ Public MustInherit Class BaseObject
         If IsClientSize Then
             If Input IsNot Nothing Then Width += 15
             If Output IsNot Nothing Then Width += 15
-            Height += 15
+            Height += 16
         End If
+
+        'Snap to the grid.
+        Width = SnapToGrid(Width)
+        Height = SnapToGrid(Height)
 
         Rect.Size = SnapToGrid(New Size(Width, Height))
 
         BackGround.Size = SnapToGrid(New Size(Width, Height - 15))
 
         Dim inp, out As Short
-        If Input IsNot Nothing Then inp = 15
-        If Output IsNot Nothing Then out = 15
-        ClientRect = New Rectangle(Rect.Location + New Point(inp, 15), New Size(Width - inp - out, Height - 15))
+        If Input IsNot Nothing Then inp = 14
+        If Output IsNot Nothing Then out = 14
+        ClientRect = New Rectangle(Rect.Location + New Point(inp + 1, 16), New Size((Width - 2) - inp - out, Height - 17))
 
         TitleBar.Width = Rect.Width
         TitleRect = Nothing
@@ -661,18 +724,26 @@ Public MustInherit Class BaseObject
             y -= 15
         End If
 
+        x = SnapToGrid(x)
+        y = SnapToGrid(y)
+
+        'There is no point in doing anything if the new position is the same as the old.
+        If x = Rect.X And y = Rect.Y Then Return
+
         'Update the positions of the rectangles.
-        Rect.Location = New Point(Math.Round(x / GridSize) * GridSize, Math.Round(y / GridSize) * GridSize)
+        Rect.Location = New Point(x, y)
         TitleRect.Location = New PointF(Rect.X + Rect.Width * 0.5 - TitleRect.Width * 0.5, Rect.Y + 1)
         TitleBar.Location = Rect.Location
         BackGround.Location = New Point(Rect.X, Rect.Y + 15)
 
         Dim inp As Short
-        If Input IsNot Nothing Then inp = 15
-        ClientRect.Location = Rect.Location + New Point(inp, 15)
+        If Input IsNot Nothing Then inp = 14
+        ClientRect.Location = Rect.Location + New Point(inp + 1, 16)
 
         'Tell everyone that wants to know that, we are moving!
         Moving()
+
+        DoDraw(True)
     End Sub
 
     ''' <summary>
@@ -745,8 +816,8 @@ Public MustInherit Class BaseObject
 
         Dim tmpHeight As Integer = Rect.Height
         'Set the height if the current height is smaller.
-        If Rect.Height < 16 + (15 * Output.Length) Then
-            tmpHeight=16 + (15 * Output.Length)
+        If Rect.Height < 15 + (15 * Output.Length) Then
+            tmpHeight = 15 + (15 * Output.Length)
         End If
         SetSize(Rect.Width + 15, tmpHeight)
     End Sub
@@ -780,16 +851,16 @@ Public MustInherit Class BaseObject
     End Function
 
     Public Function GetInputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.X + 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
+        Return New PointF(Rect.X + 3, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
     Public Function GetOutputPosition(ByVal ID As Integer) As PointF
-        Return New PointF(Rect.Right - 7.5, Rect.Y + (15 * (ID + 1)) + 7.5)
+        Return New PointF(Rect.Right - 3, Rect.Y + (15 * (ID + 1)) + 7.5)
     End Function
 
 #End Region
 
 #Region "Mouse & Menu"
-    Friend Menu As New MenuNode("", True)
+    Friend MenuItems As New Menu.Node("", True)
 
     ''' <summary>
     ''' Is called when somthing in the menu was selected.
@@ -797,7 +868,7 @@ Public MustInherit Class BaseObject
     ''' </summary>
     ''' <param name="Result"></param>
     ''' <remarks></remarks>
-    Public Overridable Sub MenuSelected(ByVal Result As MenuNode)
+    Public Overridable Sub MenuSelected(ByVal Result As Menu.Node)
         Select Case LCase(Result.Name)
             Case "remove"
                 RemoveAt(Index)
@@ -842,7 +913,7 @@ Public MustInherit Class BaseObject
     ''' <remarks></remarks>
     Public Overridable Sub MouseUp(ByVal e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            Menu_Open(Index, Menu)
+            Menu.Open(Index, MenuItems)
         End If
     End Sub
 
@@ -926,14 +997,14 @@ Public Class DataFlowBase
         Return str & vbNewLine & Note
     End Function
 
-#Region "Add & Disconnect"
+#Region "Connect & Disconnect"
     ''' <summary>
     ''' Connect a input to this output.
     ''' </summary>
     ''' <param name="obj1"></param>
     ''' <param name="Index1"></param>
     ''' <returns>True if successfully added.</returns>
-    Public Function Add(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
+    Public Function TryConnect(ByVal obj1 As Integer, ByVal Index1 As Integer) As Boolean
         If Flow Is Nothing Then Return False 'Return false if its a input.
 
         'Return false if we are already at the max connections.
@@ -1081,7 +1152,7 @@ Public Class DataFlowBase
         Else
 
             For i As Integer = 1 To data.Length - 1 Step 2
-                Add(data(i), data(i + 1))
+                TryConnect(data(i), data(i + 1))
             Next
             'Make sure everything connected.
             If Connected <> data(0) Then
@@ -1181,14 +1252,250 @@ End Class
 '   Email: RaymondEllis@live.com
 #End Region
 
-Public Module Menu
-    Public Class MenuNode
-        Public Parent As MenuNode
-        Public Children As List(Of MenuNode)
+Namespace Menu
+    Public Enum Result
+        SelectedItem
+        SelectedGroup
+        Closed
+    End Enum
+
+    Public Module Menu
+        Public MenuStartPosition As Point
+
+        Private Item As Node
+        Private ObjectIndex As Integer = -1
+
+        Public Rect As Rectangle
+
+        Private Title As String = "Main"
+        Private TitleRect As RectangleF
+
+        ''' <summary>
+        ''' Open a dropdown menu with the items.
+        ''' </summary>
+        ''' <param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
+        ''' <param name="Item">The item for the menu to use.</param>
+        Public Sub Open(ByVal ObjectIndex As Integer, ByVal Item As Node)
+            Menu.ObjectIndex = ObjectIndex
+
+            'Set the menu start position to the current mouse position.
+            MenuStartPosition = Mouse.Location
+
+            'Set the tool to menu.
+            Tool = ToolType.Menu
+
+            Update(Item)
+
+            'Draw the newly opened menu.
+            DoDraw(True)
+        End Sub
+
+        Public Function MouseUp() As Node
+
+            'If the mouse is not in the main rect. then we close the menu.
+            If Rect.IntersectsWith(Mouse) Then
+
+                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y, Rect.Width, 12)) Then
+                    If Item.Parent IsNot Nothing Then
+                        Update(Item.Parent)
+                    Else
+                    End If
+                    Return New Node(Result.SelectedGroup)
+                End If
+
+                For n As Integer = 0 To Item.Children.Count - 1
+                    If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * (n + 1)), Rect.Width, 12)) Then
+
+                        If Item.Children(n).IsGroup Then
+                            Item.Children(n).SetResult(Result.SelectedGroup)
+                            Dim ReturnNode As Node = Item.Children(n)
+
+                            Update(Item.Children(n))
+                            Return ReturnNode
+                        Else
+
+                            If ObjectIndex > -1 Then
+                                Objects(ObjectIndex).MenuSelected(Item.Children(n))
+                            Else
+                                AddObject(Item.Children(n).ClassName, MenuStartPosition, Item.Children(n).UserData)
+                            End If
+
+                            Item.Children(n).SetResult(Result.SelectedItem)
+                            Tool = ToolType.None
+                            Return Item.Children(n)
+                        End If
+
+                    End If
+                Next
+
+            End If
+
+            Tool = ToolType.None
+            Return New Node(Result.Closed)
+        End Function
+
+
+        Private LastSelected As Integer
+        ''' <summary>
+        ''' Returns false if noting changed.
+        ''' </summary>
+        Public Function MouseMove() As Boolean
+            If Not Mouse.IntersectsWith(Rect) Then
+                If LastSelected > -1 Then
+                    LastSelected = -1
+                    Return True
+                Else
+                    Return False
+                End If
+            End If
+            For n As Integer = 1 To Item.Children.Count
+                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) And n <> LastSelected Then
+                    LastSelected = n
+                    Return True
+                End If
+            Next
+            Return False
+        End Function
+
+        Public Sub Draw(ByVal g As Graphics)
+            'Resize the title rectangle if needed.
+            If TitleRect.Size = Nothing Then
+                TitleRect.Size = g.MeasureString(Title, DefaultFont)
+                If TitleRect.Size.Width > Rect.Width Then
+                    Rect.Width = TitleRect.Width + 4
+                End If
+                TitleRect.Location = New PointF(Rect.X + (Rect.Width * 0.5) - (TitleRect.Width * 0.5), Rect.Y - 1)
+            End If
+
+            'Draw the background.
+            g.FillRectangle(SystemBrushes.Menu, Rect)
+
+            'Draw deviding line betwen the title and the items.
+            g.DrawLine(Pens.Black, Rect.Location + New Point(0, 12), Rect.Location + New Point(Rect.Width, 12))
+            g.DrawString(Title, DefaultFont, SystemBrushes.MenuText, TitleRect) 'Draw the title.
+
+
+            For n As Integer = 1 To Item.Children.Count
+
+                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
+                    g.FillRectangle(SystemBrushes.Highlight, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
+                    g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.HighlightText, Rect.X + 1, Rect.Y + (12 * n))
+                Else
+                    g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.MenuText, Rect.X + 1, Rect.Y + (12 * n))
+                End If
+
+
+            Next
+
+            g.DrawRectangle(Pens.Black, Rect)
+        End Sub
+
+        Private Sub Update(ByVal Item As Node)
+            Title = Item.Name
+            Menu.Item = Item
+
+
+            'Set the min width to 60.
+            Dim Width As Integer = 60
+            'Look in each node and see if there is any with a biger width.
+            For Each Node As Node In Item.Children
+                If Node.Width > Width Then
+                    Width = Node.Width
+                End If
+            Next
+            'Set the size of the rectangle.
+            Rect.Size = New Size(Width, (Item.Children.Count * 12) + 13)
+            TitleRect.Size = Nothing 'Set the title rectangle to nothing so next draw it will find it.
+
+            'Center over mouse start position.
+            Rect.X = MenuStartPosition.X - (Rect.Width * 0.5)
+            Rect.Y = MenuStartPosition.Y - (Rect.Height * 0.5)
+
+            'Clip the menu to the window.
+            If Rect.X < 0 Then Rect.X = 1
+            If Rect.Y < 0 Then Rect.Y = 1
+            If Rect.Right > Form.ClientSize.Width Then Rect.X = Form.ClientSize.Width - Rect.Width - 1
+            If Rect.Bottom > Form.ClientSize.Height Then Rect.Y = Form.ClientSize.Height - Rect.Height - 1
+        End Sub
+
+        ''' <summary>
+        ''' Add a menu node to a node list.
+        ''' Usefull to add groups.
+        ''' </summary>
+        ''' <param name="Item">The item to add the node to.</param>
+        ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+        ''' <param name="Groups"></param>
+        ''' <remarks></remarks>
+        Public Function AddNode(ByVal Item As Node, ByVal Data As String(), ByVal Groups As String()) As Node
+            Dim Node As New Node
+            Select Case Data.Length
+                Case 0
+                    Return Nothing
+
+                Case 2
+                    'Is it width or a class?
+                    If Data(1).GetType = GetType(String) Then
+                        Node.ClassName = Data(1)
+                    Else
+                        Node.Width = Data(1)
+                    End If
+
+                Case 3
+                    Node.ClassName = Data(1)
+                    If Data(2) <> "" Then Node.Width = Data(2)
+
+                Case 4
+                    Node.ClassName = Data(1)
+                    If Data(2) <> "" Then Node.Width = Data(2)
+                    Node.UserData = Data(3)
+            End Select
+            Node.Name = Data(0)
+
+            'Is there any groups?
+            If Groups.Length > 0 Then
+
+                Dim CurrentGroup As Integer = 0
+                Dim CurrentNode As Node = Item
+                Do
+                    Dim Found As Boolean = False
+                    If CurrentNode.Children IsNot Nothing Then
+                        For Each n As Node In CurrentNode.Children
+                            If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                                CurrentNode = n
+                                Found = True
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If Found = False Then
+
+                        CurrentNode.Add(New Node(Groups(CurrentGroup), True))
+                        CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
+                    End If
+
+
+                    CurrentGroup += 1
+                Loop Until CurrentGroup = Groups.Length
+
+                CurrentNode.Add(Node)
+
+            Else
+                'There was no groups so lets just add the item.
+                AddItem.Add(Node)
+            End If
+
+
+            Return Node
+        End Function
+    End Module
+
+    Public Class Node
+        Public Parent As Node
+        Public Children As List(Of Node)
         Public Name As String
         Public ClassName As String
         Public Width As Integer
-        Public Result As MenuResult
+        Public Result As Result
         Public UserData As String
 
 #Region "New"
@@ -1197,7 +1504,7 @@ Public Module Menu
 
         ''' <summary>Is used when the menu sends the object the node.</summary>
         ''' <param name="Result">What was the menus results?</param>
-        Sub New(ByVal Result As MenuResult)
+        Sub New(ByVal Result As Result)
             Me.Result = Result
         End Sub
 
@@ -1217,16 +1524,16 @@ Public Module Menu
         Public Sub New(ByVal Name As String, Optional ByVal IsGroup As Boolean = False, Optional ByVal Width As Integer = 50)
             Me.Name = Name
             Me.Width = Width
-            If IsGroup Then Children = New List(Of MenuNode)
+            If IsGroup Then Children = New List(Of Node)
         End Sub
 #End Region
 
-        Public Sub Add(ByVal Item As MenuNode)
+        Public Sub Add(ByVal Item As Node)
             Item.Parent = Me
             Children.Add(Item)
         End Sub
 
-        Public Sub SetResult(ByVal Result As MenuResult)
+        Public Sub SetResult(ByVal Result As Result)
             Me.Result = Result
         End Sub
         Public ReadOnly Property IsGroup() As Boolean
@@ -1241,246 +1548,24 @@ Public Module Menu
                 Return Name
             End If
         End Function
-    End Class
-    Public Enum MenuResult
-        SelectedItem
-        SelectedGroup
-        Closed
-    End Enum
 
-    Public MenuStartPosition As Point
+        ''' <summary>
+        ''' Sorts All children. even the childrens children+.
+        ''' </summary>
+        Public Sub Sort()
+            If Not IsGroup Then Return
+            Children.Sort(Function(a As Node, b As Node)
+                              Return a.Name.CompareTo(b.Name)
+                          End Function)
 
-    Private Item As MenuNode
-    Private ObjectIndex As Integer = -1
-
-    Private Rect As Rectangle
-
-    Private Title As String = "Main"
-    Private TitleRect As RectangleF
-
-    ''' <summary>
-    ''' Open a dropdown menu with the items.
-    ''' </summary>
-    ''' <param name="ObjectIndex">The object the menu will call MenuSlected to. -1 will add the object.</param>
-    ''' <param name="Item">The item for the menu to use.</param>
-    Public Sub Menu_Open(ByVal ObjectIndex As Integer, ByVal Item As MenuNode)
-        Title = Item.Name
-
-        Menu.Item = Item
-        Menu.ObjectIndex = ObjectIndex
-
-        'Set the menu start position to the current mouse position.
-        MenuStartPosition = Mouse.Location
-
-        'Set the tool to menu.
-        Tool = ToolType.Menu
-
-        UpdateRect()
-
-        'Draw the newly opened menu.
-        DoDraw(True)
-    End Sub
-
-    Public Function Menu_MouseUp() As MenuNode
-
-        'If the mouse is not in the main rect. then we close the menu.
-        If Rect.IntersectsWith(Mouse) Then
-
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y, Rect.Width, 12)) Then
-                If Item.Parent IsNot Nothing Then
-
-                    Item = Item.Parent
-                    Title = Item.Name
-                    UpdateRect()
-                Else
-                End If
-                Return New MenuNode(MenuResult.SelectedGroup)
-            End If
-
-            For n As Integer = 0 To Item.Children.Count - 1
-                If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * (n + 1)), Rect.Width, 12)) Then
-
-                    If Item.Children(n).IsGroup Then
-                        Item.Children(n).SetResult(MenuResult.SelectedGroup)
-                        Dim ReturnNode As MenuNode = Item.Children(n)
-
-                        Item = Item.Children(n)
-                        Title = Item.Name
-                        UpdateRect()
-
-                        Return ReturnNode
-                    Else
-
-                        If ObjectIndex > -1 Then
-                            Objects(ObjectIndex).MenuSelected(Item.Children(n))
-                        Else
-                            AddObject(Item.Children(n).ClassName, MenuStartPosition, Item.Children(n).UserData)
-                        End If
-
-                        Item.Children(n).SetResult(MenuResult.SelectedItem)
-                        Tool = ToolType.None
-                        Return Item.Children(n)
-                    End If
-
+            For Each child As Node In Children
+                If child.IsGroup Then
+                    child.Sort()
                 End If
             Next
-
-        End If
-
-        Tool = ToolType.None
-        Return New MenuNode(MenuResult.Closed)
-    End Function
-
-
-    Private LastSelected As Integer
-    ''' <summary>
-    ''' Returns false if noting changed.
-    ''' </summary>
-    Public Function Menu_MouseMove() As Boolean
-        If Not Mouse.IntersectsWith(Rect) Then
-            If LastSelected > -1 Then
-                LastSelected = -1
-                Return True
-            Else
-                Return False
-            End If
-        End If
-        For n As Integer = 1 To Item.Children.Count
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) And n <> LastSelected Then
-                LastSelected = n
-                Return True
-            End If
-        Next
-        Return False
-    End Function
-
-    Public Sub Menu_Draw(ByVal g As Graphics)
-        'Resize the title rectangle if needed.
-        If TitleRect.Size = Nothing Then
-            TitleRect.Size = g.MeasureString(Title, DefaultFont)
-            If TitleRect.Size.Width > Rect.Width Then
-                Rect.Width = TitleRect.Width + 4
-            End If
-            TitleRect.Location = New PointF(Rect.X + (Rect.Width * 0.5) - (TitleRect.Width * 0.5), Rect.Y - 1)
-        End If
-
-        'Draw the background.
-        g.FillRectangle(SystemBrushes.Menu, Rect)
-
-        'Draw deviding line betwen the title and the items.
-        g.DrawLine(Pens.Black, Rect.Location + New Point(0, 12), Rect.Location + New Point(Rect.Width, 12))
-        g.DrawString(Title, DefaultFont, SystemBrushes.MenuText, TitleRect) 'Draw the title.
-
-
-        For n As Integer = 1 To Item.Children.Count
-
-            If Mouse.IntersectsWith(New Rectangle(Rect.X, Rect.Y + (12 * n), Rect.Width, 12)) Then
-                g.FillRectangle(SystemBrushes.Highlight, Rect.X, Rect.Y + (12 * n), Rect.Width, 12)
-                g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.HighlightText, Rect.X + 1, Rect.Y + (12 * n))
-            Else
-                g.DrawString(Item.Children(n - 1).ToString, DefaultFont, SystemBrushes.MenuText, Rect.X + 1, Rect.Y + (12 * n))
-            End If
-
-
-        Next
-
-        g.DrawRectangle(Pens.Black, Rect)
-    End Sub
-
-    Private Sub UpdateRect()
-        'Set the min width to 60.
-        Dim Width As Integer = 60
-        'Look in each node and see if there is any with a biger width.
-        For Each Node As MenuNode In Item.Children
-            If Node.Width > Width Then
-                Width = Node.Width
-            End If
-        Next
-        'Set the size of the rectangle.
-        Rect.Size = New Size(Width, (Item.Children.Count * 12) + 13)
-        TitleRect.Size = Nothing 'Set the title rectangle to nothing so next draw it will find it.
-
-        'Center over mouse start position.
-        Rect.X = MenuStartPosition.X - (Rect.Width * 0.5)
-        Rect.Y = MenuStartPosition.Y - (Rect.Height * 0.5)
-
-        'Clip the menu to the window.
-        If Rect.X < 0 Then Rect.X = 1
-        If Rect.Y < 0 Then Rect.Y = 1
-        If Rect.Right > Form.ClientSize.Width Then Rect.X = Form.ClientSize.Width - Rect.Width - 1
-        If Rect.Bottom > Form.ClientSize.Height Then Rect.Y = Form.ClientSize.Height - Rect.Height - 1
-    End Sub
-
-    ''' <summary>
-    ''' Add a menu node to a node list.
-    ''' Usefull to add groups.
-    ''' </summary>
-    ''' <param name="Item">The item to add the node to.</param>
-    ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
-    ''' <param name="Groups"></param>
-    ''' <remarks></remarks>
-    Public Function AddNode(ByVal Item As MenuNode, ByVal Data As String(), ByVal Groups As String()) As MenuNode
-        Dim Node As New MenuNode
-        Select Case Data.Length
-            Case 0
-                Return Nothing
-
-            Case 2
-                'Is it width or a class?
-                Try
-                    If Data(1) <> "" Then Node.Width = Data(1)
-                Catch ex As Exception
-                    Node.ClassName = Data(1)
-                End Try
-
-            Case 3
-                Node.ClassName = Data(1)
-                If Data(2) <> "" Then Node.Width = Data(2)
-
-            Case 4
-                Node.ClassName = Data(1)
-                If Data(2) <> "" Then Node.Width = Data(2)
-                Node.UserData = Data(3)
-        End Select
-        Node.Name = Data(0)
-
-        'Is there any groups?
-        If Groups.Length > 0 Then
-
-            Dim CurrentGroup As Integer = 0
-            Dim CurrentNode As MenuNode = Item
-            Do
-                Dim Found As Boolean = False
-                If CurrentNode.Children IsNot Nothing Then
-                    For Each n As MenuNode In CurrentNode.Children
-                        If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
-                            CurrentNode = n
-                            Found = True
-                            Exit For
-                        End If
-                    Next
-                End If
-                If Found = False Then
-
-                    CurrentNode.Add(New MenuNode(Groups(CurrentGroup), True))
-                    CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
-                End If
-
-
-                CurrentGroup += 1
-            Loop Until CurrentGroup = Groups.Length
-
-            CurrentNode.Add(Node)
-
-        Else
-            'There was no groups so lets just add the item.
-            AddItem.Add(Node)
-        End If
-
-
-        Return Node
-    End Function
-End Module
+        End Sub
+    End Class
+End Namespace
 
 #Region "License & Contact"
 'License:
@@ -1517,6 +1602,7 @@ Public Module Plugins
     'The default font to use.
     Public DefaultFont As Font = SystemFonts.DefaultFont
     Public DefaultFontBrush As Brush = SystemBrushes.ControlText
+    Public InputImage, OutputImage As Image
 
     'The pen used to connect objects.
     Public ConnectorPen As New Pen(Color.FromArgb(80, 80, 80), 3)
@@ -1623,11 +1709,15 @@ Public Module Plugins
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        Plugins.Form = form
+        InputImage = Image.FromFile("Input.png")
+        OutputImage = Image.FromFile("Output.png")
 
-        AddObject_Setup()
+        Plugins.Form = form
+        'RemoveFromFGS
+        AddObject_Setup()'EndRemoveFromFGS
     End Sub
 
+    'RemoveFromFGS
 
     Public LoadedFile As String = ""
     Public Const FileVersion = 0.5
@@ -1693,6 +1783,8 @@ Public Module Plugins
 
         'Set the loaded file
         LoadedFile = File
+
+        DoDraw()
     End Sub
 
     Public Sub Save(ByVal File As String)
@@ -1715,10 +1807,11 @@ Public Module Plugins
         LoadedFile = File
     End Sub
 
+    'EndRemoveFromFGS
 #End Region
 
 #Region "Auto draw"
-    Event DrawEvent()
+    Event DrawEvent(ByVal region As Rectangle)
     Public Draw As Boolean = True
     Private DoNotDraw As Boolean = True
 
@@ -1731,19 +1824,22 @@ Public Module Plugins
 
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
         If HeighPriority Then
-            RaiseEvent DrawEvent()
+            RaiseEvent DrawEvent(Rectangle.Empty)
+            DoNotDraw = True
 
         Else 'Other wise we wait for the timer.
             DoNotDraw = False 'Tell the timer it can draw.
         End If
-
+    End Sub
+    Public Sub DoDraw(ByVal region As Rectangle)
+        RaiseEvent DrawEvent(region)
     End Sub
 
     Private WithEvents tmrDraw As New Timer
     Private Sub tmrDraw_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmrDraw.Tick
         If DoNotDraw Then Return
 
-        RaiseEvent DrawEvent()
+        RaiseEvent DrawEvent(Rectangle.Empty)
 
         DoNotDraw = True
     End Sub
@@ -1763,7 +1859,7 @@ Public Module Plugins
 
 #Region "Adding objects"
     'The items in the add object menu.
-    Public AddItem As New MenuNode("Add object", True)
+    Public AddItem As New Menu.Node("Add object", True)
 
     ''' <summary>
     ''' Add a new object from the class name.
@@ -1784,26 +1880,27 @@ Public Module Plugins
         End Try
     End Function
 
+    'RemoveFromFGS
     Private Sub AddObject_Setup()
         'Is the plugins library newer then the objects file?
-        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\Objects.list") Then
+        If IO.File.GetLastWriteTime("Plugins.dll") > IO.File.GetLastWriteTime("Plugins\MenuObjects.list") Then
 
             'The plugins have changed. So lets find all of the objects.
 
-            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.??", IO.SearchOption.AllDirectories)
+            Dim Scripts As String() = IO.Directory.GetFiles("Plugins\", "*.vb", IO.SearchOption.AllDirectories)
             Dim ObjectList As String = ""
             For Each File As String In Scripts
                 SearchForItems(File, ObjectList)
             Next
 
             'Write all of the objects found to the file.
-            Dim sw As New IO.StreamWriter("Plugins\Objects.list", False)
+            Dim sw As New IO.StreamWriter("Plugins\MenuObjects.list", False)
             sw.Write(ObjectList)
             sw.Close()
 
         Else
             'Objects.list is newer, so lets get the items from it.
-            SearchForItems("Plugins\Objects.list")
+            SearchForItems("Plugins\MenuObjects.list")
         End If
     End Sub
 
@@ -1829,28 +1926,33 @@ Public Module Plugins
                 Dim SplitLine As String() = Split(line, "|")
                 Select Case SplitLine.Length
                     Case 2 'No groups. 
-                        AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
+                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), New String() {})
 
                     Case 3 'Has Group(s) 
-                        AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
+                        Menu.AddNode(AddItem, Split(SplitLine(1), ","), Split(SplitLine(2), ","))
 
                 End Select
 
                 'Fill object list(if not "DoNotFill").
                 If ObjectList = "DoNotFill" Then
                 ElseIf ObjectList = "" Then
-                    ObjectList = line
+                    ObjectList = line.Remove(0, 1)
                 Else
-                    ObjectList &= vbNewLine & line
+                    ObjectList &= vbNewLine & line.Remove(0, 1)
                 End If
             End If
 
         Loop Until sr.EndOfStream Or (StartIndex = -1 And Not SearchWholeFile)
         sr.Close()
+
+        AddItem.Sort()
     End Sub
+    'EndRemoveFromFGS
 #End Region
 
 End Module
+
+
 
 #Region "License & Contact"
 'License:
@@ -1885,8 +1987,16 @@ End Module
 Namespace SimpleD
     Module Info
         Public Const IllegalCharacters As String = "{}=;"
-        Public Const Version = 0.985
+        Public Const Version = 0.99
         Public Const FileVersion = 1
+        '0.99
+        'Added  : Can now have groups inside of groups.
+        'Added  : GetValue(Control,Value)  Gets the property from the control name. Then sets the contols value, if the control is known.
+        'Changed: Spliting is now done with a few options not a string.
+        'Fixed  : SetValue(Control) now check throgh known controls for the right value.
+        '0.986
+        'Added: default value to Set_Value.
+        'Changed: Control to Windows.Forms.Control
         '0.985
         'Added  : FileVersion So I can easley tell if the file has changed.
         'Added  : IllegalCharacters property names and values can NOT have any of the characters in IllegalCharacters.
@@ -1974,22 +2084,31 @@ Namespace SimpleD
 #End Region
 
 #Region "To String/File"
-        Public Overloads Function ToString(Optional ByVal Split As String = vbNewLine & vbTab) As String
+
+        Public Sub ToFile(ByVal File As String, Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True)
+            Dim sw As New IO.StreamWriter(File)
+            sw.Write(ToString(SplitWithNewLine, SplitWithTabs))
+            sw.Close()
+        End Sub
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="SplitWithNewLine">Split propertys and groups using a newline?</param>
+        ''' <param name="SplitWithTabs">Split propertys and groups using tabs?
+        ''' Does not use tabs if newline is disabled.</param>
+        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True) As String
             If Groups.Count = 0 Then Return ""
+            If SplitWithNewLine = False Then SplitWithTabs = False
 
             Dim tmp As String = "//Version=" & Version & " FileVersion=" & FileVersion & "\\"
             For n As Integer = 0 To Groups.Count - 1
-                tmp &= vbNewLine & Groups(n).ToString(Split)
+                tmp &= vbNewLine & Groups(n).ToString(SplitWithNewLine, If(SplitWithTabs, 1, 0))
             Next
 
             Return tmp
 
         End Function
-        Public Sub ToFile(ByVal File As String, Optional ByVal Split As String = vbNewLine & vbTab)
-            Dim sw As New IO.StreamWriter(File)
-            sw.Write(ToString(Split))
-            sw.Close()
-        End Sub
 #End Region
 
 #Region "From String/File"
@@ -2017,76 +2136,84 @@ Namespace SimpleD
                 If tmp = "//" Then
                     InComment = True
                     n += 1
-                    GoTo NextG
                 ElseIf tmp = "\\" Then
                     InComment = False
                     n += 1
-                    GoTo NextG
-                ElseIf tmp = vbNewLine Then
-                    InComment = False
-                    n += 1
-                    GoTo NextG
+                    'ElseIf tmp = vbNewLine Then
+                    '    InComment = False
+                    '    n += 1
+                    '    GoTo NextG
 
 
                 ElseIf Not InComment Then
 
                     'Find the start so we can get the name.
                     Dim Start As Integer = Data.IndexOf("{", n)
+                    If Start = -1 Then Return
                     'Now get the name.
-                    Dim gName As String = Trim(Data.Substring(n, Start - n).Trim(vbTab))
+                    Dim gName As String = Trim(Data.Substring(n, Start - n).Trim(New Char() {vbCr, vbLf, vbTab}))
                     n = Start + 1
 
                     Dim Group As New Group(gName)
                     Groups.Add(Group)
 
-                    'Now lets get all of the propertys from the group.
-                    Do
-                        If n + 2 > Data.Length Then GoTo Endy
-                        tmp = Data.Substring(n, 2)
-                        If tmp = "//" Then
-                            InComment = True
-                            n += 1
-                            GoTo Nextp
-                        ElseIf tmp = "\\" Then
-                            InComment = False
-                            n += 1
-                            GoTo Nextp
-                        ElseIf tmp = vbNewLine Then
-                            InComment = False
-                            n += 1
-                            GoTo Nextp
-
-
-                        ElseIf Not InComment Then
-                            Dim Equals As Integer = Data.IndexOf("=", n)
-                            Dim PropName As String = Trim(Data.Substring(n, Equals - n).Trim(vbTab))
-                            n = Equals
-                            Dim PropEnd As Integer = Data.IndexOf(";", n)
-                            Dim PropValue As String = Trim(Data.Substring(n + 1, PropEnd - n - 1).Trim(vbTab))
-                            n = PropEnd
-
-                            Group.Set_Value(PropName, PropValue)
-
-
-                        End If
-
-
-
-NextP:                  'Next Property.
-                        n += 1
-                    Loop Until Data.Substring(n, 1) = "}"
+                    GetGroup(Data, n, Group)
+                    If n + 2 > Data.Length Then Return
                 End If
 
 
-
-NextG:
                 n += 1
             Loop Until n >= Data.Length - 1
 
 
-Endy:
+        End Sub
+
+        Private Sub GetGroup(ByVal Data As String, ByRef n As Integer, ByVal Group As Group)
+            Dim tmp As String
+            Dim InComment As Boolean = False
+            'Now lets get all of the propertys from the group.
+            Do
+                If n + 2 > Data.Length Then Return
+                tmp = Data.Substring(n, 2)
+                If tmp = "//" Then
+                    InComment = True
+                    n += 1
+                ElseIf tmp = "\\" Then
+                    InComment = False
+                    n += 1
 
 
+                ElseIf Not InComment Then
+                    Dim Equals As Integer = Data.IndexOf("=", n)
+                    Dim GroupStart As Integer = Data.IndexOf("{", n)
+                    Dim GroupEnd As Integer = Data.IndexOf("}", n)
+                    If Equals = -1 And GroupStart = -1 Then Return
+                    If GroupEnd < GroupStart And GroupEnd < Equals Then
+                        n = GroupEnd
+                        Return
+                    End If
+                    'Is the next thing a group or property?
+                    If Equals > -1 And ((Equals < GroupStart) Or GroupStart = -1) Then
+                        Dim PropName As String = Trim(Data.Substring(n, Equals - n).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = Equals
+                        Dim PropEnd As Integer = Data.IndexOf(";", n)
+                        Dim PropValue As String = Trim(Data.Substring(n + 1, PropEnd - n - 1).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = PropEnd
+                        Group.Set_Value(PropName, PropValue)
+                    ElseIf GroupStart > -1 Then
+
+                        Dim gName As String = Trim(Data.Substring(n, GroupStart - n).Trim(New Char() {vbCr, vbLf, vbTab}))
+                        n = GroupStart + 1
+
+                        Dim NewGroup As New Group(gName)
+                        Group.Add_Group(NewGroup)
+                        GetGroup(Data, n, NewGroup)
+                    End If
+
+                End If
+
+                n += 1
+            Loop Until Data.Substring(n, 1) = "}"
         End Sub
 #End Region
 
@@ -2096,10 +2223,51 @@ Endy:
         Public Name As String
 
         Private Propertys As New List(Of Prop)
+        Private Groups As New List(Of Group)
 
         Public Sub New(ByVal Name As String)
             Me.Name = Name
         End Sub
+
+
+#Region "Group"
+
+
+        ''' <summary>
+        ''' Create a group.
+        ''' Will return other group if names match.
+        ''' </summary>
+        ''' <param name="Name">The name of the group.</param>
+        Public Function Create_Group(ByVal Name As String) As Group
+            Dim tmp As Group = Get_Group(Name) 'Search for a group with the name.
+            If tmp Is Nothing Then 'If group not found then.
+                tmp = New Group(Name) 'Create a new group.
+                Groups.Add(tmp) 'Add the new group to the list.
+            End If
+            Return tmp 'Return the group.
+        End Function
+        Public Sub Add_Group(ByVal Group As Group)
+            'First lets see if we can find a group.
+            Dim tmp As Group = Get_Group(Group.Name)
+            If tmp IsNot Nothing Then
+                'We found a group so lets combine them.
+                tmp.Combine(Group)
+            Else
+                'We did not find any other groups so add it to the list.
+                Groups.Add(Group)
+            End If
+        End Sub
+        Public Function Get_Group(ByVal Name As String) As Group
+            Name = LCase(Name)
+            For Each Group As Group In Groups
+                If Name = LCase(Group.Name) Then
+                    Return Group
+                End If
+            Next
+            Return Nothing
+        End Function
+
+#End Region
 
         ''' <summary>
         ''' Conbines the group with this group.
@@ -2108,6 +2276,10 @@ Endy:
         Public Sub Combine(ByVal Group As Group)
             For Each Prop As Prop In Group.Propertys
                 Set_Value(Prop.Name, Prop.Value)
+            Next
+
+            For Each Grp As Group In Group.Groups
+                Add_Group(Grp)
             Next
         End Sub
 
@@ -2129,8 +2301,23 @@ Endy:
         ''' <summary>
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
+        ''' Does not create if value is eaqual to devault value.
         ''' </summary>
-        Public Sub Set_Value(ByVal Control As Control)
+        Public Sub Set_Value(ByVal Name As String, ByVal Value As String, ByVal DefaultValue As String)
+            If Name = "" Or Value = "" Then Return
+            If Value = DefaultValue Then Return 'Return if the value is the default value.
+            Dim tmp As Prop = Find(Name) 'Find the property.
+            If tmp = Nothing Then 'If it could not find the property then.
+                Propertys.Add(New Prop(Name, Value)) 'Add the property.
+            Else
+                tmp.Value = Value 'Set the value.
+            End If
+        End Sub
+        ''' <summary>
+        ''' This sets the value of a property.
+        ''' If it can not find the property it creates it.
+        ''' </summary>
+        Public Sub Set_Value(ByVal Control As Windows.Forms.Control)
             Dim Value As String = GetValueFromObject(Control) 'Find the property from a object and set the value.
             Dim tmp As Prop = Find(Control.Name) 'Find the property.
             If tmp = Nothing Then 'If it could not find the property then.
@@ -2150,7 +2337,7 @@ Endy:
             Return Find(Name).Value 'Find the property and return the value.
         End Function
         ''' <summary>
-        ''' Will not set value if no value found.
+        ''' Will not get value if no value found.
         ''' </summary>
         ''' <param name="Name"></param>
         ''' <param name="Value"></param>
@@ -2163,11 +2350,38 @@ Endy:
                 Value = prop.Value 'Find the property and return the value.
             End If
         End Sub
+
         ''' <summary>
-        ''' Get the value from a property.
+        ''' Sets the value of the control to the proprety with the same name.
+        ''' Known controls: TextBox,Label,CheckBox,RadioButton,NumericUpDown,NumericUpDownAcceleration,ProgressBar
         ''' </summary>
         ''' <param name="Control">The control to get the property from.</param>
-        Public Function Get_Value(ByVal Control As Control) As String
+        ''' <param name="Value">Returns value if control is unknown.</param>
+        Public Sub Get_Value(ByRef Control As Windows.Forms.Control, ByRef Value As String)
+            Dim TempValue As String = Find(Control.Name).Value 'Find the property from the control name.
+
+            Dim obj As Object = Control
+            Select Case Control.GetType
+                Case GetType(Windows.Forms.TextBox), GetType(Windows.Forms.Label)
+                    obj.Text = TempValue
+
+                Case GetType(Windows.Forms.CheckBox), GetType(Windows.Forms.RadioButton)
+                    obj.Checked = TempValue
+
+                Case GetType(Windows.Forms.NumericUpDown), GetType(Windows.Forms.NumericUpDownAcceleration), GetType(Windows.Forms.ProgressBar)
+                    obj.Value = TempValue
+
+                Case Else
+                    'Throw New Exception("Could not find object type.")
+                    Value = TempValue
+            End Select
+        End Sub
+        ''' <summary>
+        ''' Uses the name of the control to find the property value.
+        ''' </summary>
+        ''' <param name="Control"></param>
+        ''' <returns>Property value.</returns>
+        Public Function Get_Value(ByVal Control As Windows.Forms.Control) As String
             Return Find(Control.Name).Value 'Find the property from a object and return the value.
         End Function
 #End Region
@@ -2180,6 +2394,20 @@ Endy:
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Function GetValueFromObject(ByVal Obj As Object) As String
+
+            Select Case Obj.GetType
+                Case GetType(Windows.Forms.TextBox), GetType(Windows.Forms.Label)
+                    Return Obj.Text
+
+                Case GetType(Windows.Forms.CheckBox), GetType(Windows.Forms.RadioButton)
+                    Return Obj.Checked
+
+                Case GetType(Windows.Forms.NumericUpDown), GetType(Windows.Forms.NumericUpDownAcceleration), GetType(Windows.Forms.ProgressBar)
+                    Return Obj.Value
+
+            End Select
+
+            'Unknown control, so lets see if we can find the right value.
             Dim Value As String = "Could_Not_Find_Value"
             Try 'Try and get the value.
                 Value = Obj.Value
@@ -2216,16 +2444,39 @@ Endy:
             Return Nothing
         End Function
 
-        Public Overloads Function ToString(Optional ByVal Split As String = "") As String
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="SplitWithNewLine">Split propertys and groups using a newline?</param>
+        ''' <param name="TabCount">Split propertys and groups using tabs?
+        ''' Does not use tabs if newline is disabled.</param>
+        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal TabCount As Integer = 1) As String
             If Propertys.Count = 0 Then Return ""
+            If TabCount < 0 Then TabCount = 0
 
+            'Setup spliting.
+            Dim Split As String = ""
+            If SplitWithNewLine Then
+                Split = vbNewLine & New String(vbTab, TabCount)
+            End If
+
+            'Name and start of group.
             Dim tmp As String = Name & "{"
+
+            'Add the properys from the group.
             For n As Integer = 0 To Propertys.Count - 1
                 tmp &= Split & Propertys(n).Name & "=" & Propertys(n).Value & ";"
             Next
 
-            Return tmp & Trim(Split.Trim(vbTab)) & "}"
+            'Get all the groups in the group.
+            For Each Grp As Group In Groups
+                tmp &= Split & Grp.ToString(SplitWithNewLine, If(TabCount = 0, 0, TabCount + 1))
+            Next
 
+            '} end of group.
+            tmp &= If(SplitWithNewLine, vbNewLine, "") & If(TabCount - 1 > 0, New String(vbTab, TabCount - 1), "") & "}"
+
+            Return tmp
         End Function
 
         Overloads Shared Operator +(ByVal left As Group, ByVal right As Group) As Group
@@ -2263,7 +2514,7 @@ Public Class fgAxisToBoolean
     Private WithEvents numSwitchOn As New NumericUpDown
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 60, 5) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 60) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -2280,14 +2531,14 @@ Public Class fgAxisToBoolean
         numSwitchOn.DecimalPlaces = 2
         numSwitchOn.Value = 0.5
         numSwitchOn.Width = 60
-        numSwitchOn.Location = Position + New Point(0, 5)
+        numSwitchOn.Location = Position
         AddControl(numSwitchOn)
 
         HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
-        numSwitchOn.Location = Position + New Point(0, 5)
+        numSwitchOn.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
@@ -2412,6 +2663,7 @@ End Class
 'AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
 'AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
 'AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
+'Include(HID\Input.vb)
 
 Public Class fgJoystick
     Inherits BaseObject
@@ -2437,7 +2689,7 @@ Public Class fgJoystick
         HID.Create()
 
         comJoy.Width = 190
-        comJoy.Location = Position + New Point(0, 5)
+        comJoy.Location = Position
         comJoy.DropDownStyle = ComboBoxStyle.DropDownList
         comJoy.Items.AddRange(HID.Joysticks.ToArray)
         'comJoy.SelectedIndex = 0
@@ -2447,7 +2699,7 @@ Public Class fgJoystick
     End Sub
 
     Public Overrides Sub Moving()
-        comJoy.Location = Position + New Point(0, 5)
+        comJoy.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
@@ -2559,7 +2811,7 @@ Public Class fgGetJoystickAxis
 
     Private chkReverse(7) As CheckBox
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 50) 'Setup the base rectangles.
+        Setup(UserData, StartPosition, 50, 125) 'Setup the base rectangles.
 
 
         'Create the inputs.
@@ -2578,7 +2830,7 @@ Public Class fgGetJoystickAxis
             chk.Width = 46
             chk.Height = 15
             chk.Tag = i
-            chk.Location = Position + New Point(4, (15 * i))
+            chk.Location = Position + New Point(0, (15 * i))
             AddHandler chk.CheckedChanged, AddressOf ReverseChange
 
             chkReverse(i) = chk
@@ -2603,7 +2855,7 @@ Public Class fgGetJoystickAxis
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
         For Each chk As CheckBox In chkReverse
-            g.Get_Value(chk.Text & chk.Tag, chk.Checked)
+            g.Get_Value(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         MyBase.Load(g)
@@ -2614,7 +2866,7 @@ Public Class fgGetJoystickAxis
 
         'Save all the reverse check boxs state.
         For Each chk As CheckBox In chkReverse
-            g.Set_Value(chk.Text & chk.Tag, chk.Checked)
+            g.Set_Value(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         Return g
@@ -2700,13 +2952,13 @@ Public Class fgGetJoystickButtons
         numButtons.Minimum = 0
         numButtons.Maximum = 1000
         numButtons.Width = 60
-        numButtons.Location = Position + New Point(0, 5)
+        numButtons.Location = Position
         AddControl(numButtons)
 
     End Sub
 
     Public Overrides Sub Moving()
-        numButtons.Location = Position + New Point(0, 5)
+        numButtons.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
@@ -2751,6 +3003,8 @@ End Class
 
 'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
+'Include(HID\Input.vb)
+'Include(Base\Plugins.vb,Base\BaseObject.vb,Base\SimpleD.vb,Base\Menu.vb)
 Public Class fgGetKey
     Inherits BaseObject
 
@@ -2760,7 +3014,7 @@ Public Class fgGetKey
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 120) 'Setup the base rectangles.
-
+        File = "HID\Keyboard.vb"
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})
@@ -2771,17 +3025,18 @@ Public Class fgGetKey
         Title = "Get key"
 
 
-        comKey.Location = Position + New Point(0, 5)
+        comKey.Location = Position
         comKey.Items.AddRange([Enum].GetNames(GetType(SlimDX.DirectInput.Key)))
         comKey.SelectedItem = SlimDX.DirectInput.Key.Pause.ToString
         comKey.DropDownStyle = ComboBoxStyle.DropDownList
+        comKey.Width = Size.Width
         AddControl(comKey)
 
         HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
-        comKey.Location = Position + New Point(0, 5)
+        comKey.Location = Position
     End Sub
 
     Public Overrides Sub Dispose()
@@ -3104,133 +3359,111 @@ Public Class fgGlobalMouse
         Return g
     End Function
 End Class
-'AddMenuObject|Axis To Controller,Plugins.MIDI_AxisToController|MIDI
-Public Class MIDI_AxisToController
-    Inherits BaseObject
+'AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI
+'AddReferences(Sanford.Slim.dll)
 
-    Private Enabled As Boolean = True
-
-    Private numChannel As New NumericUpDown
-
-    Private WithEvents comController As New ComboBox
-    Private Controller As Integer
-
-#Region "Object stuff"
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 200, 50) 'Setup the base rectangles.
-
-        'Create one output.
-        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
-
-        Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
-
-        'Set the title.
-        Title = "Axis to controller"
-
-        numChannel.Minimum = 1
-        numChannel.Maximum = 16
-        numChannel.Width = 40
-        numChannel.Location = Position + New Point(45, 25)
-        AddControl(numChannel)
-
-        comController.Width = 200
-        comController.Location = Position
-        comController.DropDownStyle = ComboBoxStyle.DropDownList
-        comController.Items.AddRange([Enum].GetNames(GetType(Sanford.Multimedia.Midi.ControllerType)))
-        comController.SelectedItem = Sanford.Multimedia.Midi.ControllerType.HoldPedal1.ToString
-        AddControl(comController)
-
-    End Sub
-
-    Public Overrides Sub Dispose()
-        numChannel.Dispose()
-        comController.Dispose()
-
-        MyBase.Dispose()
-    End Sub
-
-    Public Overrides Sub Moving()
-        numChannel.Location = Position + New Point(45, 25)
-        comController.Location = Position
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                If Data <> Enabled Then
-                    Enabled = Data
-                End If
-
-
-            Case 1 'Input axis
-                If Not Enabled Then Return
-                If Data.GetType = GetType(Boolean) Then
-                    If Data = True Then
-                        Data = 1
-                    Else
-                        Data = 0
-                    End If
-                End If
-                Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
-                message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller
-                message.Data1 = Controller
-                message.Data2 = Data * 127
-                message.MidiChannel = numChannel.Value - 1
-                Send(message)
-        End Select
-    End Sub
-
-    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
-        MyBase.Draw(g)
-
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 28)
-    End Sub
-
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-
-        g.Get_Value("Enabled", Enabled, False)
-
-        Dim tmpController As Integer = -1
-        g.Get_Value("Controller", tmpController, False)
-        If Not tmpController = -1 Then
-            comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
-        End If
-
-        g.Get_Value("Channel", numChannel.Value, False)
-
-        MyBase.Load(g)
-    End Sub
-
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
-
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Controller", Controller)
-        g.Set_Value("Channel", numChannel.Value)
-
-
-        Return g
-    End Function
-#End Region
-
-#Region "Control events"
-
-    Private Sub comController_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
-        If comController.SelectedIndex = -1 Then Return
-        Controller = [Enum].Parse(GetType(Sanford.Multimedia.Midi.ControllerType), comController.SelectedItem.ToString)
-    End Sub
-
-#End Region
-
-End Class
-
-'Add#MenuObject|Debug,Plugins.MIDI_Debug|MIDI
 Public Class MIDI_Debug
     Inherits BaseObject
 
     Private Enabled As Boolean = True
 
+    Private Items As New List(Of String)
+    Private StartID As Short = -1
+
+#Region "Object stuff"
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 200, 145) 'Setup the base rectangles.
+
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
+
+        'Set the title.
+        Title = "MIDI Debug"
+
+
+    End Sub
+
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'Channel message
+                If Not Enabled Then Return
+
+                If Items.Count = 13 Then
+                    Items.RemoveAt(0)
+                    StartID += 1
+                    If StartID > 3 Then StartID = 1
+                End If
+
+                Items.Add(Data.MidiChannel + 1 & vbTab & _
+                                  Data.Command.ToString.PadRight(15) & vbTab & _
+                                  Data.Data1.ToString & vbTab & _
+                                  Data.Data2.ToString)
+
+                DoDraw(Rect)
+
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        'Draw the background colors.
+
+
+        Dim ColorID As Short = StartID
+        'Draw the debug items.
+        For i As Integer = 0 To Items.Count - 1
+            ColorID += 1
+            If ColorID > 3 Then ColorID = 1
+            Select Case ColorID
+                Case 1
+                    g.FillRectangle(Brushes.LightGray, Position.X, Position.Y + (11 * i), Size.Width, 11)
+
+                Case 2
+                    g.FillRectangle(Brushes.LightSkyBlue, Position.X, Position.Y + (11 * i), Size.Width, 11)
+                Case 3
+                    g.FillRectangle(Brushes.LightCyan, Position.X, Position.Y + (11 * i), Size.Width, 11)
+            End Select
+
+
+            g.DrawString(Items(i), DefaultFont, Brushes.Black, Position + New Point(0, 11 * i))
+        Next
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+
+        Return g
+    End Function
+#End Region
+
+End Class
+
+'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI
+Public Class MIDI_GetController
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+
     Private numChannel As New NumericUpDown
+    Private WithEvents chkChannels As New CheckBox
 
     Private WithEvents comController As New ComboBox
     Private Controller As Integer
@@ -3240,18 +3473,24 @@ Public Class MIDI_Debug
         Setup(UserData, StartPosition, 200, 50) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
-
-        Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
+        Outputs(New String() {"Value,Number,Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
         'Set the title.
-        Title = "Axis to controller"
+        Title = "Get controller"
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
+        numChannel.Enabled = False
         numChannel.Location = Position + New Point(45, 25)
         AddControl(numChannel)
+
+        chkChannels.Text = "Any channel"
+        chkChannels.Width = 113
+        chkChannels.Checked = True
+        chkChannels.Location = Position + New Point(86, 24)
+        AddControl(chkChannels)
 
         comController.Width = 200
         comController.Location = Position
@@ -3264,6 +3503,7 @@ Public Class MIDI_Debug
 
     Public Overrides Sub Dispose()
         numChannel.Dispose()
+        chkChannels.Dispose()
         comController.Dispose()
 
         MyBase.Dispose()
@@ -3271,6 +3511,7 @@ Public Class MIDI_Debug
 
     Public Overrides Sub Moving()
         numChannel.Location = Position + New Point(45, 25)
+        chkChannels.Location = Position + New Point(86, 24)
         comController.Location = Position
     End Sub
 
@@ -3282,21 +3523,17 @@ Public Class MIDI_Debug
                 End If
 
 
-            Case 1 'Input axis
+            Case 1 'Channel message
                 If Not Enabled Then Return
-                If Data.GetType = GetType(Boolean) Then
-                    If Data = True Then
-                        Data = 1
-                    Else
-                        Data = 0
+                If chkChannels.Checked Then
+                    If Data.MidiChannel <> numChannel.Value - 1 Then
+                        Return
                     End If
                 End If
-                Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
-                message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller
-                message.Data1 = Controller
-                message.Data2 = Data * 127
-                message.MidiChannel = numChannel.Value - 1
-                Send(message)
+
+                If Data.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller And Data.Data1 = Controller Then
+                    Send(Data.Data2 / 127)
+                End If
         End Select
     End Sub
 
@@ -3316,6 +3553,8 @@ Public Class MIDI_Debug
             comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
         End If
 
+        g.Get_Value("AnyChannels", chkChannels.Checked, False)
+
         g.Get_Value("Channel", numChannel.Value, False)
 
         MyBase.Load(g)
@@ -3326,6 +3565,7 @@ Public Class MIDI_Debug
 
         g.Set_Value("Enabled", Enabled)
         g.Set_Value("Controller", Controller)
+        g.Set_Value("AnyChannels", chkChannels.Checked)
         g.Set_Value("Channel", numChannel.Value)
 
 
@@ -3334,12 +3574,14 @@ Public Class MIDI_Debug
 #End Region
 
 #Region "Control events"
+    Private Sub chkChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkChannels.CheckedChanged
+        numChannel.Enabled = Not chkChannels.Checked
+    End Sub
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
         If comController.SelectedIndex = -1 Then Return
         Controller = [Enum].Parse(GetType(Sanford.Multimedia.Midi.ControllerType), comController.SelectedItem.ToString)
     End Sub
-
 #End Region
 
 End Class
@@ -3373,21 +3615,21 @@ Public Class MIDI_Input
         chkAllChannels.Text = "All channels"
         chkAllChannels.Checked = True
         chkAllChannels.Width = 85
-        chkAllChannels.Location = Position + New Point(95, 35)
+        chkAllChannels.Location = Position + New Point(95, 25)
         AddControl(chkAllChannels)
 
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Location = Position + New Point(45, 35)
+        numChannel.Location = Position + New Point(45, 25)
         AddControl(numChannel)
 
 
 
         If Sanford.Multimedia.Midi.InputDevice.DeviceCount > 0 Then
             comDevices.Width = 200
-            comDevices.Location = Position + New Point(0, 10)
+            comDevices.Location = Position
             comDevices.DropDownStyle = ComboBoxStyle.DropDownList
 
             For i As Integer = 0 To Sanford.Multimedia.Midi.InputDevice.DeviceCount - 1
@@ -3414,9 +3656,9 @@ Public Class MIDI_Input
     End Sub
 
     Public Overrides Sub Moving()
-        chkAllChannels.Location = Rect.Location + New Point(95, 35)
-        numChannel.Location = Position + New Point(45, 35)
-        comDevices.Location = Position + New Point(0, 10)
+        chkAllChannels.Location = Position + New Point(95, 25)
+        numChannel.Location = Position + New Point(45, 25)
+        comDevices.Location = Position
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -3443,7 +3685,7 @@ Public Class MIDI_Input
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 38)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 28)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
@@ -3534,6 +3776,7 @@ End Class
 'AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
 'AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
 'AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
+'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_Keyboard
     Inherits BaseObject
@@ -3566,7 +3809,6 @@ Public Class MIDI_Keyboard
 
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
-
         Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
 
@@ -3595,7 +3837,6 @@ Public Class MIDI_Keyboard
     Public Overrides Sub Dispose()
         chkFilterOtherChannels.Dispose()
         numChannel.Dispose()
-
 
         MyBase.Dispose()
     End Sub
@@ -3707,19 +3948,6 @@ Public Class MIDI_Keyboard
                         g.FillRectangle(brush, x + (10 * p) + 2, y, 5, 25)
                         g.FillRectangle(brush, x + (10 * p), y + 25, 10, 25)
                     End If
-
-
-                    'Case 0, 2, 4, 5, 7, 9, 11
-                    '    If Note(Offset + i - 4) Then
-                    '        g.FillRectangle(Brushes.Green, x + (10 * i), y + 20, 10, 30)
-                    '    End If
-
-                    'Case 1, 3, 6, 8, 10
-
-                    '    Dim b As Brush = Brushes.Black
-                    '    If Note(Offset + i - 4) = True Then b = Brushes.Green
-                    '    g.FillRectangle(b, x + (10 * i), y, 7, 20)
-
             End Select
         Next
 
@@ -3785,25 +4013,26 @@ Public Class MIDI_Keyboard
 
 Send:
                 Send(message)
-                DoDraw(True)
+                DoDraw(Rect)
+                'DoDraw(True)
         End Select
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
-
+        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
         g.Get_Value("Channel", numChannel.Value, False)
+
         MyBase.Load(g)
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
-        g.Set_Value("Channel", numChannel.Value)
+        g.Set_Value("Enabled", Enabled, True)
+        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
+        g.Set_Value("Channel", numChannel.Value, 1)
 
 
         Return g
@@ -3908,7 +4137,7 @@ Send:
                     Case 0, 5 'C & F
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n) '(Offset + n - Offset2)
+                            ReleaseNote(n)
                             Return
                         End If
 
@@ -4010,21 +4239,23 @@ Send:
     Private Sub ReleaseNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
+        tmp.MidiChannel = numChannel.Value - 1
         tmp.Data1 = ID + Offset
         tmp.Data2 = 0
         Note(ID).Release(tmp.MidiChannel)
         Send(tmp)
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 
     Private Sub PressNote(ByVal ID As Integer)
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
+        tmp.MidiChannel = numChannel.Value - 1
         tmp.Data1 = ID + Offset
         tmp.Data2 = 127
         Note(ID).Press(tmp.MidiChannel)
         Send(tmp)
-        DoDraw(True)
+        DoDraw(Rect)
     End Sub
 #End Region
 
@@ -4058,7 +4289,7 @@ Public Class MIDI_Output
         chkMessageChannels.Text = "Same as message"
         chkMessageChannels.Width = 113
         chkMessageChannels.Checked = True
-        chkMessageChannels.Location = Position + New Point(86, 35)
+        chkMessageChannels.Location = Position + New Point(86, 25)
         AddControl(chkMessageChannels)
 
 
@@ -4066,14 +4297,14 @@ Public Class MIDI_Output
         numChannel.Maximum = 16
         numChannel.Width = 40
         numChannel.Enabled = False
-        numChannel.Location = Position + New Point(45, 35)
+        numChannel.Location = Position + New Point(45, 25)
         AddControl(numChannel)
 
 
 
         If Sanford.Multimedia.Midi.OutputDevice.DeviceCount > 0 Then
             comDevices.Width = 200
-            comDevices.Location = Position + New Point(0, 10)
+            comDevices.Location = Position
             comDevices.DropDownStyle = ComboBoxStyle.DropDownList
 
             For i As Integer = 0 To Sanford.Multimedia.Midi.OutputDevice.DeviceCount - 1
@@ -4101,9 +4332,9 @@ Public Class MIDI_Output
     End Sub
 
     Public Overrides Sub Moving()
-        chkMessageChannels.Location = Rect.Location + New Point(110, 50)
-        numChannel.Location = Rect.Location + New Point(65, 50)
-        comDevices.Location = Rect.Location + New Point(15, 25)
+        chkMessageChannels.Location = Position + New Point(86, 25)
+        numChannel.Location = Position + New Point(45, 25)
+        comDevices.Location = Position
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -4172,7 +4403,7 @@ Public Class MIDI_Output
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 38)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 28)
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
@@ -4220,7 +4451,7 @@ Public Class MIDI_Output
         End Try
     End Sub
 
-    Private Sub chkAllChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
+    Private Sub chkMessageChannels_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkMessageChannels.CheckedChanged
         numChannel.Enabled = Not chkMessageChannels.Checked
     End Sub
 #End Region
@@ -4233,7 +4464,128 @@ Public Class MIDI_Output
 
 End Class
 
+'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
+Public Class MIDI_SetController
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private numChannel As New NumericUpDown
+
+    Private WithEvents comController As New ComboBox
+    Private Controller As Integer
+
+#Region "Object stuff"
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 200, 50) 'Setup the base rectangles.
+
+        'Create one output.
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
+
+        Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
+
+        'Set the title.
+        Title = "Set controller"
+
+        numChannel.Minimum = 1
+        numChannel.Maximum = 16
+        numChannel.Width = 40
+        numChannel.Location = Position + New Point(45, 25)
+        AddControl(numChannel)
+
+        comController.Width = 200
+        comController.Location = Position
+        comController.DropDownStyle = ComboBoxStyle.DropDownList
+        comController.Items.AddRange([Enum].GetNames(GetType(Sanford.Multimedia.Midi.ControllerType)))
+        comController.SelectedItem = Sanford.Multimedia.Midi.ControllerType.HoldPedal1.ToString
+        AddControl(comController)
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        numChannel.Dispose()
+        comController.Dispose()
+
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        numChannel.Location = Position + New Point(45, 25)
+        comController.Location = Position
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'Input axis
+                If Not Enabled Then Return
+                If Data.GetType = GetType(Boolean) Then
+                    If Data = True Then
+                        Data = 1
+                    Else
+                        Data = 0
+                    End If
+                End If
+                Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
+                message.Command = Sanford.Multimedia.Midi.ChannelCommand.Controller
+                message.Data1 = Controller
+                message.Data2 = Data * 127
+                message.MidiChannel = numChannel.Value - 1
+                Send(message)
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 28)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+
+        Dim tmpController As Integer = -1
+        g.Get_Value("Controller", tmpController, False)
+        If Not tmpController = -1 Then
+            comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
+        End If
+
+        g.Get_Value("Channel", numChannel.Value, False)
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("Controller", Controller)
+        g.Set_Value("Channel", numChannel.Value)
+
+
+        Return g
+    End Function
+#End Region
+
+#Region "Control events"
+
+    Private Sub comController_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
+        If comController.SelectedIndex = -1 Then Return
+        Controller = [Enum].Parse(GetType(Sanford.Multimedia.Midi.ControllerType), comController.SelectedItem.ToString)
+    End Sub
+
+#End Region
+
+End Class
+
 'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_SimulatePedals
     Inherits BaseObject
@@ -4260,19 +4612,19 @@ Public Class MIDI_SimulatePedals
         chkRemoveOldNotes.Text = "Remove old notes"
         chkRemoveOldNotes.Width = 115
         chkRemoveOldNotes.Checked = True
-        chkRemoveOldNotes.Location = Position + New Point(5, 45)
+        chkRemoveOldNotes.Location = Position + New Point(5, 40)
         AddControl(chkRemoveOldNotes)
 
         chkFilterOtherChannels.Text = "Filter out other channels"
-        chkFilterOtherChannels.Width = 139
+        chkFilterOtherChannels.Width = 145
         chkFilterOtherChannels.Checked = False
-        chkFilterOtherChannels.Location = Position + New Point(5, 25)
+        chkFilterOtherChannels.Location = Position + New Point(5, 20)
         AddControl(chkFilterOtherChannels)
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16
         numChannel.Width = 40
-        numChannel.Location = Position + New Point(55, 5)
+        numChannel.Location = Position + New Point(55, 0)
         AddControl(numChannel)
 
 
@@ -4288,15 +4640,15 @@ Public Class MIDI_SimulatePedals
     End Sub
 
     Public Overrides Sub Moving()
-        chkRemoveOldNotes.Location = Position + New Point(5, 45)
-        chkFilterOtherChannels.Location = Position + New Point(5, 25)
-        numChannel.Location = Position + New Point(55, 5)
+        chkRemoveOldNotes.Location = Position + New Point(5, 40)
+        chkFilterOtherChannels.Location = Position + New Point(5, 20)
+        numChannel.Location = Position + New Point(55, 0)
     End Sub
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)
 
-        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X + 5, Position.Y + 8)
+        g.DrawString("Channel:", DefaultFont, DefaultFontBrush, Position.X + 5, Position.Y + 3)
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -4426,20 +4778,20 @@ Public Class MIDI_SimulatePedals
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
-        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
-
+        g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked, False)
+        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
         g.Get_Value("Channel", numChannel.Value, False)
+
         MyBase.Load(g)
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("RemoveOldNotes", chkRemoveOldNotes.Checked)
-        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked)
-        g.Set_Value("Channel", numChannel.Value)
+        g.Set_Value("Enabled", Enabled, True)
+        g.Set_Value("RemoveOldNotes", chkRemoveOldNotes.Checked, True)
+        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
+        g.Set_Value("Channel", numChannel.Value, 1)
 
 
         Return g
@@ -4522,6 +4874,106 @@ Public Class MIDI_SimulatePedals
         SostenutoList.Clear()
     End Sub
 
+#End Region
+
+End Class
+
+'AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
+Public Class MIDI_Volume
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private numVolume As New NumericUpDown
+
+#Region "Object stuff"
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 95) 'Setup the base rectangles.
+
+        'Create one output.
+        Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
+
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessageBuilder,ChannelMessage", "Volume,Number,Boolean"})
+
+        'Set the title.
+        Title = "MIDI Volume"
+
+        numVolume.Minimum = 1
+        numVolume.Maximum = 128
+        numVolume.Width = 50
+        numVolume.Value = 128
+        numVolume.Location = Position + New Point(45, 0)
+        AddControl(numVolume)
+
+    End Sub
+
+    Public Overrides Sub Dispose()
+        numVolume.Dispose()
+
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        numVolume.Location = Position + New Point(45, 0)
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                If Data <> Enabled Then
+                    Enabled = Data
+                End If
+
+
+            Case 1 'Channel Message
+                If Not Enabled Then Return
+
+                Dim message As Sanford.Multimedia.Midi.ChannelMessageBuilder
+                If Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
+                    message = New Sanford.Multimedia.Midi.ChannelMessageBuilder(Data)
+                Else
+                    message = Data
+                End If
+
+
+
+                'Is it a note (on or off)?
+                If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
+                    If message.Data2 > 0 Then
+                        message.Data2 = numVolume.Value - 1
+                    End If
+                End If
+
+                Send(message)
+
+            Case 2 'Volume
+                If Not Enabled Then Return
+                numVolume.Value = (Data * 127) + 1
+        End Select
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Volume:", DefaultFont, DefaultFontBrush, Position.X, Position.Y + 3)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("Volume", numVolume.Value, False)
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("Volume", numvolume.value)
+
+
+        Return g
+    End Function
 #End Region
 
 End Class
