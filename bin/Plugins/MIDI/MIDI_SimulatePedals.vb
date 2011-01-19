@@ -99,11 +99,7 @@ Public Class MIDI_SimulatePedals
                 If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
                         NoteOn = True
-                    Else
-                        NoteOn = False
                     End If
-                ElseIf message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff Then
-                    NoteOn = False
                 End If
                 'Is the note on?
                 If NoteOn Then
@@ -135,6 +131,7 @@ Public Class MIDI_SimulatePedals
                     End If
 
                 Else
+
                     Select Case Note(message.Data1)
                         Case Notes.Sostenuto
                             If SostenutoPressed Then

@@ -24,7 +24,7 @@ Public Class MIDI_Output
         Title = "MIDI Output"
 
         chkMessageChannels.Text = "Same as message"
-        chkMessageChannels.Width = 113
+        chkMessageChannels.Width = 117
         chkMessageChannels.Checked = True
         chkMessageChannels.Location = Position + New Point(86, 25)
         AddControl(chkMessageChannels)
