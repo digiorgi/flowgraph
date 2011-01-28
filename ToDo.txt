@@ -56,6 +56,12 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 	Misc:
 		Get varable from object.
+			Need to do some more research/testing on this: 
+				Objects(#).GetType.GetField("FieldName")
+				Objects(#).GetType.GetProperty("PropertyName")
+				
+
+
 
 	Input:
 		Keyboard:	In(Enabled, Tick)	Out(Keyboard state, Down)
