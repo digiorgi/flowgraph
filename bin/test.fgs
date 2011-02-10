@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=12;
+	Objects=13;
 	FileVersion=0.5;
 }
 Object0{
@@ -39,7 +39,6 @@ Object3{
 	Output=1,4,0;
 	Input=0,1;
 	Enabled=True;
-	Joystick=RGT Force Feedback Pro;
 }
 Object4{
 	Name=Plugins.fgGetJoystickAxis;
@@ -61,7 +60,7 @@ Object6{
 	Name=Plugins.MIDI_SimulatePedals;
 	Position=375,260;
 	Output=3,9,1,2,1,12,1;
-	Input=0,1,1,1,0;
+	Input=0,2,1,1,0;
 }
 Object7{
 	Name=Plugins.fgAxisToBoolean;
@@ -76,7 +75,7 @@ Object8{
 }
 Object9{
 	Name=Plugins.MIDI_Keyboard;
-	Position=355,365;
+	Position=360,365;
 	UserData=88-21-9;
 	Output=0;
 	Input=0,1;
@@ -84,7 +83,7 @@ Object9{
 Object10{
 	Name=Plugins.MIDI_Volume;
 	Position=245,290;
-	Output=1,6,1;
+	Output=2,6,1,13,1;
 	Input=0,1,0;
 	Enabled=True;
 	Volume=128;
@@ -100,4 +99,12 @@ Object12{
 	Position=665,55;
 	Input=0,1;
 	Enabled=True;
+}
+Object13{
+	Name=Plugins.MIDI_Transpose;
+	Position=245,355;
+	Output=1,6,1;
+	Input=0,1;
+	Enabled=True;
+	Octave=1;
 }
