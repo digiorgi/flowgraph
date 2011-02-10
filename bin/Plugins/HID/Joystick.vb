@@ -70,7 +70,7 @@ Public Class fgJoystick
         Dim g As SimpleD.Group = MyBase.Save()
 
         g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Joystick", comJoy.SelectedItem.ToString)
+        If comJoy.SelectedItem IsNot Nothing Then g.Set_Value("Joystick", comJoy.SelectedItem.ToString)
 
         Return g
     End Function

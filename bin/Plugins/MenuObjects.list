@@ -31,4 +31,5 @@ AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
 AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
 AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI
 AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
