@@ -16,14 +16,14 @@ Object0{
 }
 Object1{
 	Name=Plugins.fgDisplayAsString;
-	File=fgDisplayAsString.vb;
+	File=Common\fgDisplayAsString.vb;
 	Position=310,85;
 	Input=1;
 	Data=False;
 }
 Object2{
 	Name=Plugins.fgTimer;
-	File=fgTimer.vb;
+	File=Common\fgTimer.vb;
 	Position=10,85;
 	UserData=10;
 	Output=1,0,1;

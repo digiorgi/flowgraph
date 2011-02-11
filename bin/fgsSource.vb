@@ -11,7 +11,7 @@ Namespace Plugins
 'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 'Include(HID\Input.vb)
-'Include(Base\Plugins.vb,Base\BaseObject.vb,Base\SimpleD.vb,Base\Menu.vb)
+'Include(Base\Plugins.vb,Base\BaseObject.vb)
 Public Class fgGetKey
     Inherits BaseObject
 
@@ -173,7 +173,7 @@ Public Class fgDisplayAsString
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
-        File = "fgDisplayAsString.vb"
+        File = "Common\fgDisplayAsString.vb"
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -252,7 +252,7 @@ Public Class fgTimer
     Private WithEvents numInterval As New NumericUpDown
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-        File = "fgTimer.vb"
+        File = "Common\fgTimer.vb"
 
         'Create one output.
         Outputs(New String() {"Tick"})
@@ -618,8 +618,12 @@ Public Module Plugins
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        InputImage = Image.FromFile("Input.png")
-        OutputImage = Image.FromFile("Output.png")
+        If IO.File.Exists("Plugins\Base\Input.png") Then
+            InputImage = Image.FromFile("Plugins\Base\Input.png")
+        End If
+        If IO.File.Exists("Plugins\Base\Output.png") Then
+            OutputImage = Image.FromFile("Plugins\Base\Output.png")
+        End If
 
         Plugins.Form = form
         
@@ -732,6 +736,8 @@ End Module
 '   Raymond Ellis
 '   Email: RaymondEllis@live.com
 #End Region
+
+'Include(Base\SimpleD.vb,Base\Menu.vb)
 
 Public MustInherit Class BaseObject
     Public Index As Integer = -1
@@ -913,7 +919,12 @@ Public MustInherit Class BaseObject
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
                 'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                If InputImage IsNot Nothing Then
+                    g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                End If
+
             Next
         End If
         'Draw the outputs. (if any.)
@@ -921,7 +932,11 @@ Public MustInherit Class BaseObject
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
                 'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                If OutputImage IsNot Nothing Then
+                    g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                End If
             Next
         End If
 
@@ -2268,7 +2283,7 @@ Namespace Menu
         ''' Usefull to add groups.
         ''' </summary>
         ''' <param name="Item">The item to add the node to.</param>
-        ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+        ''' <param name="Data">Name,(Optional ClassName) Or Width, Optional Width</param>
         ''' <param name="Groups"></param>
         ''' <remarks></remarks>
         Public Function AddNode(ByVal Item As Node, ByVal Data As String(), ByVal Groups As String()) As Node
@@ -2302,10 +2317,19 @@ Namespace Menu
                 Dim CurrentGroup As Integer = 0
                 Dim CurrentNode As Node = Item
                 Do
+                    'Find width in name.  GroupName'95
+                    Dim tmpWidth As Integer = 50
+                    Dim tmp() As String = Split(Groups(CurrentGroup), "'")
+                    If tmp.Length = 2 Then
+                        Groups(CurrentGroup) = tmp(0)
+                        tmpWidth = tmp(1)
+                    End If
+
                     Dim Found As Boolean = False
                     If CurrentNode.Children IsNot Nothing Then
                         For Each n As Node In CurrentNode.Children
                             If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                                If n.Width < tmpWidth Then n.Width = tmpWidth
                                 CurrentNode = n
                                 Found = True
                                 Exit For
@@ -2313,8 +2337,7 @@ Namespace Menu
                         Next
                     End If
                     If Found = False Then
-
-                        CurrentNode.Add(New Node(Groups(CurrentGroup), True))
+                        CurrentNode.Add(New Node(Groups(CurrentGroup), True, tmpWidth))
                         CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
                     End If
 
@@ -2409,6 +2432,7 @@ Namespace Menu
                 End If
             Next
         End Sub
+
     End Class
 End Namespace
 
@@ -2501,7 +2525,7 @@ Public Class frmMain
 Objects.Add(New Plugins.fgGetKey(New Point(145,70),""))
 Objects.Add(New Plugins.fgDisplayAsString(New Point(310,85),""))
 Objects.Add(New Plugins.fgTimer(New Point(10,85),"10"))
-Dim sd As New SimpleD.SimpleD("//Version=0.99 FileVersion=1\\Main{Width=731;Height=292;Objects=2;FileVersion=0.5;}Object0{Name=Plugins.fgGetKey;File=HID\Keyboard.vb;Position=145,70;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}Object1{Name=Plugins.fgDisplayAsString;File=fgDisplayAsString.vb;Position=310,85;Input=1;Data=False;}Object2{Name=Plugins.fgTimer;File=fgTimer.vb;Position=10,85;UserData=10;Output=1,0,1;Input=0,0;Enabled=True;}")
+Dim sd As New SimpleD.SimpleD("//Version=0.99 FileVersion=1\\Main{Width=731;Height=292;Objects=2;FileVersion=0.5;}Object0{Name=Plugins.fgGetKey;File=HID\Keyboard.vb;Position=145,70;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}Object1{Name=Plugins.fgDisplayAsString;File=Common\fgDisplayAsString.vb;Position=310,85;Input=1;Data=False;}Object2{Name=Plugins.fgTimer;File=Common\fgTimer.vb;Position=10,85;UserData=10;Output=1,0,1;Input=0,0;Enabled=True;}")
 Try
 Objects(0).Load(sd.Get_Group("Object0"))
 Catch ex As Exception

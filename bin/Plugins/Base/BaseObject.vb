@@ -27,6 +27,8 @@
 '   Email: RaymondEllis@live.com
 #End Region
 
+'Include(Base\SimpleD.vb,Base\Menu.vb)
+
 Public MustInherit Class BaseObject
     Public Index As Integer = -1
 
@@ -206,16 +208,23 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
-                'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                If InputImage IsNot Nothing Then
+                    g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                End If
+
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                If OutputImage IsNot Nothing Then
+                    g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                End If
             Next
         End If
 

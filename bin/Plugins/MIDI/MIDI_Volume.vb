@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_Volume
     Inherits BaseObject
 

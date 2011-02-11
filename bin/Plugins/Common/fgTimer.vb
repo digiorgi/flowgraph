@@ -7,7 +7,7 @@ Public Class fgTimer
     Private WithEvents numInterval As New NumericUpDown
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-        File = "fgTimer.vb"
+        File = "Common\fgTimer.vb"
 
         'Create one output.
         Outputs(New String() {"Tick"})
