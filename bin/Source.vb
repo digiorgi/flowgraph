@@ -3359,7 +3359,7 @@ Public Class fgGlobalMouse
         Return g
     End Function
 End Class
-'AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI
+'AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message
 'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_Debug
@@ -3455,7 +3455,7 @@ Public Class MIDI_Debug
 
 End Class
 
-'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI
+'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI,Channel Message
 Public Class MIDI_GetController
     Inherits BaseObject
 
@@ -4464,7 +4464,7 @@ Public Class MIDI_Output
 
 End Class
 
-'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
+'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI,Channel Message
 Public Class MIDI_SetController
     Inherits BaseObject
 
@@ -4584,7 +4584,7 @@ Public Class MIDI_SetController
 
 End Class
 
-'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI,Channel Message
 'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_SimulatePedals
@@ -4875,7 +4875,7 @@ Public Class MIDI_SimulatePedals
 
 End Class
 
-'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI
+'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
 Public Class MIDI_Transpose
     Inherits BaseObject
 
@@ -4972,7 +4972,7 @@ Public Class MIDI_Transpose
 
 End Class
 
-'AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
+'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message,Note
 Public Class MIDI_Volume
     Inherits BaseObject
 
@@ -4992,10 +4992,10 @@ Public Class MIDI_Volume
         'Set the title.
         Title = "MIDI Volume"
 
-        numVolume.Minimum = 1
-        numVolume.Maximum = 128
+        numVolume.Minimum = 0
+        numVolume.Maximum = 127
         numVolume.Width = 50
-        numVolume.Value = 128
+        numVolume.Value = 127
         numVolume.Location = Position + New Point(45, 0)
         AddControl(numVolume)
 
@@ -5034,7 +5034,7 @@ Public Class MIDI_Volume
                 'Is it a note (on or off)?
                 If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
-                        message.Data2 = numVolume.Value - 1
+                        message.Data2 = numVolume.Value 
                     End If
                 End If
 
@@ -5042,7 +5042,7 @@ Public Class MIDI_Volume
 
             Case 2 'Volume
                 If Not Enabled Then Return
-                numVolume.Value = (Data * 127) + 1
+                numVolume.Value = (Data * 127) 
         End Select
     End Sub
 

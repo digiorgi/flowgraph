@@ -86,7 +86,7 @@ Object10{
 	Output=2,6,1,13,1;
 	Input=0,1,0;
 	Enabled=True;
-	Volume=128;
+	Volume=127;
 }
 Object11{
 	Name=Plugins.MIDI_Debug;

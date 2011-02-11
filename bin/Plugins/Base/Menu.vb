@@ -198,7 +198,7 @@ Namespace Menu
         ''' Usefull to add groups.
         ''' </summary>
         ''' <param name="Item">The item to add the node to.</param>
-        ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+        ''' <param name="Data">Name,(Optional ClassName) Or Width, Optional Width</param>
         ''' <param name="Groups"></param>
         ''' <remarks></remarks>
         Public Function AddNode(ByVal Item As Node, ByVal Data As String(), ByVal Groups As String()) As Node
@@ -232,10 +232,19 @@ Namespace Menu
                 Dim CurrentGroup As Integer = 0
                 Dim CurrentNode As Node = Item
                 Do
+                    'Find width in name.  GroupName'95
+                    Dim tmpWidth As Integer = 50
+                    Dim tmp() As String = Split(Groups(CurrentGroup), "'")
+                    If tmp.Length = 2 Then
+                        Groups(CurrentGroup) = tmp(0)
+                        tmpWidth = tmp(1)
+                    End If
+
                     Dim Found As Boolean = False
                     If CurrentNode.Children IsNot Nothing Then
                         For Each n As Node In CurrentNode.Children
                             If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                                If n.Width < tmpWidth Then n.Width = tmpWidth
                                 CurrentNode = n
                                 Found = True
                                 Exit For
@@ -243,8 +252,7 @@ Namespace Menu
                         Next
                     End If
                     If Found = False Then
-
-                        CurrentNode.Add(New Node(Groups(CurrentGroup), True))
+                        CurrentNode.Add(New Node(Groups(CurrentGroup), True, tmpWidth))
                         CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
                     End If
 
@@ -339,5 +347,6 @@ Namespace Menu
                 End If
             Next
         End Sub
+
     End Class
 End Namespace

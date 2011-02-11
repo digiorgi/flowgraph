@@ -291,7 +291,7 @@ Plugins
  Usefull to add groups.
  </summary>
 	<param name="Item">The item to add the node to.</param>
-	<param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+	<param name="Data">Name,(Optional ClassName) Or Width, Optional Width</param>
 	<param name="Groups"></param>
 	<remarks></remarks>
 </member><member name="M:Plugins.Menu.Node.#ctor(Plugins.Menu.Result)">

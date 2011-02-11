@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
+﻿'AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI,Channel Message
 'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_SimulatePedals

@@ -21,15 +21,15 @@ AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
-AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI
-AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI
+AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message
+AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI,Channel Message
 AddMenuObject|Input,Plugins.MIDI_Input|MIDI
 AddMenuObject|128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI,Keyboards
 AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
 AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
 AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
 AddMenuObject|Output,Plugins.MIDI_Output|MIDI
-AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
-AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI
-AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI
-AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
+AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI,Channel Message
+AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI,Channel Message
+AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
+AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note

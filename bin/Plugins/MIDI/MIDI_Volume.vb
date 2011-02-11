@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Volume,Plugins.MIDI_Volume|MIDI
+﻿'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note
 Public Class MIDI_Volume
     Inherits BaseObject
 
@@ -18,10 +18,10 @@ Public Class MIDI_Volume
         'Set the title.
         Title = "MIDI Volume"
 
-        numVolume.Minimum = 1
-        numVolume.Maximum = 128
+        numVolume.Minimum = 0
+        numVolume.Maximum = 127
         numVolume.Width = 50
-        numVolume.Value = 128
+        numVolume.Value = 127
         numVolume.Location = Position + New Point(45, 0)
         AddControl(numVolume)
 
@@ -60,7 +60,7 @@ Public Class MIDI_Volume
                 'Is it a note (on or off)?
                 If (message.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn) Then
                     If message.Data2 > 0 Then
-                        message.Data2 = numVolume.Value - 1
+                        message.Data2 = numVolume.Value 
                     End If
                 End If
 
@@ -68,7 +68,7 @@ Public Class MIDI_Volume
 
             Case 2 'Volume
                 If Not Enabled Then Return
-                numVolume.Value = (Data * 127) + 1
+                numVolume.Value = (Data * 127) 
         End Select
     End Sub
 

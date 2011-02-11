@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI
+﻿'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
 Public Class MIDI_Transpose
     Inherits BaseObject
 

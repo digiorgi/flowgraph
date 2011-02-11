@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI
+﻿'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI,Channel Message
 Public Class MIDI_GetController
     Inherits BaseObject
 
