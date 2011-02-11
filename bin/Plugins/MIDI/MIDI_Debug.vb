@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI
+﻿'AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message
 'AddReferences(Sanford.Slim.dll)
 
 Public Class MIDI_Debug

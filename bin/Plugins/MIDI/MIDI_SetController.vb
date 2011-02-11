@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI
+﻿'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI,Channel Message
 Public Class MIDI_SetController
     Inherits BaseObject
 
