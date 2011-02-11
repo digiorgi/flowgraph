@@ -143,82 +143,6 @@ Public Class fgCounter
     End Sub
 End Class
 
-'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
-Public Class fgDisplayAsString
-    Inherits BaseObject
-
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
-        File = "fgDisplayAsString.vb"
-
-        'Create one input.
-        Inputs(New String() {"Value to display."})
-        'Input(0).MaxConnected = 1 'Only allow one connection.
-
-        'Set the title.
-        Title = "Display as string"
-
-        MenuItems.Add(New Menu.Node("Set String", , 70))
-    End Sub
-
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
-
-        g.Set_Value("Data", Data)
-
-        Return g
-    End Function
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Data", Data)
-
-        MyBase.Load(g)
-    End Sub
-
-    Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
-        MyBase.MenuSelected(Result)
-
-        If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
-            If Result.Name = "Set String" Then
-                Me.Data = InputBox("Set string", "THIS IS THE TITLE")
-            End If
-        End If
-    End Sub
-
-    Private Data As String
-    Private DataSize, OldSize As SizeF
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Me.Data = Data.ToString() 'Set the data.
-        DataSize = Nothing 'Set the data size to nothing so we will check the size later.
-
-        'Tell auto draw we want to draw.
-        DoDraw(Rect)
-    End Sub
-
-    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
-        'Lets measure the size if data size is nothing.
-        If DataSize = Nothing Then
-            DataSize = g.MeasureString("String= " & Data, DefaultFont) 'Measure the string.
-            If DataSize.Width < 75 Then DataSize.Width = 75 'Set the min width.
-
-            'Did the size change?
-            If DataSize <> OldSize Then
-                'If so then we set the size of the base object
-                MyBase.SetSize(DataSize.Width, DataSize.Height, True)
-                OldSize = DataSize 'Then set the old size.
-            End If
-
-        End If
-
-        'Draw the base stuff like the title outputs etc..
-        MyBase.Draw(g)
-
-
-        'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Position)
-    End Sub
-
-End Class
-
 'AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
 Public Class fgFPS
     Inherits BaseObject
@@ -240,174 +164,6 @@ Public Class fgFPS
         FrameCount += 1
 
         g.DrawString("Total Frames= " & FrameCount, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
-    End Sub
-End Class
-
-'AddMenuObject|Slider,Plugins.fgSlider
-Public Class fgSlider
-    Inherits BaseObject
-
-    Private Enabled As Boolean = True
-
-    Private Value As Integer
-
-
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
-
-        Outputs(New String() {"Value,Number"})
-        Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
-
-        'Set the title.
-        Title = "Slider"
-
-        Value = MyBase.Size.Width * 0.5
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                Enabled = Data
-
-            Case 1 'Set value
-                If Not Enabled Then Return
-                If Data.GetType Is GetType(Boolean) Then
-                    If Data = True Then
-                        Value = Size.Width
-                    Else
-                        Value = 0
-                    End If
-                Else
-                    Value = Data * Size.Width
-                End If
-
-
-        End Select
-
-        DoDraw(Rect)
-    End Sub
-
-    Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
-        MyBase.MouseDown(e)
-        If Not Enabled Then Return
-        If e.Button = MouseButtons.Left Then
-            Dim x As Integer = e.X - Position.X
-            If x >= Size.Width Then
-                Value = Size.Width
-            ElseIf x <= 0 Then
-                Value = 0
-            Else
-                Value = x
-            End If
-            Send(x / Size.Width)
-            DoDraw(Rect)
-        End If
-    End Sub
-
-    Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
-        MyBase.MouseMove(e)
-        If Not Enabled Then Return
-        If e.Button = MouseButtons.Left Then
-            Dim x As Integer = e.X - Position.X
-            If X >= Size.Width Then
-                Value = Size.Width
-            ElseIf x <= 0 Then
-                Value = 0
-            Else
-                Value = x
-            End If
-            Send(x / Size.Width)
-            DoDraw(Rect)
-        End If
-    End Sub
-
-    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
-        MyBase.Draw(g)
-
-        If Enabled Then
-            g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value, 20)
-        Else
-            g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value, 20)
-        End If
-        g.DrawString(Math.Round(Value / Size.Width * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
-    End Sub
-End Class
-
-'AddMenuObject|Timer,Plugins.fgTimer|Math
-Public Class fgTimer
-    Inherits BaseObject
-
-    Private WithEvents tmr As New Timer
-
-    Private WithEvents numInterval As New NumericUpDown
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-        File = "fgTimer.vb"
-
-        'Create one output.
-        Outputs(New String() {"Tick"})
-
-        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
-
-        'Set the title.
-        Title = "Timer"
-
-
-        numInterval.Minimum = 0
-        numInterval.Maximum = 1000000
-        numInterval.Width = 85
-        numInterval.Location = Position
-        AddControl(numInterval)
-
-
-        If UserData <> "" Then
-            numInterval.Value = UserData
-        Else
-            numInterval.Value = 1000
-        End If
-
-        tmr.Enabled = True
-    End Sub
-
-    Public Overrides Sub Dispose()
-        numInterval.Dispose()
-        MyBase.Dispose()
-    End Sub
-
-    Public Overrides Sub Moving()
-        numInterval.Location = Position
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                tmr.Enabled = Data
-
-            Case 1 'Interval
-                numInterval.Value = Data
-        End Select
-    End Sub
-
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", tmr.Enabled, False)
-
-        MyBase.Load(g)
-    End Sub
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
-
-        g.Set_Value("Enabled", tmr.Enabled)
-
-        Return g
-    End Function
-
-    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-        Send(Nothing)
-    End Sub
-
-    Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
-        tmr.Interval = numInterval.Value
-        UserData = numInterval.Value
     End Sub
 End Class
 
@@ -1423,7 +1179,7 @@ Namespace Menu
         ''' Usefull to add groups.
         ''' </summary>
         ''' <param name="Item">The item to add the node to.</param>
-        ''' <param name="Data">Name,Optional ClassName Or Width, Optional Width</param>
+        ''' <param name="Data">Name,(Optional ClassName) Or Width, Optional Width</param>
         ''' <param name="Groups"></param>
         ''' <remarks></remarks>
         Public Function AddNode(ByVal Item As Node, ByVal Data As String(), ByVal Groups As String()) As Node
@@ -1457,10 +1213,19 @@ Namespace Menu
                 Dim CurrentGroup As Integer = 0
                 Dim CurrentNode As Node = Item
                 Do
+                    'Find width in name.  GroupName'95
+                    Dim tmpWidth As Integer = 50
+                    Dim tmp() As String = Split(Groups(CurrentGroup), "'")
+                    If tmp.Length = 2 Then
+                        Groups(CurrentGroup) = tmp(0)
+                        tmpWidth = tmp(1)
+                    End If
+
                     Dim Found As Boolean = False
                     If CurrentNode.Children IsNot Nothing Then
                         For Each n As Node In CurrentNode.Children
                             If LCase(n.Name) = LCase(Groups(CurrentGroup)) And n.IsGroup Then
+                                If n.Width < tmpWidth Then n.Width = tmpWidth
                                 CurrentNode = n
                                 Found = True
                                 Exit For
@@ -1468,8 +1233,7 @@ Namespace Menu
                         Next
                     End If
                     If Found = False Then
-
-                        CurrentNode.Add(New Node(Groups(CurrentGroup), True))
+                        CurrentNode.Add(New Node(Groups(CurrentGroup), True, tmpWidth))
                         CurrentNode = CurrentNode.Children(CurrentNode.Children.Count - 1)
                     End If
 
@@ -1564,6 +1328,7 @@ Namespace Menu
                 End If
             Next
         End Sub
+
     End Class
 End Namespace
 
@@ -2504,6 +2269,313 @@ Namespace SimpleD
 
 
 End Namespace
+
+'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
+Public Class fgDisplayAsString
+    Inherits BaseObject
+
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
+        File = "fgDisplayAsString.vb"
+
+        'Create one input.
+        Inputs(New String() {"Value to display."})
+        'Input(0).MaxConnected = 1 'Only allow one connection.
+
+        'Set the title.
+        Title = "Display as string"
+
+        MenuItems.Add(New Menu.Node("Set String", , 70))
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Data", Data)
+
+        Return g
+    End Function
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Data", Data)
+
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
+        MyBase.MenuSelected(Result)
+
+        If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
+            If Result.Name = "Set String" Then
+                Me.Data = InputBox("Set string", "THIS IS THE TITLE")
+            End If
+        End If
+    End Sub
+
+    Private Data As String
+    Private DataSize, OldSize As SizeF
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Me.Data = Data.ToString() 'Set the data.
+        DataSize = Nothing 'Set the data size to nothing so we will check the size later.
+
+        'Tell auto draw we want to draw.
+        DoDraw(Rect)
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        'Lets measure the size if data size is nothing.
+        If DataSize = Nothing Then
+            DataSize = g.MeasureString("String= " & Data, DefaultFont) 'Measure the string.
+            If DataSize.Width < 75 Then DataSize.Width = 75 'Set the min width.
+
+            'Did the size change?
+            If DataSize <> OldSize Then
+                'If so then we set the size of the base object
+                MyBase.SetSize(DataSize.Width, DataSize.Height, True)
+                OldSize = DataSize 'Then set the old size.
+            End If
+
+        End If
+
+        'Draw the base stuff like the title outputs etc..
+        MyBase.Draw(g)
+
+
+        'Draw the value.
+        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Position)
+    End Sub
+
+End Class
+
+'AddMenuObject|Slider,Plugins.fgSlider
+Public Class fgSlider
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private Value As Integer
+
+
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
+
+        Outputs(New String() {"Value,Number"})
+        Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
+
+        'Set the title.
+        Title = "Slider"
+
+        Value = MyBase.Size.Width * 0.5
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                Enabled = Data
+
+            Case 1 'Set value
+                If Not Enabled Then Return
+                If Data.GetType Is GetType(Boolean) Then
+                    If Data = True Then
+                        Value = Size.Width
+                    Else
+                        Value = 0
+                    End If
+                Else
+                    Value = Data * Size.Width
+                End If
+
+
+        End Select
+
+        DoDraw(Rect)
+    End Sub
+
+    Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseDown(e)
+        If Not Enabled Then Return
+        If e.Button = MouseButtons.Left Then
+            Dim x As Integer = e.X - Position.X
+            If x >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
+            Else
+                Value = x
+            End If
+            Send(x / Size.Width)
+            DoDraw(Rect)
+        End If
+    End Sub
+
+    Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
+        MyBase.MouseMove(e)
+        If Not Enabled Then Return
+        If e.Button = MouseButtons.Left Then
+            Dim x As Integer = e.X - Position.X
+            If X >= Size.Width Then
+                Value = Size.Width
+            ElseIf x <= 0 Then
+                Value = 0
+            Else
+                Value = x
+            End If
+            Send(x / Size.Width)
+            DoDraw(Rect)
+        End If
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        If Enabled Then
+            g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value, 20)
+        Else
+            g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value, 20)
+        End If
+        g.DrawString(Math.Round(Value / Size.Width * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
+    End Sub
+End Class
+
+'AddMenuObject|Switch,Plugins.fgSwitch
+Public Class fgSwitch
+    Inherits BaseObject
+
+    Private Enabled As Boolean = True
+
+    Private Value As Boolean = True
+
+
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
+
+        Outputs(New String() {"Value,Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
+
+        'Set the title.
+        Title = "Slider"
+
+        Value = MyBase.Size.Width * 0.5
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                Enabled = Data
+
+            Case 1 'Set value
+                If Not Enabled Then Return
+                If Data = True Then
+					Value = Not Value
+					Send(Value)
+				End If
+				
+
+        End Select
+
+        DoDraw(Rect)
+    End Sub
+
+    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+        MyBase.Draw(g)
+
+        g.DrawString("Value= " & Value.ToString, DefaultFont, Brushes.Black, Position)
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+        g.Get_Value("Enabled", Enabled, False)
+        g.Get_Value("Value", Value, False)
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", Enabled)
+        g.Set_Value("Value", value)
+
+
+        Return g
+    End Function
+End Class
+
+'AddMenuObject|Timer,Plugins.fgTimer|Math
+Public Class fgTimer
+    Inherits BaseObject
+
+    Private WithEvents tmr As New Timer
+
+    Private WithEvents numInterval As New NumericUpDown
+    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+        Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
+        File = "fgTimer.vb"
+
+        'Create one output.
+        Outputs(New String() {"Tick"})
+
+        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
+
+        'Set the title.
+        Title = "Timer"
+
+
+        numInterval.Minimum = 0
+        numInterval.Maximum = 1000000
+        numInterval.Width = 85
+        numInterval.Location = Position
+        AddControl(numInterval)
+
+
+        If UserData <> "" Then
+            numInterval.Value = UserData
+        Else
+            numInterval.Value = 1000
+        End If
+
+        tmr.Enabled = True
+    End Sub
+
+    Public Overrides Sub Dispose()
+        numInterval.Dispose()
+        MyBase.Dispose()
+    End Sub
+
+    Public Overrides Sub Moving()
+        numInterval.Location = Position
+    End Sub
+
+    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+        Select Case sender.Index
+            Case 0 'Enable
+                tmr.Enabled = Data
+
+            Case 1 'Interval
+                numInterval.Value = Data
+        End Select
+    End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.Get_Value("Enabled", tmr.Enabled, False)
+
+        MyBase.Load(g)
+    End Sub
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.Set_Value("Enabled", tmr.Enabled)
+
+        Return g
+    End Function
+
+    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
+        Send(Nothing)
+    End Sub
+
+    Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
+        tmr.Interval = numInterval.Value
+        UserData = numInterval.Value
+    End Sub
+End Class
 
 'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 'AddReferences(SlimDX.dll)
@@ -4972,7 +5044,7 @@ Public Class MIDI_Transpose
 
 End Class
 
-'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message,Note
+'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note
 Public Class MIDI_Volume
     Inherits BaseObject
 

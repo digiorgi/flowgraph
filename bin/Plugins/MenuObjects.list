@@ -8,9 +8,10 @@ AddMenuObject|Add8,Plugins.fgAdd,,8|Math,Add
 AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
 AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 AddMenuObject|Counter,Plugins.fgCounter,60|Math
-AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
 AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
+AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
 AddMenuObject|Slider,Plugins.fgSlider
+AddMenuObject|Switch,Plugins.fgSwitch
 AddMenuObject|Timer,Plugins.fgTimer|Math
 AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
