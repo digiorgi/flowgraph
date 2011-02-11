@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_Transpose
     Inherits BaseObject
 

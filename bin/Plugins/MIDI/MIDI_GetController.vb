@@ -1,4 +1,5 @@
 ﻿'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI,Channel Message
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_GetController
     Inherits BaseObject
 

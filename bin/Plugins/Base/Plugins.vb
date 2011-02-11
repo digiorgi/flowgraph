@@ -140,8 +140,12 @@ Public Module Plugins
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        InputImage = Image.FromFile("Input.png")
-        OutputImage = Image.FromFile("Output.png")
+        If IO.File.Exists("Plugins\Base\Input.png") Then
+            InputImage = Image.FromFile("Plugins\Base\Input.png")
+        End If
+        If IO.File.Exists("Plugins\Base\Output.png") Then
+            OutputImage = Image.FromFile("Plugins\Base\Output.png")
+        End If
 
         Plugins.Form = form
         'RemoveFromFGS
