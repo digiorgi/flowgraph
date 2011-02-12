@@ -196,6 +196,8 @@ End Class
 '   Email: RaymondEllis@live.com
 #End Region
 
+'Include(Base\SimpleD.vb,Base\Menu.vb)
+
 Public MustInherit Class BaseObject
     Public Index As Integer = -1
 
@@ -375,16 +377,23 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
-                'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                If InputImage IsNot Nothing Then
+                    g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
+                End If
+
             Next
         End If
         'Draw the outputs. (if any.)
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
-                g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                If OutputImage IsNot Nothing Then
+                    g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
+                Else
+                    g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
+                End If
             Next
         End If
 
@@ -1474,8 +1483,12 @@ Public Module Plugins
         tmrDraw.Interval = 200
         tmrDraw.Enabled = True
 
-        InputImage = Image.FromFile("Input.png")
-        OutputImage = Image.FromFile("Output.png")
+        If IO.File.Exists("Plugins\Base\Input.png") Then
+            InputImage = Image.FromFile("Plugins\Base\Input.png")
+        End If
+        If IO.File.Exists("Plugins\Base\Output.png") Then
+            OutputImage = Image.FromFile("Plugins\Base\Output.png")
+        End If
 
         Plugins.Form = form
         'RemoveFromFGS
@@ -2270,13 +2283,13 @@ Namespace SimpleD
 
 End Namespace
 
-'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
-Public Class fgDisplayAsString
+'AddMenuObject|Display as string,Plugins.DisplayAsString,100|Misc
+Public Class DisplayAsString
     Inherits BaseObject
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
-        File = "fgDisplayAsString.vb"
+        File = "Common\DisplayAsString.vb"
 
         'Create one input.
         Inputs(New String() {"Value to display."})
@@ -2346,8 +2359,8 @@ Public Class fgDisplayAsString
 
 End Class
 
-'AddMenuObject|Slider,Plugins.fgSlider
-Public Class fgSlider
+'AddMenuObject|Slider,Plugins.Slider
+Public Class Slider
     Inherits BaseObject
 
     Private Enabled As Boolean = True
@@ -2436,147 +2449,151 @@ Public Class fgSlider
     End Sub
 End Class
 
-'AddMenuObject|Switch,Plugins.fgSwitch
-Public Class fgSwitch
-    Inherits BaseObject
+'AddMenuObject|Switch,Plugins.Switch
+Namespace Common
+    Public Class Switch
+        Inherits BaseObject
 
-    Private Enabled As Boolean = True
+        Private Enabled As Boolean = True
 
-    Private Value As Boolean = True
-
-
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
-
-        Outputs(New String() {"Value,Boolean"})
-        Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
-
-        'Set the title.
-        Title = "Slider"
-
-        Value = MyBase.Size.Width * 0.5
-    End Sub
-
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                Enabled = Data
-
-            Case 1 'Set value
-                If Not Enabled Then Return
-                If Data = True Then
-					Value = Not Value
-					Send(Value)
-				End If
-				
-
-        End Select
-
-        DoDraw(Rect)
-    End Sub
-
-    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
-        MyBase.Draw(g)
-
-        g.DrawString("Value= " & Value.ToString, DefaultFont, Brushes.Black, Position)
-    End Sub
-
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-
-        g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("Value", Value, False)
-        MyBase.Load(g)
-    End Sub
-
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
-
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Value", value)
+        Private Value As Boolean = True
 
 
-        Return g
-    End Function
-End Class
+        Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+            Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
 
-'AddMenuObject|Timer,Plugins.fgTimer|Math
-Public Class fgTimer
-    Inherits BaseObject
+            Outputs(New String() {"Value,Boolean"})
+            Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
 
-    Private WithEvents tmr As New Timer
+            'Set the title.
+            Title = "Slider"
 
-    Private WithEvents numInterval As New NumericUpDown
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-        File = "fgTimer.vb"
+            Value = MyBase.Size.Width * 0.5
+        End Sub
 
-        'Create one output.
-        Outputs(New String() {"Tick"})
+        Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+            Select Case sender.Index
+                Case 0 'Enable
+                    Enabled = Data
 
-        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
-
-        'Set the title.
-        Title = "Timer"
-
-
-        numInterval.Minimum = 0
-        numInterval.Maximum = 1000000
-        numInterval.Width = 85
-        numInterval.Location = Position
-        AddControl(numInterval)
+                Case 1 'Set value
+                    If Not Enabled Then Return
+                    If Data = True Then
+                        Value = Not Value
+                        Send(Value)
+                    End If
 
 
-        If UserData <> "" Then
-            numInterval.Value = UserData
-        Else
-            numInterval.Value = 1000
-        End If
+            End Select
 
-        tmr.Enabled = True
-    End Sub
+            DoDraw(Rect)
+        End Sub
 
-    Public Overrides Sub Dispose()
-        numInterval.Dispose()
-        MyBase.Dispose()
-    End Sub
+        Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+            MyBase.Draw(g)
 
-    Public Overrides Sub Moving()
-        numInterval.Location = Position
-    End Sub
+            g.DrawString("Value= " & Value.ToString, DefaultFont, Brushes.Black, Position)
+        End Sub
 
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                tmr.Enabled = Data
+        Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-            Case 1 'Interval
-                numInterval.Value = Data
-        End Select
-    End Sub
+            g.Get_Value("Enabled", Enabled, False)
+            g.Get_Value("Value", Value, False)
+            MyBase.Load(g)
+        End Sub
 
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", tmr.Enabled, False)
+        Public Overrides Function Save() As SimpleD.Group
+            Dim g As SimpleD.Group = MyBase.Save()
 
-        MyBase.Load(g)
-    End Sub
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
+            g.Set_Value("Enabled", Enabled)
+            g.Set_Value("Value", Value)
 
-        g.Set_Value("Enabled", tmr.Enabled)
 
-        Return g
-    End Function
+            Return g
+        End Function
+    End Class
 
-    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-        Send(Nothing)
-    End Sub
 
-    Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
-        tmr.Interval = numInterval.Value
-        UserData = numInterval.Value
-    End Sub
-End Class
+End Namespace
+'AddMenuObject|Timer,Plugins.Common.Timer|Math
+Namespace Common
+    Public Class Timer
+        Inherits BaseObject
 
+        Private WithEvents tmr As New Windows.Forms.Timer
+
+        Private WithEvents numInterval As New NumericUpDown
+        Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+            Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
+            File = "Common\Timer.vb"
+
+            'Create one output.
+            Outputs(New String() {"Tick"})
+
+            Inputs(New String() {"Enable,Boolean", "Interval,Number"})
+
+            'Set the title.
+            Title = "Timer"
+
+
+            numInterval.Minimum = 0
+            numInterval.Maximum = 1000000
+            numInterval.Width = 85
+            numInterval.Location = Position
+            AddControl(numInterval)
+
+
+            If UserData <> "" Then
+                numInterval.Value = UserData
+            Else
+                numInterval.Value = 1000
+            End If
+
+            tmr.Enabled = True
+        End Sub
+
+        Public Overrides Sub Dispose()
+            numInterval.Dispose()
+            MyBase.Dispose()
+        End Sub
+
+        Public Overrides Sub Moving()
+            numInterval.Location = Position
+        End Sub
+
+        Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+            Select Case sender.Index
+                Case 0 'Enable
+                    tmr.Enabled = Data
+
+                Case 1 'Interval
+                    numInterval.Value = Data
+            End Select
+        End Sub
+
+        Public Overrides Sub Load(ByVal g As SimpleD.Group)
+            g.Get_Value("Enabled", tmr.Enabled, False)
+
+            MyBase.Load(g)
+        End Sub
+        Public Overrides Function Save() As SimpleD.Group
+            Dim g As SimpleD.Group = MyBase.Save()
+
+            g.Set_Value("Enabled", tmr.Enabled)
+
+            Return g
+        End Function
+
+        Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
+            Send(Nothing)
+        End Sub
+
+        Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
+            tmr.Interval = numInterval.Value
+            UserData = numInterval.Value
+        End Sub
+    End Class
+End Namespace
 'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 'AddReferences(SlimDX.dll)
 
@@ -3076,7 +3093,7 @@ End Class
 'AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
 'AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 'Include(HID\Input.vb)
-'Include(Base\Plugins.vb,Base\BaseObject.vb,Base\SimpleD.vb,Base\Menu.vb)
+'Include(Base\Plugins.vb,Base\BaseObject.vb)
 Public Class fgGetKey
     Inherits BaseObject
 
@@ -3528,6 +3545,7 @@ Public Class MIDI_Debug
 End Class
 
 'AddMenuObject|Get Controller,Plugins.MIDI_GetController|MIDI,Channel Message
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_GetController
     Inherits BaseObject
 
@@ -4537,6 +4555,7 @@ Public Class MIDI_Output
 End Class
 
 'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI,Channel Message
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_SetController
     Inherits BaseObject
 
@@ -4948,6 +4967,7 @@ Public Class MIDI_SimulatePedals
 End Class
 
 'AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_Transpose
     Inherits BaseObject
 
@@ -5045,6 +5065,7 @@ Public Class MIDI_Transpose
 End Class
 
 'AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note
+'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_Volume
     Inherits BaseObject
 

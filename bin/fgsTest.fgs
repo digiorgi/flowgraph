@@ -15,15 +15,15 @@ Object0{
 	Key=Pause;
 }
 Object1{
-	Name=Plugins.fgDisplayAsString;
-	File=Common\fgDisplayAsString.vb;
+	Name=Plugins.Common.DisplayAsString;
+	File=Common\DisplayAsString.vb;
 	Position=310,85;
 	Input=1;
 	Data=False;
 }
 Object2{
-	Name=Plugins.fgTimer;
-	File=Common\fgTimer.vb;
+	Name=Plugins.Common.Timer;
+	File=Common\Timer.vb;
 	Position=10,85;
 	UserData=10;
 	Output=1,0,1;

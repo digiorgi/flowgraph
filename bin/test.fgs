@@ -4,10 +4,12 @@ Main{
 	Height=485;
 	Objects=15;
 	FileVersion=0.5;
+	SplitFileWithNewLine=True;
+	SplitFileWithTabs=True;
 }
 Object0{
-	Name=Plugins.fgTimer;
-	File=fgTimer.vb;
+	Name=Plugins.Common.Timer;
+	File=Common\Timer.vb;
 	Position=5,45;
 	UserData=10;
 	Output=2,3,1,14,1;
@@ -118,7 +120,7 @@ Object14{
 	Key=Pause;
 }
 Object15{
-	Name=Plugins.fgSwitch;
+	Name=Plugins.Common.Switch;
 	Position=95,370;
 	Output=1,13,0;
 	Input=0,1;

@@ -156,6 +156,9 @@ Public Module Plugins
 
     Public LoadedFile As String = ""
     Public Const FileVersion = 0.5
+    Private SplitFileWithNewLine As Boolean = True
+    Private SplitFileWithTabs As Boolean = True
+
 
     Public Sub Open(ByVal File As String)
         If Not IO.File.Exists(File) Then
@@ -179,6 +182,9 @@ Public Module Plugins
                    & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
             Return
         End If
+
+        g.Get_Value("SplitFileWithNewLine", SplitFileWithNewLine, False)
+        g.Get_Value("SplitFileWithTabs", SplitFileWithTabs, False)
 
         'Get the number of objects.
         Dim numObj As Integer = g.Get_Value("Objects")
@@ -231,13 +237,16 @@ Public Module Plugins
         g.Set_Value("Objects", Objects.Count - 1)
         g.Set_Value("FileVersion", FileVersion)
 
+        g.Set_Value("SplitFileWithNewLine", SplitFileWithNewLine)
+        g.Set_Value("SplitFileWithTabs", SplitFileWithTabs)
+
         'Save each object.
         For Each obj As Object In Objects
             sd.Add_Group(obj.Save)
         Next
 
         'Save to file.
-        sd.ToFile(File)
+        sd.ToFile(File, SplitFileWithNewLine, SplitFileWithTabs)
 
         LoadedFile = File
     End Sub
