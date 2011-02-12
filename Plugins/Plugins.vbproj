@@ -74,8 +74,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Bin\Plugins\*.vb" />
-    <Compile Include="..\Bin\Plugins\*\*.vb" />
+    <Compile Include="..\Bin\Plugins\**\*.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

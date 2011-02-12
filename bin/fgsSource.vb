@@ -167,160 +167,162 @@ Public Class fgKeyboard
         Return g
     End Function
 End Class
-'AddMenuObject|Display as string,Plugins.fgDisplayAsString,100|Misc
-Public Class fgDisplayAsString
-    Inherits BaseObject
+'AddMenuObject|Display as string,Plugins.Common.DisplayAsString,100|Misc
+Namespace Common
+    Public Class DisplayAsString
+        Inherits BaseObject
 
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
-        File = "Common\fgDisplayAsString.vb"
+        Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+            Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
+            File = "Common\DisplayAsString.vb"
 
-        'Create one input.
-        Inputs(New String() {"Value to display."})
-        'Input(0).MaxConnected = 1 'Only allow one connection.
+            'Create one input.
+            Inputs(New String() {"Value to display."})
+            'Input(0).MaxConnected = 1 'Only allow one connection.
 
-        'Set the title.
-        Title = "Display as string"
+            'Set the title.
+            Title = "Display as string"
 
-        MenuItems.Add(New Menu.Node("Set String", , 70))
-    End Sub
+            MenuItems.Add(New Menu.Node("Set String", , 70))
+        End Sub
 
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
+        Public Overrides Function Save() As SimpleD.Group
+            Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Data", Data)
+            g.Set_Value("Data", Data)
 
-        Return g
-    End Function
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Data", Data)
+            Return g
+        End Function
+        Public Overrides Sub Load(ByVal g As SimpleD.Group)
+            g.Get_Value("Data", Data)
 
-        MyBase.Load(g)
-    End Sub
+            MyBase.Load(g)
+        End Sub
 
-    Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
-        MyBase.MenuSelected(Result)
+        Public Overrides Sub MenuSelected(ByVal Result As Menu.Node)
+            MyBase.MenuSelected(Result)
 
-        If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
-            If Result.Name = "Set String" Then
-                Me.Data = InputBox("Set string", "THIS IS THE TITLE")
+            If Result.Result = Global.Plugins.Menu.Result.SelectedItem Then
+                If Result.Name = "Set String" Then
+                    Me.Data = InputBox("Set string", "THIS IS THE TITLE")
+                End If
             End If
-        End If
-    End Sub
+        End Sub
 
-    Private Data As String
-    Private DataSize, OldSize As SizeF
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Me.Data = Data.ToString() 'Set the data.
-        DataSize = Nothing 'Set the data size to nothing so we will check the size later.
+        Private Data As String
+        Private DataSize, OldSize As SizeF
+        Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+            Me.Data = Data.ToString() 'Set the data.
+            DataSize = Nothing 'Set the data size to nothing so we will check the size later.
 
-        'Tell auto draw we want to draw.
-        DoDraw(Rect)
-    End Sub
+            'Tell auto draw we want to draw.
+            DoDraw(Rect)
+        End Sub
 
-    Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
-        'Lets measure the size if data size is nothing.
-        If DataSize = Nothing Then
-            DataSize = g.MeasureString("String= " & Data, DefaultFont) 'Measure the string.
-            If DataSize.Width < 75 Then DataSize.Width = 75 'Set the min width.
+        Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
+            'Lets measure the size if data size is nothing.
+            If DataSize = Nothing Then
+                DataSize = g.MeasureString("String= " & Data, DefaultFont) 'Measure the string.
+                If DataSize.Width < 75 Then DataSize.Width = 75 'Set the min width.
 
-            'Did the size change?
-            If DataSize <> OldSize Then
-                'If so then we set the size of the base object
-                MyBase.SetSize(DataSize.Width, DataSize.Height, True)
-                OldSize = DataSize 'Then set the old size.
+                'Did the size change?
+                If DataSize <> OldSize Then
+                    'If so then we set the size of the base object
+                    MyBase.SetSize(DataSize.Width, DataSize.Height, True)
+                    OldSize = DataSize 'Then set the old size.
+                End If
+
             End If
 
-        End If
-
-        'Draw the base stuff like the title outputs etc..
-        MyBase.Draw(g)
+            'Draw the base stuff like the title outputs etc..
+            MyBase.Draw(g)
 
 
-        'Draw the value.
-        g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Position)
-    End Sub
+            'Draw the value.
+            g.DrawString("String= " & Data, DefaultFont, DefaultFontBrush, Position)
+        End Sub
 
-End Class
+    End Class
+End Namespace
+'AddMenuObject|Timer,Plugins.Common.Timer|Math
+Namespace Common
+    Public Class Timer
+        Inherits BaseObject
 
-'AddMenuObject|Timer,Plugins.fgTimer|Math
-Public Class fgTimer
-    Inherits BaseObject
+        Private WithEvents tmr As New Windows.Forms.Timer
 
-    Private WithEvents tmr As New Timer
+        Private WithEvents numInterval As New NumericUpDown
+        Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
+            Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
+            File = "Common\Timer.vb"
 
-    Private WithEvents numInterval As New NumericUpDown
-    Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-        Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-        File = "Common\fgTimer.vb"
+            'Create one output.
+            Outputs(New String() {"Tick"})
 
-        'Create one output.
-        Outputs(New String() {"Tick"})
+            Inputs(New String() {"Enable,Boolean", "Interval,Number"})
 
-        Inputs(New String() {"Enable,Boolean", "Interval,Number"})
-
-        'Set the title.
-        Title = "Timer"
-
-
-        numInterval.Minimum = 0
-        numInterval.Maximum = 1000000
-        numInterval.Width = 85
-        numInterval.Location = Position
-        AddControl(numInterval)
+            'Set the title.
+            Title = "Timer"
 
 
-        If UserData <> "" Then
-            numInterval.Value = UserData
-        Else
-            numInterval.Value = 1000
-        End If
+            numInterval.Minimum = 0
+            numInterval.Maximum = 1000000
+            numInterval.Width = 85
+            numInterval.Location = Position
+            AddControl(numInterval)
 
-        tmr.Enabled = True
-    End Sub
 
-    Public Overrides Sub Dispose()
-        numInterval.Dispose()
-        MyBase.Dispose()
-    End Sub
+            If UserData <> "" Then
+                numInterval.Value = UserData
+            Else
+                numInterval.Value = 1000
+            End If
 
-    Public Overrides Sub Moving()
-        numInterval.Location = Position
-    End Sub
+            tmr.Enabled = True
+        End Sub
 
-    Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-        Select Case sender.Index
-            Case 0 'Enable
-                tmr.Enabled = Data
+        Public Overrides Sub Dispose()
+            numInterval.Dispose()
+            MyBase.Dispose()
+        End Sub
 
-            Case 1 'Interval
-                numInterval.Value = Data
-        End Select
-    End Sub
+        Public Overrides Sub Moving()
+            numInterval.Location = Position
+        End Sub
 
-    Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", tmr.Enabled, False)
+        Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
+            Select Case sender.Index
+                Case 0 'Enable
+                    tmr.Enabled = Data
 
-        MyBase.Load(g)
-    End Sub
-    Public Overrides Function Save() As SimpleD.Group
-        Dim g As SimpleD.Group = MyBase.Save()
+                Case 1 'Interval
+                    numInterval.Value = Data
+            End Select
+        End Sub
 
-        g.Set_Value("Enabled", tmr.Enabled)
+        Public Overrides Sub Load(ByVal g As SimpleD.Group)
+            g.Get_Value("Enabled", tmr.Enabled, False)
 
-        Return g
-    End Function
+            MyBase.Load(g)
+        End Sub
+        Public Overrides Function Save() As SimpleD.Group
+            Dim g As SimpleD.Group = MyBase.Save()
 
-    Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-        Send(Nothing)
-    End Sub
+            g.Set_Value("Enabled", tmr.Enabled)
 
-    Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
-        tmr.Interval = numInterval.Value
-        UserData = numInterval.Value
-    End Sub
-End Class
+            Return g
+        End Function
 
+        Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
+            Send(Nothing)
+        End Sub
+
+        Private Sub numInterval_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles numInterval.ValueChanged
+            tmr.Interval = numInterval.Value
+            UserData = numInterval.Value
+        End Sub
+    End Class
+End Namespace
 'AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
 'AddReferences(SlimDX.dll)
 
@@ -918,7 +920,6 @@ Public MustInherit Class BaseObject
         If Input IsNot Nothing Then
             For n As Integer = 1 To Input.Length
                 'g.FillRectangle(Brushes.Purple, Rect.X + 1, Rect.Y + 15 * n, 15, 15)
-                'g.FillEllipse(Brushes.Red, Rect.X, Rect.Y + 15 * n, 14, 14)
                 If InputImage IsNot Nothing Then
                     g.DrawImage(InputImage, Rect.X, Rect.Y + 15 * n)
                 Else
@@ -931,7 +932,6 @@ Public MustInherit Class BaseObject
         If Output IsNot Nothing Then
             For n As Integer = 1 To Output.Length
                 'g.FillRectangle(Brushes.Green, Rect.Right - 15, Rect.Y + 16 * n, 15, 15)
-                'g.FillEllipse(Brushes.Green, Rect.Right - 15, Rect.Y + 15 * n, 14, 14)
                 If OutputImage IsNot Nothing Then
                     g.DrawImage(OutputImage, Rect.Right - 15, Rect.Y + 15 * n)
                 Else
@@ -2523,9 +2523,9 @@ Public Class frmMain
         'If there is a file to open then open it.
         Me.ClientSize = New Size(731,292)
 Objects.Add(New Plugins.fgGetKey(New Point(145,70),""))
-Objects.Add(New Plugins.fgDisplayAsString(New Point(310,85),""))
-Objects.Add(New Plugins.fgTimer(New Point(10,85),"10"))
-Dim sd As New SimpleD.SimpleD("//Version=0.99 FileVersion=1\\Main{Width=731;Height=292;Objects=2;FileVersion=0.5;}Object0{Name=Plugins.fgGetKey;File=HID\Keyboard.vb;Position=145,70;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}Object1{Name=Plugins.fgDisplayAsString;File=Common\fgDisplayAsString.vb;Position=310,85;Input=1;Data=False;}Object2{Name=Plugins.fgTimer;File=Common\fgTimer.vb;Position=10,85;UserData=10;Output=1,0,1;Input=0,0;Enabled=True;}")
+Objects.Add(New Plugins.Common.DisplayAsString(New Point(310,85),""))
+Objects.Add(New Plugins.Common.Timer(New Point(10,85),"10"))
+Dim sd As New SimpleD.SimpleD("//Version=0.99 FileVersion=1\\Main{Width=731;Height=292;Objects=2;FileVersion=0.5;}Object0{Name=Plugins.fgGetKey;File=HID\Keyboard.vb;Position=145,70;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}Object1{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=310,85;Input=1;Data=False;}Object2{Name=Plugins.Common.Timer;File=Common\Timer.vb;Position=10,85;UserData=10;Output=1,0,1;Input=0,0;Enabled=True;}")
 Try
 Objects(0).Load(sd.Get_Group("Object0"))
 Catch ex As Exception
@@ -2534,12 +2534,12 @@ End Try
 Try
 Objects(1).Load(sd.Get_Group("Object1"))
 Catch ex As Exception
-MsgBox("Could not load object# 1" & Environment.NewLine & "Name: Plugins.fgDisplayAsString" & Environment.NewLine & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
+MsgBox("Could not load object# 1" & Environment.NewLine & "Name: Plugins.Common.DisplayAsString" & Environment.NewLine & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
 End Try
 Try
 Objects(2).Load(sd.Get_Group("Object2"))
 Catch ex As Exception
-MsgBox("Could not load object# 2" & Environment.NewLine & "Name: Plugins.fgTimer" & Environment.NewLine & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
+MsgBox("Could not load object# 2" & Environment.NewLine & "Name: Plugins.Common.Timer" & Environment.NewLine & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
 End Try
     End Sub
 
