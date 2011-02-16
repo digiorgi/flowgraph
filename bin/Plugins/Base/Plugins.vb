@@ -276,6 +276,7 @@ Public Module Plugins
         End If
     End Sub
     Public Sub DoDraw(ByVal region As Rectangle)
+        If Not Draw Then Return
         RaiseEvent DrawEvent(region)
     End Sub
 
