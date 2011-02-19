@@ -1,0 +1,7 @@
+relre:\obj
+glob:*.exe*
+glob:bin/Flowgraph.*
+glob:bin/PluginCompiler.*
+glob:bin/Plugins.*
+glob:bin/fgsSource.vb
+glob:bin/Source.vb
