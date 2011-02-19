@@ -121,7 +121,7 @@ Object14{
 }
 Object15{
 	Name=Plugins.Common.Switch;
-	Position=95,370;
+	Position=120,370;
 	Output=1,13,0;
 	Input=0,1;
 	Enabled=True;

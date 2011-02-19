@@ -9,15 +9,13 @@ Namespace Common
 
 
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-            Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
+            Setup(UserData, StartPosition, 70) 'Setup the base rectangles.
 
             Outputs(New String() {"Value,Boolean"})
             Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
 
             'Set the title.
-            Title = "Slider"
-
-            Value = MyBase.Size.Width * 0.5
+            Title = "Switch"
         End Sub
 
         Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
