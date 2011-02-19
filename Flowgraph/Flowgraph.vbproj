@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plugins\Plugins.vbproj">
-      <Project>{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}</Project>
+      <!--<Project>{DD8F5DFF-B627-4679-A62E-B6C903A1CB5B}</Project>-->
       <Name>Plugins</Name>
     </ProjectReference>
   </ItemGroup>
