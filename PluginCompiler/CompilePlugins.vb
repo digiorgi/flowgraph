@@ -41,21 +41,11 @@ Module CompilePlugins
     'The main source.
     Private Source As String
     Public Function Compile() As Boolean
-        Log("Backing up Plugins.dll ")
-        'Backup the current Plugins.dll if any.
-        If IO.File.Exists("Plugins.dll") Then
-            Try
-                If IO.File.Exists("Plugins_bak.dll") Then IO.File.Delete("Plugins_bak.dll")
-                IO.File.Move("Plugins.dll", "Plugins_bak.dll")
-                Log("Done!", False)
-            Catch ex As Exception
-                Log("")
-                Log("Error backingup Plugins.dll")
-                Log(ex.Message)
 
-                Return False
-            End Try
-        End If
+
+        'Backup the current Plugins.dll if any.
+        If Not BackupFile("Plugins.dll") Then Return False
+
 
         Log("Loading plugins ")
         'Add the main things to the source.
@@ -130,7 +120,7 @@ Module CompilePlugins
                 End If
             Next
 
-            'ToDo: I think this can be done better.
+            'ToDo:#1 I think this can be done better.
             'Show the errors/warnings.
             If tErrors = "Errors:" Then
                 Log("Compleated with " & Errors.Count & " warnings.", False)
@@ -139,38 +129,23 @@ Module CompilePlugins
             ElseIf Warnings = "Warnings:" Then
                 Log("Could not compile there is: " & Errors.Count & " errors", False)
                 Log(tErrors)
+                RestoreFile("Plugins.dll")
 
             Else
                 Log("Could not compile there is: " & Errors.Count & " errors/warnings", False)
                 Log(tErrors)
                 Log(Warnings)
+                RestoreFile("Plugins.dll")
 
             End If
             Log("Please note that line numbers are form the Source.vb file.")
             Log("")
 
-            Log("Restoring backup ")
-            'Try and restore the backup.
-            Try
-                If IO.File.Exists("Plugins.dll") Then IO.File.Delete("Plugins.dll")
-                IO.File.Move("Plugins_bak.dll", "Plugins.dll")
-                Log("Done!", False)
-            Catch ex As Exception
-                Log("Error restoring backup!", False)
-                Log(ex.Message)
-            End Try
+
             Return False
         Else
             Log("Done!", False)
-            Log("Removing backup ")
-            'Try and remove the backup.
-            Try
-                If IO.File.Exists("Plugins_bak.dll") Then IO.File.Delete("Plugins_bak.dll")
-                Log("Done!", False)
-            Catch ex As Exception
-                Log("Error removing backup!", False)
-                Log(ex.Message)
-            End Try
+            RemoveBackup("Plugins.dll")
             Return True
         End If
 
