@@ -1,6 +1,8 @@
 ﻿Imports System.CodeDom.Compiler
 Imports System.Reflection
 
+'ToDo: This whole file is messy!  CLEAN IT UP!!! :)   Also dubble check everything.
+
 'This will compile the FlowGraphSave files.
 Module CompileFGS
     Private Draw As Boolean = True
@@ -15,8 +17,10 @@ Module CompileFGS
     End Sub
 
 #Region "Getting ready to compile"
-    Public Sub CompileFGS(ByVal fgsFile As String)
+    Public Sub Compile(ByVal fgsFile As String)
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Windows.Forms.Application.ExecutablePath)
+
+        'ToDo: What about if <fgsFile>.exe already exists?
 
         sAdd("Imports Microsoft.VisualBasic")
         sAdd("Imports System")

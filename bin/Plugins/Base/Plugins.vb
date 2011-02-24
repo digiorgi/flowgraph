@@ -172,8 +172,15 @@ Public Module Plugins
         sd.FromFile(File)
 
         Dim g As SimpleD.Group = sd.Get_Group("Main")
-        Form.ClientSize = New Size(g.Get_Value("Width"), g.Get_Value("Height"))
 
+        Form.ClientSize = New Size(g.Get_Value("Width"), g.Get_Value("Height"))
+        'Make sure the form is still in the screen.
+        Dim x As Integer = Form.Location.X
+        Dim y As Integer = Form.Location.Y
+        Dim scr As Rectangle = Screen.GetWorkingArea(Form.Location)
+        If x + Form.Width > scr.Right Then x = scr.Right - Form.Width
+        If y + Form.Height > scr.Bottom Then y = scr.Bottom - Form.Height
+        Form.Location = New Point(x, y) 'Set the window location.
 
         'Make sure the versions match.
         If g.Get_Value("FileVersion") <> FileVersion Then
