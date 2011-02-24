@@ -5,8 +5,9 @@ Imports System.Reflection
 
 'This will compile the FlowGraphSave files.
 Module CompileFGS
-    Private Draw As Boolean = True
     Private IncludeBaseObject As Boolean = False
+
+    Private OutputAssembly As String = ""
 
     Private Source As String = "'Compiled using CompileFGS"
     ''' <summary>
@@ -17,17 +18,30 @@ Module CompileFGS
     End Sub
 
 #Region "Getting ready to compile"
-    Public Sub Compile(ByVal fgsFile As String)
+    Public Function Compile(ByVal fgsFile As String) As Boolean
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Windows.Forms.Application.ExecutablePath)
 
-        'ToDo: What about if <fgsFile>.exe already exists?
+        If ClassLibrary Then
+            OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".dll"
+        Else
+            OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
+        End If
+
+
+        If Not BackupFile(OutputAssembly) Then Return False
+
+
+        Log("Loading fgs file ")
 
         sAdd("Imports Microsoft.VisualBasic")
         sAdd("Imports System")
-        sAdd("Imports System.Drawing")
+
         sAdd("Imports System.Collections")
         sAdd("Imports System.Collections.Generic")
-        sAdd("Imports System.Windows.Forms")
+        If Not RemoveGUI Then
+            sAdd("Imports System.Windows.Forms")
+            sAdd("Imports System.Drawing")
+        End If
         sAdd("Imports System.Diagnostics")
         sAdd("Imports Plugins")
         'Create the namespace.
@@ -44,10 +58,10 @@ Module CompileFGS
             Dim file As String = "Plugins\" & g.Get_Value("File")
             If file = "Plugins\" Then
                 Console.WriteLine("Object " & name & " does not support compiling.")
-                Return
+                Return False
             ElseIf Not IO.File.Exists(file) Then
                 Console.WriteLine("Object " & name & " file(" & file & ") does NOT exist.")
-                Return
+                Return False
             End If
 
             Dim FoundFile As Boolean = False
@@ -62,7 +76,7 @@ Module CompileFGS
 
         Log(" Done", False)
 
-        Log("Checking files...")
+        Log("Prasing #1: loading scripts ")
         Dim NewFiles As New List(Of String)
         Dim StartI As Integer = 0
 
@@ -122,12 +136,14 @@ Restart:
 
 
 
-        Log("")
-        Log("Draw=" & Draw & " BaseObject=" & IncludeBaseObject & " Files:")
+        Log("Done!", False)
+        Log("RemoveGUI=" & RemoveGUI & " BaseObject=" & IncludeBaseObject & " Files found:")
         For Each f As String In Files
-            Log(f)
+            Log(vbTab & f)
         Next
 
+        Log("")
+        Log("Prasing #2: Removing/Enabling code ")
         'End the namespace.
         sAdd("End Namespace")
 
@@ -154,20 +170,35 @@ Restart:
 
             Source = Source.Remove(Start, Count)
         Loop Until Source.Contains("'RemoveFromFGS") = False
+
+        If RemoveGUI Then
+            'Remove drawing.
+            Do
+                Dim Start As Integer = Source.IndexOf("'RemoveDraw")
+                Dim Count As Integer = 14 + Source.IndexOf("'EndRemoveDraw", Start) - Start
+
+                Source = Source.Remove(Start, Count)
+            Loop Until Source.Contains("'RemoveDraw") = False
+        End If
+
         'Add any extras.
         Do
             Source = Source.Replace("'AddToFGS", "")
         Loop Until Source.Contains("'AddToFGS") = False
 
+        Log("Done!", False)
 
+        Log("Compiling ")
         'Save the source to a file for debuging.
         Dim sw As New IO.StreamWriter("fgsSource.vb")
         sw.Write(Source)
         sw.Close()
 
         'Compile the source and get all of the errors.
-        Dim Errors As CodeDom.Compiler.CompilerErrorCollection = CompileVbPlugins(fgsFile).Errors
+        Dim Errors As CodeDom.Compiler.CompilerErrorCollection = CompileVbPlugins.Errors
 
+        'ToDo: When done with #1 replace with #1 code.
+        Log("Done!", False)
         'Get the errors.
         If Errors.Count > 0 Then
             Dim tErrors = "Errors:", Warnings As String = "Warnings:"
@@ -189,11 +220,14 @@ Restart:
                 Log("Compleated with " & Errors.Count & " warnings.")
             Else
                 Log("Could not compile there is: " & Errors.Count & " errors")
+                RestoreFile(OutputAssembly)
             End If
+            Return False
         Else
-            Log(Environment.NewLine & "Successfully compiled.")
+            RemoveBackup(OutputAssembly)
+            Return True
         End If
-    End Sub
+    End Function
 
     Public Const FileVersion = 0.5
     Public Function FGS_ToCode(ByVal fgs As String) As String
@@ -247,18 +281,22 @@ Restart:
 #Region "The real compiling"
     Private vbReferences As New List(Of String)
 
-    Private Function CompileVbPlugins(ByVal fgsFile As String) As CompilerResults
+    Private Function CompileVbPlugins() As CompilerResults
         Dim Params As New CompilerParameters()
         Dim Results As CompilerResults
 
         'Set the parameters.
         With Params
-            .OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
-            .GenerateExecutable = True
+            .OutputAssembly = OutputAssembly
             .GenerateInMemory = False
-            .MainClass = "Flowgraph.frmMain"
 
-            .CompilerOptions = "/target:winexe"
+            If ClassLibrary Then
+                .CompilerOptions = "/target:library"
+            Else
+                .CompilerOptions = "/target:winexe"
+                .GenerateExecutable = True
+                .MainClass = "Flowgraph.frmMain"
+            End If
 
 
 #If DEBUG Then
@@ -269,8 +307,10 @@ Restart:
             'Add the references.
             .ReferencedAssemblies.Add("System.dll")
             .ReferencedAssemblies.Add("System.Core.dll")
-            If Draw Then .ReferencedAssemblies.Add("System.Drawing.dll")
-            .ReferencedAssemblies.Add("System.Windows.Forms.dll")
+            If Not RemoveGUI Then
+                .ReferencedAssemblies.Add("System.Drawing.dll")
+                .ReferencedAssemblies.Add("System.Windows.Forms.dll")
+            End If
             .ReferencedAssemblies.AddRange(vbReferences.ToArray)
         End With
 

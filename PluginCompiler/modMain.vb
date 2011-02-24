@@ -1,9 +1,11 @@
 ﻿Module modMain
 
 
-
+    Public ClassLibrary As Boolean = False
+    Public RemoveGUI As Boolean = False
     Sub Main()
         Dim ExitOnSuccessfulCompile As Boolean = False
+
 
         Dim fgsFile As String = ""
         'Get the command line args.
@@ -14,6 +16,12 @@
 
                 Case "exitonsuccessfulcompile", "exitnoerror"
                     ExitOnSuccessfulCompile = True
+
+                Case "classlibrary", "dll", "library"
+                    ClassLibrary = True
+
+                Case "removegui", "nodraw"
+                    RemoveGUI = True
 
                 Case Else
                     If IO.File.Exists(args(i)) Then
@@ -26,23 +34,33 @@
 
 Restart:
 
-        If fgsFile = "" Then
-            'Start compileing.
-            If Not CompilePlugins.Compile Then
+        If fgsFile <> "" Then
+            'Compile fgs file.
+            If Not CompileFGS.Compile(fgsFile) Then
                 Log("")
-                Log("Could not compile, would you like to retry? y/n")
+                Log("Could not compile, would you like to retry? y/n: ")
 
                 Select Case Console.ReadKey.Key
                     Case ConsoleKey.Y
                         GoTo Restart
-
                     Case Else
                         Return
                 End Select
             End If
         Else
-            Log("Loading fgs file...")
-            CompileFGS.Compile(fgsFile)
+
+            'Compile plugins.
+            If Not CompilePlugins.Compile Then
+                Log("")
+                Log("Could not compile, would you like to retry? y/n: ")
+
+                Select Case Console.ReadKey.Key
+                    Case ConsoleKey.Y
+                        GoTo Restart
+                    Case Else
+                        Return
+                End Select
+            End If
         End If
 
         If ExitOnSuccessfulCompile Then Return
@@ -62,5 +80,75 @@ Restart:
         If NewLine Then Console.Write(Environment.NewLine & Text)
         If Not NewLine Then Console.Write(Text)
     End Sub
+
+#Region "BackupFile"
+
+    Public Function BackupFile(ByVal File As String) As Boolean
+        If IO.File.Exists(File) Then 'Make sure there is a file to backup.
+            Log("Backing up " & File & " ")
+            Try
+                If IO.File.Exists(File & ".bak") Then IO.File.Delete(File & ".bak") 'Remove any old backups.
+                IO.File.Move(File, File & ".bak") 'Backup the file. (rename it)
+                Log("Done!", False)
+
+            Catch ex As Exception
+                Log("")
+                Log("Error backing up " & File)
+                Log(ex.Message)
+                Return False
+            End Try
+
+        Else 'There was no file to backup, make sure there is no old backups.
+            Try
+                'Remove any old backups.
+                If IO.File.Exists(File & ".bak") Then
+                    IO.File.Delete(File & ".bak")
+                    Log("Removed old backup " & File)
+                End If
+
+            Catch ex As Exception
+                Log("Could not remove old backup!")
+                Return False
+            End Try
+
+        End If
+        Return True
+    End Function
+
+    Public Function RestoreFile(ByVal File As String) As Boolean
+        If IO.File.Exists(File & ".bak") Then
+            Log("Restoring backup ")
+            'Try and restore the backup.
+            Try
+                If IO.File.Exists(File) Then IO.File.Delete(File)
+                IO.File.Move(File & ".bak", File)
+                Log("Done!", False)
+            Catch ex As Exception
+                Log("Error restoring backup!", False)
+                Log(ex.Message)
+                Return False
+            End Try
+
+        End If
+
+        Return True
+    End Function
+
+    Public Function RemoveBackup(ByVal File As String) As Boolean
+        If IO.File.Exists(File & ".bak") Then
+            Log("Removing backup ")
+            'Try and remove the backup.
+            Try
+                If IO.File.Exists(File & ".bak") Then IO.File.Delete(File & ".bak")
+                Log("Done!", False)
+            Catch ex As Exception
+                Log("Error removing backup!", False)
+                Log(ex.Message)
+                Return False
+            End Try
+        End If
+        Return True
+    End Function
+#End Region
 
 End Module
