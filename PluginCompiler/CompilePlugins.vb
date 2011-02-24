@@ -1,7 +1,7 @@
 ﻿Imports System.CodeDom.Compiler
 Imports System.Reflection
 
-Module modPlugins
+Module CompilePlugins
 
     Private vbReferences As New List(Of String)
 
@@ -40,7 +40,24 @@ Module modPlugins
 
     'The main source.
     Private Source As String
-    Public Sub CompilePlugins()
+    Public Function Compile() As Boolean
+        Log("Backing up Plugins.dll ")
+        'Backup the current Plugins.dll if any.
+        If IO.File.Exists("Plugins.dll") Then
+            Try
+                If IO.File.Exists("Plugins_bak.dll") Then IO.File.Delete("Plugins_bak.dll")
+                IO.File.Move("Plugins.dll", "Plugins_bak.dll")
+                Log("Done!", False)
+            Catch ex As Exception
+                Log("")
+                Log("Error backingup Plugins.dll")
+                Log(ex.Message)
+
+                Return False
+            End Try
+        End If
+
+        Log("Loading plugins ")
         'Add the main things to the source.
         Source = "Imports Microsoft.VisualBasic"
         sAdd("Imports System")
@@ -91,9 +108,12 @@ Module modPlugins
         Dim sw As New IO.StreamWriter("Source.vb")
         sw.Write(Source)
         sw.Close()
+        Log("Done!", False)
 
+        Log("Compiling ")
         'Compile the source and get all of the errors.
         Dim Errors As CodeDom.Compiler.CompilerErrorCollection = CompileVbPlugins().Errors
+
 
         'Get the errors.
         If Errors.Count > 0 Then
@@ -109,20 +129,53 @@ Module modPlugins
                     tErrors &= Environment.NewLine & tmp.ErrorText & "  At line:" & tmp.Line
                 End If
             Next
-            'Show all of the errors/warnings.
-            Log(Environment.NewLine & tErrors & Environment.NewLine & Warnings & Environment.NewLine)
 
+            'ToDo: I think this can be done better.
+            'Show the errors/warnings.
             If tErrors = "Errors:" Then
-                Log("Compleated with " & Errors.Count & " warnings.")
+                Log("Compleated with " & Errors.Count & " warnings.", False)
+                Log(Warnings)
+
+            ElseIf Warnings = "Warnings:" Then
+                Log("Could not compile there is: " & Errors.Count & " errors", False)
+                Log(tErrors)
+
             Else
-                Log("Could not compile there is: " & Errors.Count & " errors")
+                Log("Could not compile there is: " & Errors.Count & " errors/warnings", False)
+                Log(tErrors)
+                Log(Warnings)
+
             End If
+            Log("Please note that line numbers are form the Source.vb file.")
+            Log("")
+
+            Log("Restoring backup ")
+            'Try and restore the backup.
+            Try
+                If IO.File.Exists("Plugins.dll") Then IO.File.Delete("Plugins.dll")
+                IO.File.Move("Plugins_bak.dll", "Plugins.dll")
+                Log("Done!", False)
+            Catch ex As Exception
+                Log("Error restoring backup!", False)
+                Log(ex.Message)
+            End Try
+            Return False
         Else
-            Log(Environment.NewLine & "Successfully compiled.")
+            Log("Done!", False)
+            Log("Removing backup ")
+            'Try and remove the backup.
+            Try
+                If IO.File.Exists("Plugins_bak.dll") Then IO.File.Delete("Plugins_bak.dll")
+                Log("Done!", False)
+            Catch ex As Exception
+                Log("Error removing backup!", False)
+                Log(ex.Message)
+            End Try
+            Return True
         End If
 
 
-    End Sub
+    End Function
 
     ''' <summary>
     ''' Add some text to the source.

@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompileFGS.vb" />
-    <Compile Include="modPlugin.vb" />
+    <Compile Include="CompilePlugins.vb" />
     <Compile Include="modMain.vb" />
     <Compile Include="..\bin\Plugins\Base\SimpleD.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

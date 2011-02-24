@@ -1,12 +1,19 @@
 ﻿Module modMain
 
+
+
     Sub Main()
+        Dim ExitOnSuccessfulCompile As Boolean = False
+
         Dim fgsFile As String = ""
         'Get the command line args.
         Dim args As String() = Environment.GetCommandLineArgs
         For i As Integer = 1 To args.Count - 1
             Select Case LCase(args(i))
                 Case ""
+
+                Case "exitonsuccessfulcompile", "exitnoerror"
+                    ExitOnSuccessfulCompile = True
 
                 Case Else
                     If IO.File.Exists(args(i)) Then
@@ -17,24 +24,34 @@
             End Select
         Next
 
+Restart:
+
         If fgsFile = "" Then
-            Log("Compileing plugins...")
             'Start compileing.
-            CompilePlugins()
+            If Not CompilePlugins.Compile Then
+                Log("")
+                Log("Could not compile, would you like to retry? y/n")
+
+                Select Case Console.ReadKey.Key
+                    Case ConsoleKey.Y
+                        GoTo Restart
+
+                    Case Else
+                        Return
+                End Select
+            End If
         Else
             Log("Loading fgs file...")
-            CompileFGS.CompileFGS(fgsFile)
+            CompileFGS.Compile(fgsFile)
         End If
 
-        If Environment.GetCommandLineArgs.Length > 1 Then
-            If Environment.GetCommandLineArgs(1) = "VBIDE" Then
-                Return
-            End If
-        End If
+        If ExitOnSuccessfulCompile Then Return
+
         'Tell the user to press any key to exit.
         Log(Environment.NewLine & "Press eny key to exit.")
         'Wait for the user to press a button.
         Console.ReadKey()
+
     End Sub
 
     ''' <summary>
