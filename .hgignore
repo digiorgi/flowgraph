@@ -5,3 +5,4 @@ glob:bin/PluginCompiler.*
 glob:bin/Plugins.*
 glob:bin/fgsSource.vb
 glob:bin/Source.vb
+relre:\Releases

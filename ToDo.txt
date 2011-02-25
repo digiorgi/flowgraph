@@ -22,8 +22,8 @@ Step#3
 
 	Tooltip regions.  Would allow controls or rectangles. e.g.
 		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
-		Tooltip.Update(#,textbox1, Optional text)
-		Tooltip.Remove(#)
+		Tooltip.Update(Index#,textbox1, Optional text)
+		Tooltip.Remove(Index#)
 
 
 	Add a check to see if plugins need compiling when Flowgraph.exe is ran.
@@ -34,6 +34,8 @@ Step#GUI
 	Zoom and movment. (Should just need to put objects in an image or something.)
 						That will not work for zooming. (Because of controls.)
 
+	New lines!!!
+		Going to make a simple picture to show how it could work.
 
 Step#4
 	Folders (Allow you to put objects in folders.)

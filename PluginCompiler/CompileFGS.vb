@@ -1,15 +1,13 @@
 ﻿Imports System.CodeDom.Compiler
 Imports System.Reflection
 
-'ToDo: This whole file is messy!  CLEAN IT UP!!! :)   Also dubble check everything.
-
 'This will compile the FlowGraphSave files.
 Module CompileFGS
     Private IncludeBaseObject As Boolean = False
 
     Private OutputAssembly As String = ""
 
-    Private Source As String = "'Compiled using CompileFGS"
+    Private Source As String
     ''' <summary>
     ''' Add some text to the source.
     ''' </summary>
@@ -27,21 +25,22 @@ Module CompileFGS
             OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
         End If
 
-
+        'try and backup the old file. (if any)
         If Not BackupFile(OutputAssembly) Then Return False
 
 
         Log("Loading fgs file ")
 
+        'Some basic needed stuff to start the file with.
+        Source = "'Compiled using CompileFGS"
         sAdd("Imports Microsoft.VisualBasic")
         sAdd("Imports System")
-
         sAdd("Imports System.Collections")
         sAdd("Imports System.Collections.Generic")
-        If Not RemoveGUI Then
-            sAdd("Imports System.Windows.Forms")
-            sAdd("Imports System.Drawing")
-        End If
+        'If Not RemoveGUI Then
+        sAdd("Imports System.Windows.Forms")
+        sAdd("Imports System.Drawing")
+        'End If
         sAdd("Imports System.Diagnostics")
         sAdd("Imports Plugins")
         'Create the namespace.
@@ -49,21 +48,30 @@ Module CompileFGS
 
         Dim Files As New List(Of String)
 
-        Dim sd As New SimpleD.SimpleD(fgsFile, True)
+        'Go throgh each object and make sure the object is supported and it can find the plugin file.
+        Dim sd As New SimpleD.SimpleD(fgsFile, True) 'Load the fgs file.
         Dim g As SimpleD.Group = sd.Get_Group("Main")
         Dim numObj As Integer = g.Get_Value("Objects")
         For i As Integer = 0 To numObj 'Loop thrugh each object.
             g = sd.Get_Group("object" & i)
-            Dim name As String = g.Get_Value("name")
+            If RemoveGUI Then 'Are we removing drawing?
+                'Does the object support NoDraw?
+                If g.Get_Value("CanNoDraw") = False Then
+                    Log("Object does not support NoDrawing: " & g.Get_Value("name"), False)
+                    Return False
+                End If
+            End If
+            'Check and make sure the file does exist.
             Dim file As String = "Plugins\" & g.Get_Value("File")
             If file = "Plugins\" Then
-                Console.WriteLine("Object " & name & " does not support compiling.")
+                Log("Object " & g.Get_Value("name") & " does not support compiling.", False)
                 Return False
             ElseIf Not IO.File.Exists(file) Then
-                Console.WriteLine("Object " & name & " file(" & file & ") does NOT exist.")
+                Log("Object " & g.Get_Value("name") & " file(" & file & ") does NOT exist.", False)
                 Return False
             End If
 
+            'Add the file to the list if the file is not already there.
             Dim FoundFile As Boolean = False
             For f As Integer = 0 To Files.Count - 1
                 If LCase(Files(f)) = LCase(file) Then
@@ -74,11 +82,11 @@ Module CompileFGS
             If Not FoundFile Then Files.Add(file)
         Next
 
-        Log(" Done", False)
+        Log("Done!", False)
 
         Log("Prasing #1: loading scripts ")
-        Dim NewFiles As New List(Of String)
-        Dim StartI As Integer = 0
+        Dim NewFiles As New List(Of String) 'If one of the file wants a file that we are not getting already, we use this list to put the new files.
+        Dim StartI As Integer = 0 'We dont clear the old file list so we need something to keep track of what files we already loaded.
 
 Restart:
         For i As Integer = StartI To Files.Count - 1
@@ -86,6 +94,7 @@ Restart:
             Dim FileSource As String = sr.ReadToEnd
             sr.Close()
 
+            'Add the file to the source.
             sAdd(FileSource)
 
             If FileSource.Contains("BaseObject") Then IncludeBaseObject = True
@@ -94,13 +103,14 @@ Restart:
             Dim ReferencesStart As Integer = -1
             Dim IncludeStart As Integer = -1
             Do
+                'Get the references.
                 ReferencesStart = FileSource.IndexOf("AddReferences(", ReferencesStart + 1) + 14
                 If ReferencesStart > 13 Then
                     Dim EndIndex As Integer = FileSource.IndexOf(")", ReferencesStart)
                     Dim References() As String = Split(FileSource.Substring(ReferencesStart, EndIndex - ReferencesStart), ",")
                     vbReferences.AddRange(References)
                 End If
-
+                'Get included files.
                 IncludeStart = FileSource.IndexOf("Include(", IncludeStart + 1) + 8
                 If IncludeStart > 7 Then
                     Dim EndIndex As Integer = FileSource.IndexOf(")", IncludeStart)
@@ -137,6 +147,7 @@ Restart:
 
 
         Log("Done!", False)
+        'Show the files we added.
         Log("RemoveGUI=" & RemoveGUI & " BaseObject=" & IncludeBaseObject & " Files found:")
         For Each f As String In Files
             Log(vbTab & f)
@@ -161,7 +172,7 @@ Restart:
         sAdd("End Namespace")
 
         'Add the fgs to the code.
-        Source = Source.Replace("If FileToOpen <> """" Then Open(FileToOpen)", FGS_ToCode(fgsFile))
+        Source = Source.Replace("If FileToOpen <> """" Then Open(FileToOpen)", FGS_ToCode(sd))
 
         'Remove stuff from code.
         Do
@@ -230,10 +241,9 @@ Restart:
     End Function
 
     Public Const FileVersion = 0.5
-    Public Function FGS_ToCode(ByVal fgs As String) As String
-        Dim sd As New SimpleD.SimpleD(fgs, True)
+    Public Function FGS_ToCode(ByVal sd As SimpleD.SimpleD) As String
         Dim g As SimpleD.Group = sd.Get_Group("Main")
-       
+
 
         'Make sure the versions match.
         If g.Get_Value("FileVersion") <> FileVersion Then
@@ -307,10 +317,10 @@ Restart:
             'Add the references.
             .ReferencedAssemblies.Add("System.dll")
             .ReferencedAssemblies.Add("System.Core.dll")
-            If Not RemoveGUI Then
-                .ReferencedAssemblies.Add("System.Drawing.dll")
-                .ReferencedAssemblies.Add("System.Windows.Forms.dll")
-            End If
+            'If Not RemoveGUI Then
+            .ReferencedAssemblies.Add("System.Drawing.dll")
+            .ReferencedAssemblies.Add("System.Windows.Forms.dll")
+            'End If
             .ReferencedAssemblies.AddRange(vbReferences.ToArray)
         End With
 

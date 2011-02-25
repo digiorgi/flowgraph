@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Switch,Plugins.Common.Switch
+﻿'AddMenuObject|Switch,Plugins.Common.Switch|Common
 Namespace Common
     Public Class Switch
         Inherits BaseObject

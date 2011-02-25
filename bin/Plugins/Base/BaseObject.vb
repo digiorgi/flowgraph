@@ -34,6 +34,7 @@ Public MustInherit Class BaseObject
 
     Private Name As String = "NoName"
     Protected File As String = ""
+    Protected CanNoDraw As Boolean = False
 
     'Output
     Public Output() As DataFlowBase
@@ -167,6 +168,7 @@ Public MustInherit Class BaseObject
 
         g.Set_Value("Name", Name)
         g.Set_Value("File", File, "")
+        g.Set_Value("CanNoDraw", CanNoDraw, False)
         g.Set_Value("Position", Rect.X & "," & Rect.Y)
         g.Set_Value("UserData", UserData)
 

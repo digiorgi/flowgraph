@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Display as string,Plugins.Common.DisplayAsString,100|Misc
+﻿'AddMenuObject|Display as string,Plugins.Common.DisplayAsString,100|Common
 Namespace Common
     Public Class DisplayAsString
         Inherits BaseObject
