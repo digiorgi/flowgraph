@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Timer,Plugins.Common.Timer|Math
+﻿'AddMenuObject|Timer,Plugins.Common.Timer|Common
 Namespace Common
     Public Class Timer
         Inherits BaseObject

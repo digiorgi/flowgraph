@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Slider,Plugins.Common.Slider
+﻿'AddMenuObject|Slider,Plugins.Common.Slider|Common
 Namespace Common
     Public Class Slider
         Inherits BaseObject
@@ -29,12 +29,15 @@ Namespace Common
                     If Not Enabled Then Return
                     If Data.GetType Is GetType(Boolean) Then
                         If Data = True Then
-                            Value = Size.Width
+                            Value = 1
                         Else
                             Value = 0
                         End If
                     Else
-                        Value = Data * Size.Width
+
+                        Value = Data
+                        If Value > 1 Then Value = 1
+                        If Value < 0 Then Value = 0
                     End If
 
 
