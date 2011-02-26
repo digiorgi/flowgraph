@@ -11,7 +11,7 @@ Public Class fgAxisToBoolean
 
 
         'Create the inputs.
-        Inputs(New String() {"Axis,Number,Axis"})
+        Inputs(New String() {"Axis,0-1Normalized"})
         'Create the output.
         Outputs(New String() {"Up,Boolean", "Down,Boolean"})
 
@@ -27,7 +27,6 @@ Public Class fgAxisToBoolean
         numSwitchOn.Location = Position
         AddControl(numSwitchOn)
 
-        HID.Create(True)
     End Sub
 
     Public Overrides Sub Moving()
@@ -36,7 +35,6 @@ Public Class fgAxisToBoolean
 
     Public Overrides Sub Dispose()
         MyBase.Dispose()
-        HID.Dispose(True)
         numSwitchOn.Dispose()
     End Sub
 
