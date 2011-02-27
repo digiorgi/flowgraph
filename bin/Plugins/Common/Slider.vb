@@ -11,8 +11,8 @@ Namespace Common
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
             Setup(UserData, StartPosition, 100) 'Setup the base rectangles.
 
-            Outputs(New String() {"Value,Number"})
-            Inputs(New String() {"Enable,Boolean", "Value,Number,Boolean"})
+            Outputs(New String() {"Value,0-1Normalized"})
+            Inputs(New String() {"Enable,Boolean", "Value,0-1Normalized,Boolean"})
 
             'Set the title.
             Title = "Slider"
