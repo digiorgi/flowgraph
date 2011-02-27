@@ -155,9 +155,9 @@ Public Class fgGetJoystickAxis
         'Create the inputs.
         Inputs(New String() {"Joystick State,JoystickState"})
         'Create the output.
-        Outputs(New String() {"X,Number,Axis", "Y,Number,Axis", "Z,Number,Axis", _
-                              "RotationX,Number,Axis", "RotationY,Number,Axis", "RotationZ,Number,Axis", _
-                              "Slider1,Number,Axis", "Slider2,Number,Axis"})
+        Outputs(New String() {"X,0-1Normalized", "Y,0-1Normalized", "Z,0-1Normalized", _
+                              "RotationX,0-1Normalized", "RotationY,0-1Normalized", "RotationZ,0-1Normalized", _
+                              "Slider1,0-1Normalized", "Slider2,0-1Normalized"})
 
         'Set the title.
         Title = "Joystick Axis"

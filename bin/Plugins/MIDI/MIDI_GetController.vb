@@ -17,7 +17,7 @@ Public Class MIDI_GetController
         Setup(UserData, StartPosition, 200, 50) 'Setup the base rectangles.
 
         'Create one output.
-        Outputs(New String() {"Value,Number,Boolean"})
+        Outputs(New String() {"Value,0-1Normalized,Boolean"})
         Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessage,ChannelMessageBuilder"})
 
         'Set the title.

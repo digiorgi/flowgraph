@@ -14,7 +14,7 @@ Public Class MIDI_Volume
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessageBuilder,ChannelMessage", "Volume,Number,Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Channel Message,ChannelMessageBuilder,ChannelMessage", "Volume,0-1Normalized,Boolean"})
 
         'Set the title.
         Title = "MIDI Volume"

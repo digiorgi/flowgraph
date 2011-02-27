@@ -17,7 +17,7 @@ Public Class MIDI_SetController
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Input axis,Number,Boolean"})
+        Inputs(New String() {"Enable,Boolean", "Value,0-1Normalized,Boolean"})
 
         'Set the title.
         Title = "Set controller"
