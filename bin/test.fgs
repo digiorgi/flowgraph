@@ -2,7 +2,7 @@
 Main{
 	Width=910;
 	Height=485;
-	Objects=14;
+	Objects=17;
 	FileVersion=0.5;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
@@ -12,7 +12,7 @@ Object0{
 	File=Common\Timer.vb;
 	Position=5,45;
 	UserData=10;
-	Output=2,3,1,13,1;
+	Output=3,3,1,13,1,17,1;
 	Input=0,0;
 	Enabled=True;
 }
@@ -60,7 +60,7 @@ Object5{
 }
 Object6{
 	Name=Plugins.MIDI_SimulatePedals;
-	Position=375,260;
+	Position=440,240;
 	Output=3,8,1,2,1,11,1;
 	Input=0,2,1,1,0;
 }
@@ -103,7 +103,7 @@ Object12{
 	Position=235,370;
 	Output=1,6,1;
 	Input=1,1;
-	Enabled=True;
+	Enabled=False;
 	Octave=1;
 }
 Object13{
@@ -121,5 +121,27 @@ Object14{
 	Output=1,12,0;
 	Input=0,1;
 	Enabled=True;
-	Value=True;
+	Value=False;
+}
+Object15{
+	Name=Plugins.Common.Slider;
+	Position=450,5;
+	Output=1,16,0;
+	Input=0,1;
+}
+Object16{
+	Name=Plugins.Common.DisplayAsString;
+	File=Common\DisplayAsString.vb;
+	Position=620,15;
+	Input=1;
+	Data=0;
+}
+Object17{
+	Name=Plugins.fgGetKey2;
+	File=HID\Keyboard.vb;
+	Position=230,50;
+	Output=0`1,15,1;
+	Input=0,1;
+	Enabled=True;
+	Key=Pause;
 }
