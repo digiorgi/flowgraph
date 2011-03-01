@@ -18,6 +18,7 @@ AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
 AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
 AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
 AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
+AddMenuObject|Get key2,Plugins.fgGetKey2,70|Input,Keyboard
 AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse

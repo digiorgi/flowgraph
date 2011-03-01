@@ -5,7 +5,7 @@ Namespace Common
 
         Private Enabled As Boolean = True
 
-        Private Value As Integer
+        Private Value As Decimal
 
 
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
@@ -17,7 +17,7 @@ Namespace Common
             'Set the title.
             Title = "Slider"
 
-            Value = MyBase.Size.Width * 0.5
+            Value = 0.5
         End Sub
 
         Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -40,6 +40,7 @@ Namespace Common
                         If Value < 0 Then Value = 0
                     End If
 
+                    Send(Value)
 
             End Select
 
@@ -52,13 +53,13 @@ Namespace Common
             If e.Button = MouseButtons.Left Then
                 Dim x As Integer = e.X - Position.X
                 If x >= Size.Width Then
-                    Value = Size.Width
+                    Value = 1
                 ElseIf x <= 0 Then
                     Value = 0
                 Else
-                    Value = x
+                    Value = x / Size.Width
                 End If
-                Send(x / Size.Width)
+                Send(Value)
                 DoDraw(Rect)
             End If
         End Sub
@@ -69,13 +70,13 @@ Namespace Common
             If e.Button = MouseButtons.Left Then
                 Dim x As Integer = e.X - Position.X
                 If x >= Size.Width Then
-                    Value = Size.Width
+                    Value = 1
                 ElseIf x <= 0 Then
                     Value = 0
                 Else
-                    Value = x
+                    Value = x / Size.Width
                 End If
-                Send(x / Size.Width)
+                Send(Value)
                 DoDraw(Rect)
             End If
         End Sub
@@ -84,11 +85,11 @@ Namespace Common
             MyBase.Draw(g)
 
             If Enabled Then
-                g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value, 20)
+                g.FillRectangle(Brushes.Blue, Position.X, Position.Y, Value * Size.Width, 20)
             Else
-                g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value, 20)
+                g.FillRectangle(Brushes.Gray, Position.X, Position.Y, Value * Size.Width, 20)
             End If
-            g.DrawString(Math.Round(Value / Size.Width * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
+            g.DrawString(Math.Round(Value * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
         End Sub
     End Class
 End Namespace
