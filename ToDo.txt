@@ -2,6 +2,7 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
+When removing an object it will disconnect some objects not even connected to it.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
