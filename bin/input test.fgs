@@ -10,7 +10,7 @@ Object6{Name=Plugins.fgGetJoystickButtons;Position=375,240;Output=1,7,0`0;Input=
 Object7{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=470,240;Input=1;Data=True;}
 Object8{Name=Plugins.fgLocalMouse;Position=140,165;Output=0`1,10,0`0;Input=0,1;Enabled=True;}
 Object9{Name=Plugins.fgGlobalMouse;Position=140,230;Output=0`1,11,0`0;Input=0,1;Enabled=True;}
-Object10{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=210,180;Input=1;Data=212;}
-Object11{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=215,245;Input=1;Data=530;}
+Object10{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=210,180;Input=1;Data=193;}
+Object11{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=215,245;Input=1;Data=486;}
 Object12{Name=Plugins.fgAxisToBoolean;Position=465,95;Output=0`1,13,0;Input=1;SwitchOn=0.9;}
 Object13{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=565,110;Input=1;Data=False;}

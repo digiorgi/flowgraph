@@ -4,6 +4,8 @@ Main{
 	Height=292;
 	Objects=2;
 	FileVersion=0.5;
+	SplitFileWithNewLine=True;
+	SplitFileWithTabs=True;
 }
 Object0{
 	Name=Plugins.fgGetKey;

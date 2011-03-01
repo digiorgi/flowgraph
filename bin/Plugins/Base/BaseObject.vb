@@ -256,19 +256,40 @@ Public MustInherit Class BaseObject
                     Dim pos1 As PointF = GetOutputPosition(n)
                     Dim pos2 As PointF = Objects(fd.obj).GetInputPosition(fd.Index)
 
-                    If pos1.X < pos2.X And pos1.Y = pos2.Y Then
+                    If pos1.Y = pos2.Y Or pos1.X = pos2.X Then
                         'Draw line: o1─o2
                         g.DrawLine(ConnectorPen, pos1, pos2)
+
                     ElseIf pos1.X < pos2.X Then
                         'Draw line:
                         'o1┐
                         '  └o2
                         Dim xHalf As Single = (pos2.X - pos1.X) * 0.5
-                        g.DrawLine(ConnectorPen, pos1, New PointF(pos1.X + ((pos2.X - pos1.X) * 0.5), pos1.Y))
+                        g.DrawLine(ConnectorPen, pos1, New PointF(pos1.X + xHalf, pos1.Y))
                         g.DrawLine(ConnectorPen, New PointF(pos1.X + xHalf, pos1.Y), New PointF(pos2.X - xHalf, pos2.Y))
                         g.DrawLine(ConnectorPen, New PointF(pos2.X - xHalf, pos2.Y), pos2)
+
                     Else
-                        g.DrawLine(ConnectorPen, pos1, pos2)
+                        'Draw line:
+                        '   o1┐
+                        ' ┌───┘
+                        ' └o2  
+                        Dim yHalf As Single = (pos2.Y - pos1.Y) * 0.5
+                        Dim p1, p2, p3, p4 As PointF
+                        p1 = pos1 + New Size(10, 0)
+                        p2 = p1 + New Size(0, yHalf)
+
+                        p4 = pos2 + New Size(-10, 0)
+                        p3 = p4 + New Size(0, -yHalf)
+
+                        g.DrawLine(ConnectorPen, pos1, p1)
+                        g.DrawLine(ConnectorPen, p1, p2)
+                        g.DrawLine(ConnectorPen, p2, p3)
+                        g.DrawLine(ConnectorPen, p3, p4)
+                        g.DrawLine(ConnectorPen, p4, pos2)
+
+                        'Else
+                        '    g.DrawLine(ConnectorPen, pos1, pos2)
                     End If
 
 
