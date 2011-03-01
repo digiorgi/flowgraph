@@ -705,11 +705,11 @@ Public Class DataFlowBase
             'Disconnect input.
 
             'Disconnecting a input is harder. Because we do not hold all of the connections.
-            'So we have to go through all of the objects. and find the ones connecting to it and disconnect them.
+            'So we have to go through all of the objects, and find the ones connected to it and disconnect them.
 
-            For Each obj As Object In Objects 'Loop through each object.
-                If obj.Output IsNot Nothing Then 'Make sure there is some outputs.
-                    For Each out As DataFlowBase In obj.Output 'Go through all of the outputs in the object.
+            For Each objectT As Object In Objects 'Loop through each object.
+                If objectT.Output IsNot Nothing Then 'Make sure there is some outputs.
+                    For Each out As DataFlowBase In objectT.Output 'Go through all of the outputs in the object.
 
                         'This next part could look messy. 
                         'But as far as I know there is no better way do to this.
@@ -719,17 +719,16 @@ Public Class DataFlowBase
                         'So we just stay at the same index we removed the object at and go from there.
 
                         Dim n As Integer = 0 'Even though n is declared here I still set it to 0. Because sometime it seems not to reset it.
-                        Do
-                            If n > out.Flow.Count - 1 Then Exit Do
-                            If out.Flow(n).obj = Me.obj And out.Flow(n).Index = Index Then
-                                'Remove the object.
+                        Do While n < out.Flow.Count
+                            If out.Flow(n).obj = obj And out.Flow(n).Index = Index Then
+                                'Remove the connection.
                                 out.Flow(n) = Nothing
                                 out.Flow.RemoveAt(n)
                                 Connected -= 1
                             Else
                                 n += 1
                             End If
-                        Loop Until n = out.Flow.Count
+                        Loop
 
 
                     Next

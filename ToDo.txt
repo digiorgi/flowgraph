@@ -2,9 +2,10 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-When removing an object it will disconnect some objects not even connected to it.
 
 ####Clean-Ups#### <Means make things orderly and comment things.
+
+##Release new version##
 
 Step#1
 	
@@ -37,6 +38,8 @@ Step#GUI
 
 	New lines!!!
 		Going to make a simple picture to show how it could work.
+		Need a option to disable new lines.
+		Need a better way to do colors. And atlest a command line to disable colors.
 
 Step#4
 	Folders (Allow you to put objects in folders.)
