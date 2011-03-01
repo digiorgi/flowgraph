@@ -94,11 +94,17 @@ Public Module Plugins
         For n As Integer = 0 To Objects.Count - 1
             Objects(n).Index = n
 
-
+            'Set the output objects.
             If Objects(n).Output IsNot Nothing Then
                 For o As Integer = 0 To Objects(n).Output.Length - 1
+                    'Output object.
+                    If Objects(n).Output(o).obj > RemovedIndex Then
+                        Objects(n).Output(o).obj -= 1
+                    End If
+
+                    'Flow objects.
                     Dim i As Integer = 0
-                    Do Until i >= Objects(n).Output(o).Flow.Count
+                    Do While i < Objects(n).Output(o).Flow.Count
                         If Objects(n).Output(o).Flow(i).obj = RemovedIndex Then
                             Objects(n).Output(o).Flow(i) = Nothing
                             Objects(n).Output(o).Flow.RemoveAt(i)
@@ -109,6 +115,17 @@ Public Module Plugins
                             i += 1
                         End If
                     Loop
+                Next
+
+                
+            End If
+
+            'Set the input objects.
+            If Objects(n).Input IsNot Nothing Then
+                For i As Integer = 0 To Objects(n).Input.Length - 1
+                    If Objects(n).Input(i).obj > RemovedIndex Then
+                        Objects(n).Input(i).obj -= 1
+                    End If
                 Next
             End If
         Next
