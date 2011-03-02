@@ -26,9 +26,10 @@ Partial Class frmMain
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnSaveAs = New System.Windows.Forms.Button()
         Me.lblToolTip = New System.Windows.Forms.Label()
-        Me.chkDraw = New System.Windows.Forms.CheckBox()
+        Me.chkDisableUI = New System.Windows.Forms.CheckBox()
         Me.btnNew = New System.Windows.Forms.Button()
         Me.btnAbout = New System.Windows.Forms.Button()
+        Me.chkSimpleLines = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'btnOpen
@@ -73,17 +74,15 @@ Partial Class frmMain
         Me.lblToolTip.UseMnemonic = False
         Me.lblToolTip.Visible = False
         '
-        'chkDraw
+        'chkDisableUI
         '
-        Me.chkDraw.AutoSize = True
-        Me.chkDraw.Checked = True
-        Me.chkDraw.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDraw.Location = New System.Drawing.Point(375, 12)
-        Me.chkDraw.Name = "chkDraw"
-        Me.chkDraw.Size = New System.Drawing.Size(51, 17)
-        Me.chkDraw.TabIndex = 4
-        Me.chkDraw.Text = "Draw"
-        Me.chkDraw.UseVisualStyleBackColor = True
+        Me.chkDisableUI.AutoSize = True
+        Me.chkDisableUI.Location = New System.Drawing.Point(375, 6)
+        Me.chkDisableUI.Name = "chkDisableUI"
+        Me.chkDisableUI.Size = New System.Drawing.Size(75, 17)
+        Me.chkDisableUI.TabIndex = 4
+        Me.chkDisableUI.Text = "Disable UI"
+        Me.chkDisableUI.UseVisualStyleBackColor = True
         '
         'btnNew
         '
@@ -103,13 +102,24 @@ Partial Class frmMain
         Me.btnAbout.Text = "About"
         Me.btnAbout.UseVisualStyleBackColor = True
         '
+        'chkSimpleLines
+        '
+        Me.chkSimpleLines.AutoSize = True
+        Me.chkSimpleLines.Location = New System.Drawing.Point(375, 23)
+        Me.chkSimpleLines.Name = "chkSimpleLines"
+        Me.chkSimpleLines.Size = New System.Drawing.Size(81, 17)
+        Me.chkSimpleLines.TabIndex = 4
+        Me.chkSimpleLines.Text = "Simple lines"
+        Me.chkSimpleLines.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(525, 463)
-        Me.Controls.Add(Me.chkDraw)
+        Me.Controls.Add(Me.chkSimpleLines)
+        Me.Controls.Add(Me.chkDisableUI)
         Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.btnAbout)
         Me.Controls.Add(Me.btnSaveAs)
@@ -117,6 +127,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.btnNew)
         Me.Controls.Add(Me.btnOpen)
         Me.DoubleBuffered = True
+        Me.MinimumSize = New System.Drawing.Size(461, 67)
         Me.Name = "frmMain"
         Me.Text = "Flowgraph"
         Me.ResumeLayout(False)
@@ -127,8 +138,9 @@ Partial Class frmMain
     Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents btnSaveAs As System.Windows.Forms.Button
     Friend WithEvents lblToolTip As System.Windows.Forms.Label
-    Friend WithEvents chkDraw As System.Windows.Forms.CheckBox
+    Friend WithEvents chkDisableUI As System.Windows.Forms.CheckBox
     Friend WithEvents btnNew As System.Windows.Forms.Button
     Friend WithEvents btnAbout As System.Windows.Forms.Button
+    Friend WithEvents chkSimpleLines As System.Windows.Forms.CheckBox
 
 End Class

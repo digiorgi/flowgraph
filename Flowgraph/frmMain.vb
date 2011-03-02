@@ -308,6 +308,7 @@ Public Class frmMain
     Private Sub frmMain_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
         e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality
 
+        If Plugins.UpdateDrawing = False Then Return
         'Draw the objects.
         For i As Integer = 0 To Objects.Count - 1
             If e.ClipRectangle.IntersectsWith(Objects(i).rect) Then
@@ -375,9 +376,26 @@ Public Class frmMain
         About.ShowDialog()
     End Sub
 
-    Private Sub chkDraw_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDraw.CheckedChanged
-        Plugins.Draw = chkDraw.Checked
-        If chkDraw.Checked Then Me.Invalidate()
+    Private oldSize As Size
+    Private Sub chkDisableUI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDisableUI.CheckedChanged
+        Plugins.UpdateDrawing = Not chkDisableUI.Checked
+
+        'Hide all the controls.
+        For i As Integer = 8 To Controls.Count - 1
+            Controls(i).Visible = Not chkDisableUI.Checked
+        Next
+
+        'Resize the form.
+        If chkDisableUI.Checked Then
+            oldSize = Me.Size
+            Me.Size = Me.MinimumSize
+        Else
+            Me.Size = oldSize
+        End If
+    End Sub
+    Private Sub chkSimpleLines_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkSimpleLines.CheckedChanged
+        Plugins.ComplexLines = Not chkSimpleLines.Checked
+        Me.Invalidate()
     End Sub
 #End Region
 
@@ -408,4 +426,5 @@ Public Class frmMain
     End Sub
 #End Region
   
+
 End Class
