@@ -31,6 +31,7 @@ Step#3
 	Add a check to see if plugins need compiling when Flowgraph.exe is ran.
 		Would then give a option to compile plugins.
 			If yes then we run compiler wich then waits for flograph to close before compiling.
+				Not sure if this is a good idea. Because it would make loading Flowgraph slower.
 
 Step#GUI
 	Zoom and movment. (Should just need to put objects in an image or something.)

@@ -279,8 +279,9 @@ Public Module Plugins
 #End Region
 
 #Region "Auto draw"
+    Public ComplexLines As Boolean = True
     Event DrawEvent(ByVal region As Rectangle)
-    Public Draw As Boolean = True
+    Public UpdateDrawing As Boolean = True
     Private DoNotDraw As Boolean = True
 
     ''' <summary>
@@ -288,7 +289,7 @@ Public Module Plugins
     ''' </summary>
     ''' <param name="HeighPriority">If it's a heigh priority, then it will draw as soon as possible.</param>
     Public Sub DoDraw(Optional ByVal HeighPriority As Boolean = False)
-        If Not Draw Then Return
+        If Not UpdateDrawing Then Return
 
         'If it is a heigh priority. then we will not wait for the next timmer tick and just draw.
         If HeighPriority Then
@@ -300,7 +301,7 @@ Public Module Plugins
         End If
     End Sub
     Public Sub DoDraw(ByVal region As Rectangle)
-        If Not Draw Then Return
+        If Not UpdateDrawing Then Return
         RaiseEvent DrawEvent(region)
     End Sub
 
