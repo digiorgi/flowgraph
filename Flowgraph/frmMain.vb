@@ -108,6 +108,8 @@ Public Class frmMain
     Private Sub frmMain_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDoubleClick
         Mouse.Location = e.Location
 
+        If Plugins.UpdateUI = False Then Return
+
         If e.Button = Windows.Forms.MouseButtons.Left Then
             For i As Integer = Objects.Count - 1 To 0 Step -1
                 'RemoveFromFGS
@@ -139,6 +141,8 @@ Public Class frmMain
 
     Private Sub frmMain_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
         Mouse.Location = e.Location
+
+        If Plugins.UpdateUI = False Then Return
 
         Select Case Tool
             Case ToolType.None
@@ -184,6 +188,8 @@ Public Class frmMain
     Private Sub frmMain_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseUp
         Mouse.Location = e.Location
 
+        If Plugins.UpdateUI = False Then Return
+
         Select Case Tool
             Case ToolType.None
                 'Check to see if the mouse is in a object.
@@ -216,7 +222,7 @@ Public Class frmMain
                 End If
 
             Case ToolType.Move
-                    Tool = ToolType.None
+                Tool = ToolType.None
 
 
                 'RemoveFromFGS
@@ -250,6 +256,7 @@ Public Class frmMain
     Private Sub frmMain_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseMove
         Mouse.Location = e.Location
 
+        If Plugins.UpdateUI = False Then Return
 
         '###Tooltip
         'Reset tooltip text to noting.
@@ -308,7 +315,7 @@ Public Class frmMain
     Private Sub frmMain_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
         e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality
 
-        If Plugins.UpdateDrawing = False Then Return
+        If Plugins.UpdateUI = False Then Return
         'Draw the objects.
         For i As Integer = 0 To Objects.Count - 1
             If e.ClipRectangle.IntersectsWith(Objects(i).rect) Then
@@ -378,7 +385,7 @@ Public Class frmMain
 
     Private oldSize As Size
     Private Sub chkDisableUI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDisableUI.CheckedChanged
-        Plugins.UpdateDrawing = Not chkDisableUI.Checked
+        Plugins.UpdateUI = Not chkDisableUI.Checked
 
         'Hide all the controls.
         For i As Integer = 8 To Controls.Count - 1
