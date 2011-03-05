@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\ToDo.txt" />
+	<Content Include="..\Change.log" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

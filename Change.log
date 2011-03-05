@@ -1,0 +1,11 @@
+##0.1.3##
+Change: DisableUI now disables mouse events also.
+
+##0.1.2##
+Added : New line system.
+Added : Each object now uses a random color for it's output lines.
+Added : GetKey2 uses GetKeyState
+Rename: Axis, some Numbers have been changed to 0-1Normalized
+Change: the Draw checkbox is now called Disable UI  and will now resize the form aswell.
+Fixed : If you removed a object then removed a second object, it would sometimes disconnect some other object.
+Fixed : Fixed a few bugs with the Slider object.
