@@ -1,11 +1,10 @@
-﻿There 'should' be no bugs or 'clean-ups' before moving to the next 'step'.
+﻿There 'should' be no bugs or 'clean-ups', before moving to the next 'step'. or releasing a new version.
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
 
 ####Clean-Ups#### <Means make things orderly and comment things.
 
-##Release new version##
 
 Step#1
 	

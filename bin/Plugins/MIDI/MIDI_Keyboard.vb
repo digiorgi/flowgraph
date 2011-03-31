@@ -264,86 +264,26 @@ Send:
         Return g
     End Function
 
+    Private LastNote As SByte = -1
     Public Overrides Sub MouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
-        'Is the mouse over the keyboard?
-        Dim x As Integer = Position.X
-        Dim y As Integer = Position.Y + 40
-        If Mouse.IntersectsWith(New Rectangle(x, y, Width, 50)) And Enabled Then
-            Dim OctavePos As SByte = OctaveOffset - 1
-            Dim p As SByte = -1
-
-            For n As Integer = 0 To NumKeys - 1
-                OctavePos += 1
-                If OctavePos = 12 Then OctavePos = 0
-                Select Case OctavePos
-                    Case 0, 2, 4, 5, 7, 9, 11
-                        p += 1
-                End Select
-
-                Select Case OctavePos
-                    Case 0, 5 'C & F
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 1, 6 'C# & F#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-
-                    Case 2 'D
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 3, 10 'D# & A#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 4, 11 'E & B
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 7 'G
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 8 'G#
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-                    Case 9 'A
-                        If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
-                            Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            PressNote(n)
-                            Return
-                        End If
-
-
-                End Select
-            Next
-
-            Return
-        End If
+        PressNote(GetNote)
         MyBase.MouseDown(e)
     End Sub
     Public Overrides Sub MouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
+        ReleaseNote(GetNote)
+        MyBase.MouseUp(e)
+    End Sub
+    Public Overrides Sub MouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
+        If e.Button <> MouseButtons.None Then
+            Dim note As Integer = GetNote()
+            If note <> LastNote Then
+                ReleaseNote(LastNote)
+                PressNote(note)
+            End If
+        End If
+        MyBase.MouseMove(e)
+    End Sub
+    Public Function GetNote() As Integer
         'Is the mouse over the keyboard?
         Dim x As Integer = Position.X
         Dim y As Integer = Position.Y + 40
@@ -363,64 +303,55 @@ Send:
                     Case 0, 5 'C & F
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p), y, 6, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 1, 6 'C# & F#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 6, y, 6, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
 
                     Case 2 'D
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 3, 10 'D# & A#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 4, 11 'E & B
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 3, y, 7, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 7 'G
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 8 'G#
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 7, y, 6, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
                     Case 9 'A
                         If Mouse.IntersectsWith(New Rectangle(x + (10 * p) + 2, y, 5, 25)) Or _
                             Mouse.IntersectsWith(New Rectangle(x + (10 * p), y + 25, 10, 25)) Then
-                            ReleaseNote(n)
-                            Return
+                            Return n
                         End If
 
 
                 End Select
             Next
-            Return
         End If
-        MyBase.MouseUp(e)
-    End Sub
+        Return -1
+    End Function
 #End Region
 
 #Region "Misc stuff"
@@ -463,6 +394,8 @@ Send:
     ''' <param name="ID"></param>
     ''' <remarks></remarks>
     Private Sub ReleaseNote(ByVal ID As Integer)
+        If ID < 0 Then Return
+        If ID = LastNote Then LastNote = -1
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOff
         tmp.MidiChannel = numChannel.Value - 1
@@ -474,6 +407,8 @@ Send:
     End Sub
 
     Private Sub PressNote(ByVal ID As Integer)
+        If ID < 0 Then Return
+        LastNote = ID
         Dim tmp As New Sanford.Multimedia.Midi.ChannelMessageBuilder
         tmp.Command = Sanford.Multimedia.Midi.ChannelCommand.NoteOn
         tmp.MidiChannel = numChannel.Value - 1
