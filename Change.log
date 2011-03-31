@@ -1,5 +1,6 @@
 ##0.1.3##
-Change: DisableUI now disables mouse events also.
+Change	: DisableUI now disables mouse events also.
+Add		: MIDI_Keyboard you can now drag the mouse across the keys.
 
 ##0.1.2##
 Added : New line system.
