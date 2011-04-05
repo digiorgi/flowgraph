@@ -83,15 +83,15 @@ Public Class MIDI_SetController
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
+        g.GetValue("Enabled", Enabled, False)
 
         Dim tmpController As Integer = -1
-        g.Get_Value("Controller", tmpController, False)
+        g.GetValue("Controller", tmpController, False)
         If Not tmpController = -1 Then
             comController.SelectedItem = [Enum].GetName(GetType(Sanford.Multimedia.Midi.ControllerType), tmpController)
         End If
 
-        g.Get_Value("Channel", numChannel.Value, False)
+        g.GetValue("Channel", numChannel.Value, False)
 
         MyBase.Load(g)
     End Sub
@@ -99,9 +99,9 @@ Public Class MIDI_SetController
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Controller", Controller)
-        g.Set_Value("Channel", numChannel.Value)
+        g.SetValue("Enabled", Enabled)
+        g.SetValue("Controller", Controller)
+        g.SetValue("Channel", numChannel.Value)
 
 
         Return g

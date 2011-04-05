@@ -1,4 +1,4 @@
-relre:\obj
+relre:obj
 glob:*.exe*
 glob:bin/Flowgraph.*
 glob:bin/PluginCompiler.*

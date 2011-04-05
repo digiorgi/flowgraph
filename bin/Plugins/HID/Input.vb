@@ -56,14 +56,14 @@ Public Class fgAxisToBoolean
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("SwitchOn", numSwitchOn.Value, False)
+        g.GetValue("SwitchOn", numSwitchOn.Value, False)
 
         MyBase.Load(g)
     End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("SwitchOn", numSwitchOn.Value)
+        g.SetValue("SwitchOn", numSwitchOn.Value)
 
         Return g
     End Function

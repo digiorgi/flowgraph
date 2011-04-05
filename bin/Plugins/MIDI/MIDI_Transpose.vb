@@ -78,16 +78,16 @@ Public Class MIDI_Transpose
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("Octave", numOctave.Value, False)
+        g.GetValue("Enabled", Enabled, False)
+        g.GetValue("Octave", numOctave.Value, False)
         MyBase.Load(g)
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Octave", numOctave.value)
+        g.SetValue("Enabled", Enabled)
+        g.SetValue("Octave", numOctave.value)
 
 
         Return g

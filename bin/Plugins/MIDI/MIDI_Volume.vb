@@ -81,16 +81,16 @@ Public Class MIDI_Volume
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("Volume", numVolume.Value, False)
+        g.GetValue("Enabled", Enabled, False)
+        g.GetValue("Volume", numVolume.Value, False)
         MyBase.Load(g)
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("Volume", numvolume.value)
+        g.SetValue("Enabled", Enabled)
+        g.SetValue("Volume", numvolume.value)
 
 
         Return g

@@ -137,7 +137,7 @@ Public MustInherit Class BaseObject
 
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
-            g.Get_Value("Output", tmp)
+            g.GetValue("Output", tmp)
             Dim tmpS As String() = Split(tmp, "`")
             For n As Integer = 0 To tmpS.Length - 1
                 If n >= Output.Length Then Exit For
@@ -146,7 +146,7 @@ Public MustInherit Class BaseObject
         End If
 
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs.
-            g.Get_Value("Input", tmp)
+            g.GetValue("Input", tmp)
             Dim tmpS As String() = Split(tmp, ",")
             For n As Integer = 0 To tmpS.Length - 1
                 If n >= Input.Length Then Exit For
@@ -163,21 +163,21 @@ Public MustInherit Class BaseObject
     ''' <returns>The new group to be used.</returns>
     ''' <remarks></remarks>
     Public Overridable Function Save() As SimpleD.Group
-        Dim g As New SimpleD.Group("Object" & Index)
+        Dim g As New SimpleD.Group("Object")
         Dim tmp As String = ""
 
-        g.Set_Value("Name", Name)
-        g.Set_Value("File", File, "")
-        g.Set_Value("CanNoDraw", CanNoDraw, False)
-        g.Set_Value("Position", Rect.X & "," & Rect.Y)
-        g.Set_Value("UserData", UserData)
+        g.SetValue("Name", Name)
+        g.SetValue("File", File, "")
+        g.SetValue("CanNoDraw", CanNoDraw, False)
+        g.SetValue("Position", Rect.X & "," & Rect.Y)
+        g.SetValue("UserData", UserData)
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
             tmp = Output(0).Save
             For n As Integer = 1 To Output.Length - 1
                 tmp &= "`" & Output(n).Save
             Next
-            g.Set_Value("Output", tmp)
+            g.SetValue("Output", tmp)
         End If
 
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
@@ -185,7 +185,7 @@ Public MustInherit Class BaseObject
             For n As Integer = 1 To Input.Length - 1
                 tmp &= "," & Input(n).Connected
             Next
-            g.Set_Value("Input", tmp)
+            g.SetValue("Input", tmp)
         End If
 
         Return g

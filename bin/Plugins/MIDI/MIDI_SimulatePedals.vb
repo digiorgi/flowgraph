@@ -188,10 +188,10 @@ Public Class MIDI_SimulatePedals
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("RemoveOldNotes", chkRemoveOldNotes.Checked, False)
-        g.Get_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
-        g.Get_Value("Channel", numChannel.Value, False)
+        g.GetValue("Enabled", Enabled, False)
+        g.GetValue("RemoveOldNotes", chkRemoveOldNotes.Checked, False)
+        g.GetValue("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
+        g.GetValue("Channel", numChannel.Value, False)
 
         MyBase.Load(g)
     End Sub
@@ -199,10 +199,10 @@ Public Class MIDI_SimulatePedals
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled, True)
-        g.Set_Value("RemoveOldNotes", chkRemoveOldNotes.Checked, True)
-        g.Set_Value("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
-        g.Set_Value("Channel", numChannel.Value, 1)
+        g.SetValue("Enabled", Enabled, True)
+        g.SetValue("RemoveOldNotes", chkRemoveOldNotes.Checked, True)
+        g.SetValue("FilterOtherChannels", chkFilterOtherChannels.Checked, False)
+        g.SetValue("Channel", numChannel.Value, 1)
 
 
         Return g
