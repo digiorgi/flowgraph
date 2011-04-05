@@ -172,7 +172,7 @@ Public Module Plugins
     'RemoveFromFGS
 
     Public LoadedFile As String = ""
-    Public Const FileVersion = 0.5
+    Public Const FileVersion = 1 'If you change this do not for get to change the suported versions. (inside the open sub.)
     Private SplitFileWithNewLine As Boolean = True
     Private SplitFileWithTabs As Boolean = True
 
@@ -188,9 +188,9 @@ Public Module Plugins
         Dim sd As New SimpleD.SimpleD
         sd.FromFile(File)
 
-        Dim g As SimpleD.Group = sd.Get_Group("Main")
+        Dim g As SimpleD.Group = sd.GetGroup("Main")
 
-        Form.ClientSize = New Size(g.Get_Value("Width"), g.Get_Value("Height"))
+        Form.ClientSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
         'Make sure the form is still in the screen.
         Dim x As Integer = Form.Location.X
         Dim y As Integer = Form.Location.Y
@@ -199,49 +199,73 @@ Public Module Plugins
         If y + Form.Height > scr.Bottom Then y = scr.Bottom - Form.Height
         Form.Location = New Point(x, y) 'Set the window location.
 
-        'Make sure the versions match.
-        If g.Get_Value("FileVersion") <> FileVersion Then
-            MsgBox("Wrong file version." & Environment.NewLine _
-                   & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
-                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
-            Return
-        End If
+        'Make sure the versions is supported.
+        Dim CurrentFileVersion As Single = g.GetValue("FileVersion")
+        Select Case CurrentFileVersion
+            Case 0.5, 1 'Supported versions.
+            Case Else
+                MsgBox("Wrong file version." & Environment.NewLine _
+                                  & "File version: " & g.GetValue("FileVersion") & Environment.NewLine _
+                                  & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
+                Return
+        End Select
 
-        g.Get_Value("SplitFileWithNewLine", SplitFileWithNewLine, False)
-        g.Get_Value("SplitFileWithTabs", SplitFileWithTabs, False)
+        g.GetValue("SplitFileWithNewLine", SplitFileWithNewLine, False)
+        g.GetValue("SplitFileWithTabs", SplitFileWithTabs, False)
 
         'Get the number of objects.
-        Dim numObj As Integer = g.Get_Value("Objects")
-        For n As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.Get_Group("Object" & n) 'Get the object.
+        Dim numObj As Integer
+        Select Case CurrentFileVersion
+            Case 1
+                numObj = sd.GetGroupArray("object").Length - 1
+            Case 0.5
+                numObj = g.GetValue("Objects")
+        End Select
+        'For n As Integer = 0 To numObj 'Loop thrugh each object.
+        Dim i As Integer = -1
+        Do
+            i += 1
+            'Get the object.
+            If CurrentFileVersion = 1 Then
+                g = sd.GetGroupArray("object")(i)
+            ElseIf CurrentFileVersion = 0.5 Then
+                g = sd.GetGroup("Object" & i)
+            End If
             If g Is Nothing Then
-                MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                MsgBox("Could not find object# " & i & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 ClearObjects()
                 LoadedFile = ""
                 Return
             End If
 
             'Get the position.
-            Dim pos As String() = Split(g.Get_Value("position"), ",")
-            Dim obj As Integer = AddObject(g.Get_Value("name"), New Point(pos(0), pos(1)), g.Get_Value("userdata")) 'Get the object.
+            Dim pos As String() = Split(g.GetValue("position"), ",")
+            Dim obj As Integer = AddObject(g.GetValue("name"), New Point(pos(0), pos(1)), g.GetValue("userdata")) 'Get the object.
 
             'Show error if could not create object.
             If obj = -1 Then
-                MsgBox("Could not create object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 ClearObjects()
                 LoadedFile = ""
                 Return
             End If
-        Next
+        Loop Until i >= numObj
+        'Next
 
         'Load each object.
         For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
+            Select Case CurrentFileVersion
+                Case 1
+                    g = sd.GetGroupArray("object")(n)
+                Case 0.5
+                    g = sd.GetGroup("Object" & n)
+            End Select
+
             'Try and load each object.
             Try
                 Objects(n).Load(g)
             Catch ex As Exception
-                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.Get_Value("name") & vbNewLine _
+                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.GetValue("name") & vbNewLine _
                       & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
             End Try
         Next
@@ -255,18 +279,18 @@ Public Module Plugins
     Public Sub Save(ByVal File As String)
 
         Dim sd As New SimpleD.SimpleD
-        Dim g As SimpleD.Group = sd.Create_Group("Main")
-        g.Set_Value("Width", Form.ClientSize.Width)
-        g.Set_Value("Height", Form.ClientSize.Height)
-        g.Set_Value("Objects", Objects.Count - 1)
-        g.Set_Value("FileVersion", FileVersion)
+        Dim g As SimpleD.Group = sd.CreateGroup("Main")
+        g.SetValue("Width", Form.ClientSize.Width)
+        g.SetValue("Height", Form.ClientSize.Height)
+        'g.SetValue("Objects", Objects.Count - 1) 0.5
+        g.SetValue("FileVersion", FileVersion)
 
-        g.Set_Value("SplitFileWithNewLine", SplitFileWithNewLine)
-        g.Set_Value("SplitFileWithTabs", SplitFileWithTabs)
+        g.SetValue("SplitFileWithNewLine", SplitFileWithNewLine)
+        g.SetValue("SplitFileWithTabs", SplitFileWithTabs)
 
         'Save each object.
         For Each obj As Object In Objects
-            sd.Add_Group(obj.Save)
+            sd.AddGroup(obj.Save, False)
         Next
 
         'Save to file.

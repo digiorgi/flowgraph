@@ -44,16 +44,16 @@ Namespace Common
 
         Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-            g.Get_Value("Enabled", Enabled, False)
-            g.Get_Value("Value", Value, False)
+            g.GetValue("Enabled", Enabled, False)
+            g.GetValue("Value", Value, False)
             MyBase.Load(g)
         End Sub
 
         Public Overrides Function Save() As SimpleD.Group
             Dim g As SimpleD.Group = MyBase.Save()
 
-            g.Set_Value("Enabled", Enabled)
-            g.Set_Value("Value", Value)
+            g.SetValue("Enabled", Enabled)
+            g.SetValue("Value", Value)
 
 
             Return g

@@ -20,12 +20,12 @@ Namespace Common
         Public Overrides Function Save() As SimpleD.Group
             Dim g As SimpleD.Group = MyBase.Save()
 
-            g.Set_Value("Data", Data)
+            g.SetValue("Data", Data)
 
             Return g
         End Function
         Public Overrides Sub Load(ByVal g As SimpleD.Group)
-            g.Get_Value("Data", Data)
+            g.GetValue("Data", Data)
 
             MyBase.Load(g)
         End Sub

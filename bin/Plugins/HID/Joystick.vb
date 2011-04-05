@@ -52,9 +52,9 @@ Public Class fgJoystick
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
-        'g.Get_Value("Joystick", comJoy.SelectedText, False)
-        Dim tmpJoy As String = g.Get_Value("Joystick")
+        g.GetValue("Enabled", Enabled, False)
+        'g.GetValue("Joystick", comJoy.SelectedText, False)
+        Dim tmpJoy As String = g.GetValue("Joystick")
         If tmpJoy <> "" Then
             For i As Integer = 0 To comJoy.Items.Count - 1
                 If LCase(comJoy.Items(i).ToString) = LCase(tmpJoy) Then
@@ -69,8 +69,8 @@ Public Class fgJoystick
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        If comJoy.SelectedItem IsNot Nothing Then g.Set_Value("Joystick", comJoy.SelectedItem.ToString)
+        g.SetValue("Enabled", Enabled)
+        If comJoy.SelectedItem IsNot Nothing Then g.SetValue("Joystick", comJoy.SelectedItem.ToString)
 
         Return g
     End Function
@@ -193,7 +193,7 @@ Public Class fgGetJoystickAxis
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
         For Each chk As CheckBox In chkReverse
-            g.Get_Value(chk.Text & chk.Tag, chk.Checked, False)
+            g.GetValue(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         MyBase.Load(g)
@@ -204,7 +204,7 @@ Public Class fgGetJoystickAxis
 
         'Save all the reverse check boxs state.
         For Each chk As CheckBox In chkReverse
-            g.Set_Value(chk.Text & chk.Tag, chk.Checked, False)
+            g.SetValue(chk.Text & chk.Tag, chk.Checked, False)
         Next
 
         Return g
@@ -325,14 +325,14 @@ Public Class fgGetJoystickButtons
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Button", numButtons.Value, False)
+        g.GetValue("Button", numButtons.Value, False)
 
         MyBase.Load(g)
     End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Button", numButtons.Value)
+        g.SetValue("Button", numButtons.Value)
 
         Return g
     End Function

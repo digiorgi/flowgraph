@@ -50,24 +50,24 @@ Module CompileFGS
 
         'Go throgh each object and make sure the object is supported and it can find the plugin file.
         Dim sd As New SimpleD.SimpleD(fgsFile, True) 'Load the fgs file.
-        Dim g As SimpleD.Group = sd.Get_Group("Main")
-        Dim numObj As Integer = g.Get_Value("Objects")
+        Dim g As SimpleD.Group = sd.GetGroup("Main")
+        Dim numObj As Integer = g.GetValue("Objects")
         For i As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.Get_Group("object" & i)
+            g = sd.GetGroup("object" & i)
             If RemoveGUI Then 'Are we removing drawing?
                 'Does the object support NoDraw?
-                If g.Get_Value("CanNoDraw") = False Then
-                    Log("Object does not support NoDrawing: " & g.Get_Value("name"), False)
+                If g.GetValue("CanNoDraw") = False Then
+                    Log("Object does not support NoDrawing: " & g.GetValue("name"), False)
                     Return False
                 End If
             End If
             'Check and make sure the file does exist.
-            Dim file As String = "Plugins\" & g.Get_Value("File")
+            Dim file As String = "Plugins\" & g.GetValue("File")
             If file = "Plugins\" Then
-                Log("Object " & g.Get_Value("name") & " does not support compiling.", False)
+                Log("Object " & g.GetValue("name") & " does not support compiling.", False)
                 Return False
             ElseIf Not IO.File.Exists(file) Then
-                Log("Object " & g.Get_Value("name") & " file(" & file & ") does NOT exist.", False)
+                Log("Object " & g.GetValue("name") & " file(" & file & ") does NOT exist.", False)
                 Return False
             End If
 
@@ -242,30 +242,30 @@ Restart:
 
     Public Const FileVersion = 0.5
     Public Function FGS_ToCode(ByVal sd As SimpleD.SimpleD) As String
-        Dim g As SimpleD.Group = sd.Get_Group("Main")
+        Dim g As SimpleD.Group = sd.GetGroup("Main")
 
 
         'Make sure the versions match.
-        If g.Get_Value("FileVersion") <> FileVersion Then
+        If g.GetValue("FileVersion") <> FileVersion Then
             MsgBox("Wrong file version." & Environment.NewLine _
-                   & "File version: " & g.Get_Value("FileVersion") & Environment.NewLine _
+                   & "File version: " & g.GetValue("FileVersion") & Environment.NewLine _
                    & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
             Return ""
         End If
 
-        Dim Code As String = "Me.ClientSize = New Size(" & g.Get_Value("Width") & "," & g.Get_Value("Height") & ")"
+        Dim Code As String = "Me.ClientSize = New Size(" & g.GetValue("Width") & "," & g.GetValue("Height") & ")"
 
         'Get the number of objects.
-        Dim numObj As Integer = g.Get_Value("Objects")
+        Dim numObj As Integer = g.GetValue("Objects")
         For n As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.Get_Group("Object" & n) 'Get the object.
+            g = sd.GetGroup("Object" & n) 'Get the object.
             If g Is Nothing Then
                 MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 Return ""
             End If
 
             Code &= vbNewLine
-            Code &= "Objects.Add(New " & g.Get_Value("name") & "(New Point(" & g.Get_Value("position") & "),""" & g.Get_Value("userdata") & """))"
+            Code &= "Objects.Add(New " & g.GetValue("name") & "(New Point(" & g.GetValue("position") & "),""" & g.GetValue("userdata") & """))"
 
         Next
         'Dim a As New SimpleD.Group
@@ -274,12 +274,12 @@ Restart:
 
         'Load each object.
         For n As Integer = 0 To numObj
-            g = sd.Get_Group("Object" & n)
+            g = sd.GetGroup("Object" & n)
             'Try and load each object.
             Code &= vbNewLine & "Try" & vbNewLine
-            Code &= "Objects(" & n & ").Load(sd.Get_Group(""Object" & n & """))"
+            Code &= "Objects(" & n & ").Load(sd.GetGroup(""Object" & n & """))"
             Code &= vbNewLine & "Catch ex As Exception"
-            Code &= vbNewLine & "MsgBox(""Could not load object# " & n & """ & Environment.NewLine & ""Name: " & g.Get_Value("name") & """ & Environment.NewLine" _
+            Code &= vbNewLine & "MsgBox(""Could not load object# " & n & """ & Environment.NewLine & ""Name: " & g.GetValue("name") & """ & Environment.NewLine" _
                   & " & ""Execption="" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, ""Error loading object"")"
             Code &= vbNewLine & "End Try"
         Next

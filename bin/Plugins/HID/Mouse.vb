@@ -63,14 +63,14 @@ Public Class fgRawMouse
     End Function
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", Enabled, False)
+        g.GetValue("Enabled", Enabled, False)
 
         MyBase.Load(g)
     End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
+        g.SetValue("Enabled", Enabled)
 
         Return g
     End Function
@@ -124,14 +124,14 @@ Public Class fgLocalMouse
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", Enabled, False)
+        g.GetValue("Enabled", Enabled, False)
 
         MyBase.Load(g)
     End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
+        g.SetValue("Enabled", Enabled)
 
         Return g
     End Function
@@ -185,14 +185,14 @@ Public Class fgGlobalMouse
     End Sub
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.Get_Value("Enabled", Enabled, False)
+        g.GetValue("Enabled", Enabled, False)
 
         MyBase.Load(g)
     End Sub
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
+        g.SetValue("Enabled", Enabled)
 
         Return g
     End Function

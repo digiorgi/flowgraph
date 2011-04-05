@@ -77,7 +77,7 @@ Public Class MIDI_Debug
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
+        g.GetValue("Enabled", Enabled, False)
 
 
         MyBase.Load(g)
@@ -86,7 +86,7 @@ Public Class MIDI_Debug
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
+        g.SetValue("Enabled", Enabled)
 
         Return g
     End Function

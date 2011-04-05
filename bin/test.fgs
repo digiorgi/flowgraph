@@ -1,13 +1,12 @@
-//Version=0.99 FileVersion=1\\
+//Version=0.991 FileVersion=1\\
 Main{
 	Width=910;
 	Height=485;
-	Objects=10;
-	FileVersion=0.5;
+	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
 }
-Object0{
+Object{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=5,45;
@@ -16,20 +15,20 @@ Object0{
 	Input=0,0;
 	Enabled=True;
 }
-Object1{
+Object{
 	Name=Plugins.Common.Slider;
 	Position=435,25;
 	Output=1,2,0;
 	Input=0,3;
 }
-Object2{
+Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=625,10;
 	Input=1;
 	Data=0;
 }
-Object3{
+Object{
 	Name=Plugins.fgGetKey2;
 	File=HID\Keyboard.vb;
 	Position=230,50;
@@ -38,45 +37,45 @@ Object3{
 	Enabled=True;
 	Key=Pause;
 }
-Object4{
+Object{
 	Name=Plugins.fgAdd;
 	Position=540,195;
 	UserData=5;
 	Output=1,5,0;
 	Input=1,1,1,1,1;
 }
-Object5{
+Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=700,185;
 	Input=1;
-	Data=569;
+	Data=10;
 }
-Object6{
+Object{
 	Name=Plugins.fgCounter;
 	Position=285,160;
 	Output=1,4,0;
 	Input=0,0;
 }
-Object7{
+Object{
 	Name=Plugins.fgCounter;
-	Position=475,120;
+	Position=465,110;
 	Output=1,4,1;
 	Input=0,0;
 }
-Object8{
+Object{
 	Name=Plugins.fgCounter;
 	Position=590,350;
 	Output=1,4,2;
 	Input=0,0;
 }
-Object9{
+Object{
 	Name=Plugins.fgCounter;
 	Position=340,275;
 	Output=1,4,3;
 	Input=0,0;
 }
-Object10{
+Object{
 	Name=Plugins.fgCounter;
 	Position=435,365;
 	Output=1,4,4;

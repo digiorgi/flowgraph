@@ -145,11 +145,11 @@ Public Class MIDI_Output
 
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
-        g.Get_Value("Enabled", Enabled, False)
-        g.Get_Value("DeviceID", comDevices.SelectedIndex)
-        g.Get_Value("MessageChannels", chkMessageChannels.Checked)
+        g.GetValue("Enabled", Enabled, False)
+        g.GetValue("DeviceID", comDevices.SelectedIndex)
+        g.GetValue("MessageChannels", chkMessageChannels.Checked)
         Try
-            g.Get_Value("Channel", numChannel.Value)
+            g.GetValue("Channel", numChannel.Value)
         Catch ex As Exception
         End Try
 
@@ -159,10 +159,10 @@ Public Class MIDI_Output
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.Set_Value("Enabled", Enabled)
-        g.Set_Value("DeviceID", comDevices.SelectedIndex)
-        g.Set_Value("MessageChannels", chkMessageChannels.Checked)
-        g.Set_Value("Channel", numChannel.Value)
+        g.SetValue("Enabled", Enabled)
+        g.SetValue("DeviceID", comDevices.SelectedIndex)
+        g.SetValue("MessageChannels", chkMessageChannels.Checked)
+        g.SetValue("Channel", numChannel.Value)
 
 
         Return g

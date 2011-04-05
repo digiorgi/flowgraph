@@ -1,13 +1,12 @@
-//Version=0.99 FileVersion=1\\
+//Version=0.991 FileVersion=1\\
 Main{
 	Width=989;
 	Height=436;
-	Objects=14;
-	FileVersion=0.5;
+	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
 }
-Object0{
+Object{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=5,45;
@@ -16,7 +15,7 @@ Object0{
 	Input=0,0;
 	Enabled=True;
 }
-Object1{
+Object{
 	Name=Plugins.MIDI_Input;
 	Position=5,290;
 	Output=2,9,1,10,1`0`0`0;
@@ -26,7 +25,7 @@ Object1{
 	AllChannels=True;
 	Channel=1;
 }
-Object2{
+Object{
 	Name=Plugins.MIDI_Output;
 	Position=725,215;
 	Input=0,1,0,0,0;
@@ -35,14 +34,14 @@ Object2{
 	MessageChannels=True;
 	Channel=1;
 }
-Object3{
+Object{
 	Name=Plugins.fgJoystick;
 	Position=135,45;
 	Output=1,4,0;
 	Input=0,1;
 	Enabled=True;
 }
-Object4{
+Object{
 	Name=Plugins.fgGetJoystickAxis;
 	Position=15,105;
 	Output=0`1,7,0`0`0`0`1,5,0`0`0;
@@ -51,34 +50,34 @@ Object4{
 	Rev5=True;
 	Rev6=True;
 }
-Object5{
+Object{
 	Name=Plugins.fgAxisToBoolean;
 	Position=140,155;
 	Output=0`1,6,2;
 	Input=1;
 	SwitchOn=0.9;
 }
-Object6{
+Object{
 	Name=Plugins.MIDI_SimulatePedals;
 	Position=460,220;
 	Output=3,8,1,2,1,11,1;
 	Input=0,2,1,1,0;
 }
-Object7{
+Object{
 	Name=Plugins.fgAxisToBoolean;
 	Position=135,105;
 	Output=0`1,6,3;
 	Input=1;
 	SwitchOn=0.9;
 }
-Object8{
+Object{
 	Name=Plugins.MIDI_Keyboard;
 	Position=435,320;
 	UserData=88-21-9;
 	Output=0;
 	Input=0,1;
 }
-Object9{
+Object{
 	Name=Plugins.MIDI_Volume;
 	Position=170,215;
 	Output=2,6,1,12,1;
@@ -86,19 +85,19 @@ Object9{
 	Enabled=True;
 	Volume=127;
 }
-Object10{
+Object{
 	Name=Plugins.MIDI_Debug;
 	Position=410,45;
 	Input=0,1;
 	Enabled=True;
 }
-Object11{
+Object{
 	Name=Plugins.MIDI_Debug;
 	Position=635,45;
 	Input=0,1;
 	Enabled=True;
 }
-Object12{
+Object{
 	Name=Plugins.MIDI_Transpose;
 	Position=280,370;
 	Output=1,6,1;
@@ -106,7 +105,7 @@ Object12{
 	Enabled=False;
 	Octave=1;
 }
-Object13{
+Object{
 	Name=Plugins.fgGetKey;
 	File=HID\Keyboard.vb;
 	Position=10,370;
@@ -115,7 +114,7 @@ Object13{
 	Enabled=True;
 	Key=Pause;
 }
-Object14{
+Object{
 	Name=Plugins.Common.Switch;
 	Position=165,370;
 	Output=1,12,0;
