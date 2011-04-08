@@ -9,6 +9,7 @@ AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
 AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 AddMenuObject|Counter,Plugins.fgCounter,60|Math
 AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
+AddMenuObject|ObjectTemplate,Plugins.ObjectTemplate,100|Group1,Group2
 AddMenuObject|Display as string,Plugins.Common.DisplayAsString,100|Common
 AddMenuObject|Slider,Plugins.Common.Slider|Common
 AddMenuObject|Switch,Plugins.Common.Switch|Common
