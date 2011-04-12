@@ -79,7 +79,7 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 		InputHandler: In(Input)		Out(InputState, Axis, IsPressed)
 
 	Output:
-		
+		Really need more then just HID output. (I know currently there is just MIDI.)
 
 
 	MIDI:
@@ -92,5 +92,9 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 
 		Keyboard:
 			Add a check box to disable other channel colors.
-
+		
+		Equlizer: Allow you to easly set each notes volume, or a group of notes like every 8 notes get a slider.
+		More adv get note: GetNoteLowerThen GetNoteHeigherThen GetNoteInbetwen
+		Match channels: Try to match channels so you could say turn up the user volume.
+		
 		Some sort of MID player.
