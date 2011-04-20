@@ -37,8 +37,6 @@ Step#GUI
 						That will not work for zooming. (Because of controls.)
 
 	New lines!!!
-		Going to make a simple picture to show how it could work.
-		Need a option to disable new lines.
 		Need a better way to do colors. And atlest a command line to disable colors.
 
 Step#4
@@ -85,8 +83,8 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 	MIDI:
 		GetController
 		GetSetNote
-		Filter objects
-		Debug	Like Pedals debug.
+		Filter objects In(Enabled,ChannelMessage)	Out(Filterd,Other)
+		Debug	Need debugging for other events.
 		Input:
 			Add a checkbox to 'fix' controller events. (Mainly note On and Off.)
 
@@ -97,4 +95,4 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 		More adv get note: GetNoteLowerThen GetNoteHeigherThen GetNoteInbetwen
 		Match channels: Try to match channels so you could say turn up the user volume.
 		
-		Some sort of MID player.
+		Some sort of MIDI file player. (It was included in Sanford's MIDI library, just needs to be added to a object.)
