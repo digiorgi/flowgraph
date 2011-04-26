@@ -1,7 +1,8 @@
 //Version=0.991 FileVersion=1\\
 Main{
-	Width=910;
-	Height=485;
+	DisableUI=True;
+	Width=839;
+	Height=466;
 	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
