@@ -3,8 +3,9 @@ The objects can be added at anytime. But be aware there could be changes that wi
 
 ####BUGS####
 
-####Clean-Ups#### <Means make things orderly and comment things.
-
+####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
+Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedals page.(It kinda fits here.)
+BaseObject: Should move DataFlow in to it's own file.
 
 Step#1
 	
@@ -13,8 +14,8 @@ Step#2
 		Don't see a use for it yet.  (It would require other objects to support it.  So it would make making a object harder.)
 
 	Add support for C# plugins
-		Im thinking of just having a libary named csPlugins.dll
-			That will not work right.  So need a nother idea.  (problem is that the C# library, would need to be linked to vb and vb to c#. Would then create a loop.)
+		I'm thinking of just having a library named csPlugins.dll
+			That will not work right.  So need a another idea.  (problem is that the C# library, would need to be linked to vb and vb to c#. Would then create a loop.)
 
 
 Step#3
@@ -29,15 +30,15 @@ Step#3
 
 	Add a check to see if plugins need compiling when Flowgraph.exe is ran.
 		Would then give a option to compile plugins.
-			If yes then we run compiler wich then waits for flograph to close before compiling.
+			If yes then we run compiler witch then waits for Flowgraph to close before compiling.
 				Not sure if this is a good idea. Because it would make loading Flowgraph slower.
 
 Step#GUI
-	Zoom and movment. (Should just need to put objects in an image or something.)
+	Zoom and movement. (Should just need to put objects in an image or something.)
 						That will not work for zooming. (Because of controls.)
 
 	New lines!!!
-		Need a better way to do colors. And atlest a command line to disable colors.
+		Need a better way to do colors. And at lest a command line to disable colors.
 
 Step#4
 	Folders (Allow you to put objects in folders.)
@@ -46,12 +47,12 @@ Step#4
 
 
 
-Objects to add:   **There should be atleast one object scripted in C#.** (After step#2 is Done.)
+Objects to add:   **There should be at least one object scripted in C#.** (After step#2 is Done.)
 	Math:
 		Minus
 		Round
 		Multiply
-		Devide
+		Divide
 
 	Logic:
 		Equals	In(Object1,Object2)		Out(Equals as Boolean)
@@ -62,7 +63,7 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 			Less Than or equal to 
 
 	Misc:
-		Get varable from object.
+		Get variable from object.
 			Need to do some more research/testing on this: 
 				Objects(#).GetType.GetField("FieldName")
 				Objects(#).GetType.GetProperty("PropertyName")
@@ -83,15 +84,15 @@ Objects to add:   **There should be atleast one object scripted in C#.** (After 
 	MIDI:
 		GetController
 		GetSetNote
-		Filter objects In(Enabled,ChannelMessage)	Out(Filterd,Other)
+		Filter objects: In(Enabled,ChannelMessage)	Out(Filtered,Other)
 		Debug	Need debugging for other events.
 		Input:
-			Add a checkbox to 'fix' controller events. (Mainly note On and Off.)
+			Add a check box to 'fix' controller events. (Mainly note On and Off.)
 
 		Keyboard:
 			Add a check box to disable other channel colors.
 		
-		Equlizer: Allow you to easly set each notes volume, or a group of notes like every 8 notes get a slider.
+		Equalizer: Allow you to easily set each notes volume, or a group of notes like every 8 notes get a slider.
 		More adv get note: GetNoteLowerThen GetNoteHeigherThen GetNoteInbetwen
 		Match channels: Try to match channels so you could say turn up the user volume.
 		
