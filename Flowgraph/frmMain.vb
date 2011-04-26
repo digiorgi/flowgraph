@@ -374,6 +374,10 @@ Public Class frmMain
             Save(sfd.FileName)
         End If
     End Sub
+
+    Private Sub frmMain_ResizeEnd(sender As Object, e As System.EventArgs) Handles Me.ResizeEnd
+        Plugins.WindowSize = Me.ClientSize
+    End Sub
     'EndRemoveFromFGS
 
     Dim About As New frmAbout
@@ -383,7 +387,6 @@ Public Class frmMain
         About.ShowDialog()
     End Sub
 
-    Private oldSize As Size
     Private Sub chkDisableUI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDisableUI.CheckedChanged
         Plugins.UpdateUI = Not chkDisableUI.Checked
 
@@ -394,10 +397,9 @@ Public Class frmMain
 
         'Resize the form.
         If chkDisableUI.Checked Then
-            oldSize = Me.Size
             Me.Size = Me.MinimumSize
         Else
-            Me.Size = oldSize
+            Me.ClientSize = Plugins.WindowSize
         End If
     End Sub
     Private Sub chkSimpleLines_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkSimpleLines.CheckedChanged
@@ -413,6 +415,8 @@ Public Class frmMain
 
         AddHandler DrawEvent, AddressOf Draw
 
+        AddHandler OpenedEvent, AddressOf Opened
+
         Load_Plugin(Me) 'Load the plugin stuff. (auto draw, connector pen, etc..)
     End Sub
 
@@ -424,6 +428,10 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub Opened()
+        chkDisableUI.Checked = Not Plugins.UpdateUI
+    End Sub
+
     Public Sub AddControl(ByVal Control As Control)
         Me.Controls.Add(Control)
         lblToolTip.BringToFront()
@@ -433,5 +441,6 @@ Public Class frmMain
     End Sub
 #End Region
   
+
 
 End Class

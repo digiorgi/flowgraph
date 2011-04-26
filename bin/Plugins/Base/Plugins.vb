@@ -42,6 +42,7 @@ Public Module Plugins
     Public Mouse As Rectangle
 
     Public Form As Control
+    Public WindowSize As Size
 
     
 #Region "Grid"
@@ -176,6 +177,7 @@ Public Module Plugins
     Private SplitFileWithNewLine As Boolean = True
     Private SplitFileWithTabs As Boolean = True
 
+    Public Event OpenedEvent()
 
     Public Sub Open(ByVal File As String)
         If Not IO.File.Exists(File) Then
@@ -190,7 +192,14 @@ Public Module Plugins
 
         Dim g As SimpleD.Group = sd.GetGroup("Main")
 
-        Form.ClientSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
+        WindowSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
+        If Not g.GetValue("DisableUI") = "" AndAlso g.GetValue("DisableUI") = True Then
+            UpdateUI = False
+            'Form.Size = Form.MinimumSize
+        Else
+
+        End If
+        Form.ClientSize = WindowSize
         'Make sure the form is still in the screen.
         Dim x As Integer = Form.Location.X
         Dim y As Integer = Form.Location.Y
@@ -272,7 +281,7 @@ Public Module Plugins
 
         'Set the loaded file
         LoadedFile = File
-
+        RaiseEvent OpenedEvent()
         DoDraw()
     End Sub
 
@@ -280,8 +289,12 @@ Public Module Plugins
 
         Dim sd As New SimpleD.SimpleD
         Dim g As SimpleD.Group = sd.CreateGroup("Main")
-        g.SetValue("Width", Form.ClientSize.Width)
-        g.SetValue("Height", Form.ClientSize.Height)
+        If UpdateUI = False Then
+            g.SetValue("DisableUI", "True")
+        End If
+        g.SetValue("Width", WindowSize.Width)
+        g.SetValue("Height", WindowSize.Height)
+
         'g.SetValue("Objects", Objects.Count - 1) 0.5
         g.SetValue("FileVersion", FileVersion)
 
