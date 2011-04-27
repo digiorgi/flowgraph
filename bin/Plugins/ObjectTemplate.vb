@@ -1,6 +1,6 @@
 ﻿'AddMenuObject|ObjectTemplate,Plugins.ObjectTemplate,100|Group1,Group2
 
-'This file is just outputing object.ToString()
+'This file is just outputing(and draws) IncomingData.ToString()
 
 
 Public Class ObjectTemplate
@@ -32,7 +32,7 @@ Public Class ObjectTemplate
 
 	Private Data As String
 	Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
-		Me.Data = Data.ToString() 'Set the data.
+        Me.Data = sender.Base.Name & " Says: " & Data.ToString() 'Set the data.
         Send(Data, 0) 'Output the data on output zero.
         DoDraw(Rect) 'Tell auto draw we want to draw.
 	End Sub
