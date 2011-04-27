@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Frame counter,Plugins.fgFPS,160|Misc
+﻿'AddMenuObject|Frame counter,Plugins.fgFPS,80|Misc
 Public Class fgFPS
     Inherits BaseObject
 
