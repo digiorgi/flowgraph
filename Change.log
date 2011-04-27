@@ -1,8 +1,9 @@
 ##0.1.3## InDev
-Add		: MIDI_Keyboard you can now drag the mouse across the keys.
+Added	: MIDI_Keyboard you can now drag the mouse across the keys.
 Added	: ObjectTemplate.vb
+Added	: Menu groups now displayed like this <group>
 Upgraded: SimpleD to 0.991
-Change	: DisableUI now disables mouse events also.
+Fixed	: DisableUI now disables mouse events also.
 Fixed	: DisableUI now saves with the file.
 
 

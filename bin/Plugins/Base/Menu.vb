@@ -328,6 +328,9 @@ Namespace Menu
             If Name = "" Then
                 Return "NoName"
             Else
+                If IsGroup Then
+                    Return "<" & Name & ">"
+                End If
                 Return Name
             End If
         End Function
