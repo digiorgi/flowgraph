@@ -4,8 +4,9 @@ The objects can be added at anytime. But be aware there could be changes that wi
 ####BUGS####
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
-Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedals page.(It kinda fits here.)
+Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedals page.
 BaseObject: Should move DataFlow in to it's own file.
+Make sure all numbers load right for different languages. ex: spanish half is 0,5 english half is 0.5
 
 Step#1
 	
@@ -26,7 +27,9 @@ Step#3
 		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
 		Tooltip.Update(Index#,textbox1, Optional text)
 		Tooltip.Remove(Index#)
-
+	
+	fgs source. A button that would show a window with the fgs contents and could be chaged.
+	
 
 	Add a check to see if plugins need compiling when Flowgraph.exe is ran.
 		Would then give a option to compile plugins.

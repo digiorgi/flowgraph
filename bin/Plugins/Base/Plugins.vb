@@ -173,7 +173,7 @@ Public Module Plugins
     'RemoveFromFGS
 
     Public LoadedFile As String = ""
-    Public Const FileVersion = 1 'If you change this do not for get to change the suported versions. (inside the open sub.)
+    Public Const FileVersion As Short = 1 'If you change this do not for get to change the suported versions. (inside the open sub.)
     Private SplitFileWithNewLine As Boolean = True
     Private SplitFileWithTabs As Boolean = True
 
@@ -195,9 +195,6 @@ Public Module Plugins
         WindowSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
         If Not g.GetValue("DisableUI") = "" AndAlso g.GetValue("DisableUI") = True Then
             UpdateUI = False
-            'Form.Size = Form.MinimumSize
-        Else
-
         End If
         Form.ClientSize = WindowSize
         'Make sure the form is still in the screen.
@@ -215,7 +212,7 @@ Public Module Plugins
             Case Else
                 MsgBox("Wrong file version." & Environment.NewLine _
                                   & "File version: " & g.GetValue("FileVersion") & Environment.NewLine _
-                                  & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
+                                  & "Requires  version 0.5 or 1", MsgBoxStyle.Critical, "Error loading")
                 Return
         End Select
 
