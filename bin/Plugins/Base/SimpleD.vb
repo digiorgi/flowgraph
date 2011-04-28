@@ -40,6 +40,7 @@ Namespace SimpleD
         'Added  : Properties and Groups can now have duplcate names.
         'Added  : AddValue AND FindArray AND GetValueArray AND GetGroupArray
         'Change : Groups and properties are now public.
+        'Change : Clarified that the version on the top of the string is the SimpleD version.
         'Rename : Propretys to Properties
         'Rename : Set_Value to SetValue AND Get_Value to GetValue
         'Rename : Get_Group to GetGroup AND Add_Group to AddGroup AND Create_Group to CreateGroup
@@ -142,7 +143,7 @@ Namespace SimpleD
             If Groups.Count = 0 Then Return ""
             If SplitWithNewLine = False Then SplitWithTabs = False
 
-            Dim tmp As String = "//Version=" & Version & " FileVersion=" & FileVersion & "\\"
+            Dim tmp As String = "//SimpleD version=" & Version & "  SimpleD file version=" & FileVersion & "\\"
             For n As Integer = 0 To Groups.Count - 1
                 tmp &= vbNewLine & Groups(n).ToString(SplitWithNewLine, If(SplitWithTabs, 1, 0))
             Next

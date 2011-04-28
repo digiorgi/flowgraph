@@ -1,13 +1,12 @@
-//Version=0.99 FileVersion=1\\
+//SimpleD version=0.991  SimpleD file version=1\\
 Main{
-	Width=731;
-	Height=292;
-	Objects=2;
-	FileVersion=0.5;
+	Width=405;
+	Height=160;
+	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
 }
-Object0{
+Object{
 	Name=Plugins.fgGetKey;
 	File=HID\Keyboard.vb;
 	Position=145,70;
@@ -16,14 +15,14 @@ Object0{
 	Enabled=True;
 	Key=Pause;
 }
-Object1{
+Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=310,85;
 	Input=1;
 	Data=False;
 }
-Object2{
+Object{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=10,85;

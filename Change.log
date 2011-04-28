@@ -5,8 +5,10 @@ Added	: Menu groups now displayed like this <group>
 Added	: Drag and drop files and text.
 Added	: Loaded file to title.
 Added	: The window size is now snaped to the grid size.
+Changed	: Compiler now removes source file if there is no errors/warnings.(Will keep the file if its ran with command line KeepSource)
 Changed	: The buttons(Open, Save, etc..) are now in a menu.
 Upgraded: SimpleD to 0.991
+Fixed	: Culture should not matter now.  (is set to en-US)
 Fixed	: DisableUI now disables mouse events also.
 Fixed	: DisableUI now saves with the file.
 

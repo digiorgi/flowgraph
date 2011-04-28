@@ -3,6 +3,7 @@ Imports System.Reflection
 
 'This will compile the FlowGraphSave files.
 Module CompileFGS
+    Public Const SupportedFGSVersion As Short = 1
     Private IncludeBaseObject As Boolean = False
 
     Private OutputAssembly As String = ""
@@ -51,9 +52,20 @@ Module CompileFGS
         'Go throgh each object and make sure the object is supported and it can find the plugin file.
         Dim sd As New SimpleD.SimpleD(fgsFile, True) 'Load the fgs file.
         Dim g As SimpleD.Group = sd.GetGroup("Main")
-        Dim numObj As Integer = g.GetValue("Objects")
+        Dim WindowSize As String() = New String() {g.GetValue("Width"), g.GetValue("Height")}
+        Dim fgsVersion As String = g.GetValue("FileVersion")
+        'Make sure the versions match.
+        If fgsVersion <> SupportedFGSVersion Then
+            MsgBox("Wrong file version." & Environment.NewLine _
+                   & "File version: " & fgsVersion & Environment.NewLine _
+                   & "Requires  version: " & SupportedFGSVersion, MsgBoxStyle.Critical, "Error loading .fgs")
+            Return ""
+        End If
+
+
+        Dim numObj As Integer = sd.GetGroupArray("object").Length - 1
         For i As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.GetGroup("object" & i)
+            g = sd.GetGroupArray("object")(i)
             If RemoveGUI Then 'Are we removing drawing?
                 'Does the object support NoDraw?
                 If g.GetValue("CanNoDraw") = False Then
@@ -173,6 +185,16 @@ Restart:
 
         'Add the fgs to the code.
         Source = Source.Replace("If FileToOpen <> """" Then Open(FileToOpen)", FGS_ToCode(sd))
+        'Replace sizes.
+        Source = Source.Replace( _
+        "Me.ClientSize = New System.Drawing.Size(485, 410)", "Me.ClientSize = New System.Drawing.Size(" & WindowSize(0) & ", " & WindowSize(1) & ")").Replace( _
+        "Public WindowSize As Size", "Public WindowSize As New Size(" & WindowSize(0) & ", " & WindowSize(1) & ")")
+
+        'Replace title
+        Source = Source.Replace( _
+                    "Me.Text = ""Flowgraph v"" & Application.ProductVersion.ToString", "Me.Text=""" & IO.Path.GetFileNameWithoutExtension(fgsFile) & " - Flowgraph Compiled""" & Environment.NewLine & _
+                    "Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle")
+
 
         'Remove stuff from code.
         Do
@@ -236,29 +258,23 @@ Restart:
             Return False
         Else
             RemoveBackup(OutputAssembly)
+            If Not KeepSource Then
+                IO.File.Delete("fgsSource.vb")
+            End If
             Return True
         End If
     End Function
 
-    Public Const FileVersion = 0.5
+
     Public Function FGS_ToCode(ByVal sd As SimpleD.SimpleD) As String
-        Dim g As SimpleD.Group = sd.GetGroup("Main")
+        Dim g As SimpleD.Group
 
-
-        'Make sure the versions match.
-        If g.GetValue("FileVersion") <> FileVersion Then
-            MsgBox("Wrong file version." & Environment.NewLine _
-                   & "File version: " & g.GetValue("FileVersion") & Environment.NewLine _
-                   & "Requires  version: " & FileVersion, MsgBoxStyle.Critical, "Error loading")
-            Return ""
-        End If
-
-        Dim Code As String = "Me.ClientSize = New Size(" & g.GetValue("Width") & "," & g.GetValue("Height") & ")"
+        Dim Code As String = "" '"Me.ClientSize = New Size(" & g.GetValue("Width") & "," & g.GetValue("Height") & ")"
 
         'Get the number of objects.
-        Dim numObj As Integer = g.GetValue("Objects")
-        For n As Integer = 0 To numObj 'Loop thrugh each object.
-            g = sd.GetGroup("Object" & n) 'Get the object.
+        Dim obj() As SimpleD.Group = sd.GetGroupArray("object")
+        For n As Integer = 0 To obj.Length - 1 'Loop thrugh each object.
+            g = obj(n) 'Get the object.
             If g Is Nothing Then
                 MsgBox("Could not find object# " & n & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 Return ""
@@ -273,11 +289,11 @@ Restart:
         Code &= vbNewLine & "Dim sd As New SimpleD.SimpleD(""" & sd.ToString(False).Replace(Environment.NewLine, "") & """)"
 
         'Load each object.
-        For n As Integer = 0 To numObj
-            g = sd.GetGroup("Object" & n)
+        For n As Integer = 0 To obj.Length - 1
+            g = obj(n)
             'Try and load each object.
             Code &= vbNewLine & "Try" & vbNewLine
-            Code &= "Objects(" & n & ").Load(sd.GetGroup(""Object" & n & """))"
+            Code &= "Objects(" & n & ").Load(sd.GetGroupArray(""Object"")(" & n & "))"
             Code &= vbNewLine & "Catch ex As Exception"
             Code &= vbNewLine & "MsgBox(""Could not load object# " & n & """ & Environment.NewLine & ""Name: " & g.GetValue("name") & """ & Environment.NewLine" _
                   & " & ""Execption="" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, ""Error loading object"")"

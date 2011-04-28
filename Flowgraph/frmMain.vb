@@ -53,6 +53,8 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Threading.Thread.CurrentThread.CurrentCulture = New System.Globalization.CultureInfo("en-US")
+        Threading.Thread.CurrentThread.CurrentUICulture = New System.Globalization.CultureInfo("en-US")
         Me.Text = "Flowgraph v" & Application.ProductVersion.ToString
 
         'Set the current directory to the exe path.
@@ -386,7 +388,9 @@ Public Class frmMain
 
         AddHandler DrawEvent, AddressOf Draw
 
+        'RemoveFromFGS
         AddHandler OpenedEvent, AddressOf Opened
+        'EndRemoveFromFGS
 
         Load_Plugin(Me) 'Load the plugin stuff. (auto draw, connector pen, etc..)
     End Sub
@@ -399,6 +403,7 @@ Public Class frmMain
         End If
     End Sub
 
+    'RemoveFromFGS
     Private Sub Opened()
         'menuDisableUI.Checked = Not Plugins.UpdateUI
         If menuDisableUI.Checked = Plugins.UpdateUI Then menuDisableUI_Click(Nothing, Nothing)
@@ -409,6 +414,7 @@ Public Class frmMain
             Me.Text = IO.Path.GetFileName(LoadedFile) & " - Flowgraph v" & Application.ProductVersion.ToString
         End If
     End Sub
+    'EndRemoveFromFGS
 
     Public Sub AddControl(ByVal Control As Control)
         Me.Controls.Add(Control)
