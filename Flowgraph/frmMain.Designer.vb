@@ -22,42 +22,20 @@ Partial Class frmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.btnOpen = New System.Windows.Forms.Button()
-        Me.btnSave = New System.Windows.Forms.Button()
-        Me.btnSaveAs = New System.Windows.Forms.Button()
         Me.lblToolTip = New System.Windows.Forms.Label()
-        Me.chkDisableUI = New System.Windows.Forms.CheckBox()
-        Me.btnNew = New System.Windows.Forms.Button()
-        Me.btnAbout = New System.Windows.Forms.Button()
-        Me.chkSimpleLines = New System.Windows.Forms.CheckBox()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.menuFile = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuNew = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuOpen = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuSave = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuSaveAs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuView = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuDisableUI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuSimpleLines = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'btnOpen
-        '
-        Me.btnOpen.Location = New System.Drawing.Point(70, 8)
-        Me.btnOpen.Name = "btnOpen"
-        Me.btnOpen.Size = New System.Drawing.Size(56, 20)
-        Me.btnOpen.TabIndex = 0
-        Me.btnOpen.Text = "Open"
-        Me.btnOpen.UseVisualStyleBackColor = True
-        '
-        'btnSave
-        '
-        Me.btnSave.Location = New System.Drawing.Point(155, 8)
-        Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(56, 20)
-        Me.btnSave.TabIndex = 1
-        Me.btnSave.Text = "Save"
-        Me.btnSave.UseVisualStyleBackColor = True
-        '
-        'btnSaveAs
-        '
-        Me.btnSaveAs.Location = New System.Drawing.Point(217, 8)
-        Me.btnSaveAs.Name = "btnSaveAs"
-        Me.btnSaveAs.Size = New System.Drawing.Size(56, 20)
-        Me.btnSaveAs.TabIndex = 2
-        Me.btnSaveAs.Text = "Save as"
-        Me.btnSaveAs.UseVisualStyleBackColor = True
         '
         'lblToolTip
         '
@@ -66,7 +44,7 @@ Partial Class frmMain
         Me.lblToolTip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblToolTip.CausesValidation = False
         Me.lblToolTip.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.lblToolTip.Location = New System.Drawing.Point(471, 8)
+        Me.lblToolTip.Location = New System.Drawing.Point(0, 24)
         Me.lblToolTip.Name = "lblToolTip"
         Me.lblToolTip.Size = New System.Drawing.Size(45, 15)
         Me.lblToolTip.TabIndex = 3
@@ -74,73 +52,113 @@ Partial Class frmMain
         Me.lblToolTip.UseMnemonic = False
         Me.lblToolTip.Visible = False
         '
-        'chkDisableUI
+        'MenuStrip1
         '
-        Me.chkDisableUI.AutoSize = True
-        Me.chkDisableUI.Location = New System.Drawing.Point(375, 6)
-        Me.chkDisableUI.Name = "chkDisableUI"
-        Me.chkDisableUI.Size = New System.Drawing.Size(75, 17)
-        Me.chkDisableUI.TabIndex = 4
-        Me.chkDisableUI.Text = "Disable UI"
-        Me.chkDisableUI.UseVisualStyleBackColor = True
+        Me.MenuStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuFile, Me.menuView, Me.menuAbout})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.MenuStrip1.Size = New System.Drawing.Size(485, 24)
+        Me.MenuStrip1.TabIndex = 5
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'btnNew
+        'menuFile
         '
-        Me.btnNew.Location = New System.Drawing.Point(8, 8)
-        Me.btnNew.Name = "btnNew"
-        Me.btnNew.Size = New System.Drawing.Size(56, 20)
-        Me.btnNew.TabIndex = 0
-        Me.btnNew.Text = "New"
-        Me.btnNew.UseVisualStyleBackColor = True
+        Me.menuFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuNew, Me.menuOpen, Me.menuSave, Me.menuSaveAs, Me.menuExit})
+        Me.menuFile.Name = "menuFile"
+        Me.menuFile.Size = New System.Drawing.Size(35, 20)
+        Me.menuFile.Text = "&File"
         '
-        'btnAbout
+        'menuNew
         '
-        Me.btnAbout.Location = New System.Drawing.Point(313, 8)
-        Me.btnAbout.Name = "btnAbout"
-        Me.btnAbout.Size = New System.Drawing.Size(56, 20)
-        Me.btnAbout.TabIndex = 2
-        Me.btnAbout.Text = "About"
-        Me.btnAbout.UseVisualStyleBackColor = True
+        Me.menuNew.Name = "menuNew"
+        Me.menuNew.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
+        Me.menuNew.Size = New System.Drawing.Size(139, 22)
+        Me.menuNew.Text = "&New"
         '
-        'chkSimpleLines
+        'menuOpen
         '
-        Me.chkSimpleLines.AutoSize = True
-        Me.chkSimpleLines.Location = New System.Drawing.Point(375, 23)
-        Me.chkSimpleLines.Name = "chkSimpleLines"
-        Me.chkSimpleLines.Size = New System.Drawing.Size(81, 17)
-        Me.chkSimpleLines.TabIndex = 4
-        Me.chkSimpleLines.Text = "Simple lines"
-        Me.chkSimpleLines.UseVisualStyleBackColor = True
+        Me.menuOpen.Name = "menuOpen"
+        Me.menuOpen.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
+        Me.menuOpen.Size = New System.Drawing.Size(139, 22)
+        Me.menuOpen.Text = "&Open"
+        '
+        'menuSave
+        '
+        Me.menuSave.Name = "menuSave"
+        Me.menuSave.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
+        Me.menuSave.Size = New System.Drawing.Size(139, 22)
+        Me.menuSave.Text = "&Save"
+        '
+        'menuSaveAs
+        '
+        Me.menuSaveAs.Name = "menuSaveAs"
+        Me.menuSaveAs.Size = New System.Drawing.Size(139, 22)
+        Me.menuSaveAs.Text = "Save As"
+        '
+        'menuExit
+        '
+        Me.menuExit.Name = "menuExit"
+        Me.menuExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
+        Me.menuExit.Size = New System.Drawing.Size(139, 22)
+        Me.menuExit.Text = "Exit"
+        '
+        'menuView
+        '
+        Me.menuView.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuDisableUI, Me.menuSimpleLines})
+        Me.menuView.Name = "menuView"
+        Me.menuView.Size = New System.Drawing.Size(42, 20)
+        Me.menuView.Text = "&View"
+        '
+        'menuDisableUI
+        '
+        Me.menuDisableUI.Name = "menuDisableUI"
+        Me.menuDisableUI.Size = New System.Drawing.Size(132, 22)
+        Me.menuDisableUI.Text = "Disable UI"
+        '
+        'menuSimpleLines
+        '
+        Me.menuSimpleLines.Name = "menuSimpleLines"
+        Me.menuSimpleLines.Size = New System.Drawing.Size(132, 22)
+        Me.menuSimpleLines.Text = "Simple lines"
+        '
+        'menuAbout
+        '
+        Me.menuAbout.Name = "menuAbout"
+        Me.menuAbout.Size = New System.Drawing.Size(47, 20)
+        Me.menuAbout.Text = "&About"
         '
         'frmMain
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(525, 463)
-        Me.Controls.Add(Me.chkSimpleLines)
-        Me.Controls.Add(Me.chkDisableUI)
+        Me.ClientSize = New System.Drawing.Size(485, 410)
         Me.Controls.Add(Me.lblToolTip)
-        Me.Controls.Add(Me.btnAbout)
-        Me.Controls.Add(Me.btnSaveAs)
-        Me.Controls.Add(Me.btnSave)
-        Me.Controls.Add(Me.btnNew)
-        Me.Controls.Add(Me.btnOpen)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.DoubleBuffered = True
-        Me.MinimumSize = New System.Drawing.Size(461, 67)
+        Me.MainMenuStrip = Me.MenuStrip1
+        Me.MinimumSize = New System.Drawing.Size(280, 50)
         Me.Name = "frmMain"
         Me.Text = "Flowgraph"
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents btnOpen As System.Windows.Forms.Button
-    Friend WithEvents btnSave As System.Windows.Forms.Button
-    Friend WithEvents btnSaveAs As System.Windows.Forms.Button
     Friend WithEvents lblToolTip As System.Windows.Forms.Label
-    Friend WithEvents chkDisableUI As System.Windows.Forms.CheckBox
-    Friend WithEvents btnNew As System.Windows.Forms.Button
-    Friend WithEvents btnAbout As System.Windows.Forms.Button
-    Friend WithEvents chkSimpleLines As System.Windows.Forms.CheckBox
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents menuFile As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuNew As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuOpen As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuSave As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuSaveAs As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuExit As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuView As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuDisableUI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuSimpleLines As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuAbout As System.Windows.Forms.ToolStripMenuItem
 
 End Class

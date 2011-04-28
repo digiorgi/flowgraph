@@ -34,13 +34,14 @@ Public Class frmMain
 
 #Region "Load & Close"
 
+
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
         'RemoveFromFGS
         If SaveOnExit Then
             'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
             If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
-                btnSave_Click(sender, e)
+                menuSave_Click(sender, e)
             End If
         End If
         'EndRemoveFromFGS
@@ -86,10 +87,10 @@ Public Class frmMain
             End Select
         Next
 
-        'AddToFGSbtnNew.Dispose()
-        'AddToFGSbtnOpen.Dispose()
-        'AddToFGSbtnSave.Dispose()
-        'AddToFGSbtnSaveAs.Dispose()
+        'AddToFGSmenuNew.Dispose()
+        'AddToFGSmenuOpen.Dispose()
+        'AddToFGSmenuSave.Dispose()
+        'AddToFGSmenuSaveAs.Dispose()
     End Sub
 
     Private FileToOpen As String = ""
@@ -343,69 +344,39 @@ Public Class frmMain
 #Region "Controls"
 
     'RemoveFromFGS
-    Private Sub btnNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNew.Click
-        If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
-            ClearObjects()
-            LoadedFile = ""
-            DoDraw(True)
+    Private Sub frmMain_Resize(sender As Object, e As System.EventArgs) Handles Me.Resize
+        If Me.Size <> Me.MinimumSize Then
+            Plugins.WindowSize = Me.ClientSize
+            'Snap to the grid size.
+            Me.ClientSize = SnapToGrid(Me.ClientSize)
         End If
     End Sub
 
-    Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
-        Dim ofd As New OpenFileDialog
-        ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
-        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Open(ofd.FileName)
+    Private Sub frmMain_DragEnter(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter
+        If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Or
+            e.Data.GetDataPresent(Windows.Forms.DataFormats.UnicodeText) Then
+            e.Effect = DragDropEffects.All
         End If
+        'Dim tmp As String = e.Data.GetFormats()(0).ToString
+        'For n As Integer = 1 To e.Data.GetFormats.Length - 1
+        '    tmp &= ", " & e.Data.GetFormats()(n)
+        'Next
+        'Me.Text = tmp
     End Sub
 
-    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
-        If LoadedFile = "" Then
-            btnSaveAs_Click(sender, e)
-        Else
-            Save(LoadedFile)
-        End If
-    End Sub
+    Private Sub frmMain_DragDrop(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
+        If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
+            Dim file As String() = e.Data.GetData(Windows.Forms.DataFormats.FileDrop)
+            If file.Length > 0 AndAlso file(0) <> "" Then Open(file(0))
 
-    Private Sub btnSaveAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveAs.Click
-        Dim sfd As New SaveFileDialog
-        sfd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
-        If sfd.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Save(sfd.FileName)
+        ElseIf e.Data.GetDataPresent(Windows.Forms.DataFormats.UnicodeText) Then
+            Dim data As String = e.Data.GetData(Windows.Forms.DataFormats.UnicodeText)
+            If data <> "" Then Open(data, False)
         End If
-    End Sub
-
-    Private Sub frmMain_ResizeEnd(sender As Object, e As System.EventArgs) Handles Me.ResizeEnd
-        Plugins.WindowSize = Me.ClientSize
     End Sub
     'EndRemoveFromFGS
 
-    Dim About As New frmAbout
-    Private Sub btnAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAbout.Click
-        ' modMain.frmAbout.ShowDialog()
-        ' frmAbout.ShowDialog()
-        About.ShowDialog()
-    End Sub
 
-    Private Sub chkDisableUI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDisableUI.CheckedChanged
-        Plugins.UpdateUI = Not chkDisableUI.Checked
-
-        'Hide all the controls.
-        For i As Integer = 8 To Controls.Count - 1
-            Controls(i).Visible = Not chkDisableUI.Checked
-        Next
-
-        'Resize the form.
-        If chkDisableUI.Checked Then
-            Me.Size = Me.MinimumSize
-        Else
-            Me.ClientSize = Plugins.WindowSize
-        End If
-    End Sub
-    Private Sub chkSimpleLines_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkSimpleLines.CheckedChanged
-        Plugins.ComplexLines = Not chkSimpleLines.Checked
-        Me.Invalidate()
-    End Sub
 #End Region
 
 #Region "Plugin stuff"
@@ -429,7 +400,14 @@ Public Class frmMain
     End Sub
 
     Private Sub Opened()
-        chkDisableUI.Checked = Not Plugins.UpdateUI
+        'menuDisableUI.Checked = Not Plugins.UpdateUI
+        If menuDisableUI.Checked = Plugins.UpdateUI Then menuDisableUI_Click(Nothing, Nothing)
+
+        If LoadedFile = "" Then
+            Me.Text = "Unsaved - Flowgraph v" & Application.ProductVersion.ToString
+        Else
+            Me.Text = IO.Path.GetFileName(LoadedFile) & " - Flowgraph v" & Application.ProductVersion.ToString
+        End If
     End Sub
 
     Public Sub AddControl(ByVal Control As Control)
@@ -440,7 +418,81 @@ Public Class frmMain
         Me.Controls.Remove(Control)
     End Sub
 #End Region
-  
+
+
+#Region "Menu"
+    'File
+    'RemoveFromFGS
+    Private Sub menuNew_Click(sender As System.Object, e As System.EventArgs) Handles menuNew.Click
+        If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
+            ClearObjects()
+            LoadedFile = ""
+            DoDraw(True)
+            Me.Text = "Unsaved - Flowgraph v" & Application.ProductVersion.ToString
+        End If
+    End Sub
+    Private Sub menuOpen_Click(sender As System.Object, e As System.EventArgs) Handles menuOpen.Click
+        Dim ofd As New OpenFileDialog
+        ofd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Open(ofd.FileName)
+        End If
+    End Sub
+    Private Sub menuSave_Click(sender As System.Object, e As System.EventArgs) Handles menuSave.Click
+        If LoadedFile = "" Then
+            menuSaveAs_Click(sender, e)
+        Else
+            Save(LoadedFile)
+        End If
+    End Sub
+    Private Sub menuSaveAs_Click(sender As System.Object, e As System.EventArgs) Handles menuSaveAs.Click
+        Dim sfd As New SaveFileDialog
+        sfd.Filter = "FlowGraphSetting files (*.fgs)|*.fgs|All files (*.*)|*.*"
+        If sfd.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Save(sfd.FileName)
+            Me.Text = IO.Path.GetFileName(LoadedFile) & " - Flowgraph v" & Application.ProductVersion.ToString
+        End If
+    End Sub
+    'EndRemoveFromFGS
+    Private Sub menuExit_Click(sender As System.Object, e As System.EventArgs) Handles menuExit.Click
+        Me.Close()
+    End Sub
+
+    'View
+    Private Sub menuDisableUI_Click(sender As System.Object, e As System.EventArgs) Handles menuDisableUI.Click
+        Plugins.UpdateUI = menuDisableUI.Checked
+
+        'Hide/Show all the controls.
+        For i As Integer = 2 To Controls.Count - 1
+            Controls(i).Visible = menuDisableUI.Checked
+        Next
+
+        'Resize the form.
+        If Not menuDisableUI.Checked Then
+            Me.Size = Me.MinimumSize
+        Else
+            Me.ClientSize = Plugins.WindowSize
+        End If
+
+        menuDisableUI.Checked = Not menuDisableUI.Checked
+    End Sub
+    Private Sub menuSimpleLines_Click(sender As System.Object, e As System.EventArgs) Handles menuSimpleLines.Click
+        menuSimpleLines.Checked = Not menuSimpleLines.Checked
+        Plugins.ComplexLines = Not menuSimpleLines.Checked
+        Me.Invalidate()
+    End Sub
+
+    'About
+    Dim About As New frmAbout
+    Private Sub menuAbout_Click(sender As System.Object, e As System.EventArgs) Handles menuAbout.Click
+        About.ShowDialog()
+    End Sub
+
+
+
+
+#End Region
+
 
 
 End Class

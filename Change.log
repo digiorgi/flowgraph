@@ -2,6 +2,10 @@
 Added	: MIDI_Keyboard you can now drag the mouse across the keys.
 Added	: ObjectTemplate.vb
 Added	: Menu groups now displayed like this <group>
+Added	: Drag and drop files and text.
+Added	: Loaded file to title.
+Added	: The window size is now snaped to the grid size.
+Changed	: The buttons(Open, Save, etc..) are now in a menu.
 Upgraded: SimpleD to 0.991
 Fixed	: DisableUI now disables mouse events also.
 Fixed	: DisableUI now saves with the file.
