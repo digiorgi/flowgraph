@@ -179,22 +179,23 @@ Public Module Plugins
 
     Public Event OpenedEvent()
 
-    Public Sub Open(ByVal File As String)
-        If Not IO.File.Exists(File) Then
-            MsgBox("Could not find file:" & vbNewLine & File, , "Error loading")
+    Public Sub Open(ByVal Data As String, Optional FromFile As Boolean = True)
+        If FromFile AndAlso Not IO.File.Exists(Data) Then
+            MsgBox("Could not find file:" & vbNewLine & Data, , "Error loading")
             Return
         End If
 
         ClearObjects()
 
-        Dim sd As New SimpleD.SimpleD
-        sd.FromFile(File)
+        Dim sd As New SimpleD.SimpleD(Data, FromFile)
 
         Dim g As SimpleD.Group = sd.GetGroup("Main")
 
         WindowSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
         If Not g.GetValue("DisableUI") = "" AndAlso g.GetValue("DisableUI") = True Then
             UpdateUI = False
+        Else
+            UpdateUI = True
         End If
         Form.ClientSize = WindowSize
         'Make sure the form is still in the screen.
@@ -205,7 +206,7 @@ Public Module Plugins
         If y + Form.Height > scr.Bottom Then y = scr.Bottom - Form.Height
         Form.Location = New Point(x, y) 'Set the window location.
 
-        'Make sure the versions is supported.
+        'Make sure the version of the file is supported.
         Dim CurrentFileVersion As Single = g.GetValue("FileVersion")
         Select Case CurrentFileVersion
             Case 0.5, 1 'Supported versions.
@@ -277,7 +278,13 @@ Public Module Plugins
         Next
 
         'Set the loaded file
-        LoadedFile = File
+        If FromFile Then
+            LoadedFile = Data
+        Else
+            LoadedFile = ""
+        End If
+
+
         RaiseEvent OpenedEvent()
         DoDraw()
     End Sub

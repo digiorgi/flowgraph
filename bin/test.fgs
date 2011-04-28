@@ -1,8 +1,7 @@
 //Version=0.991 FileVersion=1\\
 Main{
-	DisableUI=True;
-	Width=839;
-	Height=466;
+	Width=755;
+	Height=435;
 	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
@@ -25,7 +24,7 @@ Object{
 Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=625,10;
+	Position=625,25;
 	Input=1;
 	Data=0;
 }
@@ -48,9 +47,9 @@ Object{
 Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=700,185;
+	Position=620,210;
 	Input=1;
-	Data=10;
+	Data=30;
 }
 Object{
 	Name=Plugins.fgCounter;
@@ -66,7 +65,7 @@ Object{
 }
 Object{
 	Name=Plugins.fgCounter;
-	Position=590,350;
+	Position=595,350;
 	Output=1,4,2;
 	Input=0,0;
 }
