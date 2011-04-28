@@ -4,8 +4,9 @@ The objects can be added at anytime. But be aware there could be changes that wi
 ####BUGS####
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
-Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedals page.
-Make sure all numbers load right for different languages. ex: spanish half is 0,5 english half is 0.5
+Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedal pages.
+Make sure all numbers load right for different languages. ex: spanish half is 0,5 english half is 0.5	Should be fixed. (Set culture to en-US)
+Get all fgs files to compile.
 
 Step#1
 	
@@ -21,7 +22,7 @@ Step#2
 Step#3
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
 		Need a way for the compiler to remove unneeded code from scripts.
-
+	
 	Tooltip regions.  Would allow controls or rectangles. e.g.
 		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
 		Tooltip.Update(Index#,textbox1, Optional text)

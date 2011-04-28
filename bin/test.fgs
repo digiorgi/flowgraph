@@ -1,4 +1,4 @@
-//Version=0.991 FileVersion=1\\
+//SimpleD version=0.991  SimpleD file version=1\\
 Main{
 	Width=755;
 	Height=435;
@@ -49,7 +49,7 @@ Object{
 	File=Common\DisplayAsString.vb;
 	Position=620,210;
 	Input=1;
-	Data=30;
+	Data=10;
 }
 Object{
 	Name=Plugins.fgCounter;

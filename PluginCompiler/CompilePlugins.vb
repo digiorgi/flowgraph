@@ -146,6 +146,9 @@ Module CompilePlugins
         Else
             Log("Done!", False)
             RemoveBackup("Plugins.dll")
+            If Not KeepSource Then
+                IO.File.Delete("Source.vb")
+            End If
             Return True
         End If
 

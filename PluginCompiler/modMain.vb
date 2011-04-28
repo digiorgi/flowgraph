@@ -3,6 +3,7 @@
 
     Public ClassLibrary As Boolean = False
     Public RemoveGUI As Boolean = False
+    Public KeepSource As Boolean = False
     Sub Main()
         Dim ExitOnSuccessfulCompile As Boolean = False
 
@@ -22,6 +23,9 @@
 
                 Case "removegui", "nodraw"
                     RemoveGUI = True
+
+                Case "keepsource", "savesource"
+                    KeepSource = True
 
                 Case Else
                     If IO.File.Exists(args(i)) Then
