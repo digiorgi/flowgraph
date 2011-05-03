@@ -1,14 +1,13 @@
-//Version=0.991 FileVersion=1\\
-Main{Width=900;Height=375;FileVersion=1;SplitFileWithNewLine=False;SplitFileWithTabs=False;}
-Object{Name=Plugins.Common.Timer;File=Common\Timer.vb;Position=10,25;UserData=10;Output=1,3,1;Input=0,0;Enabled=True;}
-Object{Name=Plugins.MIDI_Input;Position=5,300;Output=1,10,1`0`0`0;Input=0,0;Enabled=True;DeviceID=2;AllChannels=True;Channel=1;}
-Object{Name=Plugins.MIDI_Output;Position=680,210;Input=0,2,0,0,0;Enabled=True;DeviceID=1;MessageChannels=True;Channel=1;}
-Object{Name=Plugins.fgJoystick;Position=10,95;Output=1,4,0;Input=0,1;Enabled=True;Joystick=RGT Force Feedback Pro;}
-Object{Name=Plugins.fgGetJoystickAxis;Position=10,145;Output=0`1,7,0`0`0`0`1,5,0`1,11,0`0;Input=1;Rev1=True;Rev5=True;Rev6=True;}
-Object{Name=Plugins.fgAxisToBoolean;Position=115,200;Output=0`1,6,2;Input=1;SwitchOn=0.9;}
-Object{Name=Plugins.MIDI_SimulatePedals;Position=415,185;Output=2,9,1,2,1;Input=0,1,1,1,0;}
-Object{Name=Plugins.fgAxisToBoolean;Position=115,145;Output=0`1,6,3;Input=1;SwitchOn=0.9;}
-Object{Name=Plugins.MIDI_SetController;Position=415,275;Output=1,2,1;Input=0,1;Enabled=True;Controller=64;Channel=1;}
-Object{Name=Plugins.MIDI_Keyboard;Position=350,25;UserData=88-21-9;Output=0;Input=0,1;}
-Object{Name=Plugins.MIDI_Volume;Position=255,315;Output=1,6,1;Input=0,1,0;Enabled=True;Volume=127;}
-Object{Name=Plugins.fgAxisToBoolean;Position=115,245;Output=0`1,8,1;Input=1;SwitchOn=0.9;}
+//SimpleD version=0.991  SimpleD file version=1\\
+Main{Width=860;Height=355;FileVersion=1;SplitFileWithNewLine=False;SplitFileWithTabs=False;}
+Object{Name=Plugins.Common.Timer;File=Common\Timer.vb;Position=5,105;UserData=10;Output=1,3,1;Input=0,0;Enabled=True;}
+Object{Name=Plugins.MIDI_Input;Position=5,25;Output=1,9,1`0`0`0;Input=0,0;Enabled=True;DeviceID=2;AllChannels=True;Channel=1;}
+Object{Name=Plugins.MIDI_Output;Position=635,25;Input=0,1,0,0,0;Enabled=True;DeviceID=1;MessageChannels=True;Channel=1;}
+Object{Name=Plugins.fgJoystick;Position=135,105;Output=1,4,0;Input=0,1;Enabled=True;Joystick=RGT Force Feedback Pro;}
+Object{Name=Plugins.fgGetJoystickAxis;Position=10,165;Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;Input=1;Rev1=True;Rev5=True;Rev6=True;}
+Object{Name=Plugins.fgAxisToBoolean;Position=120,225;Output=0`1,6,2;Input=1;SwitchOn=0.9;}
+Object{Name=Plugins.MIDI_SimulatePedals;Position=375,115;Output=2,8,1,2,1;Input=0,1,1,1,1;}
+Object{Name=Plugins.fgAxisToBoolean;Position=135,160;Output=0`1,6,3;Input=1;SwitchOn=0.9;}
+Object{Name=Plugins.MIDI_Keyboard;Position=310,245;UserData=88-21-9;Output=0;Input=0,1;}
+Object{Name=Plugins.MIDI_Volume;Position=265,25;Output=1,6,1;Input=0,1,0;Enabled=True;Volume=127;}
+Object{Name=Plugins.fgAxisToBoolean;Position=120,275;Output=0`1,6,4;Input=1;SwitchOn=0.9;}
