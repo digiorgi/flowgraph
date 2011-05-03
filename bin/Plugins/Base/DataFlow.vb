@@ -256,7 +256,9 @@ Public Class DataFlowBase
             Next
             'Make sure everything connected.
             If Connected <> data(0) Then
-                Throw New Exception("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title)
+                'Throw New Exception("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title)
+                MsgBox("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title & Environment.NewLine & _
+                       "Could because it was trying to connect to a dummy")
             End If
 
         End If

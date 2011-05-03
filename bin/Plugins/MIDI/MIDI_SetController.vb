@@ -1,4 +1,4 @@
-﻿'AddMenuObject|Set Controller,Plugins.MIDI_SetController|MIDI,Channel Message
+﻿'AddMenuObject|Set,Plugins.MIDI_SetController|MIDI,Channel Message,Controller
 'AddReferences(Sanford.Slim.dll)
 Public Class MIDI_SetController
     Inherits BaseObject
@@ -21,6 +21,7 @@ Public Class MIDI_SetController
 
         'Set the title.
         Title = "Set controller"
+        File = "MIDI\MIDI_SetController.vb"
 
         numChannel.Minimum = 1
         numChannel.Maximum = 16

@@ -251,10 +251,20 @@ Public Module Plugins
 
             'Show error if could not create object.
             If obj = -1 Then
-                MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
-                ClearObjects()
-                LoadedFile = ""
-                Return
+                'MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                'ClearObjects()
+                'LoadedFile = ""
+                'Return
+
+                MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name") & Environment.NewLine & "Will be replaced with a dummy" _
+                       , MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.GetValue("userdata"))
+                If obj = -1 Then
+                    MsgBox("Could not create ""ObjectDummy""!", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                    ClearObjects()
+                    LoadedFile = ""
+                    Return
+                End If
             End If
         Loop Until i >= numObj
         'Next

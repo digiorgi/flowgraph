@@ -33,6 +33,8 @@ Partial Class frmMain
         Me.menuView = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuDisableUI = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuSimpleLines = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuHelp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuBasicUse = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -55,7 +57,7 @@ Partial Class frmMain
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuFile, Me.menuView, Me.menuAbout})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuFile, Me.menuView, Me.menuHelp})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
@@ -123,10 +125,26 @@ Partial Class frmMain
         Me.menuSimpleLines.Size = New System.Drawing.Size(132, 22)
         Me.menuSimpleLines.Text = "Simple lines"
         '
+        'menuHelp
+        '
+        Me.menuHelp.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuBasicUse, Me.menuAbout})
+        Me.menuHelp.Name = "menuHelp"
+        Me.menuHelp.Size = New System.Drawing.Size(41, 20)
+        Me.menuHelp.Text = "&Help"
+        '
+        'menuBasicUse
+        '
+        Me.menuBasicUse.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
+        Me.menuBasicUse.ForeColor = System.Drawing.Color.Blue
+        Me.menuBasicUse.Name = "menuBasicUse"
+        Me.menuBasicUse.ShortcutKeys = System.Windows.Forms.Keys.F1
+        Me.menuBasicUse.Size = New System.Drawing.Size(152, 22)
+        Me.menuBasicUse.Text = "Basic use"
+        '
         'menuAbout
         '
         Me.menuAbout.Name = "menuAbout"
-        Me.menuAbout.Size = New System.Drawing.Size(47, 20)
+        Me.menuAbout.Size = New System.Drawing.Size(152, 22)
         Me.menuAbout.Text = "&About"
         '
         'frmMain
@@ -159,6 +177,8 @@ Partial Class frmMain
     Friend WithEvents menuView As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuDisableUI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuSimpleLines As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuHelp As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents menuBasicUse As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuAbout As System.Windows.Forms.ToolStripMenuItem
 
 End Class

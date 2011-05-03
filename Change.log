@@ -1,13 +1,16 @@
 ##0.1.3## InDev
 Added	: MIDI_Keyboard you can now drag the mouse across the keys.
-Added	: ObjectTemplate.vb
 Added	: Menu groups now displayed like this <group>
 Added	: Drag and drop files and text.
 Added	: Loaded file to title.
 Added	: The window size is now snaped to the grid size.
+Added   : MIDI_BasicFilter  MIDI_Instrument ObjectDummy ObjectTemplate
+Added   : SynthesiaSostenutoFix.fgs
+Added	: Can now load fgs files if missing objects.
 Changed	: Compiler now removes source file if there is no errors/warnings.(Will keep the file if its ran with command line KeepSource)
 Changed	: The buttons(Open, Save, etc..) are now in a menu.
 Upgraded: SimpleD to 0.991
+Fixed   : MIDI_GetController "Any channel" checkbox did not work properly.
 Fixed	: Culture should not matter now.  (is set to en-US)
 Fixed	: DisableUI now disables mouse events also.
 Fixed	: DisableUI now saves with the file.

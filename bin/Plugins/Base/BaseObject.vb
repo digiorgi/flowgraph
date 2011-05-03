@@ -33,7 +33,13 @@ Public MustInherit Class BaseObject
     Public Index As Integer = -1
 
     Private Name As String = "NoName"
+    ''' <summary>
+    ''' Used to tell fgs compiler where the source file is.
+    ''' </summary>
     Protected File As String = ""
+    ''' <summary>
+    ''' Does this object support removing drawing code?
+    ''' </summary>
     Protected CanNoDraw As Boolean = False
 
     'Output
@@ -42,7 +48,7 @@ Public MustInherit Class BaseObject
     'Input
     Public Input() As DataFlowBase
 
-    'This rectangle is the size of the whole object. It's used for collision checking. And the position of the object..
+    'This rectangle is the size of the whole object. It's used for collision checking. And the position of the object.
     Public Rect As Rectangle
 
     Private _Title As String = "Title not set"
@@ -51,10 +57,10 @@ Public MustInherit Class BaseObject
 
     'This rectangle is the size of the client drawing area. (plus one pixel on each side.)
     Private BackGround As Rectangle
+    Private ClientRect As Rectangle
 
     Public UserData As String = ""
 
-    Private ClientRect As Rectangle
 
 #Region "Setup & Dispose"
 

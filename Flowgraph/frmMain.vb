@@ -488,13 +488,14 @@ Public Class frmMain
         Me.Invalidate()
     End Sub
 
-    'About
+    'Help
     Dim About As New frmAbout
     Private Sub menuAbout_Click(sender As System.Object, e As System.EventArgs) Handles menuAbout.Click
         About.ShowDialog()
     End Sub
-
-
+    Private Sub menuBasicUse_Click(sender As System.Object, e As System.EventArgs) Handles menuBasicUse.Click
+        System.Diagnostics.Process.Start("https://code.google.com/p/flowgraph/wiki/Flowgraph")
+    End Sub
 
 
 #End Region
