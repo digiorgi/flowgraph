@@ -16,6 +16,7 @@ Public Class fgRawMouse
 
         'Set the title.
         Title = "Raw Mouse"
+        File = "HID\Mouse.vb"
 
         HID.Create(, True)
     End Sub
@@ -91,6 +92,7 @@ Public Class fgLocalMouse
 
         'Set the title.
         Title = "Local Mouse"
+        File = "HID\Mouse.vb"
     End Sub
 
     Public Overrides Sub Dispose()
@@ -152,6 +154,7 @@ Public Class fgGlobalMouse
 
         'Set the title.
         Title = "Global Mouse"
+        File = "HID\Mouse.vb"
     End Sub
 
     Public Overrides Sub Dispose()

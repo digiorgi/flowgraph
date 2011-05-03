@@ -23,6 +23,7 @@ Public Class MIDI_Input
 
         'Set the title.
         Title = "MIDI Input"
+        File = "MIDI\MIDI_Input.vb"
 
         chkAllChannels.Text = "All channels"
         chkAllChannels.Checked = True

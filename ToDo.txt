@@ -4,8 +4,6 @@ The objects can be added at anytime. But be aware there could be changes that wi
 ####BUGS####
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
-Make sure Flowgraph can do Everything Pedals can. Then add a note to use Flowgraph on the Pedal pages. Done but should be duble checked.
-Get all fgs files to compile.
 
 Step#1
 	

@@ -18,6 +18,7 @@ Public Class MIDI_Volume
 
         'Set the title.
         Title = "MIDI Volume"
+        File = "MIDI\MIDI_Volume.vb"
 
         numVolume.Minimum = 0
         numVolume.Maximum = 127

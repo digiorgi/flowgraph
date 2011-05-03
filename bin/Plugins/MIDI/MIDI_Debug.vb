@@ -17,7 +17,7 @@ Public Class MIDI_Debug
 
         'Set the title.
         Title = "MIDI Debug"
-
+        File = "MIDI\MIDI_Debug.vb"
 
     End Sub
 

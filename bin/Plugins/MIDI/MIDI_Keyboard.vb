@@ -40,6 +40,7 @@ Public Class MIDI_Keyboard
 
         'Set the title.
         Title = "MIDI Keyboard"
+        File = "MIDI\MIDI_Keyboard.vb"
 
         chkFilterOtherChannels.Text = "Filter out other channels"
         chkFilterOtherChannels.Width = 139

@@ -22,6 +22,7 @@ Public Class MIDI_SimulatePedals
 
         'Set the title.
         Title = "Simulate Pedals"
+        File = "MIDI\MIDI_SimulatePedals.vb"
 
         chkRemoveOldNotes.Text = "Remove old notes"
         chkRemoveOldNotes.Width = 115

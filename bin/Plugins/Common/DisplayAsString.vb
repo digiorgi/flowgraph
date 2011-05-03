@@ -5,7 +5,7 @@ Namespace Common
 
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
             Setup(UserData, StartPosition, 105) 'Setup the base rectangles.
-            File = "Common\DisplayAsString.vb"
+
 
             'Create one input.
             Inputs(New String() {"Value to display."})
@@ -13,6 +13,7 @@ Namespace Common
 
             'Set the title.
             Title = "Display as string"
+            File = "Common\DisplayAsString.vb"
 
             MenuItems.Add(New Menu.Node("Set String", , 70))
         End Sub

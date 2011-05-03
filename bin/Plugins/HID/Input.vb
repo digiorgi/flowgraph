@@ -17,6 +17,7 @@ Public Class fgAxisToBoolean
 
         'Set the title.
         Title = "Axis to boolean"
+        File = "HID\Input.vb"
 
         numSwitchOn.Minimum = 0
         numSwitchOn.Maximum = 1

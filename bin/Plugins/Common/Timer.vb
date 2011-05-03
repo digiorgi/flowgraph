@@ -8,7 +8,7 @@ Namespace Common
         Private WithEvents numInterval As New NumericUpDown
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
             Setup(UserData, StartPosition, 85) 'Setup the base rectangles.
-            File = "Common\Timer.vb"
+
 
             'Create one output.
             Outputs(New String() {"Tick"})
@@ -17,7 +17,7 @@ Namespace Common
 
             'Set the title.
             Title = "Timer"
-
+            File = "Common\Timer.vb"
 
             numInterval.Minimum = 0
             numInterval.Maximum = 1000000

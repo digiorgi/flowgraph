@@ -16,6 +16,7 @@ Namespace Common
 
             'Set the title.
             Title = "Switch"
+            File = "Common\Switch.vb"
         End Sub
 
         Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)

@@ -17,6 +17,7 @@ Object{
 }
 Object{
 	Name=Plugins.Common.Slider;
+	File=Common\Slider.vb;
 	Position=435,25;
 	Output=1,2,0;
 	Input=0,3;
@@ -39,6 +40,7 @@ Object{
 }
 Object{
 	Name=Plugins.fgAdd;
+	File=fgAdd.vb;
 	Position=540,195;
 	UserData=5;
 	Output=1,5,0;
@@ -49,34 +51,39 @@ Object{
 	File=Common\DisplayAsString.vb;
 	Position=620,210;
 	Input=1;
-	Data=10;
+	Data=20;
 }
 Object{
 	Name=Plugins.fgCounter;
+	File=fgCounter.vb;
 	Position=285,160;
 	Output=1,4,0;
 	Input=0,0;
 }
 Object{
 	Name=Plugins.fgCounter;
+	File=fgCounter.vb;
 	Position=465,110;
 	Output=1,4,1;
 	Input=0,0;
 }
 Object{
 	Name=Plugins.fgCounter;
+	File=fgCounter.vb;
 	Position=595,350;
 	Output=1,4,2;
 	Input=0,0;
 }
 Object{
 	Name=Plugins.fgCounter;
+	File=fgCounter.vb;
 	Position=340,275;
 	Output=1,4,3;
 	Input=0,0;
 }
 Object{
 	Name=Plugins.fgCounter;
+	File=fgCounter.vb;
 	Position=435,365;
 	Output=1,4,4;
 	Input=0,0;
