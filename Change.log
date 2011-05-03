@@ -7,9 +7,12 @@ Added	: The window size is now snaped to the grid size.
 Added   : MIDI_BasicFilter  MIDI_Instrument ObjectDummy ObjectTemplate
 Added   : SynthesiaSostenutoFix.fgs
 Added	: Can now load fgs files if missing objects.
+Added	: Now copys needed librarys(only the ones in Flowgraph folder) to the compiled folder.
 Changed	: Compiler now removes source file if there is no errors/warnings.(Will keep the file if its ran with command line KeepSource)
 Changed	: The buttons(Open, Save, etc..) are now in a menu.
+Changed	: Moved compiled fgs to 'compiled' folder.
 Upgraded: SimpleD to 0.991
+Fixed	: Can now cpmpile every inclued fgs file.
 Fixed   : MIDI_GetController "Any channel" checkbox did not work properly.
 Fixed	: Culture should not matter now.  (is set to en-US)
 Fixed	: DisableUI now disables mouse events also.

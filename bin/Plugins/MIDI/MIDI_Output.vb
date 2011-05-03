@@ -22,6 +22,7 @@ Public Class MIDI_Output
 
         'Set the title.
         Title = "MIDI Output"
+        File = "MIDI\MIDI_Output.vb"
 
         chkMessageChannels.Text = "Same as message"
         chkMessageChannels.Width = 117

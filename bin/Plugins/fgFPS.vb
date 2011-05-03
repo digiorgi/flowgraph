@@ -9,7 +9,7 @@ Public Class fgFPS
 
         'Set the title.
         Title = "Frames"
-
+        File = "fgFPS.vb"
     End Sub
 
 

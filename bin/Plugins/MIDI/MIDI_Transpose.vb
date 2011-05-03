@@ -18,6 +18,7 @@ Public Class MIDI_Transpose
 
         'Set the title.
         Title = "MIDI Transpose"
+        File = "MIDI\MIDI_Transpose.vb"
 
         numOctave.Minimum = -4
         numOctave.Maximum = 4

@@ -16,6 +16,7 @@ Namespace Common
 
             'Set the title.
             Title = "Slider"
+            File = "Common\Slider.vb"
 
             Value = 0.5
         End Sub

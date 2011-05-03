@@ -33,6 +33,7 @@ Public Class fgAdd
 
         'Set the title.
         Title = "Add"
+        File = "fgAdd.vb"
 
     End Sub
 

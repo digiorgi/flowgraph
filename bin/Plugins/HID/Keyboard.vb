@@ -12,7 +12,6 @@ Public Class fgGetKey
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 120) 'Setup the base rectangles.
-        File = "HID\Keyboard.vb"
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick", "Keyboard State,KeyboardState"})
@@ -21,6 +20,7 @@ Public Class fgGetKey
 
         'Set the title.
         Title = "Get key"
+        File = "HID\Keyboard.vb"
 
 
         comKey.Location = Position
@@ -120,7 +120,6 @@ Public Class fgGetKey2
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 120) 'Setup the base rectangles.
-        File = "HID\Keyboard.vb"
 
         'Create the inputs.
         Inputs(New String() {"Enabled,Boolean", "Tick"})
@@ -129,7 +128,7 @@ Public Class fgGetKey2
 
         'Set the title.
         Title = "Get key2"
-
+        File = "HID\Keyboard.vb"
 
         comKey.Location = Position
         comKey.Items.AddRange([Enum].GetNames(GetType(Keys)))
@@ -214,6 +213,7 @@ Public Class fgKeyboard
 
         'Set the title.
         Title = "Keyboard"
+        File = "HID\Keyboard.vb"
 
         HID.Create(True)
     End Sub

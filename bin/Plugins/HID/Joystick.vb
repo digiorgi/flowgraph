@@ -23,6 +23,7 @@ Public Class fgJoystick
 
         'Set the title.
         Title = "Joystick"
+        File = "HID\Joystick.vb"
 
         HID.Create()
 
@@ -161,7 +162,7 @@ Public Class fgGetJoystickAxis
 
         'Set the title.
         Title = "Joystick Axis"
-
+        File = "HID\Joystick.vb"
         For i As Integer = 0 To 7
             Dim chk As New CheckBox
             chk.Text = "Rev"
@@ -286,6 +287,7 @@ Public Class fgGetJoystickButtons
 
         'Set the title.
         Title = "Joystick Buttons"
+        File = "HID\Joystick.vb"
 
         numButtons.Minimum = 0
         numButtons.Maximum = 1000

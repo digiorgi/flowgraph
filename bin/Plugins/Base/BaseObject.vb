@@ -27,7 +27,7 @@
 '   Email: RaymondEllis@live.com
 #End Region
 
-'Include(Base\SimpleD.vb,Base\Menu.vb,Base\DataFlow.vb)
+'Include(Base\SimpleD.vb,Base\Menu.vb,Base\DataFlow.vb,Base\Plugins.vb)
 
 Public MustInherit Class BaseObject
     Public Index As Integer = -1

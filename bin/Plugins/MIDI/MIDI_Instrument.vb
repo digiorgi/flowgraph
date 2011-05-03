@@ -19,7 +19,7 @@ Public Class MIDI_GetInstrument
 
         'Set the title.
         Title = "MIDI get instrument"
-
+        File = "MIDI\MIDI_Instrument.vb"
     End Sub
 
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
@@ -86,6 +86,7 @@ Public Class MIDI_SetInstrument
 
         'Set the title.
         Title = "MIDI set instrument"
+        File = "MIDI\MIDI_Instrument.vb"
 
     End Sub
 

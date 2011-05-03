@@ -23,6 +23,7 @@ Public Class MIDI_BasicFilter
 
         'Set the title.
         Title = "MIDI Basic filter"
+        File = "MIDI\MIDI_BasicFilter.vb"
 
         chkAllChannels.Text = "All channels"
         chkAllChannels.Checked = True

@@ -18,6 +18,7 @@ Public Class fgCounter
 
         'Set the title.
         Title = "Counter"
+        File = "fgCounter.vb"
 
         tmr.Interval = 1000
         tmr.Enabled = True

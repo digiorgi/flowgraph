@@ -21,9 +21,9 @@ Module CompileFGS
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Windows.Forms.Application.ExecutablePath)
 
         If ClassLibrary Then
-            OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".dll"
+            OutputAssembly = "Compiled\" & IO.Path.GetFileNameWithoutExtension(fgsFile) & ".dll"
         Else
-            OutputAssembly = IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
+            OutputAssembly = "Compiled\" & IO.Path.GetFileNameWithoutExtension(fgsFile) & ".exe"
         End If
 
         'try and backup the old file. (if any)
@@ -46,6 +46,8 @@ Module CompileFGS
         sAdd("Imports Plugins")
         'Create the namespace.
         sAdd("Namespace Plugins")
+
+        Dim LoadedBaseObject As Boolean = False
 
         Dim Files As New List(Of String)
 
@@ -109,7 +111,7 @@ Restart:
             'Add the file to the source.
             sAdd(FileSource)
 
-            If FileSource.Contains("BaseObject") Then IncludeBaseObject = True
+            If Not LoadedBaseObject AndAlso FileSource.Contains("BaseObject") Then IncludeBaseObject = True
 
             'Find references.
             Dim ReferencesStart As Integer = -1
@@ -131,6 +133,7 @@ Restart:
                 End If
             Loop Until ReferencesStart = 13 And IncludeStart = 7
         Next
+FoundNewFiles:
         'If there are any new(included) files. Then we add them to the file list and check them.
         If NewFiles.Count > 0 Then
             StartI = Files.Count ' - 1
@@ -147,6 +150,11 @@ Restart:
             Next
             NewFiles.Clear()
             GoTo Restart
+
+        ElseIf IncludeBaseObject And Not LoadedBaseObject Then
+            NewFiles.Add("Base\BaseObject.vb")
+            LoadedBaseObject = True
+            GoTo FoundNewFiles
         End If
         'If IncludeBaseObject And StartI = Files.Count - 2 Then
         '    StartI = Files.Count - 1
@@ -222,10 +230,19 @@ Restart:
         Log("Done!", False)
 
         Log("Compiling ")
+
+        If Not IO.Directory.Exists("Compiled") Then IO.Directory.CreateDirectory("Compiled")
         'Save the source to a file for debuging.
-        Dim sw As New IO.StreamWriter("fgsSource.vb")
+        Dim sw As New IO.StreamWriter("Compiled\fgsSource.vb")
         sw.Write(Source)
         sw.Close()
+
+        'Move references to compiled folder.
+        For Each ref As String In vbReferences
+            If IO.File.Exists(ref) And Not IO.File.Exists("Compiled\" & ref) Then
+                IO.File.Copy(ref, "Compiled\" & ref, False)
+            End If
+        Next
 
         'Compile the source and get all of the errors.
         Dim Errors As CodeDom.Compiler.CompilerErrorCollection = CompileVbPlugins.Errors
@@ -257,9 +274,10 @@ Restart:
             End If
             Return False
         Else
+            Log("Compiled to: " & OutputAssembly)
             RemoveBackup(OutputAssembly)
             If Not KeepSource Then
-                IO.File.Delete("fgsSource.vb")
+                IO.File.Delete("Compiled\fgsSource.vb")
             End If
             Return True
         End If
@@ -349,7 +367,7 @@ Restart:
         '                                           "..\Flowgraph\frmMain.vb", "..\Flowgraph\frmMain.Designer.vb", "..\Flowgraph\frmMain.resx", _
         '                                                    "fgsSource.vb"})
 
-        Results = Provider.CompileAssemblyFromFile(Params, "fgsSource.vb")
+        Results = Provider.CompileAssemblyFromFile(Params, "Compiled\fgsSource.vb")
 
 
         'Return the results.
