@@ -19,7 +19,7 @@ Object{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=5,290;
-	Output=3,10,1,15,1,18,1`0`0`0;
+	Output=2,10,1,15,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
 	DeviceID=2;
@@ -68,7 +68,7 @@ Object{
 	File=MIDI\MIDI_SimulatePedals.vb;
 	Position=480,220;
 	Output=3,8,1,2,1,11,1;
-	Input=0,3,1,1,0;
+	Input=0,2,1,1,0;
 }
 Object{
 	Name=Plugins.fgAxisToBoolean;
@@ -91,7 +91,7 @@ Object{
 	File=MIDI\MIDI_Volume.vb;
 	Position=250,205;
 	Output=2,6,1,12,1;
-	Input=0,2,0;
+	Input=0,1,0;
 	Enabled=True;
 	Volume=127;
 }
@@ -137,38 +137,27 @@ Object{
 	Value=False;
 }
 Object{
-	Name=Plugins.MIDI_GetInstrument;
-	File=MIDI\MIDI_Instrument.vb;
-	Position=250,155;
-	Output=1,16,1`0;
+	Name=Plugins.MIDI_GetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=250,120;
+	Output=1,16,1`1,17,1;
 	Input=0,1;
 	Enabled=True;
+	Note=64;
+	AllChannels=True;
+	Channel=1;
 }
 Object{
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
-	Position=400,120;
-	Output=1,17,1;
+	Position=480,95;
+	Output=0;
 	Input=0,1;
 }
 Object{
-	Name=Plugins.MIDI_SetInstrument;
-	File=MIDI\MIDI_Instrument.vb;
-	Position=570,105;
-	Output=1,6,1;
-	Input=0,1,0;
-	Enabled=True;
-}
-Object{
-	Name=Plugins.MIDI_BasicFilter;
-	File=MIDI\MIDI_BasicFilter.vb;
-	Position=250,285;
-	Output=1,9,1;
+	Name=Plugins.Common.Slider;
+	File=Common\Slider.vb;
+	Position=480,150;
+	Output=0;
 	Input=0,1;
-	Enabled=True;
-	AllChannels=True;
-	Channel=2;
-	Controllers=True;
-	Instrument=True;
-	Notes=True;
 }

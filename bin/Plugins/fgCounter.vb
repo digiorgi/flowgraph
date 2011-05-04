@@ -51,7 +51,6 @@ Public Class fgCounter
         End Select
     End Sub
 
-
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         'Draw the base stuff like the title outputs etc..
         MyBase.Draw(g)
@@ -64,22 +63,17 @@ Public Class fgCounter
     Public Overrides Sub MouseDoubleClick(ByVal e As System.Windows.Forms.MouseEventArgs)
         On Error Resume Next
         Value = InputBox("Enter value", "Counter", 0)
-
     End Sub
 
-
     Private Sub tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmr.Tick
-
         Value += 1
-
         Send(Value)
-
-        DoDraw()
+        DoDraw(Rect)
     End Sub
 
     Private Sub btnReset_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnReset.Click
         Value = 0
         Send(Value)
-        DoDraw()
+        DoDraw(Rect)
     End Sub
 End Class

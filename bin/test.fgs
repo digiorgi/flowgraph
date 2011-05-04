@@ -51,40 +51,58 @@ Object{
 	File=Common\DisplayAsString.vb;
 	Position=620,210;
 	Input=1;
-	Data=20;
+	Data=170;
 }
 Object{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
-	Position=285,160;
+	Position=285,155;
 	Output=1,4,0;
-	Input=0,0;
+	Input=1,0;
 }
 Object{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=465,110;
 	Output=1,4,1;
-	Input=0,0;
+	Input=1,0;
 }
 Object{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
-	Position=595,350;
+	Position=590,335;
 	Output=1,4,2;
-	Input=0,0;
+	Input=1,0;
 }
 Object{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
-	Position=340,275;
+	Position=355,275;
 	Output=1,4,3;
-	Input=0,0;
+	Input=1,0;
 }
 Object{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=435,365;
 	Output=1,4,4;
+	Input=1,0;
+}
+Object{
+	Name=Plugins.Common.Switch;
+	File=Common\Switch.vb;
+	Position=10,205;
+	Output=5,6,0,7,0,9,0,10,0,8,0;
+	Input=1,0;
+	Enabled=True;
+	Value=True;
+}
+Object{
+	Name=Plugins.Common.Switch;
+	File=Common\Switch.vb;
+	Position=10,145;
+	Output=1,11,0;
 	Input=0,0;
+	Enabled=True;
+	Value=True;
 }
