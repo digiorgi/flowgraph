@@ -51,7 +51,7 @@ Object{
 	File=Common\DisplayAsString.vb;
 	Position=620,210;
 	Input=1;
-	Data=170;
+	Data=25;
 }
 Object{
 	Name=Plugins.fgCounter;
@@ -105,4 +105,26 @@ Object{
 	Input=0,0;
 	Enabled=True;
 	Value=True;
+}
+Object{
+	Name=Plugins.MIDI_SetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=25,325;
+	Output=0;
+	Input=0,0,0,0;
+	Enabled=True;
+	Note=60;
+	Volume=127;
+	Channel=1;
+}
+Object{
+	Name=Plugins.MIDI_GetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=90,245;
+	Output=0`0;
+	Input=0,0;
+	Enabled=True;
+	Note=60;
+	AllChannels=True;
+	Channel=1;
 }
