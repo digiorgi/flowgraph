@@ -4,10 +4,11 @@ Added	: Menu groups now displayed like this <group>
 Added	: Drag and drop files and text.
 Added	: Loaded file to title.
 Added	: The window size is now snaped to the grid size.
-Added   : MIDI_BasicFilter  MIDI_Instrument ObjectDummy ObjectTemplate
+Added   : MIDI_BasicFilter  MIDI_Instrument MIDI_Note ObjectDummy ObjectTemplate
 Added   : SynthesiaSostenutoFix.fgs
 Added	: Can now load fgs files if missing objects.
 Added	: Now copys needed librarys(only the ones in Flowgraph folder) to the compiled folder.
+Added	: Switch now looks better and you can dubble click on it to change the value.
 Changed	: Compiler now removes source file if there is no errors/warnings.(Will keep the file if its ran with command line KeepSource)
 Changed	: The buttons(Open, Save, etc..) are now in a menu.
 Changed	: Moved compiled fgs to 'compiled' folder.

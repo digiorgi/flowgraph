@@ -9,7 +9,7 @@ Namespace Common
 
 
         Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
-            Setup(UserData, StartPosition, 70) 'Setup the base rectangles.
+            Setup(UserData, StartPosition, 40) 'Setup the base rectangles.
 
             Outputs(New String() {"Value,Boolean"})
             Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
@@ -31,16 +31,36 @@ Namespace Common
                         Send(Value)
                     End If
 
-
             End Select
 
+            DoDraw(Rect)
+        End Sub
+
+        Public Overrides Sub MouseDoubleClick(e As System.Windows.Forms.MouseEventArgs)
+            MyBase.MouseDoubleClick(e)
+            If Not Enabled Then Return
+            Value = Not Value
+            Send(Value)
             DoDraw(Rect)
         End Sub
 
         Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
             MyBase.Draw(g)
 
-            g.DrawString("Value= " & Value.ToString, DefaultFont, Brushes.Black, Position)
+            Dim bOn As Brush = Brushes.Green
+            Dim bOff As Brush = Brushes.Red
+            If Not Enabled Then
+                bOn = Brushes.Gray
+                bOff = Brushes.Gray
+            End If
+
+            If Value Then
+                g.FillRectangle(bOn, Position.X, Position.Y, 16, 16)
+            Else
+                g.FillRectangle(bOff, Position.X + 20, Position.Y, 16, 16)
+            End If
+
+            g.DrawString("On Off", DefaultFont, Brushes.White, Position)
         End Sub
 
         Public Overrides Sub Load(ByVal g As SimpleD.Group)

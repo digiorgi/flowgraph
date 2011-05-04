@@ -34,6 +34,7 @@ AddMenuObject|128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI,Keyboards
 AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
 AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
 AddMenuObject|24 keys,Plugins.MIDI_Keyboard,120,24-60-0|MIDI,Keyboards
+AddMenuObject|Get,Plugins.MIDI_GetNote|MIDI,Channel Message,Note
 AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 AddMenuObject|Set,Plugins.MIDI_SetController|MIDI,Channel Message,Controller
 AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI,Channel Message
