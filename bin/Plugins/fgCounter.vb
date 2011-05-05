@@ -56,7 +56,7 @@ Public Class fgCounter
         MyBase.Draw(g)
 
         'Draw the value.
-        g.DrawString("Value= " & Value, DefaultFont, DefaultFontBrush, Rect.X + 15, Rect.Y + 15)
+        g.DrawString("Value= " & Value, DefaultFont, DefaultFontBrush, Position.X, Position.Y)
 
     End Sub
 
@@ -76,4 +76,19 @@ Public Class fgCounter
         Send(Value)
         DoDraw(Rect)
     End Sub
+
+    Public Overrides Sub Load(ByVal g As SimpleD.Group)
+        g.GetValue("Enabled", tmr.Enabled, False)
+        g.GetValue("Value", Value, False)
+        MyBase.Load(g)
+    End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As SimpleD.Group = MyBase.Save()
+
+        g.SetValue("Enabled", tmr.Enabled)
+        g.SetValue("Value", Value)
+
+        Return g
+    End Function
 End Class

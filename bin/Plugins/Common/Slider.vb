@@ -96,5 +96,19 @@ Namespace Common
             End If
             g.DrawString(Math.Round(Value * 100) & "%", DefaultFont, Brushes.White, Position + New Point(Size.Width * 0.5, 3))
         End Sub
+
+        Public Overrides Sub Load(ByVal g As SimpleD.Group)
+
+            g.GetValue("Enabled", Enabled, False)
+            MyBase.Load(g)
+        End Sub
+
+        Public Overrides Function Save() As SimpleD.Group
+            Dim g As SimpleD.Group = MyBase.Save()
+
+            g.SetValue("Enabled", Enabled)
+
+            Return g
+        End Function
     End Class
 End Namespace
