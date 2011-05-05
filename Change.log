@@ -1,4 +1,6 @@
-##0.1.3## InDev
+##0.1.4## InDev
+
+##0.1.3##
 Added	: MIDI_Keyboard you can now drag the mouse across the keys.
 Added	: Menu groups now displayed like this <group>
 Added	: Drag and drop files and text.
@@ -13,7 +15,7 @@ Changed	: Compiler now removes source file if there is no errors/warnings.(Will 
 Changed	: The buttons(Open, Save, etc..) are now in a menu.
 Changed	: Moved compiled fgs to 'compiled' folder.
 Upgraded: SimpleD to 0.991
-Fixed	: Can now cpmpile every inclued fgs file.
+Fixed	: Can now compile every inclued fgs file.
 Fixed   : MIDI_GetController "Any channel" checkbox did not work properly.
 Fixed	: Culture should not matter now.  (is set to en-US)
 Fixed	: DisableUI now disables mouse events also.

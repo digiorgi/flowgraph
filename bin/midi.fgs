@@ -5,9 +5,9 @@ Object{Name=Plugins.MIDI_Input;File=MIDI\MIDI_Input.vb;Position=5,25;Output=1,9,
 Object{Name=Plugins.MIDI_Output;File=MIDI\MIDI_Output.vb;Position=635,25;Input=0,1,0,0,0;Enabled=True;DeviceID=1;MessageChannels=True;Channel=1;}
 Object{Name=Plugins.fgJoystick;File=HID\Joystick.vb;Position=135,105;Output=1,4,0;Input=0,1;Enabled=True;Joystick=RGT Force Feedback Pro;}
 Object{Name=Plugins.fgGetJoystickAxis;File=HID\Joystick.vb;Position=10,165;Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;Input=1;Rev1=True;Rev5=True;Rev6=True;}
-Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=120,225;Output=0`1,6,2;Input=1;SwitchOn=0.9;}
-Object{Name=Plugins.MIDI_SimulatePedals;File=MIDI\MIDI_SimulatePedals.vb;Position=375,115;Output=2,8,1,2,1;Input=0,1,1,1,1;}
-Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=135,160;Output=0`1,6,3;Input=1;SwitchOn=0.9;}
+Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=120,210;Output=0`1,6,2;Input=1;SwitchOn=0.9;}
+Object{Name=Plugins.MIDI_SimulatePedals;File=MIDI\MIDI_SimulatePedals.vb;Position=380,110;Output=2,8,1,2,1;Input=0,1,1,1,1;}
+Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=120,160;Output=0`1,6,3;Input=1;SwitchOn=0.9;}
 Object{Name=Plugins.MIDI_Keyboard;File=MIDI\MIDI_Keyboard.vb;Position=310,245;UserData=88-21-9;Output=0;Input=0,1;}
 Object{Name=Plugins.MIDI_Volume;File=MIDI\MIDI_Volume.vb;Position=265,25;Output=1,6,1;Input=0,1,0;Enabled=True;Volume=127;}
-Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=120,275;Output=0`1,6,4;Input=1;SwitchOn=0.9;}
+Object{Name=Plugins.fgAxisToBoolean;File=HID\Input.vb;Position=120,260;Output=0`1,6,4;Input=1;SwitchOn=0.9;}

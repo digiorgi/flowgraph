@@ -8,13 +8,6 @@ The objects can be added at anytime. But be aware there could be changes that wi
 Step#1
 	
 Step#2
-	Allow objects to send Requests for new data from a input. (Object1 is connected to Object2 and Object2 wants a update so it asks object1.)
-		Don't see a use for it yet.  (It would require other objects to support it.  So it would make making a object harder.)
-
-	Add support for C# plugins
-		I'm thinking of just having a library named csPlugins.dll
-			That will not work right.  So need a another idea.  (problem is that the C# library, would need to be linked to vb and vb to c#. Would then create a loop.)
-
 
 Step#3
 	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
@@ -28,26 +21,18 @@ Step#3
 	fgs source. A button that would show a window with the fgs contents and could be chaged.
 	
 
-	Add a check to see if plugins need compiling when Flowgraph.exe is ran.
-		Would then give a option to compile plugins.
-			If yes then we run compiler witch then waits for Flowgraph to close before compiling.
-				Not sure if this is a good idea. Because it would make loading Flowgraph slower.
-
 Step#GUI
-	Zoom and movement. (Should just need to put objects in an image or something.)
-						That will not work for zooming. (Because of controls.)
+	Movement. (Should just need to put objects in an image or something.)
 
 	New lines!!!
 		Need a better way to do colors. And at lest a command line to disable colors.
+
 
 Step#4
 	Folders (Allow you to put objects in folders.)
 			Each folder would have one input(As Object) and one output(As Object).
 
-
-
-
-Objects to add:   **There should be at least one object scripted in C#.** (After step#2 is Done.)
+Objects to add:
 	Math:
 		Minus
 		Round
@@ -82,7 +67,6 @@ Objects to add:   **There should be at least one object scripted in C#.** (After
 
 
 	MIDI:
-		GetSetNote
 		Filter objects: In(Enabled,ChannelMessage)	Out(Filtered,Other)
 		Debug	Need debugging for other events.
 		Input:
