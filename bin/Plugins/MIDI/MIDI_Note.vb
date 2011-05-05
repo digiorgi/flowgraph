@@ -6,7 +6,6 @@ Public Class MIDI_GetNote
 
     Private Enabled As Boolean = True
 
-
     Private numChannel As New NumericUpDown
     Private WithEvents chkAllChannels As New CheckBox
 
@@ -131,8 +130,6 @@ Public Class MIDI_SetNote
     Inherits BaseObject
 
     Private Enabled As Boolean = True
-
-
     Private numChannel, numNote, numVolume As New NumericUpDown
 
 #Region "Object stuff"

@@ -116,13 +116,15 @@ Partial Class frmMain
         'menuDisableUI
         '
         Me.menuDisableUI.Name = "menuDisableUI"
-        Me.menuDisableUI.Size = New System.Drawing.Size(132, 22)
+        Me.menuDisableUI.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
+        Me.menuDisableUI.Size = New System.Drawing.Size(166, 22)
         Me.menuDisableUI.Text = "Disable UI"
         '
         'menuSimpleLines
         '
         Me.menuSimpleLines.Name = "menuSimpleLines"
-        Me.menuSimpleLines.Size = New System.Drawing.Size(132, 22)
+        Me.menuSimpleLines.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
+        Me.menuSimpleLines.Size = New System.Drawing.Size(166, 22)
         Me.menuSimpleLines.Text = "Simple lines"
         '
         'menuHelp
@@ -138,13 +140,13 @@ Partial Class frmMain
         Me.menuBasicUse.ForeColor = System.Drawing.Color.Blue
         Me.menuBasicUse.Name = "menuBasicUse"
         Me.menuBasicUse.ShortcutKeys = System.Windows.Forms.Keys.F1
-        Me.menuBasicUse.Size = New System.Drawing.Size(152, 22)
+        Me.menuBasicUse.Size = New System.Drawing.Size(142, 22)
         Me.menuBasicUse.Text = "Basic use"
         '
         'menuAbout
         '
         Me.menuAbout.Name = "menuAbout"
-        Me.menuAbout.Size = New System.Drawing.Size(152, 22)
+        Me.menuAbout.Size = New System.Drawing.Size(142, 22)
         Me.menuAbout.Text = "&About"
         '
         'frmMain

@@ -476,8 +476,10 @@ Public Class frmMain
         'Resize the form.
         If Not menuDisableUI.Checked Then
             Me.Size = Me.MinimumSize
+            Me.FormBorderStyle = Windows.Forms.FormBorderStyle.FixedSingle
         Else
             Me.ClientSize = Plugins.WindowSize
+            Me.FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
         End If
 
         menuDisableUI.Checked = Not menuDisableUI.Checked
