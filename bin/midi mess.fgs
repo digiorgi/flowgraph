@@ -1,7 +1,7 @@
 //SimpleD version=0.991  SimpleD file version=1\\
 Main{
-	Width=990;
-	Height=435;
+	Width=1120;
+	Height=640;
 	FileVersion=1;
 	SplitFileWithNewLine=True;
 	SplitFileWithTabs=True;
@@ -18,8 +18,8 @@ Object{
 Object{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
-	Position=5,290;
-	Output=2,10,1,15,1`0`0`0;
+	Position=10,355;
+	Output=3,10,1,15,1,9,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
 	DeviceID=2;
@@ -29,7 +29,7 @@ Object{
 Object{
 	Name=Plugins.MIDI_Output;
 	File=MIDI\MIDI_Output.vb;
-	Position=765,225;
+	Position=895,365;
 	Input=0,1,0,0,0;
 	Enabled=True;
 	DeviceID=0;
@@ -66,9 +66,9 @@ Object{
 Object{
 	Name=Plugins.MIDI_SimulatePedals;
 	File=MIDI\MIDI_SimulatePedals.vb;
-	Position=480,220;
+	Position=685,380;
 	Output=3,8,1,2,1,11,1;
-	Input=0,2,1,1,0;
+	Input=0,4,1,1,0;
 }
 Object{
 	Name=Plugins.fgAxisToBoolean;
@@ -81,7 +81,7 @@ Object{
 Object{
 	Name=Plugins.MIDI_Keyboard;
 	File=MIDI\MIDI_Keyboard.vb;
-	Position=435,320;
+	Position=565,525;
 	UserData=88-21-9;
 	Output=0;
 	Input=0,1;
@@ -89,30 +89,30 @@ Object{
 Object{
 	Name=Plugins.MIDI_Volume;
 	File=MIDI\MIDI_Volume.vb;
-	Position=250,205;
+	Position=270,395;
 	Output=2,6,1,12,1;
-	Input=0,1,0;
+	Input=0,2,0;
 	Enabled=True;
 	Volume=127;
 }
 Object{
 	Name=Plugins.MIDI_Debug;
 	File=MIDI\MIDI_Debug.vb;
-	Position=480,50;
+	Position=625,30;
 	Input=0,1;
 	Enabled=True;
 }
 Object{
 	Name=Plugins.MIDI_Debug;
 	File=MIDI\MIDI_Debug.vb;
-	Position=765,45;
+	Position=875,30;
 	Input=0,1;
 	Enabled=True;
 }
 Object{
 	Name=Plugins.MIDI_Transpose;
 	File=MIDI\MIDI_Transpose.vb;
-	Position=280,370;
+	Position=270,470;
 	Output=1,6,1;
 	Input=1,1;
 	Enabled=False;
@@ -121,7 +121,7 @@ Object{
 Object{
 	Name=Plugins.fgGetKey;
 	File=HID\Keyboard.vb;
-	Position=10,370;
+	Position=10,465;
 	Output=0`1,14,1;
 	Input=0,1,0;
 	Enabled=True;
@@ -130,7 +130,7 @@ Object{
 Object{
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
-	Position=165,370;
+	Position=170,465;
 	Output=1,12,0;
 	Input=0,1;
 	Enabled=True;
@@ -139,11 +139,11 @@ Object{
 Object{
 	Name=Plugins.MIDI_GetNote;
 	File=MIDI\MIDI_Note.vb;
-	Position=250,120;
-	Output=1,16,1`1,17,1;
+	Position=190,260;
+	Output=3,16,1,18,1,19,1`1,17,1;
 	Input=0,1;
 	Enabled=True;
-	Note=64;
+	Note=60;
 	AllChannels=True;
 	Channel=1;
 }
@@ -160,4 +160,26 @@ Object{
 	Position=480,150;
 	Output=0;
 	Input=0,1;
+}
+Object{
+	Name=Plugins.MIDI_SetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=540,245;
+	Output=1,6,1;
+	Input=0,1,0,0;
+	Enabled=True;
+	Note=64;
+	Volume=127;
+	Channel=1;
+}
+Object{
+	Name=Plugins.MIDI_SetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=540,330;
+	Output=1,6,1;
+	Input=0,1,0,0;
+	Enabled=True;
+	Note=67;
+	Volume=127;
+	Channel=1;
 }

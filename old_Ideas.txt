@@ -1,0 +1,13 @@
+﻿Allow objects to send Requests for new data from a input. (Object1 is connected to Object2 and Object2 wants a update so it asks object1.)
+	Don't see a use for it yet.  (It would require other objects to support it.  So it would make making a object harder.)
+
+Add support for C# plugins
+	I'm thinking of just having a library named csPlugins.dll
+		That will not work right.  So need a another idea.  (problem is that the C# library, would need to be linked to vb and vb to c#. Would then create a loop.)
+
+Add a check to see if plugins need compiling when Flowgraph.exe is ran.
+	Would then give a option to compile plugins.
+		If yes then we run compiler witch then waits for Flowgraph to close before compiling.
+			Not sure if this is a good idea. Because it would make loading Flowgraph slower.
+
+Zooming  Would not work with windows controls.
