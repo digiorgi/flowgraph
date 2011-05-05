@@ -1,4 +1,5 @@
 ##0.1.4## InDev
+Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 
 ##0.1.3##
 Added	: MIDI_Keyboard you can now drag the mouse across the keys.
