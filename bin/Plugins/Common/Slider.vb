@@ -70,13 +70,17 @@ Namespace Common
             If Not Enabled Then Return
             If e.Button = MouseButtons.Left Then
                 Dim x As Integer = e.X - Position.X
+                Dim NewValue As Decimal = 0
                 If x >= Size.Width Then
-                    Value = 1
+                    NewValue = 1
                 ElseIf x <= 0 Then
-                    Value = 0
+                    NewValue = 0
                 Else
-                    Value = x / Size.Width
+                    NewValue = x / Size.Width
                 End If
+                If Value = NewValue Then Return
+                Value = NewValue
+
                 Send(Value)
                 DoDraw(Rect)
             End If
