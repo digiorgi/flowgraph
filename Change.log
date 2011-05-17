@@ -1,4 +1,5 @@
 ##0.1.4## InDev
+Added   : SendKeys
 Updated	: SlimDX to March 2011
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 Fixed	: Silder and Counter was not saving. (enabled, value)

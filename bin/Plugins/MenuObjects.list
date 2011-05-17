@@ -24,6 +24,7 @@ AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
 AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
+AddMenuObject|SendKeys,Plugins.hidSendKeys,100|Input,Keyboard
 AddMenuObject|Basic,Plugins.MIDI_BasicFilter,70|MIDI,Channel Message,Filters
 AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message
 AddMenuObject|Get,Plugins.MIDI_GetController|MIDI,Channel Message,Controller
