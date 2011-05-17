@@ -1,4 +1,4 @@
-//SimpleD version=0.991  SimpleD file version=1\\
+//SimpleD version=1  SimpleD file version=1\\
 Main{
 	Width=755;
 	Height=435;
@@ -34,7 +34,7 @@ Object{
 	Name=Plugins.fgGetKey2;
 	File=HID\Keyboard.vb;
 	Position=230,50;
-	Output=0`1,1,1;
+	Output=0`2,1,1,14,0;
 	Input=0,2;
 	Enabled=True;
 	Key=Pause;
@@ -50,7 +50,7 @@ Object{
 Object{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=620,210;
+	Position=605,195;
 	Input=1;
 	Data=80;
 }
@@ -120,8 +120,15 @@ Object{
 Object{
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
-	Position=25,290;
+	Position=115,150;
 	Output=0;
 	Input=1,0;
 	Enabled=False;
+}
+Object{
+	Name=Plugins.hidSendKeys;
+	File=HID\SendKeys.vb;
+	Position=115,315;
+	Input=1;
+	Keys={enter};
 }
