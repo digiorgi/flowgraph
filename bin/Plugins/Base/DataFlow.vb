@@ -68,15 +68,23 @@ Public Class DataFlowBase
         'We need to get the types(if any) from the name.
         'Frist we split name.
         Dim Types As String() = Split(Name, ",")
-        If Types.Length = 0 Then 'If we did not find anything after spliting.
+        If Types.Length = 1 Then 'If we did not find anything after spliting.
             Me.Name = Name 'Then we just set the name.
         Else
             'Other wise we have to set the name to the first type.
             Me.Name = Types(0)
-            'Then we loop thrugh all of the types and add them to the list. (Starting at one because zero is the name.)
-            For n As Integer = 1 To Types.Length - 1
-                DataType.Add(Types(n))
-            Next
+            If IsOutput Then
+                DataType.Add(Types(1))
+                If Types.Length > 2 Then
+                    Objects(obj).Log("Output #" & Index & "(" & Me.Name & ") can only have One type!")
+                End If
+            Else
+                'Then we loop thrugh all of the types and add them to the list. (Starting at one because zero is the name.)
+                For n As Integer = 1 To Types.Length - 1
+                    DataType.Add(Types(n))
+                Next
+            End If
+
         End If
 
         'If it's a output then we create flow.
@@ -116,6 +124,7 @@ Public Class DataFlowBase
 
         'Make sure the object we are connecting to is a input.
         If Objects(obj1).Input Is Nothing Then Return False
+        If Objects(obj1).Input.Length - 1 < Index1 Or Index1 < 0 Then Return False
 
         'Make sure the object we are connecting to doesnot already have it's max connections.
         If Objects(obj1).input(Index1).MaxConnected > -1 Then

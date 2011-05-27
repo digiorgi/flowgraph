@@ -82,7 +82,7 @@ Public Class MIDI_SetInstrument
         'Create one output.
         Outputs(New String() {"Channel Message,ChannelMessageBuilder"})
 
-        Inputs(New String() {"Enable,Boolean", "Value,0-1Normalized", "Value,0-127"})
+        Inputs(New String() {"Enable,Boolean", "Value,0-127,0-1Normalized"})
 
         'Set the title.
         Title = "MIDI set instrument"
@@ -100,24 +100,42 @@ Public Class MIDI_SetInstrument
 
             Case 1 'Value,0-1Normalized
                 If Not Enabled Then Return
+                Dim value As Integer = GetValue(Data)
+                If value = -1 Then Return
                 Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
                 message.Command = Sanford.Multimedia.Midi.ChannelCommand.ProgramChange
-                message.Data1 = Data * 127
+                message.Data1 = value
                 Send(message)
-                Instrument = Data * 127
-                DoDraw(Rect)
-
-            Case 2 'Value,0-127
-                If Not Enabled Then Return
-                Dim message As New Sanford.Multimedia.Midi.ChannelMessageBuilder
-                message.Command = Sanford.Multimedia.Midi.ChannelCommand.ProgramChange
-                message.Data1 = Data
-                Send(message)
-                Instrument = Data
+                Instrument = value
                 DoDraw(Rect)
 
         End Select
     End Sub
+    Private Function GetValue(data As Object) As Integer
+        Dim value As Integer = 0
+        Select Case data.GetType
+            Case GetType(Boolean) 'Boolean
+                If DirectCast(data, Boolean) Then value = 127
+
+            Case GetType(Decimal) '0-1Normalized
+                value = CInt(DirectCast(data, Decimal) * 127)
+            Case GetType(Double) '0-1Normalized
+                value = CInt(DirectCast(data, Double) * 127)
+            Case GetType(Single) '0-1Normalized
+                value = CInt(DirectCast(data, Single) * 127)
+
+            Case GetType(Integer) '0-127
+                value = DirectCast(data, Integer)
+
+            Case Else
+                Log("Type (" & data.GetType.ToString() & ") is not supported.")
+                Return -1
+        End Select
+
+        If value > 127 Then value = 127
+        If value < 0 Then value = 0
+        Return value
+    End Function
 
     Public Overrides Sub Draw(ByVal g As System.Drawing.Graphics)
         MyBase.Draw(g)

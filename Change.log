@@ -1,6 +1,10 @@
 ##0.1.4## InDev
 Added   : SendKeys
+Added	: Some MIDI object values can now use 0-127
+Change	: Can now only have one output type.
 Updated	: SlimDX to March 2011
+Fixed	: MIDI_BasicFilter( Was not saving properly )
+Fixed	: If a input from a object was removed, then a fgs loaded it would crash.
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 Fixed	: Silder and Counter was not saving. (enabled, value)
 
