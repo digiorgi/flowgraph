@@ -2,7 +2,7 @@
 Public Class hidSendKeys
     Inherits BaseObject
 
-    Private txtKeys As New TextBox
+    Private txtKeys As TextBox
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 110, 25)
@@ -14,6 +14,7 @@ Public Class hidSendKeys
         'Set the title.
         Title = "SendKeys"
 
+        txtKeys = New TextBox
         txtKeys.Location = Me.Position
 
         AddControl(txtKeys)
@@ -22,6 +23,11 @@ Public Class hidSendKeys
     Public Overrides Sub Moving()
         txtKeys.Location = Me.Position
         MyBase.Moving()
+    End Sub
+
+    Public Overrides Sub Dispose()
+        txtKeys.Dispose()
+        MyBase.Dispose()
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group

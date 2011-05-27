@@ -471,5 +471,11 @@ Public Module Plugins
     'EndRemoveFromFGS
 #End Region
 
+    Public Sub Log(Text As String)
+        'ToDo: ###Add stuff for loging here.
+        Console.Write(Date.Now.ToString & ": " & Text)
+        'Debug.Print(Date.Now.ToString & ": " & Text)
+    End Sub
+
 End Module
 

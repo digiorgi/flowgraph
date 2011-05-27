@@ -32,12 +32,13 @@ Option Explicit On
 Option Strict Off
 Namespace SimpleD
     Module Info
-        Public Const IllegalCharacters As String = "{}=;"
+        Public Const IllegalCharacters As String = "{}=;" 'ToDo: Property names should beable to contain {}= and just not ;  group names should beable to have }=; in them.
         Public Const Version = 1
         Public Const FileVersion = 1
         '1      *InDev*
         'Added  : Compile options to top of file so it will compile with other options set.
         'Fixed  : Prop is now a class. Fixed a few bugs because structures are not reference type.
+        'Fixed  : ToFile now creates dir if it does not exist.
 
         'Old change logs at:
         'https://code.google.com/p/simpled/wiki/Versions
@@ -117,6 +118,10 @@ Namespace SimpleD
 
 #Region "To String/File"
         Public Sub ToFile(ByVal File As String, Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True)
+            'Create the folder if it does not exist.
+            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(File)) Then
+                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(File))
+            End If
             Dim sw As New IO.StreamWriter(File)
             sw.Write(ToString(SplitWithNewLine, SplitWithTabs))
             sw.Close()
@@ -132,7 +137,7 @@ Namespace SimpleD
             If Groups.Count = 0 Then Return ""
             If SplitWithNewLine = False Then SplitWithTabs = False
 
-            Dim tmp As String = "//SimpleD version=" & Version & "  SimpleD file version=" & FileVersion & "\\"
+            Dim tmp As String = "//SimpleD version=" & Version & "  SimpleD file version=" & FileVersion & "\\ "
             For n As Integer = 0 To Groups.Count - 1
                 tmp &= vbNewLine & Groups(n).ToString(SplitWithNewLine, If(SplitWithTabs, 1, 0))
             Next

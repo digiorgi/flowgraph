@@ -20,6 +20,7 @@ Step#3
 	
 	fgs source. A button that would show a window with the fgs contents and could be chaged.
 	
+	Logging		save a log to a log file.
 
 Step#GUI
 	Movement. (Should just need to put objects in an image or something.)

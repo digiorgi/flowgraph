@@ -137,12 +137,12 @@ Public Class MIDI_BasicFilter
     Public Overrides Function Save() As SimpleD.Group
         Dim g As SimpleD.Group = MyBase.Save()
 
-        g.setValue("Enabled", Enabled, False)
-        g.SetValue("AllChannels", chkAllChannels.Checked, False)
-        g.SetValue("Channel", numChannel.Value, False)
-        g.SetValue("Controllers", chkControllers.Checked, False)
-        g.SetValue("Instrument", chkInstrument.Checked, False)
-        g.SetValue("Notes", chkNotes.Checked, False)
+        g.SetValue("Enabled", Enabled)
+        g.SetValue("AllChannels", chkAllChannels.Checked)
+        g.SetValue("Channel", numChannel.Value)
+        g.SetValue("Controllers", chkControllers.Checked)
+        g.SetValue("Instrument", chkInstrument.Checked)
+        g.SetValue("Notes", chkNotes.Checked)
         Return g
     End Function
 

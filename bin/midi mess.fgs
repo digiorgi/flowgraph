@@ -1,4 +1,4 @@
-//SimpleD version=0.991  SimpleD file version=1\\
+//SimpleD version=1  SimpleD file version=1\\ 
 Main{
 	Width=1120;
 	Height=640;
@@ -19,10 +19,10 @@ Object{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=10,355;
-	Output=3,10,1,15,1,9,1`0`0`0;
+	Output=5,10,1,18,1,19,1,20,1,22,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
-	DeviceID=2;
+	DeviceID=0;
 	AllChannels=True;
 	Channel=1;
 }
@@ -137,49 +137,80 @@ Object{
 	Value=False;
 }
 Object{
-	Name=Plugins.MIDI_GetNote;
-	File=MIDI\MIDI_Note.vb;
-	Position=190,260;
-	Output=3,16,1,18,1,19,1`1,17,1;
+	Name=Plugins.Common.Slider;
+	File=Common\Slider.vb;
+	Position=460,85;
+	Output=1,16,1;
+	Input=0,0;
+	Enabled=True;
+}
+Object{
+	Name=Plugins.MIDI_SetController;
+	File=MIDI\MIDI_SetController.vb;
+	Position=495,195;
+	Output=1,6,1;
+	Input=1,2;
+	Enabled=False;
+	Controller=0;
+	Channel=1;
+}
+Object{
+	Name=Plugins.Common.Switch;
+	File=Common\Switch.vb;
+	Position=165,215;
+	Output=0;
+	Input=0,0;
+	Enabled=True;
+	Value=True;
+}
+Object{
+	Name=Plugins.MIDI_BasicFilter;
+	File=MIDI\MIDI_BasicFilter.vb;
+	Position=270,295;
+	Output=1,9,1;
 	Input=0,1;
 	Enabled=True;
-	Note=60;
+	AllChannels=True;
+	Channel=1;
+	Controllers=True;
+	Instrument=False;
+	Notes=True;
+}
+Object{
+	Name=Plugins.MIDI_GetInstrument;
+	File=MIDI\MIDI_Instrument.vb;
+	Position=270,245;
+	Output=0`2,16,1,21,1;
+	Input=0,1;
+	Enabled=True;
+}
+Object{
+	Name=Plugins.MIDI_GetNote;
+	File=MIDI\MIDI_Note.vb;
+	Position=270,175;
+	Output=1,21,0`0;
+	Input=0,1;
+	Enabled=True;
+	Note=70;
 	AllChannels=True;
 	Channel=1;
 }
 Object{
-	Name=Plugins.Common.Slider;
-	File=Common\Slider.vb;
-	Position=480,95;
-	Output=0;
-	Input=0,1;
-}
-Object{
-	Name=Plugins.Common.Slider;
-	File=Common\Slider.vb;
-	Position=480,150;
-	Output=0;
-	Input=0,1;
-}
-Object{
-	Name=Plugins.MIDI_SetNote;
-	File=MIDI\MIDI_Note.vb;
-	Position=540,245;
+	Name=Plugins.MIDI_SetInstrument;
+	File=MIDI\MIDI_Instrument.vb;
+	Position=545,270;
 	Output=1,6,1;
-	Input=0,1,0,0;
-	Enabled=True;
-	Note=64;
-	Volume=127;
-	Channel=1;
+	Input=1,1;
+	Enabled=False;
 }
 Object{
-	Name=Plugins.MIDI_SetNote;
+	Name=Plugins.MIDI_GetNote;
 	File=MIDI\MIDI_Note.vb;
-	Position=540,330;
-	Output=1,6,1;
-	Input=0,1,0,0;
+	Position=270,105;
+	Output=1,16,0`0;
+	Input=0,1;
 	Enabled=True;
-	Note=67;
-	Volume=127;
+	Note=73;
+	AllChannels=True;
 	Channel=1;
 }
