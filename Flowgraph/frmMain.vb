@@ -445,7 +445,7 @@ Public Class frmMain
         End If
     End Sub
     Private Sub menuSave_Click(sender As System.Object, e As System.EventArgs) Handles menuSave.Click
-        If LoadedFile = "" Then
+        If LoadedFile.Trim = "" Then
             menuSaveAs_Click(sender, e)
         Else
             Save(LoadedFile)
