@@ -320,6 +320,8 @@ Public Module Plugins
             sd.AddGroup(obj.Save, False)
         Next
 
+        If Not File.Contains("\") Then File = "\" & File
+
         'Save to file.
         sd.ToFile(File, SplitFileWithNewLine, SplitFileWithTabs)
 
