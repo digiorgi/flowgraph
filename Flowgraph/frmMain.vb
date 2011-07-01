@@ -37,6 +37,7 @@ Public Class frmMain
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
+
         'RemoveFromFGS
         If SaveOnExit Then
             'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
@@ -347,12 +348,18 @@ Public Class frmMain
 
     'RemoveFromFGS
     Private Sub frmMain_Resize(sender As Object, e As System.EventArgs) Handles Me.Resize
-        If Me.Size <> Me.MinimumSize Then
-            Plugins.WindowSize = Me.ClientSize
+
+        If (Me.Size.Width > Me.MinimumSize.Width And Me.Size.Height > Me.MinimumSize.Height) And Me.WindowState = FormWindowState.Normal AndAlso _
+            Plugins.WindowSize <> Me.ClientSize Then
             'Snap to the grid size.
             Me.ClientSize = SnapToGrid(Me.ClientSize)
+            Plugins.WindowSize = Me.ClientSize
         End If
+
+        Plugins.WindowState = Me.WindowState
     End Sub
+
+
 
     Private Sub frmMain_DragEnter(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter
         If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Or
