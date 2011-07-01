@@ -1,5 +1,6 @@
-//SimpleD version=1  SimpleD file version=1\\
+SimpleD{Version=1;FormatVersion=2;}
 Main{
+	Maximized=True;
 	Width=755;
 	Height=435;
 	FileVersion=1;

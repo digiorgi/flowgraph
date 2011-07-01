@@ -41,9 +41,9 @@ Public Module Plugins
     'Used to check if the mouse is inside a rectangle.
     Public Mouse As Rectangle
 
-    Public Form As Control
+    Public Form As Form
     Public WindowSize As Size
-
+    Public WindowState As FormWindowState = FormWindowState.Normal
     
 #Region "Grid"
     'The snap grid size.
@@ -187,7 +187,7 @@ Public Module Plugins
 
         ClearObjects()
 
-        Dim sd As New SimpleD.SimpleD(Data, FromFile)
+        Dim sd As New SimpleD.Group(Data, FromFile)
 
         Dim g As SimpleD.Group = sd.GetGroup("Main")
 
@@ -198,6 +198,14 @@ Public Module Plugins
             UpdateUI = True
         End If
         Form.ClientSize = WindowSize
+
+        If g.GetValue("Maximized") <> "" AndAlso Boolean.Parse(g.GetValue("Maximized")) Then
+            WindowState = FormWindowState.Maximized
+        Else
+            WindowState = FormWindowState.Normal
+        End If
+        Form.WindowState = WindowState
+
         'Make sure the form is still in the screen.
         Dim x As Integer = Form.Location.X
         Dim y As Integer = Form.Location.Y
@@ -301,11 +309,12 @@ Public Module Plugins
 
     Public Sub Save(ByVal File As String)
 
-        Dim sd As New SimpleD.SimpleD
+        Dim sd As New SimpleD.Group
         Dim g As SimpleD.Group = sd.CreateGroup("Main")
         If UpdateUI = False Then
             g.SetValue("DisableUI", "True")
         End If
+        If WindowState = FormWindowState.Maximized Then g.SetValue("Maximized", "True")
         g.SetValue("Width", WindowSize.Width)
         g.SetValue("Height", WindowSize.Height)
 

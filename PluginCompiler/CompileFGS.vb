@@ -52,7 +52,7 @@ Module CompileFGS
         Dim Files As New List(Of String)
 
         'Go throgh each object and make sure the object is supported and it can find the plugin file.
-        Dim sd As New SimpleD.SimpleD(fgsFile, True) 'Load the fgs file.
+        Dim sd As New SimpleD.Group(fgsFile, True) 'Load the fgs file.
         Dim g As SimpleD.Group = sd.GetGroup("Main")
         Dim WindowSize As String() = New String() {g.GetValue("Width"), g.GetValue("Height")}
         Dim fgsVersion As String = g.GetValue("FileVersion")
@@ -284,7 +284,7 @@ FoundNewFiles:
     End Function
 
 
-    Public Function FGS_ToCode(ByVal sd As SimpleD.SimpleD) As String
+    Public Function FGS_ToCode(ByVal sd As SimpleD.Group) As String
         Dim g As SimpleD.Group
 
         Dim Code As String = "" '"Me.ClientSize = New Size(" & g.GetValue("Width") & "," & g.GetValue("Height") & ")"

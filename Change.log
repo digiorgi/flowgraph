@@ -1,8 +1,11 @@
 ##0.1.4## InDev
+New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127
 Change	: Can now only have one output type.
+Updated	: SimpleD to 1.0(beta)
 Updated	: SlimDX to March 2011
+Fixed	: Was not saving window size properly.
 Fixed	: MIDI_BasicFilter( Was not saving properly )
 Fixed	: If a input from a object was removed, then a fgs loaded it would crash.
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
