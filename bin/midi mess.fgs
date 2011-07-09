@@ -1,12 +1,12 @@
-//SimpleD version=1  SimpleD file version=1\\ 
-Main{
+SimpleD{Version=1;FormatVersion=2;}
+Main
+{
 	Width=1120;
 	Height=640;
 	FileVersion=1;
-	SplitFileWithNewLine=True;
-	SplitFileWithTabs=True;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=5,45;
@@ -15,7 +15,8 @@ Object{
 	Input=0,0;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=10,355;
@@ -26,7 +27,8 @@ Object{
 	AllChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Output;
 	File=MIDI\MIDI_Output.vb;
 	Position=895,365;
@@ -36,16 +38,17 @@ Object{
 	MessageChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.fgJoystick;
 	File=HID\Joystick.vb;
 	Position=135,45;
 	Output=1,4,0;
 	Input=0,1;
 	Enabled=True;
-	Joystick=RGT Force Feedback Pro;
 }
-Object{
+Object
+{
 	Name=Plugins.fgGetJoystickAxis;
 	File=HID\Joystick.vb;
 	Position=15,105;
@@ -55,7 +58,8 @@ Object{
 	Rev5=True;
 	Rev6=True;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAxisToBoolean;
 	File=HID\Input.vb;
 	Position=135,155;
@@ -63,14 +67,16 @@ Object{
 	Input=1;
 	SwitchOn=0.9;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_SimulatePedals;
 	File=MIDI\MIDI_SimulatePedals.vb;
 	Position=685,380;
 	Output=3,8,1,2,1,11,1;
 	Input=0,4,1,1,0;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAxisToBoolean;
 	File=HID\Input.vb;
 	Position=135,105;
@@ -78,7 +84,8 @@ Object{
 	Input=1;
 	SwitchOn=0.9;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Keyboard;
 	File=MIDI\MIDI_Keyboard.vb;
 	Position=565,525;
@@ -86,7 +93,8 @@ Object{
 	Output=0;
 	Input=0,1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Volume;
 	File=MIDI\MIDI_Volume.vb;
 	Position=270,395;
@@ -95,21 +103,24 @@ Object{
 	Enabled=True;
 	Volume=127;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Debug;
 	File=MIDI\MIDI_Debug.vb;
 	Position=625,30;
 	Input=0,1;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Debug;
 	File=MIDI\MIDI_Debug.vb;
 	Position=875,30;
 	Input=0,1;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Transpose;
 	File=MIDI\MIDI_Transpose.vb;
 	Position=270,470;
@@ -118,7 +129,8 @@ Object{
 	Enabled=False;
 	Octave=1;
 }
-Object{
+Object
+{
 	Name=Plugins.fgGetKey;
 	File=HID\Keyboard.vb;
 	Position=10,465;
@@ -127,7 +139,8 @@ Object{
 	Enabled=True;
 	Key=Pause;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=170,465;
@@ -136,7 +149,8 @@ Object{
 	Enabled=True;
 	Value=False;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
 	Position=460,85;
@@ -144,7 +158,8 @@ Object{
 	Input=0,0;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_SetController;
 	File=MIDI\MIDI_SetController.vb;
 	Position=495,195;
@@ -154,7 +169,8 @@ Object{
 	Controller=0;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=165,215;
@@ -163,7 +179,8 @@ Object{
 	Enabled=True;
 	Value=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_BasicFilter;
 	File=MIDI\MIDI_BasicFilter.vb;
 	Position=270,295;
@@ -176,7 +193,8 @@ Object{
 	Instrument=False;
 	Notes=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_GetInstrument;
 	File=MIDI\MIDI_Instrument.vb;
 	Position=270,245;
@@ -184,7 +202,8 @@ Object{
 	Input=0,1;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_GetNote;
 	File=MIDI\MIDI_Note.vb;
 	Position=270,175;
@@ -195,7 +214,8 @@ Object{
 	AllChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_SetInstrument;
 	File=MIDI\MIDI_Instrument.vb;
 	Position=545,270;
@@ -203,7 +223,8 @@ Object{
 	Input=1,1;
 	Enabled=False;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_GetNote;
 	File=MIDI\MIDI_Note.vb;
 	Position=270,105;

@@ -174,12 +174,11 @@ Public Module Plugins
 
     Public LoadedFile As String = ""
     Public Const FileVersion As Short = 1 'If you change this do not for get to change the suported versions. (inside the open sub.)
-    Private SplitFileWithNewLine As Boolean = True
-    Private SplitFileWithTabs As Boolean = True
+    Public BraceStyle As SimpleD.Group.Style = SimpleD.Group.Style.BSD_Allman
 
     Public Event OpenedEvent()
 
-    Public Sub Open(ByVal Data As String, Optional FromFile As Boolean = True)
+    Public Sub Open(ByVal Data As String, Optional ByVal FromFile As Boolean = True)
         If FromFile AndAlso Not IO.File.Exists(Data) Then
             MsgBox("Could not find file:" & vbNewLine & Data, , "Error loading")
             Return
@@ -215,7 +214,7 @@ Public Module Plugins
         Form.Location = New Point(x, y) 'Set the window location.
 
         'Make sure the version of the file is supported.
-        Dim CurrentFileVersion As Single = g.GetValue("FileVersion")
+        Dim CurrentFileVersion As Single = Single.Parse(g.GetValue("FileVersion"))
         Select Case CurrentFileVersion
             Case 0.5, 1 'Supported versions.
             Case Else
@@ -225,8 +224,8 @@ Public Module Plugins
                 Return
         End Select
 
-        g.GetValue("SplitFileWithNewLine", SplitFileWithNewLine, False)
-        g.GetValue("SplitFileWithTabs", SplitFileWithTabs, False)
+        BraceStyle = SimpleD.Group.Style.BSD_Allman
+        If g.GetValue("BraceStyle") <> "" Then [Enum].TryParse(g.GetValue("BraceStyle"), BraceStyle)
 
         'Get the number of objects.
         Dim numObj As Integer
@@ -321,18 +320,17 @@ Public Module Plugins
         'g.SetValue("Objects", Objects.Count - 1) 0.5
         g.SetValue("FileVersion", FileVersion)
 
-        g.SetValue("SplitFileWithNewLine", SplitFileWithNewLine)
-        g.SetValue("SplitFileWithTabs", SplitFileWithTabs)
-
         'Save each object.
         For Each obj As Object In Objects
             sd.AddGroup(obj.Save, False)
         Next
 
+        g.SetValue("BraceStyle", BraceStyle.ToString)
+
         If Not File.Contains("\") Then File = "\" & File
 
         'Save to file.
-        sd.ToFile(File, SplitFileWithNewLine, SplitFileWithTabs)
+        sd.ToFile(File, , BraceStyle)
 
         LoadedFile = File
     End Sub
