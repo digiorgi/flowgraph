@@ -1,13 +1,14 @@
 SimpleD{Version=1;FormatVersion=2;}
-Main{
+Main
+{
 	DisableUI=True;
 	Width=875;
 	Height=370;
 	FileVersion=1;
-	SplitFileWithNewLine=True;
-	SplitFileWithTabs=True;
+	BraceStyle=BSD_Allman;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=5,105;
@@ -16,7 +17,8 @@ Object{
 	Input=0,0;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=5,25;
@@ -27,7 +29,8 @@ Object{
 	AllChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Output;
 	File=MIDI\MIDI_Output.vb;
 	Position=635,25;
@@ -37,16 +40,17 @@ Object{
 	MessageChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.fgJoystick;
 	File=HID\Joystick.vb;
 	Position=135,105;
 	Output=1,4,0;
 	Input=0,1;
 	Enabled=True;
-	Joystick=RGT Force Feedback Pro;
 }
-Object{
+Object
+{
 	Name=Plugins.fgGetJoystickAxis;
 	File=HID\Joystick.vb;
 	Position=10,165;
@@ -56,7 +60,8 @@ Object{
 	Rev5=True;
 	Rev6=True;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAxisToBoolean;
 	File=HID\Input.vb;
 	Position=120,210;
@@ -64,14 +69,16 @@ Object{
 	Input=1;
 	SwitchOn=0.9;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_SimulatePedals;
 	File=MIDI\MIDI_SimulatePedals.vb;
 	Position=380,110;
 	Output=2,8,1,2,1;
 	Input=0,1,1,1,1;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAxisToBoolean;
 	File=HID\Input.vb;
 	Position=120,160;
@@ -79,7 +86,8 @@ Object{
 	Input=1;
 	SwitchOn=0.9;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Keyboard;
 	File=MIDI\MIDI_Keyboard.vb;
 	Position=310,245;
@@ -87,7 +95,8 @@ Object{
 	Output=0;
 	Input=0,1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Volume;
 	File=MIDI\MIDI_Volume.vb;
 	Position=265,25;
@@ -96,7 +105,8 @@ Object{
 	Enabled=True;
 	Volume=127;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAxisToBoolean;
 	File=HID\Input.vb;
 	Position=120,260;

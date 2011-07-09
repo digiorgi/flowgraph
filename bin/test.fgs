@@ -1,13 +1,13 @@
 SimpleD{Version=1;FormatVersion=2;}
-Main{
-	Maximized=True;
+Main
+{
 	Width=755;
 	Height=435;
 	FileVersion=1;
-	SplitFileWithNewLine=True;
-	SplitFileWithTabs=True;
+	BraceStyle=BSD_Allman;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=5,45;
@@ -16,7 +16,8 @@ Object{
 	Input=0,0;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
 	Position=435,25;
@@ -24,14 +25,16 @@ Object{
 	Input=0,3;
 	Enabled=True;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=625,25;
 	Input=1;
 	Data=0;
 }
-Object{
+Object
+{
 	Name=Plugins.fgGetKey2;
 	File=HID\Keyboard.vb;
 	Position=230,50;
@@ -40,7 +43,8 @@ Object{
 	Enabled=True;
 	Key=Pause;
 }
-Object{
+Object
+{
 	Name=Plugins.fgAdd;
 	File=fgAdd.vb;
 	Position=540,195;
@@ -48,14 +52,16 @@ Object{
 	Output=1,5,0;
 	Input=1,1,1,1,1;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=605,195;
 	Input=1;
 	Data=80;
 }
-Object{
+Object
+{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=285,155;
@@ -64,7 +70,8 @@ Object{
 	Enabled=False;
 	Value=16;
 }
-Object{
+Object
+{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=465,110;
@@ -73,7 +80,8 @@ Object{
 	Enabled=False;
 	Value=16;
 }
-Object{
+Object
+{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=590,335;
@@ -82,7 +90,8 @@ Object{
 	Enabled=False;
 	Value=16;
 }
-Object{
+Object
+{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=355,275;
@@ -91,7 +100,8 @@ Object{
 	Enabled=False;
 	Value=16;
 }
-Object{
+Object
+{
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=435,365;
@@ -100,7 +110,8 @@ Object{
 	Enabled=False;
 	Value=16;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=15,205;
@@ -109,7 +120,8 @@ Object{
 	Enabled=True;
 	Value=False;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=10,145;
@@ -118,7 +130,8 @@ Object{
 	Enabled=True;
 	Value=True;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
 	Position=115,150;
@@ -126,7 +139,8 @@ Object{
 	Input=1,0;
 	Enabled=False;
 }
-Object{
+Object
+{
 	Name=Plugins.hidSendKeys;
 	File=HID\SendKeys.vb;
 	Position=115,315;
