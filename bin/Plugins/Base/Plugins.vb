@@ -307,6 +307,7 @@ Public Module Plugins
     End Sub
 
     Public Sub Save(ByVal File As String)
+        File = IO.Path.GetFullPath(File)
 
         Dim sd As New SimpleD.Group
         Dim g As SimpleD.Group = sd.CreateGroup("Main")
@@ -322,7 +323,7 @@ Public Module Plugins
 
         'Save each object.
         For Each obj As Object In Objects
-            sd.AddGroup(obj.Save, False)
+            sd.AddGroup(obj.Save)
         Next
 
         g.SetValue("BraceStyle", BraceStyle.ToString)
@@ -331,7 +332,6 @@ Public Module Plugins
 
         'Save to file.
         sd.ToFile(File, , BraceStyle)
-
         LoadedFile = File
     End Sub
 

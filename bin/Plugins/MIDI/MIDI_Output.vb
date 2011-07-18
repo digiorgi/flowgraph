@@ -147,10 +147,10 @@ Public Class MIDI_Output
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.GetValue("Enabled", Enabled, False)
-        g.GetValue("DeviceID", comDevices.SelectedIndex)
-        g.GetValue("MessageChannels", chkMessageChannels.Checked)
+        g.GetValue("DeviceID", comDevices.SelectedIndex, True)
+        g.GetValue("MessageChannels", chkMessageChannels.Checked, True)
         Try
-            g.GetValue("Channel", numChannel.Value)
+            g.GetValue("Channel", numChannel.Value, True)
         Catch ex As Exception
         End Try
 

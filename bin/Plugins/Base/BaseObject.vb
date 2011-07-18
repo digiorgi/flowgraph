@@ -143,7 +143,7 @@ Public MustInherit Class BaseObject
 
 
         If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
-            g.GetValue("Output", tmp)
+            g.GetValue("Output", tmp, True)
             Dim tmpS As String() = Split(tmp, "`")
             For n As Integer = 0 To tmpS.Length - 1
                 If n >= Output.Length Then Exit For
@@ -152,7 +152,7 @@ Public MustInherit Class BaseObject
         End If
 
         If Input IsNot Nothing Then 'Same as output^^^ but for inputs.
-            g.GetValue("Input", tmp)
+            g.GetValue("Input", tmp, True)
             Dim tmpS As String() = Split(tmp, ",")
             For n As Integer = 0 To tmpS.Length - 1
                 If n >= Input.Length Then Exit For

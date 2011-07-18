@@ -134,7 +134,7 @@ Object
 {
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
-	Position=115,150;
+	Position=115,120;
 	Output=0;
 	Input=1,0;
 	Enabled=False;

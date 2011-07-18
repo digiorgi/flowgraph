@@ -30,6 +30,12 @@
 
 Option Explicit On
 Option Strict Off
+
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+Imports Microsoft.VisualBasic
+
 Namespace SimpleD
     Partial Public Class Group
 
@@ -47,6 +53,7 @@ Namespace SimpleD
             End If
         End Sub
 
+#Region "To/From file"
         ''' <summary>
         ''' Load the SimpleData from a file.
         ''' </summary>
@@ -63,13 +70,15 @@ Namespace SimpleD
 
         Public Sub ToFile(ByVal File As String, Optional AddVersion As Boolean = True, Optional OverrideStyle As Style = Style.None)
             'Create the folder if it does not exist.
-            If Not IO.Directory.Exists(IO.Path.GetDirectoryName(File)) Then
+            If File.Contains("\") Or File.Contains("/") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(File))
             End If
             Dim sw As New IO.StreamWriter(File)
-            sw.Write(ToString())
+            sw.Write(ToString(AddVersion, OverrideStyle))
             sw.Close()
         End Sub
+#End Region
+
 #Region "Group"
         ''' <summary>
         ''' Create a group.
@@ -84,20 +93,8 @@ Namespace SimpleD
             End If
             Return tmp 'Return the group.
         End Function
-        Public Sub AddGroup(ByVal Group As Group, Optional ByVal CombineDuplicates As Boolean = False)
-            If Not CombineDuplicates Then
-                Groups.Add(Group)
-            Else
-                'First lets see if we can find a group.
-                Dim tmp As Group = GetGroup(Group.Name)
-                If tmp IsNot Nothing Then
-                    'We found a group so lets combine them.
-                    tmp.Combine(Group)
-                Else
-                    'We did not find any other groups so add it to the list.
-                    Groups.Add(Group)
-                End If
-            End If
+        Public Sub AddGroup(ByVal Group As Group)
+            Groups.Add(Group)
         End Sub
         Public Function GetGroup(ByVal Name As String) As Group
             Name = LCase(Name)
@@ -118,18 +115,73 @@ Namespace SimpleD
             Next
             Return tmp.ToArray
         End Function
+
+        ''' <summary>
+        ''' Will keep the first group with a given name.
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub RemoveDuplicateGroups(ByVal SubGroups As Boolean)
+            Dim names As New List(Of String)
+            Dim i As Integer = 0
+            While i < Groups.Count
+                Dim RemoveGroup As Boolean = False
+                For Each n As String In names
+                    If LCase(Groups(i).Name) = n Then RemoveGroup = True
+                Next
+                If RemoveGroup Then
+                    Groups.RemoveAt(i)
+                    i -= 1
+                Else
+                    names.Add(LCase(Groups(i).Name))
+                End If
+                i += 1
+            End While
+            names.Clear()
+            'Do sub groups.
+            If SubGroups Then
+                For Each g As Group In Groups
+                    g.RemoveDuplicateGroups(True)
+                Next
+            End If
+        End Sub
+        ''' <summary>
+        ''' Will keep the first group with a given name.
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub RemoveDuplicateGroups(ByVal GroupName As String, ByVal SubGroups As Boolean)
+            GroupName = LCase(GroupName)
+            Dim FoundFirst As Boolean = False
+            Dim i As Integer = 0
+            While i < Groups.Count
+                Dim RemoveGroup As Boolean = False
+                If LCase(Groups(i).Name) = GroupName Then
+                    If FoundFirst Then
+                        Groups.RemoveAt(i)
+                        i -= 1
+                    Else
+                        FoundFirst = True
+                    End If
+                End If
+                i += 1
+            End While
+            If SubGroups Then
+                For Each g As Group In Groups
+                    g.RemoveDuplicateGroups(GroupName, True)
+                Next
+            End If
+        End Sub
 #End Region
 
-#Region "SetValue"
+#Region "Add&Set Value"
         ''' <summary>
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
         ''' </summary>
         Public Sub SetValue(ByVal Name As String, ByVal Value As String)
             If Name = "" Or Value = "" Then Return
-            Dim tmp As Prop = Find(Name) 'Find the property.
+            Dim tmp As [Property] = Find(Name) 'Find the property.
             If tmp Is Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Name, Value)) 'Add the property.
+                Properties.Add(New [Property](Name, Value)) 'Add the property.
             Else
                 tmp.Value = Value 'Set the value.
             End If
@@ -142,22 +194,9 @@ Namespace SimpleD
         Public Sub SetValue(ByVal Name As String, ByVal Value As String, ByVal DefaultValue As String)
             If Name = "" Or Value = "" Then Return
             If Value = DefaultValue Then Return 'Return if the value is the default value.
-            Dim tmp As Prop = Find(Name) 'Find the property.
+            Dim tmp As [Property] = Find(Name) 'Find the property.
             If tmp Is Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Name, Value)) 'Add the property.
-            Else
-                tmp.Value = Value 'Set the value.
-            End If
-        End Sub
-        ''' <summary>
-        ''' This sets the value of a property.
-        ''' If it can not find the property it creates it.
-        ''' </summary>
-        Public Sub SetValue(ByVal Control As Windows.Forms.Control)
-            Dim Value As String = GetValueFromControl(Control) 'Find the property from a object and set the value.
-            Dim tmp As Prop = Find(Control.Name) 'Find the property.
-            If tmp Is Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Control.Name, Value)) 'Add the property.
+                Properties.Add(New [Property](Name, Value)) 'Add the property.
             Else
                 tmp.Value = Value 'Set the value.
             End If
@@ -168,7 +207,7 @@ Namespace SimpleD
         ''' </summary>
         Public Sub AddValue(ByVal Name As String, ByVal Value As String)
             If Name = "" Then Return
-            Properties.Add(New Prop(Name, Value))
+            Properties.Add(New [Property](Name, Value))
         End Sub
 #End Region
 #Region "GetValue"
@@ -177,15 +216,15 @@ Namespace SimpleD
         ''' </summary>
         ''' <param name="Name">The name of the property to get the value from.</param>
         Public Function GetValue(ByVal Name As String) As String
-            Dim prop As Prop = Find(Name) 'Find the property and return the value.
+            Dim prop As [Property] = Find(Name) 'Find the property and return the value.
             If prop IsNot Nothing Then Return prop.Value
             Return Nothing
         End Function
         Public Function GetValueArray(ByVal Name As String) As String()
             Dim tmp As New List(Of String)
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    tmp.Add(Prop.Value)
+            For Each [Property] As [Property] In Properties
+                If LCase([Property].Name) = LCase(Name) Then
+                    tmp.Add([Property].Value)
                 End If
             Next
             Return tmp.ToArray
@@ -196,103 +235,27 @@ Namespace SimpleD
         ''' <param name="Name"></param>
         ''' <param name="Value"></param>
         ''' <param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
-        Public Sub GetValue(ByVal Name As String, ByRef Value As Object, Optional ByVal EmptyIfNotFound As Boolean = True)
-            Dim prop As Prop = Find(Name)
+        Public Sub GetValue(ByVal Name As String, ByRef Value As Object, ByVal EmptyIfNotFound As Boolean)
+            Dim prop As [Property] = Find(Name)
             If prop Is Nothing Then
                 If EmptyIfNotFound Then Value = Nothing
             Else
                 Value = prop.Value 'Find the property and return the value.
             End If
         End Sub
-
-        ''' <summary>
-        ''' Sets the value of the control to the proprety with the same name.
-        ''' Known controls: TextBox,Label,CheckBox,RadioButton,NumericUpDown,ProgressBar
-        ''' </summary>
-        ''' <param name="Control">The control to get the property from.</param>
-        ''' <param name="Value">Returns value if control is unknown.</param>
-        Public Sub GetValue(ByRef Control As Windows.Forms.Control, ByRef Value As String)
-            Dim Prop As Prop = Find(Control.Name) 'Find the property from the control name.
-            If Prop Is Nothing Then Return
-            Dim TempValue As String = Prop.Value
-
-            Dim obj As Object = Control
-            If TypeOf Control Is Windows.Forms.TextBox Or TypeOf Control Is Windows.Forms.Label Then
-                obj.Text = TempValue
-
-            ElseIf TypeOf Control Is Windows.Forms.CheckBox Or TypeOf Control Is Windows.Forms.RadioButton Then
-                If Not Boolean.TryParse(TempValue, obj.Checked) Then Value = TempValue
-
-            ElseIf TypeOf Control Is Windows.Forms.NumericUpDown Or TypeOf Control Is Windows.Forms.ProgressBar Then
-                Dim tValue As Decimal = 0
-                If Decimal.TryParse(TempValue, tValue) Then
-                    If tValue > obj.Maximum Then
-                        obj.Value = obj.Maximum
-                    ElseIf tValue < obj.Minimum Then
-                        obj.Value = obj.Minimum
-                    Else
-                        obj.Value = tValue
-                    End If
-                Else
-                    Value = TempValue
-                End If
-
-                Else
-                    'Throw New Exception("Could not find object type.")
-                    Value = TempValue
-                End If
-        End Sub
-        ''' <summary>
-        ''' Uses the name of the control to find the property value.
-        ''' </summary>
-        ''' <param name="Control"></param>
-        ''' <returns>Property value.</returns>
-        Public Function GetValue(ByVal Control As Windows.Forms.Control) As String
-            Return GetValue(Control.Name)
-        End Function
 #End Region
 
-        Private Function GetValueFromControl(ByVal Obj As Object) As String
-            If TypeOf Obj Is Windows.Forms.TextBox Or TypeOf Obj Is Windows.Forms.Label Then
-                Return Obj.Text
-            ElseIf TypeOf Obj Is Windows.Forms.CheckBox Or TypeOf Obj Is Windows.Forms.RadioButton Then
-                Return Obj.Checked
-            ElseIf TypeOf Obj Is Windows.Forms.NumericUpDown Or TypeOf Obj Is Windows.Forms.ProgressBar Then
-                Return Obj.Value
-            End If
-
-            'Unknown control, so lets see if we can find the right value.
-            Dim Value As String = "Could_Not_Find_Value"
-            Try 'Try and get the value.
-                Value = Obj.Value
-            Catch
-                Try 'Try and get checked.
-                    Value = Obj.Checked
-                Catch
-                    Try 'Try and get the text.
-                        Value = Obj.Text
-                    Catch
-                        Try
-                            Value = Obj.ToString
-                        Catch
-                            Throw New Exception("Could not get value from object:" & Obj.name)
-                        End Try
-                    End Try
-                End Try
-            End Try
-            Return Value
-        End Function
-
+#Region "Find Properties"
         ''' <summary>
         ''' Find a property from the name. returns the first property found.
         ''' </summary>
         ''' <param name="Name">The name of the property.</param>
         ''' <returns>The property.</returns>
-        Public Function Find(ByVal Name As String) As Prop
+        Public Function Find(ByVal Name As String) As [Property]
             'Very simple,  loop through each property until the names match. then return the matching property.
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    Return Prop
+            For Each [Property] As [Property] In Properties
+                If LCase([Property].Name) = LCase(Name) Then
+                    Return [Property]
                 End If
             Next
             Return Nothing
@@ -301,32 +264,16 @@ Namespace SimpleD
         ''' Find a properties from the name. returns all properties found.
         ''' </summary>
         ''' <param name="Name">The name of the property.</param>
-        Public Function FindArray(ByVal Name As String) As Prop()
-            Dim tmp As New List(Of Prop)
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    tmp.Add(Prop)
+        Public Function FindArray(ByVal Name As String) As [Property]()
+            Dim tmp As New List(Of [Property])
+            For Each [Property] As [Property] In Properties
+                If LCase([Property].Name) = LCase(Name) Then
+                    tmp.Add([Property])
                 End If
             Next
             Return tmp.ToArray
         End Function
+#End Region
 
-
-        ''' <summary>
-        ''' Conbines the group with this group.
-        ''' </summary>
-        ''' <param name="Group">Overides all the properties with the properties in the group.</param>
-        Public Sub Combine(ByVal Group As Group)
-            For Each Prop As Prop In Group.Properties
-                SetValue(Prop.Name, Prop.Value)
-            Next
-            For Each Grp As Group In Group.Groups
-                AddGroup(Grp)
-            Next
-        End Sub
-        Overloads Shared Operator +(ByVal left As Group, ByVal right As Group) As Group
-            left.Combine(right)
-            Return left
-        End Operator
     End Class
 End Namespace

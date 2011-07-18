@@ -36,7 +36,7 @@ Public Class hidSendKeys
         Return g
     End Function
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
-        g.GetValue("Keys", txtKeys.Text)
+        g.GetValue("Keys", txtKeys.Text, True)
         MyBase.Load(g)
     End Sub
 

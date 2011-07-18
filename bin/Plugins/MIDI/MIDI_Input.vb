@@ -104,10 +104,10 @@ Public Class MIDI_Input
     Public Overrides Sub Load(ByVal g As SimpleD.Group)
 
         g.GetValue("Enabled", Enabled, False)
-        g.GetValue("DeviceID", comDevices.SelectedIndex)
-        g.GetValue("AllChannels", chkAllChannels.Checked)
+        g.GetValue("DeviceID", comDevices.SelectedIndex, True)
+        g.GetValue("AllChannels", chkAllChannels.Checked, True)
         Try
-            g.GetValue("Channel", numChannel.Value)
+            g.GetValue("Channel", numChannel.Value, True)
         Catch ex As Exception
         End Try
 
