@@ -26,7 +26,7 @@ Namespace Common
             Return g
         End Function
         Public Overrides Sub Load(ByVal g As SimpleD.Group)
-            g.GetValue("Data", Data)
+            g.GetValue("Data", Data, True)
 
             MyBase.Load(g)
         End Sub

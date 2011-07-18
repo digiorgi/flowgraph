@@ -1,4 +1,4 @@
-##0.1.4## InDev
+##0.1.4## InDev Dont forget to disable SlimDX by default.
 New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127
@@ -10,6 +10,7 @@ Fixed	: MIDI_BasicFilter( Was not saving properly )
 Fixed	: If a input from a object was removed, then a fgs loaded it would crash.
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 Fixed	: Silder and Counter was not saving. (enabled, value)
+Fixed	: Save would not work when file was not full.
 
 
 ##0.1.3##

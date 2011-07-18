@@ -30,6 +30,12 @@
 
 Option Explicit On
 Option Strict On
+
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+Imports Microsoft.VisualBasic
+
 Namespace SimpleD
     Module Info
         'What things can NOT contain.
@@ -38,16 +44,19 @@ Namespace SimpleD
         '   Group names { // = ;
         Public Const Version = 1
         Public Const FileVersion = 2
-        '1      *InDev* Before release there should be no ToDo: 
+        '1      7-18-2011
         'New    : ToString now has brace styling.
         'New    : FromString(Now Parse) is now faster. (Have seen 14x better speed. Bigger strings will have a bigger difference.)
         'New    : Can now have properties with out any groups in a file.
         'New    : Checks for empty data in "Group.FromString".
+        'New    : Can now set what you want to use as a tab.
+        'Renamed: Prop to Property
+        'Removed: Windows.Forms and everything that used it.
         'Change : Now saves the version of SimpleD as a group on the top of the file. (was saved as a comment before.)
         'Change : Removed "SimpleD.SimpleD" now just use "SimpleD.Group".
         'Change : The helper functions are now in a seperate file. (Can be put in same file if desired.)
-        'Fixed  : Prop is now a class. Fixed a few bugs because structures are not reference type.
-        'Fixed  : GetValue(ByRef Control, ByRef Value) Nolonger crashes if value did not convert properly.
+        'Fixed  : Property is now a class. Fixed a few bugs because structures are not reference type.
+        'Fixed  : GetValue(ByRef Control, ByRef Value) Nolonger crashes if value did not convert properly. (Can be found at: https://code.google.com/p/simpled/wiki/control_helper)
         'Fixed  : ToFile now creates dir if it does not exist.
 
         'Old change logs at:
@@ -57,7 +66,7 @@ Namespace SimpleD
     Public Class Group
         Public Name As String
 
-        Public Properties As New List(Of Prop)
+        Public Properties As New List(Of [Property])
         Public Groups As New List(Of Group)
 
         Public Sub New(Optional ByVal Name As String = "")
@@ -69,9 +78,13 @@ Namespace SimpleD
         Enum Style
             None
             Whitesmiths
+            GNU
             BSD_Allman
+            K_R
+            GroupsOnNewLine
         End Enum
         Public BraceStyle As Style = Style.BSD_Allman
+        Public Tab As String = vbTab
 
         ''' <summary>
         ''' Returns a string with all the properties and sub groups.
@@ -96,26 +109,29 @@ Namespace SimpleD
             'Name and start of group. Name{
             If Not IsFirst Then
                 Select Case CurrentStyle
-                    Case Style.None
+                    Case Style.None, Style.K_R
                         tmp &= Name & "{"
                     Case Style.Whitesmiths
                         tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
                     Case Style.BSD_Allman
                         tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "{"
+                    Case Style.GNU
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "  {"
+                    Case Style.GroupsOnNewLine
+                        tmp &= Environment.NewLine & GetTabs(TabCount - 1) & Name & "{"
                 End Select
             End If
 
             'Groups and properties
             Select Case CurrentStyle
-                Case Style.None
+                Case Style.None, Style.GroupsOnNewLine
                     For n As Integer = 0 To Properties.Count - 1
                         tmp &= Properties(n).Name & "=" & Properties(n).Value & ";"
                     Next
                     For Each Grp As Group In Groups
                         tmp &= Grp.ToStringBase(False, TabCount + 1, False, OverrideStyle)
                     Next
-
-                Case Style.Whitesmiths, Style.BSD_Allman
+                Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
                     For n As Integer = 0 To Properties.Count - 1
                         tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).Name & "=" & Properties(n).Value & ";"
                     Next
@@ -127,12 +143,14 @@ Namespace SimpleD
             '} end of group.
             If Not IsFirst Then
                 Select Case CurrentStyle
-                    Case Style.None
+                    Case Style.None, Style.GroupsOnNewLine
                         tmp &= "}"
                     Case Style.Whitesmiths
                         tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
-                    Case Style.BSD_Allman
+                    Case Style.BSD_Allman, Style.K_R
                         tmp &= Environment.NewLine & GetTabs(TabCount) & "}"
+                    Case Style.GNU
+                        tmp &= Environment.NewLine & GetTabs(TabCount) & "  }"
                 End Select
             End If
 
@@ -141,65 +159,16 @@ Namespace SimpleD
 
         Private Function GetTabs(Count As Integer) As String
             If Count < 1 Then Return ""
-            Return New String(CChar(vbTab), Count)
+            Dim str As String = Tab
+            For i As Integer = 2 To Count
+                str &= Tab
+            Next
+            Return str
         End Function
 
 #End Region
 
 #Region "Parse(FromString)"
-        'ToDo: Remove old FromString (After Parse has been fully tested.)
-        Public Function FromStringOLD(Data As String, Optional ByRef Index As Integer = 0) As String
-            If Data = "" Then Return "Data is empty!"
-            Dim tmp As String
-            Dim InComment As Boolean = False
-            'Now lets get all of the properties from the group.
-            Do
-                If Index + 2 > Data.Length Then Return "Could not find end of group: " & Name
-                tmp = Data.Substring(Index, 2)
-                If tmp = "//" Then
-                    InComment = True
-                    Index += 1
-                ElseIf tmp = "\\" Then
-                    InComment = False
-                    Index += 1
-
-
-                ElseIf Not InComment Then
-                    Dim Equals As Integer = Data.IndexOf("=", Index) 'Search for the next property.
-                    Dim GroupStart As Integer = Data.IndexOf("{", Index) 'Search for the NEXT group.
-                    If Equals = -1 AndAlso GroupStart = -1 Then Return "" 'If there is no more groups and properties then we are at the end of file.
-                    Dim GroupEnd As Integer = Data.IndexOf("}", Index)
-                    If GroupEnd > -1 And GroupEnd < GroupStart And GroupEnd < Equals Then 'Are we at the end of this group?
-                        Index = GroupEnd
-                        Return ""
-                    End If
-                    'Is the next thing a group or property?
-                    If Equals > -1 And ((Equals < GroupStart) Or GroupStart = -1) Then
-                        Dim PropName As String = Data.Substring(Index, Equals - Index).Trim
-                        Index = Equals
-                        Dim PropEnd As Integer = Data.IndexOf(";", Index)
-                        If PropEnd = -1 Then Return "Could not find end of Prop:" & PropName
-                        Dim PropValue As String = Data.Substring(Index + 1, PropEnd - Index - 1)
-                        Index = PropEnd
-                        Properties.Add(New Prop(PropName, PropValue))
-
-                    ElseIf GroupStart > -1 Then
-                        Dim gName As String = Trim(Data.Substring(Index, GroupStart - Index).Trim)
-                        Index = GroupStart + 1
-
-                        Dim NewGroup As New Group(gName)
-                        Groups.Add(NewGroup)
-                        Dim result As String = NewGroup.FromStringOLD(Data, Index)
-                        If result <> "" Then Return result
-                    End If
-                End If
-
-                Index += 1
-                If Index >= Data.Length Then Return "" 'The end of the string is also the end of the group.
-            Loop Until Data.Substring(Index, 1) = "}"
-            Return ""
-        End Function
-
 
         ''' <summary>
         ''' Note: It will continue loading even with errors.
@@ -273,7 +242,7 @@ Namespace SimpleD
 
                     Case 1 'In property
                         If chr = ";"c Then
-                            Properties.Add(New Prop(tName.Trim, tValue))
+                            Properties.Add(New [Property](tName.Trim, tValue))
                             tName = ""
                             tValue = ""
                             State = 0
@@ -325,7 +294,7 @@ Namespace SimpleD
     ''' <summary>
     ''' Holds a properties name and value.
     ''' </summary>
-    Public Class Prop
+    Public Class [Property]
         Public Name As String
         Public Value As String
         Public Sub New(ByVal Name As String, ByVal Value As String)
@@ -333,12 +302,12 @@ Namespace SimpleD
             Me.Value = Value
         End Sub
 
-        Shared Operator =(ByVal left As Prop, ByVal right As Prop) As Boolean
+        Shared Operator =(ByVal left As [Property], ByVal right As [Property]) As Boolean
             If left Is Nothing And right Is Nothing Then Return True
             If left Is Nothing Or right Is Nothing Then Return False
             Return left.Name = right.Name And left.Value = right.Value
         End Operator
-        Shared Operator <>(ByVal left As Prop, ByVal right As Prop) As Boolean
+        Shared Operator <>(ByVal left As [Property], ByVal right As [Property]) As Boolean
             Return Not left = right
         End Operator
     End Class
