@@ -36,7 +36,7 @@ Object
 	Position=635,25;
 	Input=0,1,0,0,0;
 	Enabled=True;
-	DeviceID=6;
+	DeviceID=7;
 	MessageChannels=True;
 	Channel=1;
 }
