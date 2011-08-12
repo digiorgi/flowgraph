@@ -12,7 +12,7 @@ Namespace Common
             Setup(UserData, StartPosition, 40) 'Setup the base rectangles.
 
             Outputs(New String() {"Value,Boolean"})
-            Inputs(New String() {"Enable,Boolean", "Value,Boolean"})
+            Inputs(New String() {"Enable,Boolean", "Value,,Boolean"})
 
             'Set the title.
             Title = "Switch"
@@ -22,15 +22,18 @@ Namespace Common
         Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
             Select Case sender.Index
                 Case 0 'Enable
-                    Enabled = Data
+                    Enabled = DirectCast(Data, Boolean)
 
-                Case 1 'Set value
+                Case 1 'Value
                     If Not Enabled Then Return
-                    If Data = True Then
+
+                    If Data Is Nothing Then  'Tick
                         Value = Not Value
                         Send(Value)
+                    Else 'Set value
+                        Value = DirectCast(Data, Boolean)
+                        Send(Value)
                     End If
-
             End Select
 
             DoDraw(Rect)

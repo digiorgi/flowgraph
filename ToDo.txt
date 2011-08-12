@@ -2,10 +2,10 @@
 The objects can be added at anytime. But be aware there could be changes that will brake objects.
 
 ####BUGS####
-Save does not seem to work. Does work after save as
-
+Find better input library!!
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
+Make sure plugins can be connected to plugins that they should beable to connect to.
 
 Step#1
 	
