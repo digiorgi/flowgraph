@@ -434,7 +434,8 @@ Public Class frmMain
 
 
 #Region "Menu"
-    'File
+
+#Region "File"
     'RemoveFromFGS
     Private Sub menuNew_Click(sender As System.Object, e As System.EventArgs) Handles menuNew.Click
         If MsgBox("Are you sure you want to erase everything?", MsgBoxStyle.YesNo, "New") = MsgBoxResult.Yes Then
@@ -470,8 +471,9 @@ Public Class frmMain
     Private Sub menuExit_Click(sender As System.Object, e As System.EventArgs) Handles menuExit.Click
         Me.Close()
     End Sub
+#End Region
 
-    'View
+#Region "View"
     Private Sub menuDisableUI_Click(sender As System.Object, e As System.EventArgs) Handles menuDisableUI.Click
         Plugins.UpdateUI = menuDisableUI.Checked
 
@@ -491,13 +493,19 @@ Public Class frmMain
 
         menuDisableUI.Checked = Not menuDisableUI.Checked
     End Sub
+
     Private Sub menuSimpleLines_Click(sender As System.Object, e As System.EventArgs) Handles menuSimpleLines.Click
         menuSimpleLines.Checked = Not menuSimpleLines.Checked
         Plugins.ComplexLines = Not menuSimpleLines.Checked
         Me.Invalidate()
     End Sub
 
-    'Help
+    Private Sub mnuSource_Click(sender As System.Object, e As System.EventArgs) Handles mnuSource.Click
+        MsgBox("Under construction!", MsgBoxStyle.OkOnly + MsgBoxStyle.Information, "Source - Flowgraph")
+    End Sub
+#End Region
+
+#Region "Help"
     Dim About As New frmAbout
     Private Sub menuAbout_Click(sender As System.Object, e As System.EventArgs) Handles menuAbout.Click
         About.ShowDialog()
@@ -505,9 +513,10 @@ Public Class frmMain
     Private Sub menuBasicUse_Click(sender As System.Object, e As System.EventArgs) Handles menuBasicUse.Click
         System.Diagnostics.Process.Start("https://code.google.com/p/flowgraph/wiki/Flowgraph")
     End Sub
-
+#End Region
 
 #End Region
+
 
 
 

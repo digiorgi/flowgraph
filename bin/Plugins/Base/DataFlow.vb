@@ -146,7 +146,7 @@ Public Class DataFlowBase
             Next
         ElseIf Objects(obj1).Input(Index1).DataType.Count > 0 Then
             Return False
-        Else
+        Else 'Both are undefined.
             FoundType = True
         End If
         If Not FoundType Then Return False

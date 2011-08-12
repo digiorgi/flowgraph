@@ -36,6 +36,7 @@ Partial Class frmMain
         Me.menuHelp = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuBasicUse = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSource = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -108,7 +109,7 @@ Partial Class frmMain
         '
         'menuView
         '
-        Me.menuView.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuDisableUI, Me.menuSimpleLines})
+        Me.menuView.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuDisableUI, Me.menuSimpleLines, Me.mnuSource})
         Me.menuView.Name = "menuView"
         Me.menuView.Size = New System.Drawing.Size(42, 20)
         Me.menuView.Text = "&View"
@@ -117,14 +118,14 @@ Partial Class frmMain
         '
         Me.menuDisableUI.Name = "menuDisableUI"
         Me.menuDisableUI.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
-        Me.menuDisableUI.Size = New System.Drawing.Size(166, 22)
+        Me.menuDisableUI.Size = New System.Drawing.Size(170, 22)
         Me.menuDisableUI.Text = "Disable UI"
         '
         'menuSimpleLines
         '
         Me.menuSimpleLines.Name = "menuSimpleLines"
         Me.menuSimpleLines.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
-        Me.menuSimpleLines.Size = New System.Drawing.Size(166, 22)
+        Me.menuSimpleLines.Size = New System.Drawing.Size(170, 22)
         Me.menuSimpleLines.Text = "Simple lines"
         '
         'menuHelp
@@ -148,6 +149,13 @@ Partial Class frmMain
         Me.menuAbout.Name = "menuAbout"
         Me.menuAbout.Size = New System.Drawing.Size(142, 22)
         Me.menuAbout.Text = "&About"
+        '
+        'mnuSource
+        '
+        Me.mnuSource.Name = "mnuSource"
+        Me.mnuSource.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.U), System.Windows.Forms.Keys)
+        Me.mnuSource.Size = New System.Drawing.Size(170, 22)
+        Me.mnuSource.Text = "Source (fgs)"
         '
         'frmMain
         '
@@ -182,5 +190,6 @@ Partial Class frmMain
     Friend WithEvents menuHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuBasicUse As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents menuAbout As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuSource As System.Windows.Forms.ToolStripMenuItem
 
 End Class

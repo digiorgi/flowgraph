@@ -11,7 +11,7 @@ Namespace Common
 
 
             'Create one output.
-            Outputs(New String() {"Tick"})
+            Outputs(New String() {"Tick,"})
 
             Inputs(New String() {"Enable,Boolean", "Interval,Number"})
 
