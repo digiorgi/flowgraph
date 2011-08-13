@@ -63,7 +63,8 @@ Public Class frmMain
 
         'Do command line stuff.
         Dim args As String() = Environment.GetCommandLineArgs
-        For a As Integer = 1 To args.Length - 1
+        Dim a As Integer = 0
+        Do While a < args.Length
             Select Case LCase(args(a))
                 Case "startatcursor"
                     'This block of code will move the window to the mouse position.
@@ -80,6 +81,15 @@ Public Class frmMain
                 Case "nosaveonexit"
                     SaveOnExit = False
 
+                Case "logsave"
+                    a += 1
+                    If a >= args.Length - 1 Then Exit Do
+                    Plugins.LogSavePriority = Integer.Parse(args(a))
+                Case "logshow"
+                    a += 1
+                    If a >= args.Length - 1 Then Exit Do
+                    Plugins.LogShowPriority = Integer.Parse(args(a))
+
                 Case Else
                     If IO.File.Exists(args(a)) Then
                         FileToOpen = args(a)
@@ -88,7 +98,8 @@ Public Class frmMain
                     End If
                     'EndRemoveFromFGS
             End Select
-        Next
+            a += 1
+        Loop
 
         'AddToFGSmenuNew.Dispose()
         'AddToFGSmenuOpen.Dispose()

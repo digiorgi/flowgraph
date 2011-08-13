@@ -180,7 +180,7 @@ Public Module Plugins
 
     Public Sub Open(ByVal Data As String, Optional ByVal FromFile As Boolean = True)
         If FromFile AndAlso Not IO.File.Exists(Data) Then
-            MsgBox("Could not find file:" & vbNewLine & Data, , "Error loading")
+            Log("Could not find file:" & vbNewLine & Data, LogPriority.High)
             Return
         End If
 
@@ -189,6 +189,11 @@ Public Module Plugins
         Dim sd As New SimpleD.Group(Data, FromFile)
 
         Dim g As SimpleD.Group = sd.GetGroup("Main")
+        If g Is Nothing Then
+            Log("Could not load file! " & Data, LogPriority.High)
+            LoadedFile = ""
+            Return
+        End If
 
         WindowSize = New Size(g.GetValue("Width"), g.GetValue("Height"))
         If Not g.GetValue("DisableUI") = "" AndAlso g.GetValue("DisableUI") = True Then
@@ -218,9 +223,9 @@ Public Module Plugins
         Select Case CurrentFileVersion
             Case 0.5, 1 'Supported versions.
             Case Else
-                MsgBox("Wrong file version." & Environment.NewLine _
+                Log("Wrong file version." & Environment.NewLine _
                                   & "File version: " & g.GetValue("FileVersion") & Environment.NewLine _
-                                  & "Requires  version 0.5 or 1", MsgBoxStyle.Critical, "Error loading")
+                                  & "Requires  version 0.5 or 1", LogPriority.High)
                 Return
         End Select
 
@@ -246,7 +251,7 @@ Public Module Plugins
                 g = sd.GetGroup("Object" & i)
             End If
             If g Is Nothing Then
-                MsgBox("Could not find object# " & i & " in file.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                Log("Could not find object# " & i & " in file.", LogPriority.High)
                 ClearObjects()
                 LoadedFile = ""
                 Return
@@ -263,11 +268,13 @@ Public Module Plugins
                 'LoadedFile = ""
                 'Return
 
-                MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name") & Environment.NewLine & "Will be replaced with a dummy" _
-                       , MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                Log("Could not create object# " & i & Environment.NewLine & _
+                       "Name: " & g.GetValue("name") & Environment.NewLine & _
+                       "Will be replaced with a dummy" _
+                       , LogPriority.High)
                 obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.GetValue("userdata"))
                 If obj = -1 Then
-                    MsgBox("Could not create ""ObjectDummy""!", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
+                    Log("Could not create ""ObjectDummy""!", LogPriority.High)
                     ClearObjects()
                     LoadedFile = ""
                     Return
@@ -289,8 +296,8 @@ Public Module Plugins
             Try
                 Objects(n).Load(g)
             Catch ex As Exception
-                MsgBox("Could not load object# " & n & Environment.NewLine & "Name: " & g.GetValue("name") & vbNewLine _
-                      & "Execption=" & ex.Message, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading object")
+                Log("Could not load object# " & n & Environment.NewLine & "Name: " & g.GetValue("name") & vbNewLine _
+                      & "Execption=" & ex.Message, LogPriority.High)
             End Try
         Next
 
@@ -387,7 +394,7 @@ Public Module Plugins
     End Sub
 #End Region
 
-#Region "Adding objects"
+#Region "Adding objects(plugins)"
     'The items in the add object menu.
     Public AddItem As New Menu.Node("Add object", True)
 
@@ -405,7 +412,7 @@ Public Module Plugins
             Objects.Add(Activator.CreateInstance(Type.[GetType](Name), New Object() {StartPosition, UserData}))
             Return Objects.Count - 1
         Catch ex As Exception
-            'MsgBox("Could not create object: " & Name)
+            Log("Could not create object: " & Name & Environment.NewLine & ex.Message, LogPriority.Medium)
             Return -1
         End Try
     End Function
@@ -480,10 +487,25 @@ Public Module Plugins
     'EndRemoveFromFGS
 #End Region
 
-    Public Sub Log(Text As String)
-        'ToDo: ###Add stuff for loging here.
-        Console.Write(Date.Now.ToString & ": " & Text)
-        'Debug.Print(Date.Now.ToString & ": " & Text)
+    Public LogSavePriority As LogPriority = LogPriority.Medium
+    Public LogShowPriority As LogPriority = LogPriority.High
+    Private LogStr As String = ""
+    Enum LogPriority
+        High = 2
+        Medium = 1
+        Low = 0
+    End Enum
+    Public Sub Log(ByVal Text As String, ByVal Priority As LogPriority)
+        LogStr &= Environment.NewLine & Date.Now.ToString & ": " & Text
+        If Priority >= LogSavePriority Then
+            Dim sw As New IO.StreamWriter("Log.txt")
+            sw.Write(LogStr)
+            sw.Close()
+            LogStr = ""
+        End If
+        If Priority >= LogShowPriority Then
+            MessageBox.Show(Text, "Error - Flowgraph", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
     End Sub
 
 End Module

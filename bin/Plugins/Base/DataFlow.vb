@@ -259,15 +259,17 @@ Public Class DataFlowBase
         If Flow Is Nothing Then
             Connected = data(0)
         Else
-
+            Dim Dummy As Integer = 0
             For i As Integer = 1 To data.Length - 1 Step 2
-                TryConnect(data(i), data(i + 1))
+                If Not TryConnect(data(i), data(i + 1)) Then
+                    If Objects(data(i)).GetType Is GetType(ObjectDummy) Then
+                        Dummy += 1
+                    End If
+                End If
             Next
-            'Make sure everything connected.
-            If Connected <> data(0) Then
-                'Throw New Exception("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title)
-                MsgBox("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title & Environment.NewLine & _
-                       "Could because it was trying to connect to a dummy")
+            'Make sure everything connected. (don't cound dummy objects.)
+            If Connected + Dummy <> data(0) Then
+                Log("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title, LogPriority.Medium)
             End If
 
         End If
