@@ -51,7 +51,7 @@ Public Class MIDI_Input
 
             AddControl(comDevices)
         Else
-            MsgBox("Could not find any MIDI input devices!", MsgBoxStyle.Critical, "Error")
+            Log("Could not find any MIDI input devices!")
         End If
 
     End Sub
@@ -143,7 +143,7 @@ Public Class MIDI_Input
             'Create the device.
             Device = New Sanford.Multimedia.Midi.InputDevice(comDevices.SelectedIndex)
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error!")
+            Log(ex.Message)
             Device = Nothing
         End Try
 
@@ -159,7 +159,7 @@ Public Class MIDI_Input
 
 #Region "MIDI events"
     Private Sub Device_Error(ByVal sender As Object, ByVal e As Sanford.Multimedia.ErrorEventArgs) Handles Device.Error
-        MsgBox(e.Error.Message)
+        Log(e.Error.Message)
     End Sub
 
     Private Sub Device_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles Device.ChannelMessageReceived

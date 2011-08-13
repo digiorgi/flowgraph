@@ -572,6 +572,6 @@ Public MustInherit Class BaseObject
     End Function
 
     Public Sub Log(str As String)
-        Plugins.Log("Plugin(" & Name & "): " & str)
+        Plugins.Log("Plugin(" & Name & "): " & str, LogPriority.Low)
     End Sub
 End Class

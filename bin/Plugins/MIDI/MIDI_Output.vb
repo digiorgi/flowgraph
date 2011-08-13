@@ -52,7 +52,7 @@ Public Class MIDI_Output
 
             AddControl(comDevices)
         Else
-            MsgBox("Could not find any MIDI output devices!", MsgBoxStyle.Critical, "Error")
+            Log("Could not find any MIDI output devices!")
         End If
 
     End Sub
@@ -93,7 +93,7 @@ Public Class MIDI_Output
                     ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
                         Device.Send(Data)
                     Else
-                        MsgBox("Not ChannelMessageBuilder or ChannelMessage", MsgBoxStyle.Critical, "Error")
+                        Log("Not ChannelMessageBuilder or ChannelMessage")
                         Return
                     End If
                 Else
@@ -104,7 +104,7 @@ Public Class MIDI_Output
                     ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.ChannelMessage) Then
                         message = New Sanford.Multimedia.Midi.ChannelMessageBuilder(Data)
                     Else
-                        MsgBox("Not ChannelMessageBuilder or ChannelMessage", MsgBoxStyle.Critical, "Error")
+                        Log("Not ChannelMessageBuilder or ChannelMessage")
                         Return
                     End If
 
@@ -124,7 +124,7 @@ Public Class MIDI_Output
                 ElseIf Data.GetType = GetType(Sanford.Multimedia.Midi.SysCommonMessage) Then
                     Device.Send(Data)
                 Else
-                    MsgBox("Not SysCommonMessageBuilder or SysCommonMessage", MsgBoxStyle.Critical, "Error")
+                    Log("Not SysCommonMessageBuilder or SysCommonMessage")
                     Return
                 End If
 
@@ -184,7 +184,7 @@ Public Class MIDI_Output
             'Create the device.
             Device = New Sanford.Multimedia.Midi.OutputDevice(comDevices.SelectedIndex)
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error!")
+            Log(ex.Message)
             Device = Nothing
         End Try
     End Sub
@@ -196,7 +196,7 @@ Public Class MIDI_Output
 
 #Region "MIDI events"
     Private Sub Device_Error(ByVal sender As Object, ByVal e As Sanford.Multimedia.ErrorEventArgs) Handles Device.Error
-        MsgBox(e.Error.Message)
+        Log(e.Error.Message)
     End Sub
 #End Region
 

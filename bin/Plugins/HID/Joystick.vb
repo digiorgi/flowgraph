@@ -103,7 +103,7 @@ Public Class fgJoystick
             Joystick.SetCooperativeLevel(Form.Handle, SlimDX.DirectInput.CooperativeLevel.Exclusive + SlimDX.DirectInput.CooperativeLevel.Background)
 
         Catch ex As Exception
-            MsgBox("Error! Could not create joystick device.", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error")
+            Log("Error! Could not create joystick device.")
             Enabled = False
         Finally
             Joystick.Acquire()

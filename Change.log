@@ -2,8 +2,9 @@
 New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127
+Added	: Logging.
 Change	: Can now only have one output type.
-Updated	: SimpleD to 1.0(beta)
+Updated	: SimpleD to 1.0
 Updated	: SlimDX to March 2011
 Fixed	: Was not saving window size properly.
 Fixed	: MIDI_BasicFilter( Was not saving properly )
