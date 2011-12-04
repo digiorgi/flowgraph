@@ -1,4 +1,4 @@
-SimpleD{Version=1;FormatVersion=2;}
+SimpleD{Version=1.1;FormatVersion=3;}
 Main
 {
 	Width=755;

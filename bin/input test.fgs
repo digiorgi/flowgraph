@@ -1,4 +1,4 @@
-//SimpleD version=0.991  SimpleD file version=1\\
+/*SimpleD version=0.991  SimpleD file version=1*/
 Main{Width=685;Height=340;FileVersion=1;SplitFileWithNewLine=False;SplitFileWithTabs=False;}
 Object{Name=Plugins.fgGetKey;File=HID\Keyboard.vb;Position=140,50;Output=0`1,1,0;Input=0,1,0;Enabled=True;Key=Pause;}
 Object{Name=Plugins.Common.DisplayAsString;File=Common\DisplayAsString.vb;Position=315,65;Input=1;Data=False;}
