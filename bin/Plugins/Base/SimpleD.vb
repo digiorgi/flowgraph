@@ -24,7 +24,7 @@
 '
 'Contact:
 '   Raymond Ellis
-'   Email: RaymondEllis@live.com
+'   Email: RaymondEllis*live.com
 '   Website: https://sites.google.com/site/raymondellis89/
 #End Region
 
@@ -39,12 +39,17 @@ Imports Microsoft.VisualBasic
 Namespace SimpleD
     Module Info
         'What things can NOT contain.
-        '   Property names { // =
+        '   Property names { /* =
         '   Property values ; = (Equals is allowed if specafied)
-        '   Group names { // = ;
-        Public Const Version = 1
-        Public Const FileVersion = 2
-        '1      7-18-2011
+        '   Group names { /* = ;
+        Public Const Version = 1.1
+        Public Const FileVersion = 3
+        '1.1    <Not Released>
+        'Change : Commants are now /*comment*/ (was //comment\\)
+        'Change : There is now NoStyle
+        'Fixed  : Did not spefi that parse is the same as fromstring.
+        '
+        '1      7-18-2011 *Stable*
         'New    : ToString now has brace styling.
         'New    : FromString(Now Parse) is now faster. (Have seen 14x better speed. Bigger strings will have a bigger difference.)
         'New    : Can now have properties with out any groups in a file.
@@ -76,12 +81,13 @@ Namespace SimpleD
 #Region "ToString"
 
         Enum Style
-            None
-            Whitesmiths
-            GNU
-            BSD_Allman
-            K_R
-            GroupsOnNewLine
+            None = 0
+            NoStyle = 1
+            Whitesmiths = 2
+            GNU = 3
+            BSD_Allman = 4
+            K_R = 5
+            GroupsOnNewLine = 6
         End Enum
         Public BraceStyle As Style = Style.BSD_Allman
         Public Tab As String = vbTab
@@ -101,6 +107,7 @@ Namespace SimpleD
 
             Dim CurrentStyle As Style = BraceStyle
             If OverrideStyle <> Style.None Then CurrentStyle = OverrideStyle
+            If CurrentStyle = Style.None Then CurrentStyle = Style.NoStyle
 
             Dim tmp As String = ""
 
@@ -109,7 +116,7 @@ Namespace SimpleD
             'Name and start of group. Name{
             If Not IsFirst Then
                 Select Case CurrentStyle
-                    Case Style.None, Style.K_R
+                    Case Style.NoStyle, Style.K_R
                         tmp &= Name & "{"
                     Case Style.Whitesmiths
                         tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
@@ -124,7 +131,7 @@ Namespace SimpleD
 
             'Groups and properties
             Select Case CurrentStyle
-                Case Style.None, Style.GroupsOnNewLine
+                Case Style.NoStyle, Style.GroupsOnNewLine
                     For n As Integer = 0 To Properties.Count - 1
                         tmp &= Properties(n).Name & "=" & Properties(n).Value & ";"
                     Next
@@ -143,7 +150,7 @@ Namespace SimpleD
             '} end of group.
             If Not IsFirst Then
                 Select Case CurrentStyle
-                    Case Style.None, Style.GroupsOnNewLine
+                    Case Style.NoStyle, Style.GroupsOnNewLine
                         tmp &= "}"
                     Case Style.Whitesmiths
                         tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
@@ -194,7 +201,6 @@ Namespace SimpleD
             Dim ErrorIndex As Integer = 0 'Used for error handling.
             Dim tName As String = "" 'Group or property name
             Dim tValue As String = ""
-            Dim LastChr As Char = " "c 'Only needed for comments because they use two chars. //
 
             Do Until Index > Data.Length - 1
                 Dim chr As Char = Data(Index)
@@ -217,7 +223,6 @@ Namespace SimpleD
                                 Dim newGroup As New Group(tName.Trim)
                                 Results &= newGroup.FromStringBase(False, Data, Index, AllowEqualsInValue)
                                 Groups.Add(newGroup)
-                                LastChr = " "c
                                 tName = ""
 
                             Case "}"c 'End of current group
@@ -228,11 +233,14 @@ Namespace SimpleD
                                 End If
 
 
-                            Case "/"c
-                                If LastChr = "/"c Then
+                            Case "*"c
+                                'If LastChr = "/"c Then
+                                If Index - 1 >= 0 AndAlso Data(Index - 1) = "/"c Then
                                     tName = ""
                                     State = 2 'In comment
                                     ErrorIndex = Index
+                                Else
+                                    tName &= chr
                                 End If
 
                             Case Else
@@ -261,14 +269,16 @@ Namespace SimpleD
                         End If
 
                     Case 2 'In comment
-                        If chr = "\"c And LastChr = "\"c Then
-                            State = 0
+                        If Index - 1 >= 0 Then
+                            If Data(Index - 1) = "*"c AndAlso chr = "/"c Then
+                                State = 0
+                            End If
                         End If
+
 
                 End Select
 
                 Index += 1
-                LastChr = chr
             Loop
 
             If State = 1 Then
@@ -282,6 +292,12 @@ Namespace SimpleD
             Return Results
         End Function
 
+        ''' <summary>
+        ''' Note: It will continue loading even with errors.
+        ''' </summary>
+        ''' <param name="Data">The string to parse.</param>
+        ''' <returns>Errors if any.</returns>
+        ''' <remarks></remarks>
         Shared Function Parse(ByVal Data As String, Optional ByVal AllowEqualsInValue As Boolean = False) As Group
             Dim g As New Group
             g.FromStringBase(True, Data, 0, AllowEqualsInValue)

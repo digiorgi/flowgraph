@@ -1,10 +1,12 @@
-##0.1.4## InDev Dont forget to disable SlimDX by default.
+##0.1.4## InDev Don't forget to disable SlimDX by default.
+BIG note: 0.1.3 fgs files are NOT compatable! (Well work if you remove the first line of text.)
 New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127
 Added	: Logging.
 Change	: Can now only have one output type.
-Updated	: SimpleD to 1.0
+Change	: Comments in .fgs files are now like this: /*Comment Here*/	(makes incompatable with 0.1.3)
+Updated	: SimpleD to 1.1
 Updated	: SlimDX to March 2011
 Fixed	: Was not saving window size properly.
 Fixed	: MIDI_BasicFilter( Was not saving properly )

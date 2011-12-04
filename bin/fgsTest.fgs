@@ -1,12 +1,13 @@
-//SimpleD version=0.991  SimpleD file version=1\\
-Main{
+SimpleD{Version=1.1;FormatVersion=3;}
+Main
+{
 	Width=405;
 	Height=160;
 	FileVersion=1;
-	SplitFileWithNewLine=True;
-	SplitFileWithTabs=True;
+	BraceStyle=BSD_Allman;
 }
-Object{
+Object
+{
 	Name=Plugins.fgGetKey;
 	File=HID\Keyboard.vb;
 	Position=145,70;
@@ -15,14 +16,16 @@ Object{
 	Enabled=True;
 	Key=Pause;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
 	Position=310,85;
 	Input=1;
 	Data=False;
 }
-Object{
+Object
+{
 	Name=Plugins.Common.Timer;
 	File=Common\Timer.vb;
 	Position=10,85;
