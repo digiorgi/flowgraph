@@ -1,24 +1,29 @@
-﻿'AddMenuObject|Add2,Plugins.fgAdd,,2|Math,Add
-'AddMenuObject|Add3,Plugins.fgAdd,,3|Math,Add
-'AddMenuObject|Add4,Plugins.fgAdd,,4|Math,Add
-'AddMenuObject|Add5,Plugins.fgAdd,,5|Math,Add
-'AddMenuObject|Add6,Plugins.fgAdd,,6|Math,Add
-'AddMenuObject|Add7,Plugins.fgAdd,,7|Math,Add
-'AddMenuObject|Add8,Plugins.fgAdd,,8|Math,Add
-'AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
-'AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
+﻿'AddMenuObject|Subtract,Plugins.math_Subtract,,|Math
 'Needed|Name displayed,Class name,Width,UserData|Groups
-Public Class fgAdd
+
+
+Public Class math_Subtract
     Inherits BaseObject
 
     Public Sub New(ByVal StartPosition As Point, ByVal UserData As String)
         Setup(UserData, StartPosition, 30) 'Setup the base rectangles.
 
-        Dim InputCount As Integer = 2
+        Dim InputCount As Integer = -1
         If UserData <> "" Then
-            InputCount = UserData
+            InputCount = Integer.Parse(UserData)
+        Else
+            Dim tmpS As String = InputBox("Number of inputs", "Subtract - Flowgraph", 2)
+            InputCount = Integer.Parse(tmpS)
         End If
 
+        If InputCount < 1 Then
+            Log("Need more then zero inputs!")
+            MsgBox("Need more then zero inputs!")
+            RemoveAt(Me.Index)
+            Return
+        End If
+
+        MyBase.UserData = InputCount.ToString
 
         ReDim Values(InputCount - 1)
         Dim inp(InputCount - 1) As String
@@ -32,8 +37,8 @@ Public Class fgAdd
         Outputs(New String() {"Equals,Number"})
 
         'Set the title.
-        Title = "Add"
-        File = "fgAdd.vb"
+        Title = "Subtract"
+        File = "Math\math_Subtract.vb"
 
     End Sub
 
@@ -42,9 +47,9 @@ Public Class fgAdd
 
         Values(sender.Index) = Data
 
-        Dim Equals As Integer = 0
-        For Each Value As Integer In Values
-            Equals += Value
+        Dim Equals As Integer = Values(0)
+        For i As Integer = 1 To Values.Length - 1
+            Equals -= Values(i)
         Next
         Send(Equals)
     End Sub

@@ -6,7 +6,12 @@ Find better input library!!
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
 Make sure plugins can be connected to plugins that they should beable to connect to.
+	MIDI is done.
+	Need to check input, math, fgCounter
+	Need some sort of plugins to convert to/from 0-1Normalized maybe just multiplucation and devision plugins?
+
 May want to remove code to load old fgs files. (SimpleD v1.1 broke loading old ones anyways.)
+
 
 Step#1
 	
@@ -42,6 +47,8 @@ Step#GUI
 Step#4
 	Folders (Allow you to put objects in folders.)
 			Each folder would have one input(As Object) and one output(As Object).
+				Or maybe spefiy the input object and output object.  The folder would then have the inputs of the input object and the outputs from the output object.
+
 
 Objects to add:
 	Math:

@@ -24,7 +24,7 @@
 '
 'Contact:
 '   Raymond Ellis
-'   Email: RaymondEllis@live.com
+'   Email: RaymondEllis*live.com
 '   Website: https://sites.google.com/site/raymondellis89/
 #End Region
 
