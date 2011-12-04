@@ -38,84 +38,75 @@ Object
 	Name=Plugins.fgGetKey2;
 	File=HID\Keyboard.vb;
 	Position=230,50;
-	Output=0`2,1,1,14,0;
+	Output=0`2,1,1,13,0;
 	Input=0,2;
 	Enabled=True;
 	Key=Pause;
 }
 Object
 {
-	Name=Plugins.fgAdd;
-	File=fgAdd.vb;
-	Position=540,195;
-	UserData=5;
-	Output=1,5,0;
-	Input=1,1,1,1,1;
-}
-Object
-{
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=605,195;
-	Input=1;
-	Data=80;
+	Position=620,155;
+	Input=2;
+	Data=85;
 }
 Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=285,155;
-	Output=1,4,0;
+	Output=2,14,1,15,1;
 	Input=1,0;
 	Enabled=False;
-	Value=16;
+	Value=17;
 }
 Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=465,110;
-	Output=1,4,1;
+	Output=2,14,0,15,0;
 	Input=1,0;
 	Enabled=False;
-	Value=16;
+	Value=17;
 }
 Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=590,335;
-	Output=1,4,2;
+	Output=2,14,4,15,4;
 	Input=1,0;
 	Enabled=False;
-	Value=16;
+	Value=17;
 }
 Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=355,275;
-	Output=1,4,3;
+	Output=2,14,2,15,2;
 	Input=1,0;
 	Enabled=False;
-	Value=16;
+	Value=17;
 }
 Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=435,365;
-	Output=1,4,4;
+	Output=2,14,3,15,3;
 	Input=1,0;
 	Enabled=False;
-	Value=16;
+	Value=17;
 }
 Object
 {
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=15,205;
-	Output=6,6,0,7,0,9,0,10,0,8,0,13,0;
+	Output=6,5,0,6,0,8,0,9,0,7,0,12,0;
 	Input=1,0;
 	Enabled=True;
 	Value=False;
@@ -125,7 +116,7 @@ Object
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=10,145;
-	Output=1,11,0;
+	Output=1,10,0;
 	Input=0,0;
 	Enabled=True;
 	Value=True;
@@ -146,4 +137,30 @@ Object
 	Position=115,315;
 	Input=1;
 	Keys={enter};
+}
+Object
+{
+	Name=Plugins.math_Add;
+	File=Math\math_Add.vb;
+	Position=530,205;
+	UserData=5;
+	Output=1,4,0;
+	Input=1,1,1,1,1;
+}
+Object
+{
+	Name=Plugins.math_Subtract;
+	File=Math\math_Subtract.vb;
+	Position=610,200;
+	UserData=5;
+	Output=1,16,0;
+	Input=1,1,1,1,1;
+}
+Object
+{
+	Name=Plugins.Common.DisplayAsString;
+	File=Common\DisplayAsString.vb;
+	Position=660,285;
+	Input=1;
+	Data=-51;
 }

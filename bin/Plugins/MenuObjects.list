@@ -1,12 +1,3 @@
-AddMenuObject|Add2,Plugins.fgAdd,,2|Math,Add
-AddMenuObject|Add3,Plugins.fgAdd,,3|Math,Add
-AddMenuObject|Add4,Plugins.fgAdd,,4|Math,Add
-AddMenuObject|Add5,Plugins.fgAdd,,5|Math,Add
-AddMenuObject|Add6,Plugins.fgAdd,,6|Math,Add
-AddMenuObject|Add7,Plugins.fgAdd,,7|Math,Add
-AddMenuObject|Add8,Plugins.fgAdd,,8|Math,Add
-AddMenuObject|Add9,Plugins.fgAdd,,9|Math,Add
-AddMenuObject|Add10,Plugins.fgAdd,,10|Math,Add
 AddMenuObject|Counter,Plugins.fgCounter,60|Math
 AddMenuObject|Frame counter,Plugins.fgFPS,80|Misc
 AddMenuObject|ObjectTemplate,Plugins.ObjectTemplate,100|Group1,Group2
@@ -25,6 +16,8 @@ AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
 AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
 AddMenuObject|SendKeys,Plugins.hidSendKeys,100|Input,Keyboard
+AddMenuObject|Add,Plugins.math_Add,,|Math
+AddMenuObject|Subtract,Plugins.math_Subtract,,|Math
 AddMenuObject|Basic,Plugins.MIDI_BasicFilter,70|MIDI,Channel Message,Filters
 AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message
 AddMenuObject|Get,Plugins.MIDI_GetController|MIDI,Channel Message,Controller

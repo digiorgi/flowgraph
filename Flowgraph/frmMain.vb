@@ -24,7 +24,7 @@
 '
 'Contact:
 '   Raymond Ellis
-'   Email: RaymondEllis@live.com
+'   Email: RaymondEllis*live.com
 #End Region
 
 Public Class frmMain

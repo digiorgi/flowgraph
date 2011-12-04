@@ -24,7 +24,7 @@
 '
 'Contact:
 '   Raymond Ellis
-'   Email: RaymondEllis@live.com
+'   Email: RaymondEllis*live.com
 #End Region
 
 'Include(Base\SimpleD.vb,Base\Menu.vb,Base\DataFlow.vb,Base\Plugins.vb)
