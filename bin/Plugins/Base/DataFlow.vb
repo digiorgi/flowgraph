@@ -133,24 +133,26 @@ Public Class DataFlowBase
 
 
         'Make sure the object can connect to that type.
-        Dim FoundType As Boolean = False
-        If DataType.Count > 0 And Objects(obj1).Input(Index1).DataType.Count > 0 Then
-            For Each Type As String In DataType
-                For Each objType As String In Objects(obj1).Input(Index1).DataType
-                    If LCase(objType) = LCase(Type) Then
-                        FoundType = True
-                        Exit For
-                    End If
-                Next
-                If FoundType Then Exit For
-            Next
-        ElseIf Objects(obj1).Input(Index1).DataType.Count > 0 Then
-            Return False
-        Else 'Both are undefined.
-            FoundType = True
-        End If
-        If Not FoundType Then Return False
+        If Objects(obj).GetType IsNot GetType(ObjectDummy) Then 'ObjectDummy can be connected to anything.
 
+            Dim FoundType As Boolean = False
+            If DataType.Count > 0 And Objects(obj1).Input(Index1).DataType.Count > 0 Then
+                For Each Type As String In DataType
+                    For Each objType As String In Objects(obj1).Input(Index1).DataType
+                        If LCase(objType) = LCase(Type) Then
+                            FoundType = True
+                            Exit For
+                        End If
+                    Next
+                    If FoundType Then Exit For
+                Next
+            ElseIf Objects(obj1).Input(Index1).DataType.Count > 0 Then
+                Return False
+            Else 'Both are undefined.
+                FoundType = True
+            End If
+            If Not FoundType Then Return False
+        End If
 
         'Look through flow, and check to see if there is already one going to the same place. this one wants to go.
         'Note: they can connect to the same object just not the same place on the object.
@@ -262,9 +264,7 @@ Public Class DataFlowBase
             Dim Dummy As Integer = 0
             For i As Integer = 1 To data.Length - 1 Step 2
                 If Not TryConnect(data(i), data(i + 1)) Then
-                    If Objects(data(i)).GetType Is GetType(ObjectDummy) Then
-                        Dummy += 1
-                    End If
+                    'Could not connect object.
                 End If
             Next
             'Make sure everything connected. (don't cound dummy objects.)

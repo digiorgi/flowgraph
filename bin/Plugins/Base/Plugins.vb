@@ -272,7 +272,7 @@ Public Module Plugins
                        "Name: " & g.GetValue("name") & Environment.NewLine & _
                        "Will be replaced with a dummy" _
                        , LogPriority.High)
-                obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.GetValue("userdata"))
+                obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.ToString(False, SimpleD.Group.Style.BSD_Allman))
                 If obj = -1 Then
                     Log("Could not create ""ObjectDummy""!", LogPriority.High)
                     ClearObjects()
