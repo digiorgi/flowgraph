@@ -63,7 +63,7 @@ Public Class frmMain
 
         'Do command line stuff.
         Dim args As String() = Environment.GetCommandLineArgs
-        Dim a As Integer = 0
+        Dim a As Integer = 1
         Do While a < args.Length
             Select Case LCase(args(a))
                 Case "startatcursor"

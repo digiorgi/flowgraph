@@ -15,6 +15,7 @@ Fixed	: If a input from a object was removed, then a fgs loaded it would crash.
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 Fixed	: Silder and Counter was not saving. (enabled, value)
 Fixed	: Save would not work when file was not full.
+Fixed	: No longer trys to load flowgraph.exe if nothing is in command line.
 
 
 ##0.1.3##

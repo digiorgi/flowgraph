@@ -47,9 +47,9 @@ Object
 {
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=620,155;
+	Position=640,115;
 	Input=2;
-	Data=85;
+	Data=83;
 }
 Object
 {
@@ -59,7 +59,7 @@ Object
 	Output=2,14,1,15,1;
 	Input=1,0;
 	Enabled=False;
-	Value=17;
+	Value=19;
 }
 Object
 {
@@ -69,7 +69,7 @@ Object
 	Output=2,14,0,15,0;
 	Input=1,0;
 	Enabled=False;
-	Value=17;
+	Value=19;
 }
 Object
 {
@@ -79,7 +79,7 @@ Object
 	Output=2,14,4,15,4;
 	Input=1,0;
 	Enabled=False;
-	Value=17;
+	Value=19;
 }
 Object
 {
@@ -89,17 +89,17 @@ Object
 	Output=2,14,2,15,2;
 	Input=1,0;
 	Enabled=False;
-	Value=17;
+	Value=19;
 }
 Object
 {
-	Name=Plugins.fgCounter1;
+	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
 	Position=420,365;
 	Output=2,14,3,15,3;
 	Input=1,0;
 	Enabled=False;
-	Value=17;
+	Value=7;
 }
 Object
 {
@@ -151,7 +151,7 @@ Object
 {
 	Name=Plugins.math_Subtract;
 	File=Math\math_Subtract.vb;
-	Position=610,205;
+	Position=615,205;
 	UserData=5;
 	Output=1,16,0;
 	Input=1,1,1,1,1;
@@ -160,7 +160,7 @@ Object
 {
 	Name=Plugins.Common.DisplayAsString;
 	File=Common\DisplayAsString.vb;
-	Position=660,285;
+	Position=640,150;
 	Input=1;
-	Data=-51;
+	Data=-45;
 }

@@ -11,7 +11,6 @@ Make sure plugins can be connected to plugins that they should beable to connect
 	Need some sort of plugins to convert to/from 0-1Normalized maybe just multiplucation and devision plugins?
 
 May want to remove code to load old fgs files. (SimpleD v1.1 broke loading old ones anyways.)
-Finsh DummyObject. (Currently a mess)
 
 
 Step#1
@@ -28,10 +27,6 @@ Step#3
 		Tooltip.Remove(Index#)
 	
 	fgs source. A button that would show a window with the fgs contents and could be chaged.
-
-	Make ObjectDummy emulate the object it's replacing. 
-		It should be connected to the right objects.
-		And display the most info it can find about the missing object. (atleast the name.)
 
 	Handle unhandled exceptions. :P
 		http://www.codeproject.com/KB/dotnet/unhandledexceptions.aspx
