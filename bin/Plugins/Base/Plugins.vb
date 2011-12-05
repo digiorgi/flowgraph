@@ -263,6 +263,7 @@ Public Module Plugins
 
             'Show error if could not create object.
             If obj = -1 Then
+                'ToDo: Remove this:
                 'MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
                 'ClearObjects()
                 'LoadedFile = ""

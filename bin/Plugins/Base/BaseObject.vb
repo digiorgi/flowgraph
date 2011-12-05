@@ -295,8 +295,6 @@ Public MustInherit Class BaseObject
                             g.DrawLine(ConnectorPen, p3, p4)
                             g.DrawLine(ConnectorPen, p4, pos2)
 
-                            'Else
-                            '    g.DrawLine(ConnectorPen, pos1, pos2)
                         End If
 
                     Else 'Simple lines
