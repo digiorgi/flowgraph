@@ -11,6 +11,7 @@ Make sure plugins can be connected to plugins that they should beable to connect
 	Need some sort of plugins to convert to/from 0-1Normalized maybe just multiplucation and devision plugins?
 
 May want to remove code to load old fgs files. (SimpleD v1.1 broke loading old ones anyways.)
+Finsh DummyObject. (Currently a mess)
 
 
 Step#1

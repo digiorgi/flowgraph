@@ -178,7 +178,7 @@ Public MustInherit Class BaseObject
         g.SetValue("Position", Rect.X & "," & Rect.Y)
         g.SetValue("UserData", UserData)
 
-        If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. for each output
+        If Output IsNot Nothing Then 'If there is output then save Output=(obj1),(index1),(obj1),etc.. each output is split using `
             tmp = Output(0).Save
             For n As Integer = 1 To Output.Length - 1
                 tmp &= "`" & Output(n).Save
@@ -186,7 +186,7 @@ Public MustInherit Class BaseObject
             g.SetValue("Output", tmp)
         End If
 
-        If Input IsNot Nothing Then 'Same as output^^^ but for inputs...
+        If Input IsNot Nothing Then 'Any inputs?  Input= #1ConnectedCount, #2ConnectedCount,etc... each input is split using ,
             tmp = Input(0).Connected
             For n As Integer = 1 To Input.Length - 1
                 tmp &= "," & Input(n).Connected

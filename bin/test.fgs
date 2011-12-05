@@ -55,7 +55,7 @@ Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
-	Position=285,155;
+	Position=290,155;
 	Output=2,14,1,15,1;
 	Input=1,0;
 	Enabled=False;
@@ -85,7 +85,7 @@ Object
 {
 	Name=Plugins.fgCounter;
 	File=fgCounter.vb;
-	Position=355,275;
+	Position=340,235;
 	Output=2,14,2,15,2;
 	Input=1,0;
 	Enabled=False;
@@ -93,9 +93,9 @@ Object
 }
 Object
 {
-	Name=Plugins.fgCounter;
+	Name=Plugins.fgCounter1;
 	File=fgCounter.vb;
-	Position=435,365;
+	Position=420,365;
 	Output=2,14,3,15,3;
 	Input=1,0;
 	Enabled=False;
@@ -105,7 +105,7 @@ Object
 {
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
-	Position=15,205;
+	Position=10,215;
 	Output=6,5,0,6,0,8,0,9,0,7,0,12,0;
 	Input=1,0;
 	Enabled=True;
@@ -134,7 +134,7 @@ Object
 {
 	Name=Plugins.hidSendKeys;
 	File=HID\SendKeys.vb;
-	Position=115,315;
+	Position=570,65;
 	Input=1;
 	Keys={enter};
 }
@@ -151,7 +151,7 @@ Object
 {
 	Name=Plugins.math_Subtract;
 	File=Math\math_Subtract.vb;
-	Position=610,200;
+	Position=610,205;
 	UserData=5;
 	Output=1,16,0;
 	Input=1,1,1,1,1;
