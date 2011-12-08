@@ -35,19 +35,13 @@ Object
 }
 Object
 {
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
+	Name=Plugins.fgGetKey2;
+	File=HID\Keyboard.vb;
 	Position=230,50;
-	UserData=
-Name=Plugins.fgGetKey2;
-File=HID\Keyboard.vb;
-Position=230,50;
-Output=0`2,1,1,13,0;
-Input=0,2;
-Enabled=True;
-Key=Pause;;
 	Output=0`2,1,1,13,0;
 	Input=0,2;
+	Enabled=True;
+	Key=Pause;
 }
 Object
 {
@@ -138,17 +132,11 @@ Object
 }
 Object
 {
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
+	Name=Plugins.hidSendKeys;
+	File=HID\SendKeys.vb;
 	Position=570,65;
-	UserData=
-Name=Plugins.hidSendKeys;
-File=HID\SendKeys.vb;
-Position=570,65;
-Input=1;
-Keys={enter};;
-	Output=0;
 	Input=1;
+	Keys={enter};
 }
 Object
 {
