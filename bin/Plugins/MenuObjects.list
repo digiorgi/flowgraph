@@ -5,17 +5,6 @@ AddMenuObject|Display as string,Plugins.Common.DisplayAsString,100|Common
 AddMenuObject|Slider,Plugins.Common.Slider|Common
 AddMenuObject|Switch,Plugins.Common.Switch|Common
 AddMenuObject|Timer,Plugins.Common.Timer|Common
-AddMenuObject|Axis To Boolean,Plugins.fgAxisToBoolean,85|Input
-AddMenuObject|Device,Plugins.fgJoystick,70|Input,Joystick
-AddMenuObject|Get Axis,Plugins.fgGetJoystickAxis,70|Input,Joystick
-AddMenuObject|Get Buttons,Plugins.fgGetJoystickButtons,70|Input,Joystick
-AddMenuObject|Get key,Plugins.fgGetKey,70|Input,Keyboard
-AddMenuObject|Get key2,Plugins.fgGetKey2,70|Input,Keyboard
-AddMenuObject|Device,Plugins.fgKeyboard,70|Input,Keyboard
-AddMenuObject|Raw Mouse,Plugins.fgRawMouse,60|Input,Mouse
-AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
-AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
-AddMenuObject|SendKeys,Plugins.hidSendKeys,100|Input,Keyboard
 AddMenuObject|Add,Plugins.math_Add,,|Math
 AddMenuObject|Normalizer,Plugins.math_Normalizer,,|Math
 AddMenuObject|Denormalizer,Plugins.math_Denormalizer,,|Math

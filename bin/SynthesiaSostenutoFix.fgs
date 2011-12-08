@@ -1,12 +1,13 @@
-/*SimpleD version=0.991  SimpleD file version=1*/
-Main{
+SimpleD{Version=1.1;FormatVersion=3;}
+Main
+{
 	Width=520;
 	Height=275;
 	FileVersion=1;
-	SplitFileWithNewLine=True;
-	SplitFileWithTabs=True;
+	BraceStyle=BSD_Allman;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=5,40;
@@ -17,28 +18,31 @@ Object{
 	AllChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_Output;
 	File=MIDI\MIDI_Output.vb;
 	Position=270,155;
 	Input=0,1,1,1,1;
 	Enabled=True;
-	DeviceID=2;
+	DeviceID=7;
 	MessageChannels=True;
 	Channel=1;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_SimulatePedals;
 	File=MIDI\MIDI_SimulatePedals.vb;
 	Position=65,155;
 	Output=1,1,1;
 	Input=0,1,0,1,0;
 }
-Object{
+Object
+{
 	Name=Plugins.MIDI_GetController;
 	File=MIDI\MIDI_GetController.vb;
 	Position=260,50;
-	Output=1,2,3;
+	Output=0;
 	Input=0,1;
 	Enabled=True;
 	Controller=66;

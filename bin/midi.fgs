@@ -1,4 +1,4 @@
-SimpleD{Version=1;FormatVersion=2;}
+SimpleD{Version=1.1;FormatVersion=3;}
 Main
 {
 	DisableUI=True;
@@ -42,32 +42,50 @@ Object
 }
 Object
 {
-	Name=Plugins.fgJoystick;
-	File=HID\Joystick.vb;
+	Name=Plugins.ObjectDummy;
+	File=Base\ObjectDummy.vb;
 	Position=135,105;
+	UserData=
+Name=Plugins.fgJoystick;
+File=HID\Joystick.vb;
+Position=135,105;
+Output=1,4,0;
+Input=0,1;
+Enabled=True;;
 	Output=1,4,0;
 	Input=0,1;
-	Enabled=True;
 }
 Object
 {
-	Name=Plugins.fgGetJoystickAxis;
-	File=HID\Joystick.vb;
+	Name=Plugins.ObjectDummy;
+	File=Base\ObjectDummy.vb;
 	Position=10,165;
+	UserData=
+Name=Plugins.fgGetJoystickAxis;
+File=HID\Joystick.vb;
+Position=10,165;
+Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;
+Input=1;
+Rev1=True;
+Rev5=True;
+Rev6=True;;
 	Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;
 	Input=1;
-	Rev1=True;
-	Rev5=True;
-	Rev6=True;
 }
 Object
 {
-	Name=Plugins.fgAxisToBoolean;
-	File=HID\Input.vb;
+	Name=Plugins.ObjectDummy;
+	File=Base\ObjectDummy.vb;
 	Position=120,210;
+	UserData=
+Name=Plugins.fgAxisToBoolean;
+File=HID\Input.vb;
+Position=120,210;
+Output=0`1,6,2;
+Input=1;
+SwitchOn=0.9;;
 	Output=0`1,6,2;
 	Input=1;
-	SwitchOn=0.9;
 }
 Object
 {
@@ -79,12 +97,18 @@ Object
 }
 Object
 {
-	Name=Plugins.fgAxisToBoolean;
-	File=HID\Input.vb;
+	Name=Plugins.ObjectDummy;
+	File=Base\ObjectDummy.vb;
 	Position=120,160;
+	UserData=
+Name=Plugins.fgAxisToBoolean;
+File=HID\Input.vb;
+Position=120,160;
+Output=0`1,6,3;
+Input=1;
+SwitchOn=0.9;;
 	Output=0`1,6,3;
 	Input=1;
-	SwitchOn=0.9;
 }
 Object
 {
@@ -107,10 +131,16 @@ Object
 }
 Object
 {
-	Name=Plugins.fgAxisToBoolean;
-	File=HID\Input.vb;
+	Name=Plugins.ObjectDummy;
+	File=Base\ObjectDummy.vb;
 	Position=120,260;
+	UserData=
+Name=Plugins.fgAxisToBoolean;
+File=HID\Input.vb;
+Position=120,260;
+Output=0`1,6,4;
+Input=1;
+SwitchOn=0.9;;
 	Output=0`1,6,4;
 	Input=1;
-	SwitchOn=0.9;
 }

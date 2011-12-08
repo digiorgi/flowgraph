@@ -240,6 +240,8 @@ Public Module Plugins
             Case 0.5
                 numObj = g.GetValue("Objects")
         End Select
+
+        Dim dummys As String = ""
         'For n As Integer = 0 To numObj 'Loop thrugh each object.
         Dim i As Integer = -1
         Do
@@ -262,17 +264,14 @@ Public Module Plugins
             Dim obj As Integer = AddObject(g.GetValue("name"), New Point(pos(0), pos(1)), g.GetValue("userdata")) 'Get the object.
 
             'Show error if could not create object.
-            If obj = -1 Then
-                'ToDo: Remove this:
-                'MsgBox("Could not create object# " & i & Environment.NewLine & "Name: " & g.GetValue("name"), MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "Error loading file")
-                'ClearObjects()
-                'LoadedFile = ""
-                'Return
+            If obj = -1 Then 'ToDo: This code currently looks messy.
+                dummys &= "Name: " & g.GetValue("name") & Environment.NewLine
 
                 Log("Could not create object# " & i & Environment.NewLine & _
                        "Name: " & g.GetValue("name") & Environment.NewLine & _
                        "Will be replaced with a dummy" _
-                       , LogPriority.High)
+                       , LogPriority.Medium)
+
                 obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.ToString(False, SimpleD.Group.Style.BSD_Allman))
                 If obj = -1 Then
                     Log("Could not create ""ObjectDummy""!", LogPriority.High)
@@ -283,6 +282,10 @@ Public Module Plugins
             End If
         Loop Until i >= numObj
         'Next
+        'Show dummys
+        If dummys <> "" Then MsgBox("Could not create object(s)" & Environment.NewLine & _
+            "They have been replaced with a dummy." & Environment.NewLine & Environment.NewLine & _
+            dummys, MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Loading - Flowgraph)")
 
         'Load each object.
         For n As Integer = 0 To numObj
