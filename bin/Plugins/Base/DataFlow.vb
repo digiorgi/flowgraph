@@ -261,14 +261,13 @@ Public Class DataFlowBase
         If Flow Is Nothing Then
             Connected = data(0)
         Else
-            Dim Dummy As Integer = 0
             For i As Integer = 1 To data.Length - 1 Step 2
                 If Not TryConnect(data(i), data(i + 1)) Then
                     'Could not connect object.
                 End If
             Next
             'Make sure everything connected. (don't cound dummy objects.)
-            If Connected + Dummy <> data(0) Then
+            If Connected.ToString <> data(0) Then
                 Log("Connections do not match!" & Environment.NewLine & "Name=" & Name & " ObjectTitle=" & Objects(obj).Title, LogPriority.Medium)
             End If
 

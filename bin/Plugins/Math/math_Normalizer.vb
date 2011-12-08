@@ -75,6 +75,11 @@ Public Class math_Normalizer
         Return g
     End Function
 
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
+
+        txtMax.Dispose()
+    End Sub
 
 
     Private Sub txtMax_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles txtMax.KeyUp
@@ -127,7 +132,12 @@ Public Class math_Denormalizer
 
         Moving()
     End Sub
+    Public Overrides Sub Dispose()
+        MyBase.Dispose()
 
+        txtMax.Dispose()
+        chkRound.Dispose()
+    End Sub
     Public Overrides Sub Moving()
         chkRound.Location = Position + New Point(0, -2)
         txtMax.Location = Position + New Point(0, 10)
