@@ -17,6 +17,8 @@ AddMenuObject|Local Mouse,Plugins.fgLocalMouse,65|Input,Mouse
 AddMenuObject|Global Mouse,Plugins.fgGlobalMouse,75|Input,Mouse
 AddMenuObject|SendKeys,Plugins.hidSendKeys,100|Input,Keyboard
 AddMenuObject|Add,Plugins.math_Add,,|Math
+AddMenuObject|Normalizer,Plugins.math_Normalizer,,|Math
+AddMenuObject|Denormalizer,Plugins.math_Denormalizer,,|Math
 AddMenuObject|Subtract,Plugins.math_Subtract,,|Math
 AddMenuObject|Basic,Plugins.MIDI_BasicFilter,70|MIDI,Channel Message,Filters
 AddMenuObject|Debug,Plugins.MIDI_Debug|MIDI,Channel Message

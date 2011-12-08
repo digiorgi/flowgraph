@@ -62,6 +62,8 @@ Namespace Common
                     'If so then we set the size of the base object
                     MyBase.SetSize(DataSize.Width, DataSize.Height, True)
                     OldSize = DataSize 'Then set the old size.
+
+                    DoDraw(True)
                 End If
 
             End If

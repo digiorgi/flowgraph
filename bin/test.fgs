@@ -49,7 +49,7 @@ Object
 	File=Common\DisplayAsString.vb;
 	Position=640,115;
 	Input=2;
-	Data=83;
+	Data=88;
 }
 Object
 {
@@ -59,7 +59,7 @@ Object
 	Output=2,14,1,15,1;
 	Input=1,0;
 	Enabled=False;
-	Value=19;
+	Value=20;
 }
 Object
 {
@@ -69,7 +69,7 @@ Object
 	Output=2,14,0,15,0;
 	Input=1,0;
 	Enabled=False;
-	Value=19;
+	Value=20;
 }
 Object
 {
@@ -79,7 +79,7 @@ Object
 	Output=2,14,4,15,4;
 	Input=1,0;
 	Enabled=False;
-	Value=19;
+	Value=20;
 }
 Object
 {
@@ -89,7 +89,7 @@ Object
 	Output=2,14,2,15,2;
 	Input=1,0;
 	Enabled=False;
-	Value=19;
+	Value=20;
 }
 Object
 {
@@ -99,14 +99,14 @@ Object
 	Output=2,14,3,15,3;
 	Input=1,0;
 	Enabled=False;
-	Value=7;
+	Value=8;
 }
 Object
 {
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=10,215;
-	Output=6,5,0,6,0,8,0,9,0,7,0,12,0;
+	Output=5,5,0,6,0,8,0,9,0,7,0;
 	Input=1,0;
 	Enabled=True;
 	Value=False;
@@ -116,7 +116,7 @@ Object
 	Name=Plugins.Common.Switch;
 	File=Common\Switch.vb;
 	Position=10,145;
-	Output=1,10,0;
+	Output=2,10,0,12,0;
 	Input=0,0;
 	Enabled=True;
 	Value=True;
@@ -125,10 +125,10 @@ Object
 {
 	Name=Plugins.Common.Slider;
 	File=Common\Slider.vb;
-	Position=135,115;
-	Output=0;
+	Position=110,110;
+	Output=1,20,0;
 	Input=1,0;
-	Enabled=False;
+	Enabled=True;
 }
 Object
 {
@@ -162,5 +162,42 @@ Object
 	File=Common\DisplayAsString.vb;
 	Position=640,150;
 	Input=1;
-	Data=-45;
+	Data=-48;
+}
+Object
+{
+	Name=Plugins.math_Normalizer;
+	File=Math\math_Normalizer.vb;
+	Position=100,355;
+	Output=1,19,0;
+	Input=1,0;
+	Value=47.36;
+	Max=128;
+}
+Object
+{
+	Name=Plugins.Common.DisplayAsString;
+	File=Common\DisplayAsString.vb;
+	Position=210,285;
+	Input=1;
+	Data=47.36;
+}
+Object
+{
+	Name=Plugins.Common.DisplayAsString;
+	File=Common\DisplayAsString.vb;
+	Position=210,320;
+	Input=1;
+	Data=0.37;
+}
+Object
+{
+	Name=Plugins.math_Denormalizer;
+	File=Math\math_Normalizer.vb;
+	Position=95,295;
+	Output=2,18,0,17,0;
+	Input=1,0;
+	Value=0.37;
+	Max=128;
+	Round=False;
 }

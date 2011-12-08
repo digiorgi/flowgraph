@@ -41,9 +41,14 @@ Public Class frmMain
         'RemoveFromFGS
         If SaveOnExit Then
             'Right now there is no way of knowing if anything has changed. So we will always ask to save any changes.
-            If MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNo, "Save") = MsgBoxResult.Yes Then
-                menuSave_Click(sender, e)
-            End If
+            Select Case MsgBox("Do you want to save any changes you may have made?", MsgBoxStyle.YesNoCancel + MsgBoxStyle.Question, "Save") 'ToDo: Should be Cancel by default.
+                Case MsgBoxResult.Yes
+                    menuSave_Click(sender, e)
+
+                Case MsgBoxResult.Cancel
+                    e.Cancel = True
+                    Return
+            End Select
         End If
         'EndRemoveFromFGS
 
