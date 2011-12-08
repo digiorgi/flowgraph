@@ -27,8 +27,13 @@
 
         MenuItems.Add(New Menu.Node("Display fgs info", False))
         MenuItems.Add(New Menu.Node("Copy to clipboard", False, 100))
-        MenuItems.Add(New Menu.Node("Copy fgs snippet", False))
     End Sub
+
+    Public Overrides Function Save() As SimpleD.Group
+        Dim g As New SimpleD.Group(UserData, False, False)
+        g.Name = "Object"
+        Return g
+    End Function
 
     Public Overrides Sub MenuSelected(Result As Menu.Node)
         MyBase.MenuSelected(Result)
@@ -38,8 +43,6 @@
                 MsgBox(UserData, MsgBoxStyle.OkOnly, "Dummy info - Flowgraph")
             ElseIf Result.Name = "Copy to clipboard" Then
                 Clipboard.SetText(str)
-            ElseIf Result.Name = "Copy fgs snippet" Then
-                Clipboard.SetText(UserData)
             End If
         End If
     End Sub
