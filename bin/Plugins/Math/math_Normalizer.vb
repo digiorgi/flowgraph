@@ -17,7 +17,7 @@ Public Class math_Normalizer
 
 
         'Create the inputs.
-        Inputs(New String() {"Value,Number", "Max,Number"})
+        Inputs(New String() {"Value,Number,Boolean", "Max,Number"})
         'Create the output.
         Outputs(New String() {"Value,0-1Normalized"})
 
@@ -41,7 +41,19 @@ Public Class math_Normalizer
 
         Select Case sender.Index
             Case 0 'Value
-                Value = CSng(Data)
+                Select Case Data.GetType
+                    Case GetType(Boolean)
+                        If DirectCast(Data, Boolean) = True Then
+                            Value = Max
+                        Else
+                            Value = 0
+                        End If
+
+                    Case Else
+                        Value = CSng(Data)
+                End Select
+
+
                 Send(Value / Max)
 
             Case 1 'Max

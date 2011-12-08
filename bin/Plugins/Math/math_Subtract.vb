@@ -1,6 +1,7 @@
 ﻿'AddMenuObject|Subtract,Plugins.math_Subtract,,|Math
 'Needed|Name displayed,Class name,Width,UserData|Groups
 
+'ToDo: Needs RequestData.  (Found in old_Ideas.txt) (math_Add could also use it.)
 
 Public Class math_Subtract
     Inherits BaseObject

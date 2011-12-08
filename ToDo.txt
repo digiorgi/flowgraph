@@ -6,25 +6,15 @@ Find better input library!!
 
 ####Clean-Ups#### <Make things orderly and comment things. (Split up big files, Use regions, Simplify code.)
 Make sure plugins can be connected to plugins that they should beable to connect to.
-	MIDI is done.
-	Need to check input, math, fgCounter
-	Need some sort of plugins to convert to/from 0-1Normalized maybe just multiplucation and devision plugins?
+	Double check everything.
 
 May want to remove code to load old fgs files. (SimpleD v1.1 broke loading old ones anyways.)
 
+########STOP WORKING ON STEPS#######   Ya I need to get a stable release out... 
 
-Step#1
-	
-Step#2
-
+Step#1 Done
+Step#2 Done
 Step#3
-	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
-		Work on getting objects to compile with no UI.
-	
-	Tooltip regions.  Would allow controls or rectangles. e.g.
-		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
-		Tooltip.Update(Index#,textbox1, Optional text)
-		Tooltip.Remove(Index#)
 	
 	fgs source. A button that would show a window with the fgs contents and could be chaged.
 
@@ -33,8 +23,12 @@ Step#3
 		http://www.codeproject.com/KB/exception/ExceptionHandling.aspx
 		http://www.codeproject.com/KB/exception/SafeForm.aspx
 
+	Replace object	(replace a object with a different object.)
+		Would atempt to connect inputs/outputs as well.
+
+
 Step#GUI
-	Movement. (Should just need to put objects in an image or something.)
+	Movement. (Put everything in a panel. Then move the panel around.) 
 
 	New lines!!!
 		Need a better way to do colors. Or at lest a command line to disable colors.
@@ -45,6 +39,13 @@ Step#4
 			Each folder would have one input(As Object) and one output(As Object).
 				Or maybe spefiy the input object and output object.  The folder would then have the inputs of the input object and the outputs from the output object.
 
+	Tooltip regions.  Would allow controls or rectangles. e.g.
+		Tooltip.Add(textbox1, "Add some text.") 'Returns index.
+		Tooltip.Update(Index#,textbox1, Optional text)
+		Tooltip.Remove(Index#)
+
+	Compile saved config file with plugins. as a single (.exe or .dll)    (with a option to disable all GUI)
+		Work on getting objects to compile with no UI.
 
 Objects to add:
 	Math:
