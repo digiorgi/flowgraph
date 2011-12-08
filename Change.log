@@ -1,10 +1,11 @@
 ##0.1.4## InDev Don't forget to disable SlimDX by default.
-BIG note: 0.1.3 fgs files are NOT compatable! (Well work if you remove the first line of text.)
+Notice!	: 0.1.3 fgs files are NOT compatable! (Well work if you remove the first line of text.)
 New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127
 Added	: Logging.
-Added   : math_Subtract.vb
+Added   : math_Subtract.vb and math_Normalizer.vb
+Added	: Can now cancel closing.
 Change	: Can now only have one output type.
 Change	: Comments in .fgs files are now like this: /*Comment Here*/	(makes incompatable with 0.1.3)
 Updated	: SimpleD to 1.1
@@ -14,8 +15,9 @@ Fixed	: MIDI_BasicFilter( Was not saving properly )
 Fixed	: If a input from a object was removed, then a fgs loaded it would crash.
 Fixed	: Slider nolonger ouputs the same value if you move the mouse on the y axis
 Fixed	: Silder and Counter was not saving. (enabled, value)
-Fixed	: Save would not work when file was not full.
+Fixed	: Save would not work when file was not full. ("\test.fgs" would not work  but "c:\test.fgs" would)
 Fixed	: No longer trys to load flowgraph.exe if nothing is in command line.
+Fixed	: DisplayAsString was not redrawing properly after resizing, because string size changed.
 
 
 ##0.1.3##
