@@ -17,12 +17,15 @@
         Dim outCount(Split(g.GetValue("output"), "`").Length - 1) As String
         Outputs(outCount)
 
-        str = "Name=" & g.GetValue("name")
-        If g.GetValue("file") <> "" Then
-            str &= vbNewLine & "File=" & g.GetValue("file")
-        End If
-        str &= vbNewLine & "UserData=" & g.GetValue("userdata")
+        str = "Name of old object:" & vbNewLine & g.GetValue("name")
+        'If g.GetValue("file") <> "" Then
+        '    str &= vbNewLine & "File=" & g.GetValue("file")
+        'End If
+        'str &= vbNewLine & "UserData=" & g.GetValue("userdata")
 
+        MyBase.UserData = g.ToString(False, SimpleD.Group.Style.BSD_Allman)
+
+        MenuItems.Add(New Menu.Node("Display fgs info", False))
         MenuItems.Add(New Menu.Node("Copy to clipboard", False, 100))
         MenuItems.Add(New Menu.Node("Copy fgs snippet", False))
     End Sub
@@ -31,7 +34,9 @@
         MyBase.MenuSelected(Result)
 
         If Result.Result = Menu.Result.SelectedItem Then
-            If Result.Name = "Copy to clipboard" Then
+            If Result.Name = "Display fgs info" Then
+                MsgBox(UserData, MsgBoxStyle.OkOnly, "Dummy info - Flowgraph")
+            ElseIf Result.Name = "Copy to clipboard" Then
                 Clipboard.SetText(str)
             ElseIf Result.Name = "Copy fgs snippet" Then
                 Clipboard.SetText(UserData)
