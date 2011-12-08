@@ -23,7 +23,6 @@
         'End If
         'str &= vbNewLine & "UserData=" & g.GetValue("userdata")
 
-        MyBase.UserData = g.ToString(False, SimpleD.Group.Style.BSD_Allman)
 
         MenuItems.Add(New Menu.Node("Display fgs info", False))
         MenuItems.Add(New Menu.Node("Copy to clipboard", False, 100))
