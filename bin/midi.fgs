@@ -3,26 +3,16 @@ Main
 {
 	DisableUI=True;
 	Width=875;
-	Height=370;
+	Height=280;
 	FileVersion=1;
 	BraceStyle=BSD_Allman;
-}
-Object
-{
-	Name=Plugins.Common.Timer;
-	File=Common\Timer.vb;
-	Position=5,105;
-	UserData=10;
-	Output=1,3,1;
-	Input=0,0;
-	Enabled=True;
 }
 Object
 {
 	Name=Plugins.MIDI_Input;
 	File=MIDI\MIDI_Input.vb;
 	Position=5,25;
-	Output=1,9,1`0`0`0;
+	Output=1,4,1`0`0`0;
 	Input=0,0;
 	Enabled=True;
 	DeviceID=0;
@@ -42,79 +32,17 @@ Object
 }
 Object
 {
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
-	Position=135,105;
-	UserData=
-Name=Plugins.fgJoystick;
-File=HID\Joystick.vb;
-Position=135,105;
-Output=1,4,0;
-Input=0,1;
-Enabled=True;;
-	Output=1,4,0;
-	Input=0,1;
-}
-Object
-{
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
-	Position=10,165;
-	UserData=
-Name=Plugins.fgGetJoystickAxis;
-File=HID\Joystick.vb;
-Position=10,165;
-Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;
-Input=1;
-Rev1=True;
-Rev5=True;
-Rev6=True;;
-	Output=0`1,7,0`0`0`0`1,5,0`1,10,0`0;
-	Input=1;
-}
-Object
-{
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
-	Position=120,210;
-	UserData=
-Name=Plugins.fgAxisToBoolean;
-File=HID\Input.vb;
-Position=120,210;
-Output=0`1,6,2;
-Input=1;
-SwitchOn=0.9;;
-	Output=0`1,6,2;
-	Input=1;
-}
-Object
-{
 	Name=Plugins.MIDI_SimulatePedals;
 	File=MIDI\MIDI_SimulatePedals.vb;
-	Position=380,110;
-	Output=2,8,1,2,1;
+	Position=425,25;
+	Output=2,3,1,1,1;
 	Input=0,1,1,1,1;
-}
-Object
-{
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
-	Position=120,160;
-	UserData=
-Name=Plugins.fgAxisToBoolean;
-File=HID\Input.vb;
-Position=120,160;
-Output=0`1,6,3;
-Input=1;
-SwitchOn=0.9;;
-	Output=0`1,6,3;
-	Input=1;
 }
 Object
 {
 	Name=Plugins.MIDI_Keyboard;
 	File=MIDI\MIDI_Keyboard.vb;
-	Position=310,245;
+	Position=305,155;
 	UserData=88-21-9;
 	Output=0;
 	Input=0,1;
@@ -124,23 +52,8 @@ Object
 	Name=Plugins.MIDI_Volume;
 	File=MIDI\MIDI_Volume.vb;
 	Position=265,25;
-	Output=1,6,1;
+	Output=1,2,1;
 	Input=0,1,0;
 	Enabled=True;
 	Volume=127;
-}
-Object
-{
-	Name=Plugins.ObjectDummy;
-	File=Base\ObjectDummy.vb;
-	Position=120,260;
-	UserData=
-Name=Plugins.fgAxisToBoolean;
-File=HID\Input.vb;
-Position=120,260;
-Output=0`1,6,4;
-Input=1;
-SwitchOn=0.9;;
-	Output=0`1,6,4;
-	Input=1;
 }
