@@ -4,6 +4,8 @@
     Public ClassLibrary As Boolean = False
     Public RemoveGUI As Boolean = False
     Public KeepSource As Boolean = False
+    Public LogFile As String = "CompilerLog.txt"
+    Public LogString As String
     Sub Main()
         Dim ExitOnSuccessfulCompile As Boolean = False
 
@@ -43,6 +45,7 @@ Restart:
             If Not CompileFGS.Compile(fgsFile) Then
                 Log("")
                 Log("Could not compile, would you like to retry? y/n: ")
+                SaveLog()
 
                 Select Case Console.ReadKey.Key
                     Case ConsoleKey.Y
@@ -54,9 +57,10 @@ Restart:
         Else
 
             'Compile plugins.
-            If Not CompilePlugins.Compile Then
+            If Not CompilePlugins2.Compile Then
                 Log("")
                 Log("Could not compile, would you like to retry? y/n: ")
+                SaveLog()
 
                 Select Case Console.ReadKey.Key
                     Case ConsoleKey.Y
@@ -67,6 +71,8 @@ Restart:
             End If
         End If
 
+        SaveLog()
+
         If ExitOnSuccessfulCompile Then Return
 
         'Tell the user to press any key to exit.
@@ -74,6 +80,7 @@ Restart:
         'Wait for the user to press a button.
         Console.ReadKey()
 
+   
     End Sub
 
     ''' <summary>
@@ -83,6 +90,20 @@ Restart:
     Public Sub Log(ByVal Text As String, Optional ByVal NewLine As Boolean = True)
         If NewLine Then Console.Write(Environment.NewLine & Text)
         If Not NewLine Then Console.Write(Text)
+
+        If LogFile <> "" Then
+            If NewLine Then LogString &= (Environment.NewLine & Text)
+            If Not NewLine Then LogString &= (Text)
+        End If
+    End Sub
+
+    Public Sub SaveLog()
+        If LogFile <> "" Then
+            Dim sw As New IO.StreamWriter(LogFile)
+            sw.Write(LogString)
+            sw.Close()
+        End If
+        LogString = ""
     End Sub
 
 #Region "BackupFile"

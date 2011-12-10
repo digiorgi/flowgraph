@@ -6,9 +6,11 @@ Added	: Some MIDI object values can now use 0-127
 Added	: Logging.
 Added   : math_Subtract.vb and math_Normalizer.vb
 Added	: Can now cancel closing.
+Added	: Compiler now outputs the log to a file. (CompilterLog.txt)
 Change	: Can now only have one output type.
 Change	: Comments in .fgs files are now like this: /*Comment Here*/	(makes incompatable with 0.1.3)
 Updated	: SimpleD to 1.1
+Removed	: Compiling of fgs files.  (Will try to get it working for v0.1.5)
 Removed	: SlimDX and all mouse/keyboard/joysitck plugins.
 Fixed	: Was not saving window size properly.
 Fixed	: MIDI_BasicFilter( Was not saving properly )

@@ -42,8 +42,8 @@ Namespace SimpleD
         '   Property names { /* =
         '   Property values ; = (Equals is allowed if specafied)
         '   Group names { /* = ;
-        Public Const Version = 1.1
-        Public Const FileVersion = 3
+        Public Const Version As Single = 1.1
+        Public Const FileVersion As Single = 3
         '1.1    <Not Released>
         'Change : Commants are now /*comment*/ (was //comment\\)
         'Change : There is now NoStyle

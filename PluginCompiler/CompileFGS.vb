@@ -18,6 +18,9 @@ Module CompileFGS
 
 #Region "Getting ready to compile"
     Public Function Compile(ByVal fgsFile As String) As Boolean
+        Log("Compile fgs has been disabled..")
+        Return True
+
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Windows.Forms.Application.ExecutablePath)
 
         If ClassLibrary Then
