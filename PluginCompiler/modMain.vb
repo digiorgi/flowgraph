@@ -6,6 +6,7 @@
     Public KeepSource As Boolean = False
     Public LogFile As String = "CompilerLog.txt"
     Public LogString As String
+    Public LogHasError As Boolean = False
     Sub Main()
         Dim ExitOnSuccessfulCompile As Boolean = False
 
@@ -37,6 +38,9 @@
                     End If
             End Select
         Next
+
+
+        If IO.File.Exists(LogFile) Then IO.File.Delete(LogFile) 'Delete the old log. (if any)
 
 Restart:
 
@@ -76,7 +80,7 @@ Restart:
         If ExitOnSuccessfulCompile Then Return
 
         'Tell the user to press any key to exit.
-        Log(Environment.NewLine & "Press eny key to exit.")
+        Log(Environment.NewLine & "Press eny key to exit.", , False)
         'Wait for the user to press a button.
         Console.ReadKey()
 
@@ -87,9 +91,13 @@ Restart:
     ''' Log some text to the console.
     ''' </summary>
     ''' <param name="Text">The text to put on the console</param>
-    Public Sub Log(ByVal Text As String, Optional ByVal NewLine As Boolean = True)
+    Public Sub Log(ByVal Text As String, Optional ByVal NewLine As Boolean = True, Optional ByVal IsError As Boolean = True)
         If NewLine Then Console.Write(Environment.NewLine & Text)
         If Not NewLine Then Console.Write(Text)
+
+        If IsError Then
+            LogHasError = True
+        End If
 
         If LogFile <> "" Then
             If NewLine Then LogString &= (Environment.NewLine & Text)
@@ -98,6 +106,8 @@ Restart:
     End Sub
 
     Public Sub SaveLog()
+        If Not LogHasError Then Return 'Don't save if the log doesn't contain any errors/warnings.
+
         If LogFile <> "" Then
             Dim sw As New IO.StreamWriter(LogFile)
             sw.Write(LogString)
