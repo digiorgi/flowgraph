@@ -1,5 +1,5 @@
-##0.1.4## InDev Don't forget to disable SlimDX by default.
-Notice!	: 0.1.3 fgs files are NOT compatable! (Well work if you remove the first line of text.)
+##0.1.4##
+Notice!	: 0.1.3(and earlyer) fgs files are NOT compatable! (Well work if you remove the first line of text.)
 New		: Now saves maximized state. (only if true.)
 Added   : SendKeys
 Added	: Some MIDI object values can now use 0-127

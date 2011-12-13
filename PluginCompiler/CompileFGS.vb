@@ -19,7 +19,7 @@ Module CompileFGS
 #Region "Getting ready to compile"
     Public Function Compile(ByVal fgsFile As String) As Boolean
         Log("Compile fgs has been disabled..")
-        Return True
+        If SupportedFGSVersion = 1 Then Return True 'the if statment just keeps VS from putting unused var warings.
 
         Environment.CurrentDirectory = IO.Path.GetDirectoryName(Windows.Forms.Application.ExecutablePath)
 

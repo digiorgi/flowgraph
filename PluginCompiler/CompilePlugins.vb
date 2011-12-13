@@ -208,6 +208,7 @@ Module CompilePlugins2
         'Compile the plugin.
         ' Results = Provider.CreateCompiler.CompileAssemblyFromFileBatch(Params, Files)
         Results = Provider.CompileAssemblyFromSource(Params, Data) '"Source.vb")
+        'ToDo: Make plugin compiler compile from the files. (Will have to brake all plugins unliss I can find a way to set included and namespace.)
 
         'Return the results.
         Return Results
@@ -220,7 +221,7 @@ Module CompilePlugins2
         If Not BackupFile("Plugins.dll") Then Return False
 
 
-        Log("Loading plugins ")
+        Log("Loading plugins ", , False)
         'Add the main things to the source.
         Dim BaseImports As String = "Imports Microsoft.VisualBasic, System, System.Drawing, System.Collections" & _
                                     ", System.Collections.Generic, System.Windows.Forms, System.Diagnostics" & Environment.NewLine & _
@@ -289,9 +290,9 @@ Module CompilePlugins2
         ' sAdd("End Namespace")
 
 
-        Log("Done!", False)
+        Log("Done!", False, False)
 
-        Log("Compiling ")
+        Log("Compiling ", , False)
         'Compile the source and get all of the errors.
         Dim Errors As CodeDom.Compiler.CompilerErrorCollection = CompileVbPlugins(data.ToArray).Errors
 
@@ -335,7 +336,7 @@ Module CompilePlugins2
 
             Return False
         Else
-            Log("Done!", False)
+            Log("Done!", False, False)
             RemoveBackup("Plugins.dll")
             If Not KeepSource Then
                 IO.File.Delete("Source.vb")
