@@ -272,7 +272,7 @@ Public Module Plugins
                        "Will be replaced with a dummy" _
                        , LogPriority.Medium)
 
-                obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.ToString(False, SimpleD.Group.Style.BSD_Allman))
+                obj = AddObject("Plugins.ObjectDummy", New Point(pos(0), pos(1)), g.ToString(False))
                 If obj = -1 Then
                     Log("Could not create ""ObjectDummy""!", LogPriority.High)
                     ClearObjects()
@@ -342,7 +342,8 @@ Public Module Plugins
         If Not File.Contains("\") Then File = "\" & File
 
         'Save to file.
-        sd.ToFile(File, , BraceStyle)
+        sd.BraceStyle = BraceStyle
+        sd.ToFile(File)
         LoadedFile = File
     End Sub
 

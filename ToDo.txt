@@ -9,8 +9,6 @@ Can't compile fgs
 
 May want to remove code to load old fgs files. (SimpleD v1.1 broke loading old ones anyways.)
 
-########STOP WORKING ON STEPS#######   Ya I need to get a stable release out... 
-
 Step#1 Done
 Step#2 Done
 Step#3
