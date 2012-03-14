@@ -29,7 +29,7 @@
     End Sub
 
     Public Overrides Function Save() As SimpleD.Group
-        Dim g As New SimpleD.Group(UserData, False, False)
+        Dim g As New SimpleD.Group(UserData, False)
         g.Name = "Object"
         Return g
     End Function

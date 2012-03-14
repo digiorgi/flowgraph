@@ -45,11 +45,11 @@ Namespace SimpleD
         ''' <param name="Data"></param>
         ''' <param name="FromFile">If set to true then it will load from the file specfied in data</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal Data As String, ByVal FromFile As Boolean, Optional ByVal AllowEqualsInValue As Boolean = False)
+        Public Sub New(ByVal Data As String, ByVal FromFile As Boolean)
             If Not FromFile Then
-                FromString(Data, AllowEqualsInValue)
+                FromString(Data)
             Else
-                Me.FromFile(Data, AllowEqualsInValue)
+                Me.FromFile(Data)
             End If
         End Sub
 
@@ -60,21 +60,21 @@ Namespace SimpleD
         ''' <param name="File">The file to load.</param>
         ''' <returns>Error if any.</returns>
         ''' <remarks></remarks>
-        Public Function FromFile(ByVal File As String, Optional ByVal AllowEqualsInValue As Boolean = False) As String
+        Public Function FromFile(ByVal File As String) As String
             If Not IO.File.Exists(File) Then Return "File does not exist:" & File
             Dim sr As New IO.StreamReader(File)
             Dim data As String = sr.ReadToEnd
             sr.Close()
-            Return FromString(data, AllowEqualsInValue)
+            Return FromString(data)
         End Function
 
-        Public Sub ToFile(ByVal File As String, Optional AddVersion As Boolean = True, Optional OverrideStyle As Style = Style.None)
+        Public Sub ToFile(ByVal File As String, Optional AddVersion As Boolean = True)
             'Create the folder if it does not exist.
             If File.Contains("\") Or File.Contains("/") Then
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(File))
             End If
             Dim sw As New IO.StreamWriter(File)
-            sw.Write(ToString(AddVersion, OverrideStyle))
+            sw.Write(ToString(AddVersion))
             sw.Close()
         End Sub
 #End Region
