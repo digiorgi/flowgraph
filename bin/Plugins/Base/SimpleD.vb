@@ -44,18 +44,17 @@ Namespace SimpleD
         '   Group names { } /* = ;
         Public Const Version As Single = 1.1
         Public Const FileVersion As Single = 3
-        Public AllowEqualsInValue As Boolean = False
+        Public AllowEqualsInValue As Boolean = True
         Public AllowSemicolonInValue As Boolean = True
         'Public CheckIllegalChars As Boolean = True 'Should be apart of the Helper.
         '
         '1.2    Redo the helper class.  It needs to folow some standers.
         '
-        'ToDo: Update Java/PHP
-        '1.1    <Not Released>
+        '1.1    3-21-2012 *Stable*
         'Added  : Can now make a empty property by just using a semicolon. p; is now the same as p=;
         'Change : AllowEqualsInValue is now in Info.
         'Change : } can now end the base group. so "p=v;}p2=2;" would only parse as "p=v;" because } ended the base group.
-        'Change : Commants are now /*comment*/ (was //comment\\)
+        'Change : Comments are now /*comment*/ (was //comment\\)
         'Change : The brace styles are now a bit simpiler.   Uses last groups style if none is specfied. falls back to BSD_Allman if base group is none.
         'Change : There is now NoStyle
         'Fixed  : Did not spefi that parse is the same as fromstring.
@@ -90,100 +89,6 @@ Namespace SimpleD
             Me.Name = Name
             Me.BraceStyle = braceStyle
         End Sub
-
-#Region "ToString"
-
-        Enum Style
-            None = 0
-            NoStyle = 1
-            Whitesmiths = 2
-            GNU = 3
-            BSD_Allman = 4
-            K_R = 5
-            GroupsOnNewLine = 6
-        End Enum
-        Public BraceStyle As Style = Style.None
-        Public Tab As String = vbTab
-
-        ''' <summary>
-        ''' Returns a string with all the properties and sub groups.
-        ''' </summary>
-        ''' <param name="AddVersion">Add the version of SimpleD to start of string?</param>
-        Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True) As String
-            Return ToStringBase(True, -1, AddVersion, BraceStyle)
-        End Function
-
-        Private Function ToStringBase(ByVal IsFirst As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style) As String
-            If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
-
-            If Me.BraceStyle <> Style.None Then braceStyle = Me.BraceStyle
-            If braceStyle = Style.None Then braceStyle = Style.BSD_Allman
-
-            Dim tmp As String = ""
-
-            If AddVersion Then tmp = "SimpleD{Version=" & Version & ";FormatVersion=" & FileVersion & ";}"
-
-            'Name and start of group. Name{
-            If Not IsFirst Then
-                Select Case braceStyle
-                    Case Style.NoStyle, Style.K_R
-                        tmp &= Name & "{"
-                    Case Style.Whitesmiths
-                        tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
-                    Case Style.BSD_Allman
-                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "{"
-                    Case Style.GNU
-                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "  {"
-                    Case Style.GroupsOnNewLine
-                        tmp &= Environment.NewLine & GetTabs(TabCount - 1) & Name & "{"
-                End Select
-            End If
-
-            'Groups and properties
-            Select Case braceStyle
-                Case Style.NoStyle, Style.GroupsOnNewLine
-                    For n As Integer = 0 To Properties.Count - 1
-                        tmp &= Properties(n).ToString()
-                    Next
-                    For Each Grp As Group In Groups
-                        tmp &= Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
-                    Next
-                Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
-                    For n As Integer = 0 To Properties.Count - 1
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).ToString()
-                    Next
-                    For Each Grp As Group In Groups
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
-                    Next
-            End Select
-
-            '} end of group.
-            If Not IsFirst Then
-                Select Case braceStyle
-                    Case Style.NoStyle, Style.GroupsOnNewLine
-                        tmp &= "}"
-                    Case Style.Whitesmiths
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
-                    Case Style.BSD_Allman, Style.K_R
-                        tmp &= Environment.NewLine & GetTabs(TabCount) & "}"
-                    Case Style.GNU
-                        tmp &= Environment.NewLine & GetTabs(TabCount) & "  }"
-                End Select
-            End If
-
-            Return tmp
-        End Function
-
-        Private Function GetTabs(Count As Integer) As String
-            If Count < 1 Then Return ""
-            Dim str As String = Tab
-            For i As Integer = 2 To Count
-                str &= Tab
-            Next
-            Return str
-        End Function
-
-#End Region
 
 #Region "Parse(FromString)"
 
@@ -320,6 +225,100 @@ Namespace SimpleD
         End Function
 #End Region
 
+#Region "ToString"
+
+        Enum Style
+            None = 0
+            NoStyle = 1
+            Whitesmiths = 2
+            GNU = 3
+            BSD_Allman = 4
+            K_R = 5
+            GroupsOnNewLine = 6
+        End Enum
+        Public BraceStyle As Style = Style.None
+        Public Tab As String = vbTab
+
+        ''' <summary>
+        ''' Returns a string with all the properties and sub groups.
+        ''' </summary>
+        ''' <param name="AddVersion">Add the version of SimpleD to start of string?</param>
+        Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True) As String
+            Return ToStringBase(True, -1, AddVersion, BraceStyle)
+        End Function
+
+        Private Function ToStringBase(ByVal IsFirst As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style) As String
+            If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
+
+            If Me.BraceStyle <> Style.None Then braceStyle = Me.BraceStyle
+            If braceStyle = Style.None Then braceStyle = Style.BSD_Allman
+
+            Dim tmp As String = ""
+
+            If AddVersion Then tmp = "SimpleD{Version=" & Version & ";FormatVersion=" & FileVersion & ";}"
+
+            'Name and start of group. Name{
+            If Not IsFirst Then
+                Select Case braceStyle
+                    Case Style.NoStyle, Style.K_R
+                        tmp &= Name & "{"
+                    Case Style.Whitesmiths
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
+                    Case Style.BSD_Allman
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "{"
+                    Case Style.GNU
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "  {"
+                    Case Style.GroupsOnNewLine
+                        tmp &= Environment.NewLine & GetTabs(TabCount - 1) & Name & "{"
+                End Select
+            End If
+
+            'Groups and properties
+            Select Case braceStyle
+                Case Style.NoStyle, Style.GroupsOnNewLine
+                    For n As Integer = 0 To Properties.Count - 1
+                        tmp &= Properties(n).ToString()
+                    Next
+                    For Each Grp As Group In Groups
+                        tmp &= Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
+                    Next
+                Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
+                    For n As Integer = 0 To Properties.Count - 1
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).ToString()
+                    Next
+                    For Each Grp As Group In Groups
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
+                    Next
+            End Select
+
+            '} end of group.
+            If Not IsFirst Then
+                Select Case braceStyle
+                    Case Style.NoStyle, Style.GroupsOnNewLine
+                        tmp &= "}"
+                    Case Style.Whitesmiths
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
+                    Case Style.BSD_Allman, Style.K_R
+                        tmp &= Environment.NewLine & GetTabs(TabCount) & "}"
+                    Case Style.GNU
+                        tmp &= Environment.NewLine & GetTabs(TabCount) & "  }"
+                End Select
+            End If
+
+            Return tmp
+        End Function
+
+        Private Function GetTabs(Count As Integer) As String
+            If Count < 1 Then Return ""
+            Dim str As String = Tab
+            For i As Integer = 2 To Count
+                str &= Tab
+            Next
+            Return str
+        End Function
+
+#End Region
+
     End Class
 
     ''' <summary>
@@ -334,11 +333,13 @@ Namespace SimpleD
         End Sub
 
         Public Overrides Function ToString() As String
-            If AllowSemicolonInValue Then
-                Value = Value.Replace(";", ";;")
-            End If
             If Value = "" Then Return Name & ";"
-            Return Name & "=" & Value & ";"
+            If AllowSemicolonInValue Then
+                Dim tmpValue As String = Value.Replace(";", ";;")
+                Return Name & "=" & tmpValue & ";"
+            Else
+                Return Name & "=" & Value & ";"
+            End If
         End Function
 
         Shared Operator =(ByVal left As [Property], ByVal right As [Property]) As Boolean
