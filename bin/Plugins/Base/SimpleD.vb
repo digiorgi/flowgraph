@@ -42,13 +42,14 @@ Namespace SimpleD
         '   Property names { } /* =
         '   Property values ;(is allowed if specafied) =(is allowed if specafied)
         '   Group names { } /* = ;
-        Public Const Version As Single = 1.1
+        Public Const Version As Single = 1.2
         Public Const FileVersion As Single = 3
         Public AllowEqualsInValue As Boolean = True
         Public AllowSemicolonInValue As Boolean = True
         'Public CheckIllegalChars As Boolean = True 'Should be apart of the Helper.
         '
         '1.2    Redo the helper class.  It needs to folow some standers.
+        'Change : The name of the first group now gets saved. (if it's not empty)
         '
         '1.1    3-21-2012 *Stable*
         'Added  : Can now make a empty property by just using a semicolon. p; is now the same as p=;
@@ -244,10 +245,12 @@ Namespace SimpleD
         ''' </summary>
         ''' <param name="AddVersion">Add the version of SimpleD to start of string?</param>
         Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True) As String
-            Return ToStringBase(True, -1, AddVersion, BraceStyle)
+            Dim SaveName As Boolean = True
+            If Name = "" Then SaveName = False
+            Return ToStringBase(SaveName, -1, AddVersion, BraceStyle)
         End Function
 
-        Private Function ToStringBase(ByVal IsFirst As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style) As String
+        Private Function ToStringBase(ByVal SaveName As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style) As String
             If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
 
             If Me.BraceStyle <> Style.None Then braceStyle = Me.BraceStyle
@@ -258,7 +261,7 @@ Namespace SimpleD
             If AddVersion Then tmp = "SimpleD{Version=" & Version & ";FormatVersion=" & FileVersion & ";}"
 
             'Name and start of group. Name{
-            If Not IsFirst Then
+            If SaveName Then
                 Select Case braceStyle
                     Case Style.NoStyle, Style.K_R
                         tmp &= Name & "{"
@@ -280,19 +283,19 @@ Namespace SimpleD
                         tmp &= Properties(n).ToString()
                     Next
                     For Each Grp As Group In Groups
-                        tmp &= Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
+                        tmp &= Grp.ToStringBase(True, TabCount + 1, False, braceStyle)
                     Next
                 Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
                     For n As Integer = 0 To Properties.Count - 1
                         tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).ToString()
                     Next
                     For Each Grp As Group In Groups
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(False, TabCount + 1, False, braceStyle)
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(True, TabCount + 1, False, braceStyle)
                     Next
             End Select
 
             '} end of group.
-            If Not IsFirst Then
+            If SaveName Then
                 Select Case braceStyle
                     Case Style.NoStyle, Style.GroupsOnNewLine
                         tmp &= "}"
