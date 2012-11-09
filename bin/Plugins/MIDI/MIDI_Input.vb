@@ -134,7 +134,7 @@ Public Class MIDI_Input
     Private Sub comDevices_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles comDevices.SelectedIndexChanged
         If comDevices.SelectedIndex = -1 Then Return
         If Device IsNot Nothing Then
-               Device.Close()
+            Device.Close()
             Device = Nothing
         End If
 
