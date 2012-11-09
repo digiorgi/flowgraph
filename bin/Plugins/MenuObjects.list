@@ -16,6 +16,7 @@ AddMenuObject|Get,Plugins.MIDI_GetPitchWheel|MIDI,Pitch wheel
 AddMenuObject|Input,Plugins.MIDI_Input|MIDI
 AddMenuObject|Get,Plugins.MIDI_GetInstrument,70|MIDI,Channel Message,Instrument
 AddMenuObject|Set,Plugins.MIDI_SetInstrument,70|MIDI,Channel Message,Instrument
+AddMenuObject|Spliter,Plugins.MIDI_Instrument_Spliter,70|MIDI,Channel Message,Instrument
 AddMenuObject|128keys,Plugins.MIDI_Keyboard,120,128-0-0|MIDI,Keyboards
 AddMenuObject|88 keys,Plugins.MIDI_Keyboard,120,88-21-9|MIDI,Keyboards
 AddMenuObject|61 keys,Plugins.MIDI_Keyboard,120,61-36-0|MIDI,Keyboards
