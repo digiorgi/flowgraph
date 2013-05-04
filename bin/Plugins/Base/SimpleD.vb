@@ -70,6 +70,7 @@ Namespace SimpleD
         'Change : ToString is now using Text.StringBuilder. (BIGsmallfiletest.sd is 370x faster, then it was)
         'Fixed  : ToString is now faster then FromString!!
         'Fixed  : Properties that have not been ended now parse properly. ("p=v" is "p=v;" "p" is "")
+        'Fixed  : Crash when a group or a property is nothing.
 
         'Old change logs at:
         'https://code.google.com/p/simpled/wiki/Versions
@@ -214,7 +215,7 @@ Namespace SimpleD
         ''' Note: It will continue loading even with errors.
         ''' </summary>
         ''' <param name="Data">The string to parse.</param>
-        ''' <returns>Errors if any.</returns>
+        ''' <returns>New group from the string.</returns>
         ''' <remarks></remarks>
         Shared Function Parse(ByVal Data As String) As Group
             Dim g As New Group
@@ -248,7 +249,7 @@ Namespace SimpleD
             ToStringBase(SaveName, -1, AddVersion, BraceStyle, Output)
             Return Output.ToString
         End Function
-        Public Overloads Function ToStringBuilder(Optional ByVal AddVersion As Boolean = True) As Text.StringBuilder
+        Public Function ToStringBuilder(Optional ByVal AddVersion As Boolean = True) As Text.StringBuilder
             Dim SaveName As Boolean = True
             If Name = "" Then SaveName = False
             Dim Output As New Text.StringBuilder()
@@ -256,7 +257,7 @@ Namespace SimpleD
             Return Output
         End Function
 
-        Private Sub ToStringBase(ByVal SaveName As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style, ByRef Output As Text.StringBuilder)
+        Private Sub ToStringBase(ByVal saveName As Boolean, ByVal tabCount As Integer, ByVal addVersion As Boolean, ByVal braceStyle As Style, ByRef output As Text.StringBuilder)
             If Not AllowEmpty And Me.IsEmpty Then Return
             If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
 
@@ -297,21 +298,25 @@ Namespace SimpleD
             Select Case braceStyle
                 Case Style.NoStyle, Style.GroupsOnNewLine
                     For n As Integer = 0 To Properties.Count - 1
-                        Output.Append(Properties(n).ToString())
+                        If Properties(n) Is Nothing Then Continue For
+                        output.Append(Properties(n).ToString())
                     Next
                     For Each Grp As Group In Groups
-                        Grp.ToStringBase(True, TabCount + 1, False, braceStyle, Output)
+                        If Grp Is Nothing Then Continue For
+                        Grp.ToStringBase(True, tabCount + 1, False, braceStyle, output)
                     Next
                 Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
                     For n As Integer = 0 To Properties.Count - 1
-                        Output.AppendLine()
-                        If TabCount > -1 Then Output.Append(Tab, TabCount + 1)
-                        Output.Append(Properties(n).ToString())
+                        If Properties(n) Is Nothing Then Continue For
+                        output.AppendLine()
+                        If tabCount > -1 Then output.Append(Tab, tabCount + 1)
+                        output.Append(Properties(n).ToString())
                     Next
                     For Each Grp As Group In Groups
-                        Output.AppendLine()
-                        If TabCount > -1 Then Output.Append(Tab, TabCount + 1)
-                        Grp.ToStringBase(True, TabCount + 1, False, braceStyle, Output)
+                        If Grp Is Nothing Then Continue For
+                        output.AppendLine()
+                        If tabCount > -1 Then output.Append(Tab, tabCount + 1)
+                        Grp.ToStringBase(True, tabCount + 1, False, braceStyle, output)
                     Next
             End Select
 
@@ -343,7 +348,7 @@ Namespace SimpleD
         ''' Returns true if there are zero groups, zero properties, and the name is empty.
         ''' </summary>
         Public Function IsEmpty() As Boolean
-            If Groups.Count = 0 And Properties.Count = 0 And Name = "" Then Return True
+            If Groups.Count = 0 AndAlso Properties.Count = 0 AndAlso Name = "" Then Return True
             Return False
         End Function
     End Class
@@ -394,7 +399,7 @@ Namespace SimpleD
         ''' Returns true if both name and value are empty.
         ''' </summary>
         Public Function IsEmpty() As Boolean
-            If Name = "" And Value = "" Then Return True
+            If Name = "" AndAlso Value = "" Then Return True
             Return False
         End Function
     End Class

@@ -26,5 +26,6 @@ AddMenuObject|Set,Plugins.MIDI_SetNote|MIDI,Channel Message,Note
 AddMenuObject|Output,Plugins.MIDI_Output|MIDI
 AddMenuObject|Set,Plugins.MIDI_SetController|MIDI,Channel Message,Controller
 AddMenuObject|Simulate pedals,Plugins.MIDI_SimulatePedals,120|MIDI,Channel Message
+AddMenuObject|Stuff,Plugins.MIDI_Stuff,70|MIDI,Channel Message,Instrument
 AddMenuObject|Transpose,Plugins.MIDI_Transpose|MIDI,Channel Message,Note
 AddMenuObject|Set volume,Plugins.MIDI_Volume,70|MIDI,Channel Message'110,Note
