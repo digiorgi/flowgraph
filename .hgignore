@@ -7,3 +7,6 @@ glob:bin/fgsSource.vb
 glob:bin/Source.vb
 relre:\Releases
 glob:bin/fgsTest.pdb
+syntax: glob
+*.vbproj.user
+*.suo

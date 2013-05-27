@@ -94,47 +94,36 @@ Public Class MIDI_Keyboard
             End Select
 
             Dim Note As NoteT = Me.Note(n)
-            Dim brush As Brush = Brushes.Black
+            Dim pressed As Boolean = False
+            Dim bColor As Color = Color.Red
+            Dim h As Double = bColor.GetHue
+            Dim s As Double = bColor.GetSaturation
+            Dim l As Double = bColor.GetBrightness
             If Not chkFilterOtherChannels.Checked Then
-                If Note.Channel(0) Then
-                    brush = Brushes.Blue
-                ElseIf Note.Channel(1) Then
-                    brush = Brushes.Aqua
-                ElseIf Note.Channel(2) Then
-                    brush = Brushes.Green
-                ElseIf Note.Channel(3) Then
-                    brush = Brushes.Red
-                ElseIf Note.Channel(4) Then
-                    brush = Brushes.Purple
-                ElseIf Note.Channel(5) Then
-                    brush = Brushes.Brown
-                ElseIf Note.Channel(6) Then
-                    brush = Brushes.Gray
-                ElseIf Note.Channel(7) Then
-                    brush = Brushes.Orange
-                ElseIf Note.Channel(8) Then
-                    brush = Brushes.Teal
-                ElseIf Note.Channel(9) Then
-                    brush = Brushes.Yellow
-                ElseIf Note.Channel(10) Then
-                    brush = Brushes.BlueViolet
-                ElseIf Note.Channel(11) Then
-                    brush = Brushes.LawnGreen
-                ElseIf Note.Channel(12) Then
-                    brush = Brushes.Pink
-                ElseIf Note.Channel(13) Then
-                    brush = Brushes.Tan
-                ElseIf Note.Channel(14) Then
-                    brush = Brushes.DarkGreen
-                ElseIf Note.Channel(15) Then
-                    brush = Brushes.Coral
-                End If
+                For i As Integer = 0 To 15
+                    If Note.Channel(i) Then
+                        h += 21 * i '(i + 1)
+                        If i / 2 = i Then s *= 0.8
+                        pressed = True
+                    End If
+                Next
             Else
                 If Note.Channel(numChannel.Value - 1) Then
-                    brush = Brushes.Blue
+                    pressed = True
                 End If
             End If
 
+
+
+            Select Case OctavePos
+                Case 1, 3, 6, 8, 10 'Black key
+                    'l = l * 0.5
+                Case Else 'White key
+                    l *= 1.5
+                    If l > 1 Then l = 1
+            End Select
+            Dim brush As New SolidBrush(HSLColor(h, s, l))
+            If Not pressed Then brush = Brushes.Black
 
             Select Case OctavePos
                 Case 0, 5 'C & F
@@ -180,6 +169,49 @@ Public Class MIDI_Keyboard
 
     End Sub
 
+    Public Function HSLColor(h As Double, s As Double, l As Double) As Color
+        Dim t As Double() = New Double() {0, 0, 0}
+
+        'Try
+        Dim tH As Double = h / 360.0F
+        Dim tS As Double = s
+        Dim tL As Double = l
+
+        If tS.Equals(0) Then
+            t(0) = tL 'InlineAssignHelper(t(1), InlineAssignHelper(t(2), tL))
+            t(1) = tL
+            t(2) = tL
+        Else
+            Dim q As Double, p As Double
+
+            q = If(tL < 0.5, tL * (1 + tS), tL + tS - (tL * tS))
+            p = 2 * tL - q
+
+            t(0) = tH + (1.0 / 3.0)
+            t(1) = tH
+            t(2) = tH - (1.0 / 3.0)
+
+            For i As Byte = 0 To 2
+                t(i) = If(t(i) < 0, t(i) + 1.0, If(t(i) > 1, t(i) - 1.0, t(i)))
+
+                If t(i) * 6.0 < 1.0 Then
+                    t(i) = p + ((q - p) * 6 * t(i))
+                ElseIf t(i) * 2.0 < 1.0 Then
+                    t(i) = q
+                ElseIf t(i) * 3.0 < 2.0 Then
+                    t(i) = p + ((q - p) * 6 * ((2.0 / 3.0) - t(i)))
+                Else
+                    t(i) = p
+                End If
+            Next
+        End If
+        'Catch ee As Exception
+
+        'End Try
+
+        Return Color.FromArgb(CInt(t(0) * 255), CInt(t(1) * 255), CInt(t(2) * 255))
+    End Function
+
     Public Overrides Sub Receive(ByVal Data As Object, ByVal sender As DataFlow)
         Select Case sender.Index
             Case 0 'Enable
@@ -203,7 +235,7 @@ Public Class MIDI_Keyboard
                     message = Data
                 End If
 
-               
+
 
                 Dim NoteOn As Boolean = False
 
